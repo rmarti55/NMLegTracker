@@ -1,0 +1,17 @@
+{
+   "2025-03-05" : {
+      "13:30:00" : {
+         "HCEDC" : {
+            "bills" : ["HJM9","HB396","HB415"],
+            "date" : "2025-03-05",
+            "datetime" : "2025-03-05T13:30:00",
+            "mtime" : "2025-03-05T09:39:39",
+            "name" : "HCEDC",
+            "room" : "317",
+            "time" : "1:30 PM",
+            "url" : "2025/03/HCEDC/HCEDCageMar05.25.pdf",
+            "zoom" : "https://us02web.zoom.us/j/84498420158"
+         }
+      }
+   }
+}

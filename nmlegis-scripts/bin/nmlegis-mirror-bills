@@ -1,0 +1,272 @@
+#!/usr/bin/perl
+#
+# nmlegis-mirror-bills - mirror HTML bill pages
+#
+package ESM::NMLegisMirrorBills;
+
+use v5.14;
+use strict;
+use warnings;
+use utf8;
+use open qw( :encoding(UTF-8) :std );
+
+(our $ME = $0) =~ s|.*/||;
+(our $VERSION = '$Revision: 1.30 $ ') =~ tr/[0-9].//cd;
+
+use NMLegis                     qw(:all);
+use NMLegis::Scrape;
+
+###############################################################################
+# BEGIN user-customizable section
+
+our $URL = 'https://nmlegis.gov/Sessions/<yy>%20Regular/<type>/<chamber>/';
+
+# END   user-customizable section
+###############################################################################
+
+use Date::Parse;
+use Time::Piece;
+use FindBin                     qw($Bin);
+use File::stat;
+use File::Slurp                 qw(read_file);
+use JSON::XS;
+use LWP::Simple                 qw(mirror);
+
+use HTML::Entities;
+use HTML::TreeBuilder;
+
+###############################################################################
+# BEGIN boilerplate args checking, usage messages
+
+sub usage {
+    print  <<"END_USAGE";
+Usage: $ME [OPTIONS] PATH
+
+blah blah blah
+
+OPTIONS:
+
+  -v, --verbose  show verbose progress indicators
+  -n, --dry-run  make no actual changes
+
+  --help         display this message
+  --man          display program man page
+  --version      display program name and version
+END_USAGE
+
+    exit;
+}
+
+# Command-line options.  Note that this operates directly on @ARGV !
+our $debug   = 0;
+our $force   = 0;
+our $verbose = 0;
+our $NOT     = '';              # print "blahing the blah$NOT\n" if $debug
+sub handle_opts {
+    use Getopt::Long;
+    GetOptions(
+        'debug!'     => \$debug,
+        'dry-run|n!' => sub { $NOT = ' [NOT]' },
+        'force'      => \$force,
+        'verbose|v'  => \$verbose,
+
+        help         => \&usage,
+        version      => sub { print "$ME version $VERSION\n"; exit 0 },
+    ) or die "Try `$ME --help' for help\n";
+}
+
+# END   boilerplate args checking, usage messages
+###############################################################################
+
+############################## CODE BEGINS HERE ###############################
+
+# The term is "modulino".
+__PACKAGE__->main()                                     unless caller();
+
+# Main code.
+sub main {
+    # Note that we operate directly on @ARGV, not on function parameters.
+    # This is deliberate: it's because Getopt::Long only operates on @ARGV
+    # and there's no clean way to make it use @_.
+    handle_opts();                      # will set package globals
+
+
+    for my $chamber (qw(house senate)) {
+        for my $type (qw(bills memorials resolutions)) {
+            (my $url = $URL) =~ s/<chamber>/$chamber/g;
+            $url =~ s/<type>/$type/g;
+            $url =~ s/<yy>/$YY/g;
+
+            fetch_billfiles($url);
+        }
+    }
+
+    # Special case for tabled reports and financial impact reports
+    for my $special_url (qw(Tabled_Reports firs votes LESCAnalysis LFCForms)) {
+        my $url = $URL;
+        $url =~ s|<[^y].*$|$special_url|;
+        $url =~ s/<yy>/$YY/g;
+        #print $url, "\n";
+        fetch_billfiles($url);
+    }
+}
+
+sub fetch_billfiles {
+    my $url = shift;
+
+    print "> fetch_billfiles($url)\n"                   if $verbose;
+    my $data = NMLegis::Scrape->fetch($url);
+
+    #use Data::Dump; dd $data; exit 0;
+    my $tb = HTML::TreeBuilder->new_from_content($data->{html});
+
+    my @documents;
+    find_documents($url, $tb, 0, \@documents);
+
+    (my $cache_dir = $data->{cache_file}) =~ s!/[^/]+$!!;
+    # barf. We need to rethink this.
+    $cache_dir .= "/$1" if $url =~ m!/(firs|votes|LESCAnalysis|LFCForms|Committee_Subs_And_Amendments)!;
+
+  DOC:
+    for my $doc (@documents) {
+        my ($mtime, $filename) = @$doc;
+
+        next if $filename =~ /\.PDF$/i
+            && $filename !~ /T\./
+            && $filename !~ /[HS]VOTE\.PDF/
+            && $url !~ /(firs|LESCAnalysis|LFCForms|Committee_Subs_And_Amendments)/;
+
+        # 2025-03-12, 03-16, these are mistakes. We need a better way.
+        next if $YY eq '25' && $filename eq 'SJM015SVOTE.PDF';
+        next if $YY eq '25' && $filename eq 'HB007HVOTE.PDF';
+
+        my $re = '';
+        if (my $st = stat("$cache_dir/$filename")) {
+            # Sigh. 1.5 hours, because otherwise with DST we keep re-fetching.
+            if (abs($st->mtime - $mtime) < 5400) {
+                next DOC;
+            }
+            $re = 'RE-';
+        }
+
+        print "${re}fetching: $filename\n";
+        # Not cached
+        my $fetched = NMLegis::Scrape->fetch("$url/$filename");
+
+        # FIXME FIXME
+        if ($url =~ /Tabled_Reports/) {
+            if ($filename =~ /^([HS][A-Z]+\d+).*T\.pdf$/) {
+                if (! $re) {
+                    add_table_history_entry($fetched);
+                }
+            }
+        }
+
+        sleep 2;
+    }
+}
+
+
+our $Last_Date;
+our %In;
+our %State;
+
+# Stolen from https://www.lemoda.net/perl/html-treebuilder-basic/index.html
+sub find_documents {
+    my ($url, $node, $depth, $doclist) = @_;
+
+    # Print indentation according to the level of recursion.
+    print "  " x $depth                                 if $debug;
+
+    # If $node is a reference, then it is an HTML::Element.
+    if (ref $node) {
+        # Print the tag associated with $node, for example "html" or
+        # "li".
+        my $tag = lc($node->tag());
+        print $tag, "\n"                                if $debug;
+        $In{$tag}++;
+
+        # $node->content_list () returns a list of child nodes of
+        # $node, which we store in @children.
+
+        my @children = $node->content_list ();
+        for my $child_node (@children) {
+            find_documents ($url, $child_node, $depth + 1, $doclist);
+        }
+
+        $In{$tag}--;
+    }
+    elsif ($In{pre}) {
+        # If $node is not a reference, then it is just a piece of text
+        # from the HTML file.
+        if ($node =~ m!^\s*([\d/]+\s+[\d:]+\s*[AP]M)\s+\d+\s*$!) {
+            $Last_Date = str2time($1)
+                or die "$ME: Could not parse date '$1'";
+        }
+        elsif ($In{a} && $node =~ /^([SH]\w+\d+\S+\.(HTML|html|PDF|pdf))$/) {
+            die "FATAL: $url: Got '$node' without last_date" if ! $Last_Date;
+            push @$doclist, [ $Last_Date, uc($1) ];
+            undef $Last_Date;
+        }
+
+        # 2025-03-15 special case for committee subs, where filenames are weird
+        elsif ($In{a} && $url =~ /Committee_Subs_And/ && $node =~ /^([SH][A-Z]+\d+.*\.(pdf|PDF))$/) {
+            die "FATAL: $url: Got '$node' without last_date" if ! $Last_Date;
+            push @$doclist, [ $Last_Date, uc($1) ];
+            undef $Last_Date;
+        }
+        elsif ($node =~ /To Parent Directory/) {
+            ;
+        }
+
+        print $node, "\n"                               if $debug;
+    }
+}
+
+
+#############################
+#  add_table_history_entry  #  Try to write a history entry for tabled bills
+#############################
+sub add_table_history_entry {
+    my $fetched = shift;
+
+    my $url = $fetched->{url} or do {
+        warn "$ME: add_tabled_history_entry: no url????";
+        return;
+    };
+    $url =~ m!/(H|B)([JC]*[BMR])0*(\d+).*T\.pdf$! or do {
+        warn "$ME: Could not parse bill number from $url";
+        return;
+    };
+
+    my $billno = "$1$2$3";
+
+    # Use this moment in time as date
+    my $t = localtime($^T);
+    my $ymd = $t->ymd;
+    my $hms = $t->hms;
+    my $history_dir = "$Data_Dir/history/$ymd";
+    mkdir $history_dir, 02700 if ! -d $history_dir;
+    my $history_file = "$history_dir/$hms.json";
+
+    my $history = {
+        _datetime => "${ymd}T$hms",
+        _schema   => "20230201",                # FIXME
+        history   => [],
+    };
+    if (-e $history_file) {
+        $history = decode_json(read_file($history_file));
+    }
+
+    push @{$history->{history}}, [ $billno, "reported as tabled in committee", $url ];
+    write_json_outfile($history, $history_file);
+}
+
+
+
+
+
+
+
+
+1;

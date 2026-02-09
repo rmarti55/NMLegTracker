@@ -1,0 +1,7 @@
+<td<%== $rowspan %><%== ' class="mylegislator"' if grep { $self->user->is_my_legislator($_) } $b->sponsors %>>
+% if (my $sponsor = $b->sponsor) {
+%= include 'legislators/_sponsor_button', l => $sponsor, name => 'lastname', bill => $b
+% } else {
+[N/A]
+% }
+</td>

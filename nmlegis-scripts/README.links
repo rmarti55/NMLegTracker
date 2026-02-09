@@ -1,0 +1,25 @@
+accdb (Microsoft database with json tables):
+   https://nmlegis.gov/Sessions/23%20Regular/other/LegInfo23.zip
+
+SENATE PREFILES:
+
+   https://www.nmlegis.gov/Sessions/24%20Regular/bills/senate/Index%20of%202024%20Senate%20Prefiles.pdf
+      PDF spreadsheet
+
+   https://www.nmlegis.gov/Sessions/24%20Regular/bills/senate/prefile/
+      web server list of bills, pdf and html
+
+
+ftp://www.nmlegis.gov/Legislator%20Information/Legislators.XLS
+
+https://nmlegis.gov/Legislation/Action_Abbreviations
+    description/reference of acronyms, terms
+
+https://nmlegis.gov/Committee/Standing_Committees
+    may need to check in each year because committee names/abbrs may change
+
+https://nmlegis.gov/Committee/Interim
+    2024-01 we don't even attempt to parse these
+
+https://sg001-harmony.sliq.net/00293/harmony
+    House and Senate floors, and committees without Zoom

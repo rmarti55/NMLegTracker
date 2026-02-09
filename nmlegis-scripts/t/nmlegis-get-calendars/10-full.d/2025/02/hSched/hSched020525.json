@@ -1,0 +1,287 @@
+{
+   "2025-02-05" : {
+      "08:30:00" : {
+         "HEC" : {
+            "bills" : ["HB157","HB193","HB201"],
+            "date" : "2025-02-05",
+            "datetime" : "2025-02-05T08:30:00",
+            "mtime" : "2025-02-04T18:19:09",
+            "name" : "HEC",
+            "room" : "309",
+            "time" : "8:30 AM",
+            "url" : "2025/02/hSched/hSched020525.pdf",
+            "zoom" : "https://us02web.zoom.us/j/89904664485"
+         },
+         "HGEIC" : {
+            "bills" : ["HB98","HB108","HB113","HB91","HB93","HB118","HJR5"],
+            "date" : "2025-02-05",
+            "datetime" : "2025-02-05T08:30:00",
+            "mtime" : "2025-02-04T18:19:09",
+            "name" : "HGEIC",
+            "room" : "305",
+            "time" : "8:30 AM",
+            "url" : "2025/02/hSched/hSched020525.pdf",
+            "zoom" : "https://us02web.zoom.us/j/89282948977"
+         },
+         "HHHC" : {
+            "bills" : ["HB15","HB70","HB78","HB80","HB106","HB116"],
+            "date" : "2025-02-05",
+            "datetime" : "2025-02-05T08:30:00",
+            "mtime" : "2025-02-04T18:19:09",
+            "name" : "HHHC",
+            "room" : "307",
+            "time" : "8:30 AM",
+            "url" : "2025/02/hSched/hSched020525.pdf",
+            "zoom" : "https://us02web.zoom.us/j/86178202695"
+         },
+         "HTRC" : {
+            "bills" : ["HB19","HB47","HB52"],
+            "date" : "2025-02-05",
+            "datetime" : "2025-02-05T08:30:00",
+            "mtime" : "2025-02-04T18:19:09",
+            "name" : "HTRC",
+            "room" : "316",
+            "time" : "8:30 AM",
+            "url" : "2025/02/hSched/hSched020525.pdf",
+            "zoom" : "https://us02web.zoom.us/j/84092015982"
+         }
+      },
+      "13:30:00" : {
+         "HAFC" : {
+            "bills" : [],
+            "date" : "2025-02-05",
+            "datetime" : "2025-02-05T13:30:00",
+            "mtime" : "2025-02-04T18:19:09",
+            "name" : "HAFC",
+            "room" : "307",
+            "time" : "1:30 PM",
+            "url" : "2025/02/hSched/hSched020525.pdf",
+            "zoom" : "https://us02web.zoom.us/j/88154987441"
+         },
+         "HCEDC" : {
+            "bills" : ["HB220","HB215","HB179","HB130"],
+            "date" : "2025-02-05",
+            "datetime" : "2025-02-05T13:30:00",
+            "mtime" : "2025-02-04T18:19:09",
+            "name" : "HCEDC",
+            "room" : "317",
+            "time" : "1:30 PM",
+            "url" : "2025/02/hSched/hSched020525.pdf",
+            "zoom" : "https://us02web.zoom.us/j/84498420158"
+         },
+         "HJC" : {
+            "bills" : ["HB12","HB198","HB209","HB216","HB147","HM7"],
+            "date" : "2025-02-05",
+            "datetime" : "2025-02-05T13:30:00",
+            "mtime" : "2025-02-04T18:19:09",
+            "name" : "HJC",
+            "room" : "309",
+            "time" : "1:30 PM",
+            "url" : "2025/02/hSched/hSched020525.pdf",
+            "zoom" : "https://us02web.zoom.us/j/85681041953"
+         }
+      }
+   },
+   "2025-02-06" : {
+      "08:30:00" : {
+         "HENRC" : {
+            "bills" : ["HB13","HB34","HB159"],
+            "date" : "2025-02-06",
+            "datetime" : "2025-02-06T08:30:00",
+            "mtime" : "2025-02-04T18:19:09",
+            "name" : "HENRC",
+            "room" : "317",
+            "time" : "8:30 AM",
+            "url" : "2025/02/hSched/hSched020525.pdf",
+            "zoom" : "https://us02web.zoom.us/j/89512433827"
+         }
+      },
+      "09:00:00" : {
+         "HRDLC" : {
+            "bills" : ["HB135","HB191","HB210","HB219"],
+            "date" : "2025-02-06",
+            "datetime" : "2025-02-06T09:00:00",
+            "mtime" : "2025-02-04T18:19:09",
+            "name" : "HRDLC",
+            "room" : "305",
+            "time" : "9:00 AM",
+            "url" : "2025/02/hSched/hSched020525.pdf",
+            "zoom" : "https://us02web.zoom.us/j/83538472931"
+         },
+         "HTPWC" : {
+            "bills" : ["HB99","HB160","HB32"],
+            "date" : "2025-02-06",
+            "datetime" : "2025-02-06T09:00:00",
+            "mtime" : "2025-02-04T18:19:09",
+            "name" : "HTPWC",
+            "room" : "309",
+            "time" : "9:00 AM",
+            "url" : "2025/02/hSched/hSched020525.pdf",
+            "zoom" : "https://us02web.zoom.us/j/82037730356"
+         }
+      },
+      "13:30:00" : {
+         "HAFC" : {
+            "bills" : [],
+            "date" : "2025-02-06",
+            "datetime" : "2025-02-06T13:30:00",
+            "mtime" : "2025-02-04T18:19:09",
+            "name" : "HAFC",
+            "room" : "307",
+            "time" : "1:30 PM",
+            "url" : "2025/02/hSched/hSched020525.pdf",
+            "zoom" : "https://us02web.zoom.us/j/88154987441"
+         },
+         "HCPAC" : {
+            "bills" : ["HB111","HB124","HB125","HB101","HB102","HB103"],
+            "date" : "2025-02-06",
+            "datetime" : "2025-02-06T13:30:00",
+            "mtime" : "2025-02-04T18:19:09",
+            "name" : "HCPAC",
+            "room" : "317",
+            "time" : "1:30 PM",
+            "url" : "2025/02/hSched/hSched020525.pdf",
+            "zoom" : "https://us02web.zoom.us/j/89876224491"
+         },
+         "HLVMC" : {
+            "bills" : ["HB158"],
+            "date" : "2025-02-06",
+            "datetime" : "2025-02-06T13:30:00",
+            "mtime" : "2025-02-04T18:19:09",
+            "name" : "HLVMC",
+            "room" : "315",
+            "time" : "1:30 PM",
+            "url" : "2025/02/hSched/hSched020525.pdf",
+            "zoom" : "https://us02web.zoom.us/j/85771184811"
+         }
+      }
+   },
+   "2025-02-07" : {
+      "08:30:00" : {
+         "HEC" : {
+            "bills" : ["HB64","HB90","HB167"],
+            "date" : "2025-02-07",
+            "datetime" : "2025-02-07T08:30:00",
+            "mtime" : "2025-02-04T18:19:09",
+            "name" : "HEC",
+            "room" : "309",
+            "time" : "8:30 AM",
+            "url" : "2025/02/hSched/hSched020525.pdf",
+            "zoom" : "https://us02web.zoom.us/j/89904664485"
+         },
+         "HGEIC" : {
+            "bills" : ["HB120","HB123","HB143","HB6"],
+            "date" : "2025-02-07",
+            "datetime" : "2025-02-07T08:30:00",
+            "mtime" : "2025-02-04T18:19:09",
+            "name" : "HGEIC",
+            "room" : "305",
+            "time" : "8:30 AM",
+            "url" : "2025/02/hSched/hSched020525.pdf",
+            "zoom" : "https://us02web.zoom.us/j/89282948977"
+         },
+         "HHHC" : {
+            "bills" : ["HB95","HB119","HB131","HB133","HB151","HB152","HB173"],
+            "date" : "2025-02-07",
+            "datetime" : "2025-02-07T08:30:00",
+            "mtime" : "2025-02-04T18:19:09",
+            "name" : "HHHC",
+            "room" : "307",
+            "time" : "8:30 AM",
+            "url" : "2025/02/hSched/hSched020525.pdf",
+            "zoom" : "https://us02web.zoom.us/j/86178202695"
+         }
+      },
+      "13:30:00" : {
+         "HAFC" : {
+            "bills" : [],
+            "date" : "2025-02-07",
+            "datetime" : "2025-02-07T13:30:00",
+            "mtime" : "2025-02-04T18:19:09",
+            "name" : "HAFC",
+            "room" : "307",
+            "time" : "1:30 PM",
+            "url" : "2025/02/hSched/hSched020525.pdf",
+            "zoom" : "https://us02web.zoom.us/j/88154987441"
+         },
+         "HCEDC" : {
+            "bills" : ["HB112","HB61"],
+            "date" : "2025-02-07",
+            "datetime" : "2025-02-07T13:30:00",
+            "mtime" : "2025-02-04T18:19:09",
+            "name" : "HCEDC",
+            "room" : "317",
+            "time" : "1:30 PM",
+            "url" : "2025/02/hSched/hSched020525.pdf",
+            "zoom" : "https://us02web.zoom.us/j/84498420158"
+         },
+         "HJC" : {
+            "bills" : ["HB4","HB31","HB38","HB39"],
+            "date" : "2025-02-07",
+            "datetime" : "2025-02-07T13:30:00",
+            "mtime" : "2025-02-04T18:19:09",
+            "name" : "HJC",
+            "room" : "309",
+            "time" : "1:30 PM",
+            "url" : "2025/02/hSched/hSched020525.pdf",
+            "zoom" : "https://us02web.zoom.us/j/85681041953"
+         }
+      }
+   },
+   "2025-02-08" : {
+      "09:00:00" : {
+         "HCPAC" : {
+            "bills" : ["HB104","HB105","HB107","HB132","HB134","HB136"],
+            "date" : "2025-02-08",
+            "datetime" : "2025-02-08T09:00:00",
+            "mtime" : "2025-02-04T18:19:09",
+            "name" : "HCPAC",
+            "room" : "317",
+            "time" : "9:00 AM",
+            "url" : "2025/02/hSched/hSched020525.pdf",
+            "zoom" : "https://us02web.zoom.us/j/89876224491"
+         }
+      },
+      "10:00:00" : {
+         "HJC" : {
+            "bills" : ["HB26","HB49","HB50","HB66","HB36"],
+            "date" : "2025-02-08",
+            "datetime" : "2025-02-08T10:00:00",
+            "mtime" : "2025-02-04T18:19:09",
+            "name" : "HJC",
+            "room" : "309",
+            "time" : "10:00 AM",
+            "url" : "2025/02/hSched/hSched020525.pdf",
+            "zoom" : "https://us02web.zoom.us/j/85681041953"
+         }
+      },
+      "13:30:00" : {
+         "HAFC" : {
+            "bills" : [],
+            "date" : "2025-02-08",
+            "datetime" : "2025-02-08T13:30:00",
+            "mtime" : "2025-02-04T18:19:09",
+            "name" : "HAFC",
+            "room" : "307",
+            "time" : "1:30 PM",
+            "url" : "2025/02/hSched/hSched020525.pdf",
+            "zoom" : "https://us02web.zoom.us/j/88154987441"
+         }
+      }
+   },
+   "2025-02-11" : {
+      "09:00:00" : {
+         "HRDLC" : {
+            "bills" : ["HB227","HB228","HB226"],
+            "date" : "2025-02-11",
+            "datetime" : "2025-02-11T09:00:00",
+            "mtime" : "2025-02-04T18:19:09",
+            "name" : "HRDLC",
+            "room" : "305",
+            "time" : "9:00 AM",
+            "url" : "2025/02/hSched/hSched020525.pdf",
+            "zoom" : "https://us02web.zoom.us/j/83538472931"
+         }
+      }
+   }
+}

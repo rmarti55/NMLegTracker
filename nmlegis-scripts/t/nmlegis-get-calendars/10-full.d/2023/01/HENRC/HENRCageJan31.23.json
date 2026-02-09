@@ -1,0 +1,17 @@
+{
+   "2023-01-31" : {
+      "08:30:00" : {
+         "HENRC" : {
+            "bills" : ["HB121","HB197"],
+            "date" : "2023-01-31",
+            "datetime" : "2023-01-31T08:30:00",
+            "mtime" : "2023-01-30T09:07:00",
+            "name" : "HENRC",
+            "room" : "317",
+            "time" : "8:30 AM",
+            "url" : "2023/01/HENRC/HENRCageJan31.23.pdf",
+            "zoom" : "https://us02web.zoom.us/j/82140964843"
+         }
+      }
+   }
+}

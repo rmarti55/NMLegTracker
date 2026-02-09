@@ -1,0 +1,17 @@
+{
+   "2024-01-31" : {
+      "13:30:00" : {
+         "HCEDC" : {
+            "bills" : ["HB266","HB271","HB9"],
+            "date" : "2024-01-31",
+            "datetime" : "2024-01-31T13:30:00",
+            "mtime" : "2024-01-30T13:09:04",
+            "name" : "HCEDC",
+            "room" : "317",
+            "time" : "1:30 PM",
+            "url" : "2024/01/HCEDC/HCEDCageJan31.24.pdf",
+            "zoom" : "https://us02web.zoom.us/j/85993976266"
+         }
+      }
+   }
+}

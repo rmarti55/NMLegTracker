@@ -1,0 +1,412 @@
+#!/usr/bin/perl
+#
+# nmlegis-show-committees - write a page for each committee, and an index
+#
+package ESM::NMLegisShowCommittees;
+
+use v5.24;
+use utf8;
+use strict;
+use warnings;
+use open qw( :encoding(UTF-8) :std );
+
+(our $ME = $0) =~ s|.*/||;
+(our $VERSION = '$Revision: 1.30 $ ') =~ tr/[0-9].//cd;
+
+use NMLegis                     qw(:all);
+use NMLegis::Agendas;
+use NMLegis::Committees;
+use NMLegis::Legislators;
+
+# For debugging, show data structures using DumpTree($var)
+#use Data::TreeDumper; $Data::TreeDumper::Displayaddress = 0;
+
+###############################################################################
+# BEGIN user-customizable section
+
+our $Destdir = '/var/www/nmlegis/committees';
+
+# END   user-customizable section
+###############################################################################
+
+use Date::Parse;
+use File::Path                  qw(make_path);
+use File::Slurp                 qw(read_file);
+use HTML::Entities;
+use JSON::XS;
+use Time::Piece;
+
+###############################################################################
+# BEGIN boilerplate args checking, usage messages
+
+sub usage {
+    print  <<"END_USAGE";
+Usage: $ME [OPTIONS] PATH
+
+$ME writes a page for each legislator, showing their committees
+and schedules
+
+OPTIONS:
+
+  -v, --verbose  show verbose progress indicators
+  -n, --dry-run  make no actual changes
+
+  --help         display this message
+  --version      display program name and version
+END_USAGE
+
+    exit;
+}
+
+# Command-line options.  Note that this operates directly on @ARGV !
+our $debug   = 0;
+our $force   = 0;
+our $verbose = 0;
+our $NOT     = '';              # print "blahing the blah$NOT\n" if $debug
+sub handle_opts {
+    use Getopt::Long;
+    GetOptions(
+        'debug!'     => \$debug,
+        'dry-run|n!' => sub { $NOT = ' [NOT]' },
+        'force'      => \$force,
+        'verbose|v'  => \$verbose,
+
+        help         => \&usage,
+        version      => sub { print "$ME version $VERSION\n"; exit 0 },
+    ) or die "Try `$ME --help' for help\n";
+}
+
+# END   boilerplate args checking, usage messages
+###############################################################################
+
+############################## CODE BEGINS HERE ###############################
+
+# The term is "modulino".
+__PACKAGE__->main()                                     unless caller();
+
+# Main code.
+sub main {
+    # Note that we operate directly on @ARGV, not on function parameters.
+    # This is deliberate: it's because Getopt::Long only operates on @ARGV
+    # and there's no clean way to make it use @_.
+    handle_opts();                      # will set package globals
+
+    die "$ME: Too many arguments; try $ME --help\n"                 if @ARGV;
+
+    my @committees = NMLegis::Committees->all;
+    for my $c (@committees) {
+        write_committee_html($c);
+    }
+
+    write_committee_index(@committees);
+}
+
+##########################
+#  write_committee_html  #  Write page for ONE COMMITTEE
+##########################
+sub write_committee_html {
+    my $committee = shift;             # in: NMLegis::Committee object
+
+    my $abbr  = $committee->abbr;
+
+    my $outdir = sprintf("%s/%s", $Destdir, $abbr);
+    make_path($outdir, { verbose => 1, mode => 02755 });
+
+    my $html_out = "$outdir/index.html";
+    my $html_tmp = "$html_out.tmp.$$";
+
+    open my $html_fh, '>', $html_tmp
+        or die "$ME: Cannot create $html_tmp: $!\n";
+
+    printf { $html_fh } <<'END_HTML', (map { encode_entities($committee->get($_)) } qw(name name name)), $abbr;
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+ <title>%s</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../../nmlegis.css" />
+<link rel="stylesheet" href="../../popup.css" />
+<div id="nav"><a href="/">Home</a>&nbsp;&rarr;&nbsp;<a href="/committees/">All Committees</a>&nbsp;&rarr;&nbsp;<b>%s</b></div>
+
+<h1>%s</h1>
+
+<p style="color: #c00; margin-left: 2em; margin-right: 2em; font-size: 125%%;"><i>
+DEPRECATION WARNING: This site (all of nmlegis.edsantiago.com) is
+being deprecated. In February 2025 I (Ed) rewrote the entire web&nbsp;UI,
+and as of February&nbsp;25 it seems to be working fairly well, so I'm
+encouraging everyone to move there instead.
+<br/>
+The new site is
+ <b><a href="https://nmlegiswatch.org/committees/%s">nmlegiswatch.org</a></b>
+</p>
+
+END_HTML
+
+    # Members
+    print { $html_fh } "<table>\n";
+    for my $l ($committee->members) {
+        printf { $html_fh } <<'END_HTML', $l->party, $l->local_url, encode_entities($l->name),encode_entities($l->role), encode_entities($l->office);
+<tr class="party-%s">
+  <td><a href="%s">%s</a></td>
+  <td>%s</td>
+  <td>%s</td>
+</tr>
+END_HTML
+    }
+    print { $html_fh } "</table>\n";
+
+    # Schedule
+    my $schedule_all = read_json("schedule.json");
+    delete $schedule_all->{_schema};
+
+    # Reorganize
+    my %schedule;
+    for my $ymd (sort keys %$schedule_all) {
+        for my $hms (sort keys %{$schedule_all->{$ymd}}) {
+            if (my $mine = $schedule_all->{$ymd}{$hms}{$abbr}) {
+                $schedule{$ymd}{$hms} = $mine;
+            }
+        }
+    }
+
+    if (keys %schedule) {
+        print { $html_fh } "<hr/>\n<h2>Schedule</h2>\n";
+
+        for my $ymd (sort keys %schedule) {
+            my $t = str2time($ymd)
+                or die;
+            my $lt = localtime($t);
+
+            printf { $html_fh } "<h3>%s</h3>\n", $lt->strftime("%A, %B %e");
+
+            for my $hms (sort keys %{$schedule{$ymd}}) {
+                # Override $lt to include hour
+                $lt = localtime(str2time("${ymd}T${hms}"));
+
+                my $mtg = $schedule{$ymd}{$hms};
+                my $bref = $mtg->{billh} || $mtg->{bills};
+                my @bills = @{ $bref };
+
+                my $time = $mtg->{time} || '[COULD NOT DETERMINE TIME]';
+                if (my $pdf = $mtg->{url}) {
+                    my $alt = "PDF calendar source";
+                    if (my $mtime = $mtg->{mtime}) {
+                        $alt .= ", last updated $mtime";
+                    }
+
+                    # 1F5D3 = calendar
+                    $time .= sprintf("&nbsp;<a href=\"%s\" title=\"%s\" target=\"_blank\">&#x1F5D3;</a>",
+                                     $pdf, $alt);
+                }
+
+                my $room = $mtg->{room};
+                if ($room) {
+                    if (my $usual_room = $mtg->{committee_info}{room}) {
+                        if ($room ne $usual_room) {
+                            $room .= " <i>[NOTE CHANGE FROM USUAL $usual_room]</i>";
+                        }
+                    }
+                    $room = "Room $room";
+                }
+                else {
+                    $room = "[room unknown]";
+                }
+                my $z = $mtg->{zoom};
+                if (! $z && $abbr =~ /^(House|Senate)/) {
+                    # No sane way to scrape this
+                    $z = 'https://sg001-harmony.sliq.net/00293/harmony';
+                }
+                if ($z) {
+                    # 1F4F9 = video camera
+                    $room .= sprintf("&nbsp;<a href=\"%s\" target=\"_blank\"><button><big>&#x1f4f9;</big></button></a>", $z);
+                }
+
+                # FIXME: room, zoom, link to committee, to PDF
+                # FIXME: popup with committee members
+                # FIXME: escapehtml
+                my $id = sprintf("%s-%s", $lt->strftime("%m%d-%H%M"), $abbr);
+                printf { $html_fh } <<"END_HTML", $committee->url, $committee->name;
+<a name="$id" />
+<table>
+ <tr><th class="time" colspan="3">$time</th><th class="room">$room</th></tr>
+ <tr><th class="committeename" colspan="4"><a href="%s">%s</a></th></tr>
+END_HTML
+
+                # Bill list
+                for my $billname (@bills) {
+                    my $b = NMLegis::Bills->new($billname);
+
+                    my $classes = join(' ', $b->css_classes);
+                    printf { $html_fh } <<"END_HTML", $classes, map { $b->get($_) } qw(local_url html_name readable_title);
+<tr class='%s'><td class='id'><a href="%s" target="_blank">%s</a></td><td colspan="2">%s</td>
+END_HTML
+
+                    if (my $s = $b->sponsor) {
+                        printf { $html_fh } "<td>%s</td></tr>", $s->full_link('lastname', { bill => $b });
+                    }
+                    else {
+                        # HB1?
+                        print  { $html_fh } "<td>-</td></tr>\n";
+                    }
+                }
+                print { $html_fh } "</table>\n<br/>\n";
+            }
+        }
+    }
+
+    # Votes
+    if (my @votes = $committee->votes) {
+        # Reorganize by date, bill, member
+        my %by_date;
+        for my $tuple (@votes) {
+            my ($bill, $date, $legislator_id, $vote) = @$tuple;
+            $by_date{$date}{$bill}{$legislator_id} = $vote;
+        }
+
+        print { $html_fh } <<'END_HTML';
+<hr/>
+<h2>Vote Record</h2>
+<table>
+ <tr>
+  <th>Date</th>
+  <th>Bill</th>
+END_HTML
+
+        for my $l ($committee->members) {
+            printf { $html_fh } "  <th class=\"party-%s\"><a href=\"%s\" target=\"_blank\">%s</a></th>\n",
+                $l->party, $l->local_url, encode_entities($l->lastname);
+        }
+        print { $html_fh } "</tr>\n";
+
+        for my $date (sort keys %by_date) {
+            my @bills = sort _by_bill_number keys %{$by_date{$date}};
+
+            print  { $html_fh } "<tr><th";
+            printf { $html_fh } " rowspan=\"%d\"", scalar(@bills) if @bills > 1;
+            printf { $html_fh } ">%s</th>", $date;
+
+            my $tr = '';
+            for my $bill_id (@bills) {
+                my $b = NMLegis::Bills->new($bill_id);
+
+                printf { $html_fh } "%s  <td><a href=\"%s\" title=\"%s\" target=\"_blank\">%s</a></td>\n",
+                    $tr, $b->local_url, encode_entities($b->readable_title), $b->html_name;
+
+                for my $l ($committee->members) {
+                    my $vote = $by_date{$date}{$bill_id}{$l->id};
+                    printf { $html_fh } "  <td class=\"vote %s\">%s</td>\n",
+                        $vote||'', ucfirst($vote||'');
+                }
+                print { $html_fh } "</tr>\n";
+
+                $tr = "<tr>\n";
+            }
+
+        }
+
+        print { $html_fh } "</table>\n";
+    }
+
+    # Done
+    printf { $html_fh } <<'END_HTML', localtime->datetime, $ME;
+<hr/>
+<span class='signature'>Updated: %s by %s</span>
+</body>
+</html>
+END_HTML
+
+    close $html_fh
+        or die "$ME: Error writing $html_tmp: $!\n";
+    chmod 0444 => $html_tmp;
+    rename $html_tmp => $html_out
+        or die "$ME: Could not rename $html_tmp: $!\n";
+}
+
+
+sub write_committee_index {
+    my $html_out = "$Destdir/index.html";
+    my $html_tmp = "$html_out.tmp.$$";
+
+    open my $html_fh, '>', $html_tmp
+        or die "$ME: Cannot create $html_tmp: $!\n";
+
+    print { $html_fh } <<'END_HTML';
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+ <title>Committees</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../nmlegis.css" />
+<div id="nav"><a href="/">Home</a>&nbsp;&rarr;&nbsp;<b>All Committees</b></div>
+
+<p style="color: #c00; margin-left: 2em; margin-right: 2em;"><i>
+DEPRECATION WARNING: This site (all of nmlegis.edsantiago.com) is
+being deprecated. In February 2025 I (Ed) rewrote the entire web&nbsp;UI,
+and as of February&nbsp;25 it seems to be working fairly well, so I'm
+encouraging everyone to move there instead.
+<br/>
+The new site is
+ <b><a href="https://nmlegiswatch.org/committees">nmlegiswatch.org</a></b>
+</p>
+
+<h1>Committees</h1>
+END_HTML
+
+    for my $chamber (qw(House Senate)) {
+        printf { $html_fh } "<h2>%s</h2>\n<ul>\n", $chamber;
+        my $chamber_initial = substr($chamber, 0, 1);
+        my @committees = grep { $_->abbr =~ /^$chamber_initial/ } @_;
+        for my $c (@committees) {
+            printf { $html_fh } "<li><a href=\"%s/\">%s</a></li>\n",
+                $c->abbr, encode_entities($c->name);
+        }
+        print  { $html_fh } "</ul>\n";
+    }
+
+    # Done
+    printf { $html_fh } <<'END_HTML', localtime->datetime, $ME;
+<hr/>
+<span class='signature'>Updated: %s by %s</span>
+</body>
+</html>
+END_HTML
+
+    close $html_fh
+        or die "$ME: Error writing $html_tmp: $!\n";
+    chmod 0444 => $html_tmp;
+    rename $html_tmp => $html_out
+        or die "$ME: Could not rename $html_tmp: $!\n";
+
+}
+
+###############################################################################
+# BEGIN helpers
+
+# FIXME! REFACTOR! Used in many places
+sub read_json {
+    my $file = shift;
+
+    my $json = read_file("$Data_Dir/$file");
+    return decode_json($json);
+}
+
+# FIXME! REFACTOR! stolen from parse-committee-votes
+sub _by_bill_number {
+    if ($a =~ /^([A-Z]+)([0-9]+)$/) {
+        my ($a_type, $a_number) = ($1, $2);
+
+        if ($b =~ /^([A-Z]+)([0-9]+)$/) {
+            my ($b_type, $b_number) = ($1, $2);
+
+            return $a_type cmp $b_type || $a_number <=> $b_number;
+        }
+        die "foo1 '$a' '$b'";
+    }
+    die "foo2 $a $b";
+}

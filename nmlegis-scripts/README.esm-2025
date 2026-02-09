@@ -1,0 +1,74 @@
+2025-02-14
+ - manual updates for Senate/House votes are not working.
+   BUT: those seem to be updated fairly pronto, so, nbd
+
+2025-01-22
+ - HEAR THIS, HEAR THIS!
+   nmlegis web site is more up-to-date (on legislators) than accdb!
+
+   Context: Greg Nibert (House 59) is gone. Jared Hembree was elected,
+   but he resigned. Mark Murphy is appointed for House 59.
+
+   As of 18:00 yesterday:
+       web site: listed both Hembree and Murphy (dups)
+       accdb: listed only Hembree (wrong)
+       xls: unknown
+
+   As of 09:19 today:
+       web site: lists only Murphy (dup fixed, maybe because of my email)
+       accdb: lists only Hembree (wrong)
+       xls: lists Murphy. (mtime 2025-01-20 18:05)
+
+Unknown if XLS is better or worse than web pages. I choose to continue
+trusting web as primary source.
+
+-----------------------------------------------------------------------
+
+01-25
+This morning's legislator update added "session secretary email"
+for House (yesterday was Senate), but the value in all cases
+is "House Session Secretary List" which is actually a link to
+
+  https://www.nmlegis.gov/Entity/House/Documents/2025ADMIN%20HOUSE.pdf
+
+...which is a three-page table: Majority, Minority, Committee (presumably
+meaning committee chairs?) Columns are LEGISLATORLASTNAME, Asst. Title,
+Asst. Name, Asst. Email, Asst. Extension. LEGISLATORLASTNAME is going
+to be hard to cross-reference against SPONCODE, but I'll try.
+
+-----------------------------------------------------------------------
+
+01-29
+WOOT! Meredith Machen points to vote results
+
+TODO: https://www.nmlegis.gov/Sessions/25%20Regular/votes/SB0236SVOTE.PDF
+
+-----------------------------------------------------------------------
+
+01-30
+Possible alternate site for New Mexico code:
+
+https://www.srca.nm.gov/parts/title11/11.001.0006.html
+
+-----------------------------------------------------------------------
+
+01-30
+FIXME! Subcommittees! https://www.nmlegis.gov/Agendas/Standing/hSched013025.pdf
+conflicting zoom links because there's a subcommittee A and B in
+different rooms at the same time.
+
+-----------------------------------------------------------------------
+
+02-01
+TODO! Add a legend describing the '$' (FIR)
+TODO! Also fetch LESCAnalysis and LFCForms
+
+-----------------------------------------------------------------------
+
+02-05 Mojolicious
+
+  https://github.com/kberov/MYDLjE/blob/master/perl/lib/MYDLjE/Plugin/DBIx.pm
+    example database stuff
+
+  https://metacpan.org/release/MSTROUT/SQL-Abstract-2.000001/source/README
+    SQL::Abstract

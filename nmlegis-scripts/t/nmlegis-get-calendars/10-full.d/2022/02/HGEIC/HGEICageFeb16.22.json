@@ -1,0 +1,17 @@
+{
+   "2022-02-16" : {
+      "09:30:00" : {
+         "HGEIC" : {
+            "bills" : ["SB14","SB198"],
+            "date" : "2022-02-16",
+            "datetime" : "2022-02-16T09:30:00",
+            "mtime" : "2022-02-16T09:28:03",
+            "name" : "HGEIC",
+            "room" : "305",
+            "time" : "9:30 AM",
+            "url" : "2022/02/HGEIC/HGEICageFeb16.22.pdf",
+            "zoom" : "https://us02web.zoom.us/j/88201222358"
+         }
+      }
+   }
+}

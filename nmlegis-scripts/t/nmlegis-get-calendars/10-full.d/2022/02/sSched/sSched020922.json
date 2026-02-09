@@ -1,0 +1,67 @@
+{
+   "2022-02-09" : {
+      "09:00:00" : {
+         "SEC" : {
+            "bills" : ["SB243"],
+            "date" : "2022-02-09",
+            "datetime" : "2022-02-09T09:00:00",
+            "mtime" : "2022-02-11T18:15:31",
+            "name" : "SEC",
+            "room" : "311",
+            "time" : "9:00 AM",
+            "url" : "2022/02/sSched/sSched020922.pdf",
+            "zoom" : "https://us02web.zoom.us/j/83582297843"
+         },
+         "SRC" : {
+            "bills" : ["SJR7"],
+            "date" : "2022-02-09",
+            "datetime" : "2022-02-09T09:00:00",
+            "mtime" : "2022-02-11T18:15:31",
+            "name" : "SRC",
+            "room" : "321",
+            "time" : "9:00 AM",
+            "url" : "2022/02/sSched/sSched020922.pdf",
+            "zoom" : "https://us02web.zoom.us/j/86412647187"
+         }
+      },
+      "13:30:00" : {
+         "SHPAC" : {
+            "bills" : ["SB167","SB202","SM7","HB52","HB65","HB132"],
+            "date" : "2022-02-09",
+            "datetime" : "2022-02-09T13:30:00",
+            "mtime" : "2022-02-11T18:15:31",
+            "name" : "SHPAC",
+            "room" : "311",
+            "time" : "1:30 PM or 1/2 hr after session",
+            "url" : "2022/02/sSched/sSched020922.pdf",
+            "zoom" : "https://us02web.zoom.us/j/87967039414"
+         },
+         "SJC" : {
+            "bills" : ["SB8","SJR6","SB84","SB54","SB12"],
+            "date" : "2022-02-09",
+            "datetime" : "2022-02-09T13:30:00",
+            "mtime" : "2022-02-11T18:15:31",
+            "name" : "SJC",
+            "room" : "321",
+            "time" : "1:30 PM or 1/2 hr after session",
+            "url" : "2022/02/sSched/sSched020922.pdf",
+            "zoom" : "https://us02web.zoom.us/j/83347538157"
+         }
+      }
+   },
+   "2022-02-10" : {
+      "09:00:00" : {
+         "SCONC" : {
+            "bills" : ["SB252","HB37"],
+            "date" : "2022-02-10",
+            "datetime" : "2022-02-10T09:00:00",
+            "mtime" : "2022-02-11T18:15:31",
+            "name" : "SCONC",
+            "room" : "311",
+            "time" : "9:00 AM",
+            "url" : "2022/02/sSched/sSched020922.pdf",
+            "zoom" : "https://us02web.zoom.us/j/86543845863"
+         }
+      }
+   }
+}

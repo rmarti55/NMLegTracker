@@ -1,0 +1,16 @@
+% layout 'default';
+% title  'Trackers';
+
+<h1>Trackers</h1>
+% for my $tuple (@$trackers) {
+<h3><%= shift(@$tuple) %></h3>
+<ul>
+  % for my $t (@$tuple) {
+  <li><b><%= link_to $t->description => $t->url %></b></li>
+  % }
+</ul>
+% }
+
+%# FIXME: schedules
+
+% $self->stash('skip_legend' => 1);

@@ -1,0 +1,24 @@
+% layout 'default';
+% title 'Not Found';
+
+% # FIXME: try smart-parsing the URL and offering suggestions
+% my $url = $self->req->url->path;
+% use Data::Dump; dd "NOT FOUND", $url;
+
+<h1>Sorry!</h1>
+
+<p>
+  Something broke. It's Ed's fault, not yours: this is still a
+  work in progress and sometimes it's hard to test every possible
+  situation.
+</p>
+<p>
+  Rest assured that Ed has just received an email report with
+  the specifics of the crash, and he will work on fixing it
+  as soon as he can. Until then, please keep going.
+</p>
+<p>
+  Thank you for understanding.
+</p>
+
+% $self->stash('skip_legend' => 1);

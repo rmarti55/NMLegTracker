@@ -1,0 +1,71 @@
+{
+   "2024-01-19" : {
+      "09:00:00" : {
+         "SFC" : {
+            "bills" : [],
+            "date" : "2024-01-19",
+            "datetime" : "2024-01-19T09:00:00",
+            "mtime" : "2024-01-18T19:39:08",
+            "name" : "SFC",
+            "room" : "322",
+            "time" : "9:00 AM",
+            "url" : "2024/01/sSched/sSched011924.pdf",
+            "zoom" : "https://us02web.zoom.us/j/81696207177"
+         }
+      }
+   },
+   "2024-01-22" : {
+      "08:00:00" : {
+         "SRC" : {
+            "bills" : [],
+            "date" : "2024-01-22",
+            "datetime" : "2024-01-22T08:00:00",
+            "mtime" : "2024-01-18T19:39:08",
+            "name" : "SRC",
+            "room" : "321",
+            "time" : "8:00 AM",
+            "url" : "2024/01/sSched/sSched011924.pdf",
+            "zoom" : "https://us02web.zoom.us/j/81944191844"
+         }
+      },
+      "09:00:00" : {
+         "SEC" : {
+            "bills" : [],
+            "date" : "2024-01-22",
+            "datetime" : "2024-01-22T09:00:00",
+            "mtime" : "2024-01-18T19:39:08",
+            "name" : "SEC",
+            "room" : "311",
+            "time" : "9:00 AM",
+            "url" : "2024/01/sSched/sSched011924.pdf"
+         }
+      },
+      "13:00:00" : {
+         "SHPAC" : {
+            "bills" : ["SB7","SB23","SB31","SB33"],
+            "date" : "2024-01-22",
+            "datetime" : "2024-01-22T13:00:00",
+            "mtime" : "2024-01-18T19:39:08",
+            "name" : "SHPAC",
+            "room" : "311",
+            "time" : "1:00 PM or 1/2 HOUR after floor session",
+            "url" : "2024/01/sSched/sSched011924.pdf"
+         }
+      }
+   },
+   "2024-01-23" : {
+      "09:00:00" : {
+         "SCONC" : {
+            "bills" : ["SB1","SB9","SB24","SB26","SB27"],
+            "date" : "2024-01-23",
+            "datetime" : "2024-01-23T09:00:00",
+            "mtime" : "2024-01-18T19:39:08",
+            "name" : "SCONC",
+            "room" : "311",
+            "time" : "9:00 AM",
+            "url" : "2024/01/sSched/sSched011924.pdf",
+            "zoom" : "https://us02web.zoom.us/j/82404382748"
+         }
+      }
+   }
+}

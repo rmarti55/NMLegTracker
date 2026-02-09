@@ -1,0 +1,16 @@
+{
+   "2022-02-08" : {
+      "13:30:00" : {
+         "SFC" : {
+            "bills" : ["SB7","SB125","SB135"],
+            "date" : "2022-02-08",
+            "datetime" : "2022-02-08T13:30:00",
+            "mtime" : "2022-02-11T18:15:31",
+            "name" : "SFC",
+            "room" : "322",
+            "time" : "1:30 PM or 1/2 hour after Floor Session",
+            "url" : "2022/02/SFC/SFCageFeb08.22.pdf"
+         }
+      }
+   }
+}

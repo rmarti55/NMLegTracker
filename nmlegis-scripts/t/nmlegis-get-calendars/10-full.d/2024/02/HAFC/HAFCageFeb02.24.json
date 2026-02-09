@@ -1,0 +1,17 @@
+{
+   "2024-02-02" : {
+      "13:30:00" : {
+         "HAFC" : {
+            "bills" : ["HB134","HB253","HB120","HB195","HB210","HB174","HB232"],
+            "date" : "2024-02-02",
+            "datetime" : "2024-02-02T13:30:00",
+            "mtime" : "2024-02-02T09:23:22",
+            "name" : "HAFC",
+            "room" : "307",
+            "time" : "1:30 PM or at the call of the Chair",
+            "url" : "2024/02/HAFC/HAFCageFeb02.24.pdf",
+            "zoom" : "https://us02web.zoom.us/j/84052541475"
+         }
+      }
+   }
+}

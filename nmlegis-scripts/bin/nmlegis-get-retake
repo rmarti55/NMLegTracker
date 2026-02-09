@@ -1,0 +1,245 @@
+#!/usr/bin/perl
+#
+# nmlegis-get-retake - get the Retake priority list
+#
+package ESM::NMLegisGetRetake;
+
+use v5.14;
+use strict;
+use warnings;
+use utf8;
+use open qw( :encoding(UTF-8) :std );
+
+(our $ME = $0) =~ s|.*/||;
+(our $VERSION = '$Revision: 1.30 $ ') =~ tr/[0-9].//cd;
+
+use NMLegis                     qw(:all);
+use NMLegis::Bills;
+use NMLegis::Committees;
+use NMLegis::Legislators;
+
+###############################################################################
+# BEGIN user-customizable section
+
+our $URL = 'https://retakeourdemocracy.org/nm-legislation/';
+
+our $Destdir = '/var/www/nmlegis/retake';
+
+# END   user-customizable section
+###############################################################################
+
+use FindBin                     qw($Bin);
+use File::Slurp                 qw(read_file);
+use LWP::Simple                 qw(mirror);
+
+use HTML::Entities;
+use HTML::TreeBuilder;
+
+###############################################################################
+# BEGIN boilerplate args checking, usage messages
+
+sub usage {
+    print  <<"END_USAGE";
+Usage: $ME [OPTIONS] PATH
+
+blah blah blah
+
+OPTIONS:
+
+  -v, --verbose  show verbose progress indicators
+  -n, --dry-run  make no actual changes
+
+  --help         display this message
+  --man          display program man page
+  --version      display program name and version
+END_USAGE
+
+    exit;
+}
+
+# Command-line options.  Note that this operates directly on @ARGV !
+our $debug   = 0;
+our $force   = 0;
+our $verbose = 0;
+our $NOT     = '';              # print "blahing the blah$NOT\n" if $debug
+sub handle_opts {
+    use Getopt::Long;
+    GetOptions(
+        'debug!'     => \$debug,
+        'dry-run|n!' => sub { $NOT = ' [NOT]' },
+        'force'      => \$force,
+        'verbose|v'  => \$verbose,
+
+        help         => \&usage,
+        version      => sub { print "$ME version $VERSION\n"; exit 0 },
+    ) or die "Try `$ME --help' for help\n";
+}
+
+# END   boilerplate args checking, usage messages
+###############################################################################
+
+############################## CODE BEGINS HERE ###############################
+
+# The term is "modulino".
+__PACKAGE__->main()                                     unless caller();
+
+# Main code.
+sub main {
+    # Note that we operate directly on @ARGV, not on function parameters.
+    # This is deliberate: it's because Getopt::Long only operates on @ARGV
+    # and there's no clean way to make it use @_.
+    handle_opts();                      # will set package globals
+
+
+    my $html_cachefile = "$Destdir/source.html";
+    fetch_and_or_cache($URL, $html_cachefile);
+
+    my @bills = parse_html($html_cachefile);
+    #use Data::Dump; dd \@bills;
+
+    my $outfile = "$Destdir/bills.txt";
+    my $out_tmp = "$outfile.tmp.$$";
+    open my $fh, '>', $out_tmp
+        or die "$ME: Cannot create $out_tmp: $!\n";
+    print { $fh } "$_\n"    for @bills;
+    close $fh
+        or die "$ME: Error writing $outfile: $!\n";
+    chmod 0444 => $out_tmp;
+
+    if ($NOT) {
+        system("cdif", "-uw", $outfile, $out_tmp);
+        unlink $out_tmp;
+        exit;
+    }
+
+    system("cmp", "-s", $out_tmp, $outfile);
+    if ($? == 0) {
+        unlink $out_tmp;
+        exit;
+    }
+
+    rename $out_tmp => $outfile;
+    if (-d "$Destdir/.hg") {
+        system('hg', '--cwd' => $Destdir, 'addremove', $outfile);
+        system('hg', '--cwd' => $Destdir, 'commit', "-mcommit from $ME", $outfile);
+    }
+
+    # Refresh page
+    exec("$Bin/nmlegis-show-misc", $Destdir);
+}
+
+sub parse_html {
+    my $infile = shift;
+    my $html_content = read_file($infile);
+
+    my $tb = HTML::TreeBuilder->new_from_content($html_content);
+
+    my $bills = [];
+    recurse($tb, 0, $bills);
+
+    return @$bills;
+}
+
+
+our %In;
+our %State;
+
+# Stolen from https://www.lemoda.net/perl/html-treebuilder-basic/index.html
+sub recurse
+{
+    my ($node, $depth, $bills) = @_;
+
+    # Print indentation according to the level of recursion.
+    print "  " x $depth                                 if $debug;
+
+    # If $node is a reference, then it is an HTML::Element.
+    if (ref $node) {
+        # Print the tag associated with $node, for example "html" or
+        # "li".
+        my $tag = lc($node->tag());
+        print $tag, "\n"                                if $debug;
+        $In{$tag}++;
+
+        # $node->content_list () returns a list of child nodes of
+        # $node, which we store in @children.
+
+        my @children = $node->content_list ();
+        for my $child_node (@children) {
+            recurse ($child_node, $depth + 1, $bills);
+        }
+
+        $In{$tag}--;
+    }
+    else {
+        # If $node is not a reference, then it is just a piece of text
+        # from the HTML file.
+        print $node, "\n"                               if $debug;
+        if ($In{h3}) {
+            if ($node =~ /\s*(\w+\s+(tier|priority))/i) {
+                $State{priority} = $1;
+            }
+        }
+        elsif ($In{h4}) {
+            push @$bills, "", "$node ($State{priority})", "";
+        }
+        elsif ($In{li} || $In{strong}) {
+            my @found;
+            while ($node =~ s/^\s*((H|S)J?(B|M|R))\s*(\d+)[,:]*(\s+[–-]+)?\s+//g) {
+                push @found, "$1$4"    unless $State{seen}{"$1$4"}++;
+            }
+
+            # Remove trailing period, whitespace
+            $node =~ s/[\.\,\s]+$//;
+
+            # Fix too-long text, like HB121
+            $node =~ s/^([^.]{30}[^.]{1,30})\..*$/$1/;
+
+            $_ = sprintf("%-7s %s", $_, $node)  for @found;
+
+            # Special case for "HB119 ... and HB120 ..."
+            if (@found == 1) {
+                if ($found[0] =~ s/\s+and\s+((H|S)J?(B|M|R))\s*(\d+)\s+(.*)//) {
+                    push @found, sprintf("%-7s %s", "$1$4", $5);
+                }
+            }
+
+            push @$bills, @found;
+        }
+    }
+}
+
+
+###############################################################################
+# BEGIN utils
+
+# In large part duped from NMLegis::Scrape
+# FIXME: refactor that module so it handles non-nmlegis URLs?
+sub fetch_and_or_cache {
+    my $url        = shift;
+    my $cache_file = shift;
+
+    return $cache_file if $ENV{NMLEGIS_USE_CACHE} || $debug;
+
+    (my $cache_dir = $cache_file) =~ s!/[^/]+$!!;
+
+    my $code = mirror($url, "$cache_file");
+    return $cache_file if $code == 304;    # unmodified
+
+    die "$ME: $url : $code" if $code >= 400;
+    -e "$cache_file"
+        or die "$ME: mirror() did not actually mirror $url - code=$code";
+
+    print "New tracking list!\n";
+    if (-d "$cache_dir/.hg") {
+        system('hg', '--cwd' => $cache_dir, 'addremove', $cache_file);
+        system('hg', '--cwd' => $cache_dir, 'diff', '--pager=never');
+        system('hg', '--cwd' => $cache_dir, 'commit', "-mcommit from $ME", $cache_file);
+    }
+
+    return $cache_file;
+}
+
+# END   utils
+###############################################################################
+
+1;

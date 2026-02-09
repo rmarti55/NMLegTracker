@@ -1,0 +1,191 @@
+% layout 'default';
+% title  sprintf("%s %s %d", map { $b->get($_) } qw(chamber_name type_name number));
+
+%=    form_for "/trackers/onebill" => (method => 'POST') => begin
+%=        hidden_field billid => $b->id
+<h1><%= sprintf("%s %s %d", map { $b->get($_) } qw(chamber_name type_name number)) %>
+% my $am_tracking = 0;
+% my @trackers_owned;
+% if ($self->user) {
+%     my $w = $self->user->is_watching($b);
+%     @trackers_owned = $self->user->trackers_owned;
+%     if (! @trackers_owned) {
+%         ...
+%     } elsif (@trackers_owned == 1) {
+%=        hidden_field trackerid => $trackers_owned[0]->id
+%         if ($w->{$trackers_owned[0]->name}) {
+%             $am_tracking = 1;
+%=            hidden_field action => 'untrack'
+%=            submit_button 'Stop Tracking'
+%         } else {
+%=            hidden_field action => 'track'
+%=            submit_button 'Start Tracking'
+%         }
+%     } else {
+%         ...
+%     }
+% }
+% # See who's tracking (but exclude our own trackers)
+% my %trackers_owned = map { $_->id => 1 } @trackers_owned;
+% if (my @tracked_by = grep { ! $trackers_owned{ $_->id } } $b->tracked_by) {
+%==   "&nbsp;<small>["
+%     if ($am_tracking) {
+%=       "Also tracked by:"
+%     } else {
+%=       "Tracked by:"
+%     }
+%     my $separator = '&nbsp;';
+%     for my $t (@tracked_by) {
+%==       $separator . link_to $t->name => $t->url
+%         $separator = ",&nbsp;"
+%     }
+%==   "]</small>";
+% }
+</h1>
+% end
+<h2><%= $b->title %> <small>[view on <%= link_to 'nmlegis.gov' => $b->nmlegis_url, target => '_blank' %>]</small></h2>
+
+% if ($b->financial_report_available) {
+%     my @analyses;
+%     if (my $fir = $b->fir) {
+%         push @analyses, [ $fir, "FIR" ];
+%     }
+%     if (my $lesc = $b->lescanalysis) {
+%         push @analyses, [ $lesc, "LESC" ];
+%     }
+%     if (my $lfc = $b->lfcform) {
+%         push @analyses, [ $lfc, "LFC" ];
+%     }
+  <h3>Financial Analys<%= @analyses == 1 ? 'i' : 'e' %>s:
+    <%== join(" | ", (map { sprintf("<a href=\"%s\" target=\"_blank\">%s</a>", @$_) } @analyses)); %></h3>
+% }
+
+
+% my @sponsors = $b->sponsors;
+<br/>
+<table>
+  <tr>
+    <th colspan="3">Sponsor<%= @sponsors == 1 ? '' : 's' =%></th>
+  </tr>
+  % for my $s (@sponsors) {
+  %     my $class = "party-" . $s->party;
+  %     $class .= ' mylegislator' if $self->user->is_my_legislator($s);
+  <tr class="legislatorname <%= $class %>">
+    <td><%= link_to $s->title_and_name => $s->url %></td>
+    <td><%= $s->district %></td>
+    <td><%= $s->county %></td>
+  </tr>
+  % }
+</table>
+
+% # This is passed along to old-code html row; we highlight our committees
+% my @mylegiscodes;
+% if ($self->user) {
+%     for my $chamber (qw(H S)) {
+%         if (my $l = $self->user->my_legislator($chamber)) {
+%             push @mylegiscodes, $l->code, map { $_->code } $l->committees;
+%         }
+%     }
+% }
+% if (my @progress = $b->html_progress_table(@mylegiscodes)) {
+%     my $classes = join(' ', $b->css_classes);
+<br/>
+<table>
+  <tr><th colspan="4">Status</th></tr>
+%     for my $row (@progress) {
+<tr class="<%= $classes %>"><%== $row %></tr>
+%     }
+<td>
+<tr>
+%=   include 'bills/_status_update_button', b => $b, rcspan => ' colspan="4"'
+</tr>
+</table>
+% }
+
+%# Full history
+% if (my $history = $b->history) {
+<br/>
+<hr/>
+<h3>"Official" History</h3>
+<p>
+  This is the <i>official</i> nmlegis action history. I'm doing my best
+  to translate the LONG/WEIRD-STRING to something less gibberishy. And
+  before you ask, no, the "Legis&nbsp;Day" number has no
+  mapping to the real world.
+</p>
+<p>
+ Actions: <span style=\"font-family: monospace; font-weight: bold;\"><%= $history->{actions} %></span>
+</p>
+<table>
+  <tr><th>Legis Day</th><th>Action</th><th>Details</th></tr>
+
+%     my %committee_iteration;       # to handle re-ref
+%     for my $action (@{$history->{history}}) {
+%         if ($action->[1] eq 'passed') {
+%             if ($action->[2] =~ /^([A-Z][A-Za-z]+)$/) {
+%                 my $c = $self->db->committee($1);
+%                 $action->[2] = sprintf("<b>%s</b>", link_to $action->[2] => $c->url);
+%                 my $i = ++$committee_iteration{$c->code};
+%                 if (my $report = $b->committee_report($c, $i)) {
+%                     $action->[2] .= sprintf(" (view %s)", link_to 'committee report' => $report->report);
+%                     if (my $cs = $report->cs) {
+%                         $action->[3] .= sprintf(" ( view %s)", link_to 'committee sub' => $cs);
+%                     }
+%
+%                     # Show votes
+%                     if (my @votes = $report->votes) {
+%                         my @yes = grep { $_->{vote} eq 'yes' } @votes;
+%                         my @no  = grep { $_->{vote} eq 'no' } @votes;
+%                         my $score = sprintf("%d-%d", scalar(@yes), scalar(@no));
+%                         push @$action, sprintf("<b>%s</b>", link_to $score => $c->url . "#vote-" . $report->date);
+%                         # Show only 'no' votes, since they're a minority
+%                         if (@no) {
+%                             my @no_links;
+%                             for my $l (map { $_->{legislator} } @no) {
+%                                 my $class = "party-" . $l->party;
+%                                 $class = "mylegislator" if ($self->user && $self->user->is_my_legislator($l));
+%                                 push @no_links, tag('span', class => $class, link_to($l->lastname => $l->url));
+%                             }
+%                             $action->[-1] .= sprintf("; nays: %s", join(", ", @no_links));
+%                         }
+%                     }
+%                 }
+%             }
+%         }
+  <tr>
+%         for my $element (@$action) {
+    <td><%== $element %></td>
+%         }
+</tr>
+%     }
+</table>
+% }
+
+%# Floor votes
+% my @order = ('House', 'Senate');
+% unshift(@order, pop(@order))   if $b->chamber eq 'S';
+% for my $chamber (@order) {
+%= include 'bills/floor_votes', b => $b, chamber => $chamber
+% }
+
+%# local actions
+% if (my @updates = $b->updates) {
+<br/>
+<hr/>
+<div class="wrap-collapsible">
+  <input id="collapsible-action-history" class="toggle" type="checkbox">
+  <label for="collapsible-action-history" class="lbl-toggle">Action History</label>
+  <div class="collapsible-content">
+    <div class="content-inner">
+<p>
+This table shows bill actions detected <i>on Ed's system</i>, using
+heuristics that may not be 100% accurate and which may not reflect
+the "official" nmlegis chronology. It is probably more than you care
+to know.
+</p>
+%= include 'common/update_table', updates => \@updates
+    </div>
+  </div>
+% }
+
+%== $bill_html

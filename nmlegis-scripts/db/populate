@@ -1,0 +1,304 @@
+#!/usr/bin/perl
+#
+# populate nmlegis db
+#
+# $Id$
+#
+package ESM::NMLegis::PopulateDB;
+
+use v5.14;
+use utf8;
+use open qw( :encoding(UTF-8) :std );
+
+use strict;
+use warnings;
+
+(our $ME = $0) =~ s|.*/||;
+(our $VERSION = '$Revision: 0.0 $ ') =~ tr/[0-9].//cd;
+
+# For debugging, show data structures using DumpTree($var)
+#use Data::TreeDumper; $Data::TreeDumper::Displayaddress = 0;
+
+use NMLegis                     qw(:all);
+use NMLegis::Bills;
+use NMLegis::Committees;
+use NMLegis::Legislators;
+
+use DBIx::Simple;
+use Date::Parse;
+use File::Slurp;
+use JSON::XS;
+use Time::Piece;
+
+###############################################################################
+# BEGIN user-customizable section
+
+# FIXME FIXME!
+our $Session = '2026';
+
+# END   user-customizable section
+###############################################################################
+
+###############################################################################
+# BEGIN boilerplate args checking, usage messages
+
+sub usage {
+    print  <<"END_USAGE";
+Usage: $ME [OPTIONS] ARGS [...]
+
+blah blah blah
+
+OPTIONS:
+
+  -v, --verbose  show verbose progress indicators
+  -n, --dry-run  make no actual changes
+
+  --help         display this message
+  --version      display program name and version
+END_USAGE
+
+    exit;
+}
+
+# Command-line options.  Note that this operates directly on @ARGV !
+our $Historical;
+our $debug   = 0;
+our $force   = 0;
+our $verbose = 0;
+our $NOT     = '';              # print "blahing the blah$NOT\n" if $debug
+sub handle_opts {
+    use Getopt::Long;
+    GetOptions(
+        'historical' => \$Historical,
+        'debug!'     => \$debug,
+        'dry-run|n!' => sub { $NOT = ' [NOT]' },
+        'force'      => \$force,
+        'verbose|v'  => \$verbose,
+
+        help         => \&usage,
+        version      => sub { print "$ME version $VERSION\n"; exit 0 },
+    ) or die "Try `$ME --help' for help\n";
+}
+
+# END   boilerplate args checking, usage messages
+###############################################################################
+
+############################## CODE BEGINS HERE ###############################
+
+# The term is "modulino".
+__PACKAGE__->main()                                     unless caller();
+
+# Main code.
+sub main {
+    # Note that we operate directly on @ARGV, not on function parameters.
+    # This is deliberate: it's because Getopt::Long only operates on @ARGV
+    # and there's no clean way to make it use @_.
+    handle_opts();                      # will set package globals
+
+    die "$ME: Too many arguments; try $ME --help\n"                 if @ARGV;
+
+    doit();
+}
+
+
+sub doit {
+    my $db = "db/nmlegis.sqlite";
+
+    _initialize($db);
+
+    my $dbix = DBIx::Simple->connect(
+        "dbi:SQLite:dbname=$db",
+        undef, undef,
+        {
+            sqlite_unicode => 1,
+            foreign_keys   => 1,
+        });
+
+    $dbix->query('PRAGMA journal_mode = WAL');
+    $dbix->query('PRAGMA synchronous = NORMAL');
+
+    # Legislators
+    printf "%3d starting legislators\n", time - $^T;
+    my %legislator_id;
+    for my $l (NMLegis::Legislators::all()) {
+        my @fields = qw(chamber code firstname lastname district county party lead_position service occupation office email phone office_phone alt_phone district_legislative_aide district_legislative_aide_email district_legislative_aide_phone session_secretary_email extra_information);
+        my $fields = join(', ', @fields);
+
+        $fields[1] = 'id';
+        $dbix->query(<<"END_SQL", map { $l->get($_) } @fields);
+INSERT INTO legislators ($fields)
+                 VALUES (??)
+END_SQL
+
+        $legislator_id{$l->id} = $dbix->last_insert_id;
+    }
+
+    #
+    # Committees
+    #
+    printf "%3d starting committees\n", time - $^T;
+    my %committee_id;
+    for my $c (NMLegis::Committees::all()) {
+        $dbix->query(<<'END_SQL', map { $c->get($_) || '' } qw(chamber abbr name room days time));
+INSERT INTO committees (chamber, code, name, room, days, time)
+                 VALUES (??)
+END_SQL
+
+        my $c_id = $dbix->last_insert_id;
+        $committee_id{$c->abbr} = $c_id;
+
+        for my $l ($c->members) {
+            my ($l_id) = $dbix->query('SELECT id FROM legislators WHERE code=?', $l->id)->list
+                or die "cannot find $l";
+            $dbix->query('INSERT INTO committee_members VALUES (??)',
+                         $c_id, $l_id, $l->role);
+        }
+    }
+
+    #
+    # Bills
+    #
+    printf "%3d starting bills\n", time - $^T;
+    my %bill_id;                # Keep cache to avoid lookups later
+    for my $bill (NMLegis::Bills::all()) {
+        $dbix->query(<<'END_SQL', $Session, $bill->name, $bill->chamber, $bill->type, $bill->number, $bill->readable_title, $bill->actions, $bill->emergency);
+INSERT INTO bills (session, code, chamber, type, number, title, actions, emergency) VALUES (??)
+END_SQL
+
+        my $b_id = $dbix->last_insert_id;
+        $bill_id{$bill->name} = $b_id;
+        my $order = 1;
+        for my $l ($bill->sponsors) {
+            $dbix->query('INSERT INTO sponsors VALUES (??)', $b_id, $legislator_id{$l->id}, $order++);
+        }
+    }
+
+    #
+    # Committee votes. It's OK for the tsv file not to exist, because
+    # our caller may be running us with a historical data dir
+    #
+    printf "%3d starting committee votes\n", time - $^T;
+    my $cvote_file = "$Data_Dir/committee-votes-$Session.tsv";
+    if (open my $cvotes_fh, '<', $cvote_file) {
+        while (my $line = <$cvotes_fh>) {
+            chomp $line;
+            my ($billcode, $committeecode, $date, $legislatorcode, $vote)
+                = split ' ', $line;
+            $dbix->query('INSERT INTO committee_votes VALUES (??)',
+                         $committee_id{$committeecode},
+                         $legislator_id{$legislatorcode},
+                         $bill_id{$billcode},
+                         $date, $vote);
+        }
+        close $cvotes_fh;
+    }
+
+    #
+    # Bill updates (the tracking we do)
+    #
+    return if $Historical;
+
+    printf "%3d starting updates\n", time - $^T;
+    opendir my $dir_fh, "$Data_Dir/history"
+        or die "$ME: opendir $Data_Dir/history: $!";
+    for my $ymd (grep { /^$Session-/ } readdir $dir_fh) {
+        opendir my $subdir_fh, "$Data_Dir/history/$ymd"
+            or die "$ME: opendir $Data_Dir/history/$ymd: $!";
+        for my $log (readdir $subdir_fh) {
+            $log =~ /^(\d+:\d+:\d+)\.json$/
+                or next;
+            my $hms = $1;
+            my $t = str2time("${ymd}T${hms}")
+                or die "$ME: could not str2time $ymd $hms";
+            my $json = read_json("$Data_Dir/history/$ymd/$log");
+            $json->{_datetime} eq "${ymd}T${hms}"
+                or die "$ME: $ymd/$log : bad datetime";
+            $json->{_schema} eq '20230201'
+                or die "$ME: $ymd/$log : bad schema";
+            for my $tuple (@{$json->{history}}) {
+                my ($billno, $event, @unexpected) = @$tuple;
+                die "$ME: $ymd/$log: unexpected '@unexpected'" if @unexpected;
+                $dbix->query('INSERT INTO bill_updates VALUES (??)',
+                             $t, $bill_id{$billno}, $event);
+            }
+        }
+        closedir $subdir_fh;
+    }
+    closedir $dir_fh;
+
+
+    # FIXME FIXME: how to do schedules?
+    # FIXME FIXME: need to do vote records, bill history
+
+    #
+    # Trackers
+    #
+    printf "%3d starting trackers\n", time - $^T;
+    for my $t (qw(ed lwv aauw)) {
+        $dbix->query('SELECT id FROM trackers WHERE name=?', $t)
+            ->into(my $t_id);
+
+        open my $fh, '<', "/var/www/nmlegis/$t/bills.txt"
+            or die "$ME: cannot read $t/bills.txt: $!";
+        my $category;
+        while (my $line = <$fh>) {
+            chomp $line;
+            next unless $line =~ /\S/;
+            if ($line =~ /^((H|S)[A-Z]{1,5}\d+)(-)?\s+\S/) {
+                my $bill = $1;
+                my $oppose = defined($3);
+                $dbix->query('INSERT INTO tracked VALUES (??)', $t_id, $bill_id{$bill}, $category, $oppose);
+            }
+            else {
+                $category = $line;
+            }
+        }
+        close $fh;
+    }
+    printf "%3d done\n", time - $^T;
+}
+
+
+sub _initialize {
+    my $db = shift;
+
+    unlink($db);
+
+    # FIXME! REFACTOR! This is the same as in test fixtures.
+    open my $fh_sqlite, '|-', 'sqlite3', $db
+        or die "Could not fork pipe to sqlite: $!";
+    open my $fh_schema, '<', 'db/schema.sql'
+        or die "Could not read schema.sql: $!";
+    while (my $line = <$fh_schema>) {
+        print { $fh_sqlite } $line;
+    }
+    close $fh_schema;
+    while (my $line = <DATA>) {
+        print { $fh_sqlite } $line;
+    }
+    close $fh_sqlite
+        or die "error running sqlite3: $!";
+}
+
+sub read_json {
+    my $file = shift;
+    my $json = read_file($file);
+    return decode_json($json);
+}
+
+__DATA__
+
+-- users
+INSERT INTO users VALUES (1, 'admin@nmlegiswatch.org', '{X-PBKDF2}HMACSHA1:AAAD6A:zQGNgA==:phVx2PJBV7Wd4dAEMF5mgWteBCc=', 'NMLegis', 'Admin', 43, 5);
+INSERT INTO users VALUES (2, 'nmlegis@edsantiago.com', '{X-PBKDF2}HMACSHA1:AAAD6A:zQGNgA==:phVx2PJBV7Wd4dAEMF5mgWteBCc=', 'Eduardo', 'Santiago', 43, 5);
+INSERT INTO users VALUES (3, 'xxx@yyy', '*', 'Meredith', 'Machen', 0, 0);
+
+-- trackers
+INSERT INTO trackers VALUES (1, 'Ed',   'Ed''s Interests', 2, 1, '');
+INSERT INTO trackers VALUES (2, 'LWV',  'League of Women Voters of NM', 1, 1);
+INSERT INTO trackers VALUES (3, 'AAUW', 'American Association of University Women', 3, 1, 'https://newmexico-online.aauw.net/');
+
+-- tracker access
+-- 2025-02-16 write access removed. For now, focus on one tracker per user.
+INSERT INTO tracker_access VALUES (2, 2, '', 1);
+INSERT INTO tracker_access VALUES (3, 2, '', 1);

@@ -1,0 +1,564 @@
+#!/usr/bin/perl
+#
+# update nmlegis db
+#
+# $Id$
+#
+package ESM::NMLegis::UpdateDB;
+
+use v5.14;
+use utf8;
+use open qw( :encoding(UTF-8) :std );
+
+use strict;
+use warnings;
+
+(our $ME = $0) =~ s|.*/||;
+(our $VERSION = '$Revision: 0.0 $ ') =~ tr/[0-9].//cd;
+
+# For debugging, show data structures using DumpTree($var)
+#use Data::TreeDumper; $Data::TreeDumper::Displayaddress = 0;
+
+use NMLegis                     qw(:all);
+use NMLegis::Bills;
+use NMLegis::Committees;
+use NMLegis::Legislators;
+
+use DBIx::Simple;
+use Date::Parse;
+use File::Slurp;
+use FindBin                     qw($Bin);
+use JSON::XS;
+use Time::Piece;
+
+###############################################################################
+# BEGIN user-customizable section
+
+# END   user-customizable section
+###############################################################################
+
+###############################################################################
+# BEGIN boilerplate args checking, usage messages
+
+sub usage {
+    print  <<"END_USAGE";
+Usage: $ME [OPTIONS] ARGS [...]
+
+blah blah blah
+
+OPTIONS:
+
+  -v, --verbose  show verbose progress indicators
+  -n, --dry-run  make no actual changes
+
+  --help         display this message
+  --version      display program name and version
+END_USAGE
+
+    exit;
+}
+
+# Command-line options.  Note that this operates directly on @ARGV !
+our $Historical;                # Populating DB with historical data
+our $debug   = 0;
+our $force   = 0;
+our $verbose = 0;
+our $NOT     = '';              # print "blahing the blah$NOT\n" if $debug
+sub handle_opts {
+    use Getopt::Long;
+    GetOptions(
+        'historical' => \$Historical,
+        'debug!'     => \$debug,
+        'dry-run|n!' => sub { $NOT = ' [NOT]' },
+        'force'      => \$force,
+        'verbose|v'  => \$verbose,
+
+        help         => \&usage,
+        version      => sub { print "$ME version $VERSION\n"; exit 0 },
+    ) or die "Try `$ME --help' for help\n";
+}
+
+# END   boilerplate args checking, usage messages
+###############################################################################
+
+############################## CODE BEGINS HERE ###############################
+
+# The term is "modulino".
+__PACKAGE__->main()                                     unless caller();
+
+# Main code.
+sub main {
+    # Note that we operate directly on @ARGV, not on function parameters.
+    # This is deliberate: it's because Getopt::Long only operates on @ARGV
+    # and there's no clean way to make it use @_.
+    handle_opts();                      # will set package globals
+
+    die "$ME: Too many arguments; try $ME --help\n"                 if @ARGV;
+
+    # cd to the right place
+    chdir $Bin
+        or die "$ME: Cannot cd $Bin: $!";
+    doit();
+}
+
+
+sub doit {
+    my $db = "nmlegis.sqlite";
+
+    my $dbix = DBIx::Simple->connect(
+        "dbi:SQLite:dbname=$db",
+        undef, undef,
+        {
+            sqlite_unicode => 1,
+            foreign_keys   => 1,
+        });
+
+    $dbix->query('PRAGMA journal_mode = WAL');
+    $dbix->query('PRAGMA synchronous = NORMAL');
+
+    #
+    # Legislators
+    #
+    my %legislator_id;
+    update_table($dbix,
+                 'legislator',
+                 [ NMLegis::Legislators::all() ],
+                 [ qw(chamber code firstname lastname district county party lead_position service occupation office email phone office_phone alt_phone district_legislative_aide district_legislative_aide_email district_legislative_aide_phone session_secretary_email extra_information) ],
+                 \%legislator_id,
+             );
+
+    #
+    # Committees
+    #
+    my @committees = NMLegis::Committees::all();
+    my %committee_id;
+    update_table($dbix,
+                 'committee',
+                 \@committees,
+                 [ qw(chamber code name room days time) ],
+                 \%committee_id,
+             );
+
+    #
+    # Bills
+    #
+    my @bills = NMLegis::Bills::all();
+    my %bill_id;                # Keep cache to avoid lookups later
+    update_table($dbix,
+                 'bill',
+                 \@bills,
+                 [ qw(session code chamber type number title actions emergency) ],
+                 \%bill_id,
+             );
+
+
+    #
+    # Now the harder ones: cross-referenced tables
+    #
+
+    # Committee members
+    for my $c (@committees) {
+        my $c_id = $committee_id{$c->code};
+
+        my %in_db = $dbix->query('SELECT legislatorid,role FROM committee_members WHERE committeeid=?', $c_id)->map_hashes('legislatorid');
+
+        my %seen;
+        for my $l ($c->members) {
+            my $l_id = $legislator_id{$l->code};
+            my $new_role = $l->role;
+            if (my $in_db = $in_db{$l_id}) {
+                if ($in_db->{role} ne $new_role) {
+                    printf "%s: %s: %s -> %s$NOT\n", $c->code, $l->name, $in_db->{role}, $l->role;
+                    unless ($NOT) {
+                        $dbix->query(<<'END_SQL', $new_role, $c_id, $l_id);
+UPDATE committee_members SET role=?
+ WHERE committeeid=?
+   AND legislatorid=?
+END_SQL
+                        _insert($dbix, 'committee_updates',
+                                time, $c_id,
+                                "new role: ".$l->code.": $new_role");
+                        _insert($dbix, 'legislator_updates',
+                                time, $l_id,
+                                "new role: ".$c->code.": $new_role");
+                    }
+                }
+                # mark as seen
+                delete $in_db{$l_id};
+            }
+            else {
+                # Someone added to committee
+                printf "%s: adding %s %s$NOT\n", $c->code, $new_role, $l->name;
+                unless ($NOT) {
+                    _insert($dbix, 'committee_members',$c_id,$l_id,$new_role);
+                    _insert($dbix, 'committee_updates',
+                            time, $c_id, "new: ".$l->code.": $new_role");
+                    _insert($dbix, 'legislator_updates',
+                            time, $l_id, "joined: ".$c->code.": $new_role");
+                }
+            }
+        }
+
+        for my $removed (keys %in_db) {
+            $dbix->query('SELECT code FROM legislators WHERE id=?', $removed)
+                ->into(my $l_code);
+            printf "%s: removing %s$NOT\n", $c->code, $l_code;
+            unless ($NOT) {
+                $dbix->query(<<'END_SQL', $c_id, $removed);
+DELETE FROM committee_members
+      WHERE committeeid=?
+        AND legislatorid=?
+END_SQL
+                _insert($dbix, 'committee_updates',
+                        time, $c_id, "removed: $l_code");
+                _insert($dbix, 'legislator_updates',
+                        time, $removed, "removed from: ".$c->code);
+            }
+        }
+    }
+
+    #
+    # Bill sponsors
+    #
+    for my $bill (@bills) {
+        my $b_code = $bill->code;
+        my $b_id   = $bill_id{$b_code};
+
+        my %in_db = $dbix->query('SELECT * FROM sponsors WHERE billid=?', $b_id)->map_hashes('billid');
+        my $order = 1;
+        for my $l ($bill->sponsors) {
+            my $l_code = $l->code;
+            my $l_id   = $legislator_id{$l_code};
+
+            my $where = "WHERE billid=? AND legislatorid=?";
+
+            my @bind = ($b_id, $l_id);
+            $dbix->query("SELECT sequence FROM sponsors $where", @bind)
+                ->into(my $db_order);
+            if (defined $db_order) {
+                if ($db_order != $order) {
+                    print "$b_code: $l_code: sponsor sequence $db_order -> $order$NOT\n" unless $order > 5;
+                    unless ($NOT) {
+                        $dbix->query("UPDATE sponsors SET sequence=? $where",
+                                     $order, @bind);
+                        _insert($dbix, 'bill_updates',
+                                time, $b_id, "sponsor: $l_code: $db_order -> $order")
+                            unless $order > 5;
+                        # FIXME: don't bother adding to legislator_updates
+                    }
+                }
+            }
+            else {
+                # Not in db at all
+                print "$b_code: $l_code: sponsor added, sequence $order$NOT\n";
+                unless ($NOT) {
+                    _insert($dbix, 'sponsors', $b_id, $l_id, $order);
+                    _insert($dbix, 'bill_updates',
+                            time, $b_id, "new sponsor: $l_code");
+                    _insert($dbix, 'legislator_updates',
+                            time, $l_id, "sponsored: $b_code");
+                }
+            }
+
+            ++$order;
+        }
+    }
+
+    # None of the below should be run in historical mode:
+    #  - committee votes, because Ed played with the schema and there are
+    #    incompatible/unreadable files in the history
+    #  - history, because it has bills that don't exist in old revs
+    #  - trackers, because ditto
+    return      if $Historical;
+
+    #
+    # Committee reports
+    #
+    # FIXME: YYYY should be SESSION!
+    my $creports_file = "$Data_Dir/committee-reports-$YYYY.json";
+    if (-e $creports_file && (my $json = read_json($creports_file))) {
+        $json->{schema} eq '20250222'
+            or do {
+                warn "$ME: $creports_file: unknown schema $json->{schema}, ignoring";
+                $json = {};
+            };
+
+        for my $billcode (keys %{$json->{reports}}) {
+            my $b_id = $bill_id{$billcode}
+                or die "$ME: FATAL: no bill ID for $billcode";
+
+            for my $committeecode (keys %{$json->{reports}{$billcode}}) {
+                my $c_id = $committee_id{$committeecode}
+                    or die "$ME: FATAL: no committee ID for $committeecode";
+
+                my @reports = @{$json->{reports}{$billcode}{$committeecode}};
+                for my $index (0 .. $#reports) {
+                    my $report = $reports[$index]
+                        or next;
+
+                    my @bind = ($c_id, $b_id, $index);
+                    $dbix->query(<<'END_SQL', @bind)->into(my $reportid);
+SELECT id FROM committee_reports
+ WHERE committeeid=?
+   AND billid=?
+   AND reportnum=?
+END_SQL
+                    if (! $reportid) {
+                        _insert($dbix, 'committee_reports',
+                                undef, @bind,
+                                $report->{date}, $report->{report},
+                                $report->{cs},
+                                $YYYY);         # FIXME: column out of order!
+                        $reportid = $dbix->last_insert_id;
+                    }
+
+                    # Individual votes
+                    for my $vote (keys %{$report->{votes}}) {
+                        for my $legislatorcode (@{$report->{votes}{$vote}}) {
+                            my $l_id = $legislator_id{$legislatorcode}
+                                or die "$ME: FATAL: no legislator ID for $legislatorcode";
+                            @bind = ($reportid, $l_id);
+                            $dbix->query(<<'END_SQL', @bind)->into(my $found);
+SELECT vote FROM committee_report_votes
+ WHERE reportid=?
+   AND legislatorid=?
+END_SQL
+                            if ($found) {
+                                $found eq $vote
+                                    or warn "$ME: changed vote! $billcode - $committeecode - $legislatorcode - $found -> $vote (updating DB)";
+                                $dbix->query(<<'END_SQL', $vote, @bind);
+UPDATE committee_report_votes SET vote=? WHERE reportid=? AND legislatorid=?
+END_SQL
+                            }
+                            else {
+                                _insert($dbix, 'committee_report_votes', @bind, $vote);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    #
+    # Floor votes
+    #
+    my $fvote_file = "$Data_Dir/floor-votes-$YYYY.json";
+    if (-e $fvote_file && (my $json = read_json($fvote_file))) {
+        $json->{schema} eq '20250222'
+            or do {
+                warn "$ME: $fvote_file: unknown schema, ignoring\n";
+                $json = {};
+            };
+
+        for my $bill (keys %{$json->{votes}}) {
+            my $b_id = $bill_id{$bill}
+                or die "$ME: No bill_id for $bill";
+            for my $chamber (keys %{$json->{votes}{$bill}}) {
+                my $date = delete $json->{votes}{$bill}{$chamber}{date}
+                    or die "$ME: $fvote_file - $bill - $chamber : no date";
+                delete $json->{votes}{$bill}{$chamber}{rollcall};
+                for my $vote (keys %{$json->{votes}{$bill}{$chamber}}) {
+                    for my $lcode (@{$json->{votes}{$bill}{$chamber}{$vote}}) {
+                        my $l_id = $legislator_id{$lcode}
+                            or die "$ME: no legislator_id for $lcode";
+                        my @bind = ($chamber, $b_id, $date, $l_id);
+                        $dbix->query(<<'END_SQL', @bind)->into(my $db_vote);
+SELECT vote FROM floor_votes
+    WHERE chamber=?
+      AND billid=?
+      AND date=?
+      AND legislatorid=?
+END_SQL
+
+                        if (defined $db_vote) {
+                            if ($db_vote ne $vote) {
+                                die "$ME: FATAL! vote changed!";
+                            }
+                        }
+                        else {
+                            # Add to db
+                            _insert($dbix, 'floor_votes', @bind, $vote, $YYYY);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+    #
+    # Bill updates (the tracking we do)
+    #
+    opendir my $dir_fh, "$Data_Dir/history"
+        or die "$ME: opendir $Data_Dir/history: $!";
+    for my $ymd (grep { /^$YYYY-/ } readdir $dir_fh) {
+        opendir my $subdir_fh, "$Data_Dir/history/$ymd"
+            or die "$ME: opendir $Data_Dir/history/$ymd: $!";
+        for my $log (readdir $subdir_fh) {
+            $log =~ /^(\d+:\d+:\d+)\.json$/
+                or next;
+            my $hms = $1;
+            my $t = str2time("${ymd}T${hms}")
+                or die "$ME: could not str2time $ymd $hms";
+            my $json = read_json("$Data_Dir/history/$ymd/$log");
+            $json->{_datetime} eq "${ymd}T${hms}"
+                or die "$ME: $ymd/$log : bad datetime";
+            $json->{_schema} eq '20230201'
+                or die "$ME: $ymd/$log : bad schema";
+          TUPLE:
+            for my $tuple (@{$json->{history}}) {
+                my ($billno, $event, @unexpected) = @$tuple;
+                die "$ME: $ymd/$log: unexpected '@unexpected'" if @unexpected;
+
+                my $b_id = $bill_id{$billno}
+                    or do {
+                        warn "$ME: no id for $billno - skipping";
+                        next TUPLE;
+                    };
+
+                $dbix->query(<<'END_SQL', $t, $b_id, $event)->into(my $found);
+SELECT event FROM bill_updates
+    WHERE timestamp=?
+      AND billid=?
+      AND event=?
+END_SQL
+                if (! $found) {
+                    _insert($dbix, 'bill_updates', $t, $b_id, $event);
+                }
+            }
+        }
+        closedir $subdir_fh;
+    }
+    closedir $dir_fh;
+
+
+    # FIXME FIXME: how to do schedules?
+    # FIXME FIXME: need to do vote records, bill history
+
+    #
+    # Trackers. LWV is a special case.
+    #
+    for my $t (qw(lwv)) {
+        $dbix->query('SELECT id FROM trackers WHERE name=?', $t)
+            ->into(my $t_id);
+        # Tabula rasa
+        $dbix->query('DELETE FROM tracked WHERE trackerid=?', $t_id);
+
+        open my $fh, '<', "/var/www/nmlegis/$t/bills.txt"
+            or die "$ME: cannot read $t/bills.txt: $!";
+        my $category;
+        while (my $line = <$fh>) {
+            chomp $line;
+            next unless $line =~ /\S/;
+            if ($line =~ /^((H|S)[A-Z]{1,5}\d+)(-)?\s+\S/) {
+                my $bill = $1;
+                my $oppose = defined($3);
+                _insert($dbix, 'tracked',
+                        $t_id, $bill_id{$bill}, $category, $oppose);
+            }
+            else {
+                $category = $line;
+            }
+        }
+        close $fh;
+    }
+}
+
+##################
+#  update_table  #  does the simple tables, the ones with 1:1 mappings
+##################
+#
+# "new_objects" might be misleading: the object CLASSES are old (the
+# pre-2025 json data), but since that's what the scripts collect,
+# "new" refers to "recent"
+#
+sub update_table {
+    my $dbix        = shift;
+    my $table_base  = shift;            # 'bill', 'legislator' (singular)
+    my $new_objects = shift;            # list of NMLegis::Xxx objects
+    my $field_list  = shift;            # ordered list of DB fields
+    my $id_ref      = shift;            # { key = code, value = DB ID }
+
+    # FIXME! This may fail for bills table once we have multiple sessions
+    #        ...we may want to append 'WHERE session=?' for bills
+    my $query = "SELECT * FROM ${table_base}s";
+    my @bind;
+    if ($table_base eq 'bill') {
+        $query .= " WHERE session=?";
+        @bind = ($YYYY);
+    }
+    my %in_db = $dbix->query($query, @bind)->map_hashes('code');
+    for my $obj (@$new_objects) {
+        my $code = $obj->code
+            or next;
+        if (my $current = $in_db{$code}) {
+            $id_ref->{$code} = $current->{id};      # db identifier
+
+            for my $f (grep { $_ ne 'code' } @$field_list) {
+                my $old = $current->{$f} || '';
+                my $new = $obj->get($f) || '';
+
+                if ($old ne $new) {
+                    unless ($NOT) {
+                        $dbix->query("UPDATE ${table_base}s SET $f=? WHERE id=?",
+                                     $new, $current->{id});
+                        # Special cases for bill actions:
+                        #  1) remove manual bill updates if action changes
+                        #  2) try to make simpler status codes
+                        if ($table_base eq 'bill' && $f eq 'actions') {
+                            $dbix->query('DELETE FROM bill_user_reports WHERE billid=?', $current->{id});
+                            $new =~ s{^\Q$old\E}{+};
+                        }
+
+                        _insert($dbix, "${table_base}_updates",
+                                time, $current->{id}, "$f: '$old' -> '$new'");
+                    }
+
+                    # Do this after, not before, to get shorter $new
+                    print "$table_base: $code: $f: $old -> $new$NOT\n";
+                }
+            }
+
+            # Mark as seen
+            delete $in_db{$code};
+        }
+        else {
+            # Need to insert new item
+            print "$table_base: $code: new\n";
+            my $fields = join(', ', @$field_list);
+            unless ($NOT) {
+                $dbix->query(<<"END_SQL", map { $obj->get($_) } @$field_list);
+INSERT INTO ${table_base}s ($fields)
+                 VALUES (??)
+END_SQL
+
+                $id_ref->{$obj->code} = $dbix->last_insert_id;
+                _insert($dbix, "${table_base}_updates",
+                        time, $dbix->last_insert_id, "[new]");
+            }
+        }
+    }
+
+    # Look for objects that were removed, but don't do anything about them
+    for my $removed (keys %in_db) {
+#        print "${table_base}s: $removed: no longer found in nmlegis\n";
+    }
+}
+
+sub _insert {
+    return if $NOT;
+    my $dbix  = shift;
+    my $table = shift;
+    my @bind  = @_;
+
+    $dbix->query("INSERT INTO $table VALUES (??)", @bind)
+        or die "$ME: INSERT($table) (@bind) failed: " . $dbix->error;
+}
+
+
+sub read_json {
+    my $file = shift;
+    my $json = read_file($file);
+    return decode_json($json);
+}

@@ -1,0 +1,9 @@
+% layout 'default';
+% title  'Already Registered';
+
+<h1>Already Registered</h1>
+<h3>You already have a login on this server.</h3>
+<p>
+  Try <b><%= link_to 'logging in' => '/login' %></b> instead, or
+  <%= link_to 'resetting your password' => '/login/reset' %>.
+</p>

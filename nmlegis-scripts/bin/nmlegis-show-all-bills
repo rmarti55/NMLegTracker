@@ -1,0 +1,413 @@
+#!/usr/bin/perl
+#
+# nmlegis-show-all-bills - write a page with all bills
+#
+package ESM::NMLegisShowAllBills;
+
+use v5.24;
+use utf8;
+use strict;
+use warnings;
+use open qw( :encoding(UTF-8) :std );
+
+(our $ME = $0) =~ s|.*/||;
+(our $VERSION = '$Revision: 1.30 $ ') =~ tr/[0-9].//cd;
+
+use NMLegis                     qw(:all);
+use NMLegis::Bills;
+use NMLegis::Committees;
+
+# For debugging, show data structures using DumpTree($var)
+#use Data::TreeDumper; $Data::TreeDumper::Displayaddress = 0;
+
+###############################################################################
+# BEGIN user-customizable section
+
+our $Destdir = '/var/www/nmlegis/bills';
+
+# END   user-customizable section
+###############################################################################
+
+use HTML::Entities;
+use Date::Parse;
+use Time::Piece;
+
+###############################################################################
+# BEGIN boilerplate args checking, usage messages
+
+sub usage {
+    print  <<"END_USAGE";
+Usage: $ME [OPTIONS] PATH
+
+$ME writes one page listing all bills.
+
+OPTIONS:
+
+  -v, --verbose  show verbose progress indicators
+  -n, --dry-run  make no actual changes
+
+  --help         display this message
+  --man          display program man page
+  --version      display program name and version
+END_USAGE
+
+    exit;
+}
+
+# Command-line options.  Note that this operates directly on @ARGV !
+our $debug   = 0;
+our $force   = 0;
+our $verbose = 0;
+our $NOT     = '';              # print "blahing the blah$NOT\n" if $debug
+sub handle_opts {
+    use Getopt::Long;
+    GetOptions(
+        'debug!'     => \$debug,
+        'dry-run|n!' => sub { $NOT = ' [NOT]' },
+        'force'      => \$force,
+        'verbose|v'  => \$verbose,
+
+        help         => \&usage,
+        version      => sub { print "$ME version $VERSION\n"; exit 0 },
+    ) or die "Try `$ME --help' for help\n";
+}
+
+# END   boilerplate args checking, usage messages
+###############################################################################
+
+############################## CODE BEGINS HERE ###############################
+
+# The term is "modulino".
+__PACKAGE__->main()                                     unless caller();
+
+# Main code.
+sub main {
+    # Note that we operate directly on @ARGV, not on function parameters.
+    # This is deliberate: it's because Getopt::Long only operates on @ARGV
+    # and there's no clean way to make it use @_.
+    handle_opts();                      # will set package globals
+
+    die "$ME: Too many arguments; try $ME --help\n"                 if @ARGV;
+
+    write_bill_index();
+    write_bill_history();
+    write_signed_bills();
+}
+
+
+######################
+#  write_bill_index  #  Write page for ALL BILLS
+######################
+sub write_bill_index {
+    # Write HTML file
+    my $html_out = "$Destdir/index.html";
+    my $html_tmp = "$html_out.tmp.$$";
+    open my $html_fh, '>', $html_tmp
+        or die "$ME: Cannot create $html_tmp: $!\n";
+    # colorbox from http://www.jacklmoore.com/colorbox/
+    print { $html_fh } <<"END_HTML";
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+ <title>NMLegis bills $YYYY</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="colorbox.css" />
+<link rel="stylesheet" href="../nmlegis.css" />
+<link rel="stylesheet" href="../popup.css" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="/jquery.colorbox.js"></script>
+<script>
+
+// 2023-01-27 dynamic search
+// from https://www.w3schools.com/howto/howto_js_filter_table.asp
+function searchbills() {
+  // Declare variables
+  var input, filter, tables, i;
+  input = document.getElementById("searchbox");
+  filter = input.value.toUpperCase();
+
+  tables = document.getElementsByTagName("table");
+
+  for (i = 0; i < tables.length; i++) {
+    var trs, j;
+    trs = tables[i].getElementsByTagName("tr");
+
+    for (j = 0; j < trs.length; j++) {
+      // Loop through all table rows, and hide those who don't match the search query
+      var td = trs[j].getElementsByTagName("td")[1];
+      if (td) {
+        var txtValue = td.textContent || td.innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+          trs[j].style.display = "";
+        } else {
+          trs[j].style.display = "none";
+        }
+     }
+    }
+  }
+}
+
+
+\$(document).ready(function(){
+    \$(".billhistory").colorbox({inline:true, width:"50%"});
+})
+</script>
+</head>
+<body>
+<input type="text" id="searchbox" onkeyup="searchbills()" placeholder="Search for bill text..."/>
+<h1>NMLegis Bills $YYYY</h1>
+
+<p style="color: #c00; margin-left: 2em; margin-right: 2em; font-size: 125%;"><i>
+DEPRECATION WARNING: This site (all of nmlegis.edsantiago.com) is
+being deprecated. In February 2025 I (Ed) rewrote the entire web&nbsp;UI,
+and as of February&nbsp;25 it seems to be working fairly well, so I'm
+encouraging everyone to move there instead.
+<br/>
+The new site is
+ <b><a href="https://nmlegiswatch.org/bills">nmlegiswatch.org</a></b>
+</p>
+
+<p>
+This page shows <b>all bills</b> filed in the $YYYY session. You probably
+don't want to use this page very often, just once in a while for searches.
+You probably want to use the <a href="../lwv/">LWV</a> tracker.
+Or, if you're a friend of Ed's, ask for your private tracker.
+</p>
+<p>
+See also the <a href="history.html">Bill Filing History</a> page for
+day-by-day lists of introduced bills; or the list of
+<a href="signed.html">signed and awaiting-signature bills</a>; or the
+<a href="../committee-calendars.html">Committee Calendars</a> page
+for a list of all upcoming committee hearings and the bills scheduled therein.
+</p>
+<p>
+Dollar sign '&#x1F4B2;' next to a bill means there is at least one
+fiscal report (FIR, LESC, LFC) available for it.
+</p>
+END_HTML
+
+    my $chamber = '';
+    my $type    = '';
+    for my $b (NMLegis::Bills::all()) {
+        if ($chamber ne $b->chamber) {
+            print  { $html_fh } "</table>\n"          if $type;
+            $chamber = $b->chamber;
+            $type    = '';
+            printf { $html_fh } "<hr/><h2>%s</h2>\n", $b->chamber_name;
+        }
+        if ($type ne $b->type) {
+            print  { $html_fh } "</table>\n"          if $type;
+            $type = $b->type;
+            printf { $html_fh } "<h3>%s %ss</h3>\n",
+                $b->chamber_name, $b->type_name;
+            print  { $html_fh } "<table>\n";
+        }
+
+        delete $b->{_am_tracking};
+        delete $b->{is_evil};
+
+        print  { $html_fh } $b->html_row();
+    }
+    print { $html_fh } "</table>\n"          if $chamber;
+
+    printf { $html_fh } <<'END_HTML', localtime->datetime, $ME;
+<hr/>
+<span class='signature'>Updated: %s by %s</span>
+</body>
+</html>
+END_HTML
+
+    close $html_fh
+        or die "$ME: Error writing $html_tmp: $!\n";
+    rename $html_tmp => $html_out
+        or die "$ME: Error renaming $html_tmp: $!\n";
+}
+
+
+# oh, the duplication, it hurts
+sub write_bill_history {
+    # Write HTML file
+    my $html_out = "$Destdir/history.html";
+    my $html_tmp = "$html_out.tmp.$$";
+    open my $html_fh, '>', $html_tmp
+        or die "$ME: Cannot create $html_tmp: $!\n";
+    # colorbox from http://www.jacklmoore.com/colorbox/
+    print { $html_fh } <<"END_HTML";
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+ <title>Bill Filing History $YYYY</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../nmlegis.css" />
+<link rel="stylesheet" href="../popup.css" />
+<link rel="stylesheet" href="../collapsible.css" />
+
+</head>
+<body>
+<div id="nav"><a href="index.html">All Bills</a>&nbsp;&rarr;&nbsp;<b>Bill Introduction History</b></div>
+<h1>Bill Filing History $YYYY</h1>
+END_HTML
+
+    my $updates = NMLegis::Bills::updates(10);
+
+    my $counter = '000';
+
+  YMD:
+    for my $ymd (reverse sort keys %$updates) {
+        # Find events of note
+        my @filed;
+
+        my $is_today = (localtime->ymd eq $ymd);
+
+        for my $hms (sort keys(%{$updates->{$ymd}})) {
+            for my $log (@{$updates->{$ymd}{$hms}{history}}) {
+                my ($bill, $action) = @$log;
+                next unless $action =~ /filed/;
+
+                push @filed, $bill;
+            }
+        }
+
+        next YMD unless @filed;
+
+        my $ymd_friendly = localtime(str2time($ymd))->strftime("%A, %b %e");
+        if ($is_today) {
+            $ymd_friendly = "TODAY ($ymd_friendly)";
+        }
+        else {
+            $ymd_friendly = "on $ymd_friendly";
+        }
+
+        print { $html_fh } <<"END_HTML";
+        <div class="wrap-collabsible">
+  <input id="collapsible$counter" class="toggle" type="checkbox">
+  <label for="collapsible$counter" class="lbl-toggle">Bills introduced $ymd_friendly</label>
+  <div class="collapsible-content">
+    <div class="content-inner">
+    <table class="bills">
+END_HTML
+        ++$counter;
+
+
+        for my $billno (@filed) {
+
+            my $b = NMLegis::Bills->new($billno);
+            print  { $html_fh } $b->html_row();
+        }
+
+        print { $html_fh } "    </table>\n";
+        print { $html_fh } "    </div>\n  </div>\n</div>\n<hr/>\n";
+    }
+
+    printf { $html_fh } <<'END_HTML', localtime->datetime, $ME;
+<span class='signature'>Updated: %s by %s.
+</body>
+</html>
+END_HTML
+
+    close $html_fh
+        or die "$ME: Error writing $html_tmp: $!\n";
+    rename $html_tmp => $html_out
+        or die "$ME: Error renaming $html_tmp: $!\n";
+}
+
+
+########################
+#  write_signed_bills  #  Write page for SIGNED bills
+########################
+sub write_signed_bills {
+    # Write HTML file
+    my $html_out = "$Destdir/signed.html";
+    my $html_tmp = "$html_out.tmp.$$";
+    open my $html_fh, '>', $html_tmp
+        or die "$ME: Cannot create $html_tmp: $!\n";
+    # colorbox from http://www.jacklmoore.com/colorbox/
+    print { $html_fh } <<"END_HTML";
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+ <title>NMLegis Signed Bills $YYYY</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="colorbox.css" />
+<link rel="stylesheet" href="../nmlegis.css" />
+<link rel="stylesheet" href="../popup.css" />
+
+</head>
+<body>
+<h1>NMLegis Signed Bills $YYYY</h1>
+<p>
+This page shows <b>signed bills</b> in the $YYYY session.
+</p>
+<p>
+See also the <a href="history.html">Bill Filing History</a> page for
+day-by-day lists of introduced bills; or the list of
+<a href="index.html">all bills this session</a>; or the
+<a href="../committee-calendars.html">Committee Calendars</a> page
+for a list of all upcoming committee hearings and the bills scheduled therein.
+</p>
+END_HTML
+
+    my %by_date;
+    my %fulldate;
+    for my $b (NMLegis::Bills::all()) {
+        # FIXME: use ->history instead, which parses dates?
+        my $a = $b->actions
+            or next;
+
+        my $md;
+        if ($a =~ /SGND.*\((\w+[\.\s]+\d+)\)/) {
+            my $t = str2time($1)
+                or die "$ME: Could not parse time '$1' in '$a'";
+            $md = localtime($t)->strftime("%m-%d");
+            $fulldate{$md} //= localtime($t)->strftime("%B %e");
+        }
+
+        elsif ($a =~ /SGND\.?\s*$/) {
+            $md = '00-01';
+            $fulldate{$md} = '[Signed, Date Unknown]';
+        }
+
+        elsif ($a =~ m!\bPASSED/H! && $a =~ m!\bPASSED/S!) {
+            $md = '00-00';
+            $fulldate{$md} = 'Awaiting Governor&apos;s Signature';
+        }
+
+        push @{$by_date{$md}}, $b       if $md;
+
+    }
+
+    for my $md (reverse sort keys %by_date) {
+        printf { $html_fh } <<"END_HTML", $fulldate{$md};
+<hr/>
+<h2>%s</h2>
+ <table class="bills">
+END_HTML
+        for my $b (@{$by_date{$md}}) {
+            print  { $html_fh } $b->html_row();
+        }
+
+        print  { $html_fh } "</table>\n";
+    }
+
+    printf { $html_fh } <<'END_HTML', localtime->datetime, $ME;
+<span class='signature'>Updated: %s by %s.
+</body>
+</html>
+END_HTML
+
+    close $html_fh
+        or die "$ME: Error writing $html_tmp: $!\n";
+    rename $html_tmp => $html_out
+        or die "$ME: Error renaming $html_tmp: $!\n";
+}
+
+1;

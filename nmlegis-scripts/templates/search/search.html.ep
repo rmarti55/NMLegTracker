@@ -1,0 +1,41 @@
+% layout 'default';
+% title  'Search';
+
+<form method="get" action="/search">
+  <div id="bigsearch">
+    <input name="q" type="text" size="30" value="<%= $q %>" />
+  </div>
+</form>
+
+<h2>Results for <u><%= $q %></u></h2>
+
+% if (@$legislators) {
+<h2>Legislators</h2>
+<ul>
+  % for my $l (@$legislators) {
+  <li><a href="<%= $l->url %>"><%= $l->name %> - <%= $l->party %>-<%= $l->county %></a></li>
+  % }
+</ul>
+% }
+
+% if (@$bills_by_title) {
+<h2>Legislation</h2>
+<table>
+  % for my $b (@$bills_by_title) {
+  %= include 'bills/_billrow', b => $b, columns => [ 'watch_button', 'id', 'title', 'sponsors', 'status' ]
+  % }
+</table>
+% }
+
+% if (@$bills_by_blurb) {
+<h2>Legislation (search terms appear in bill blurb, not title)</h2>
+<p>
+  Bill blurbs are too long AND ICKY ALL CAPS to display here. Click on
+  individual bills to find out more.
+</p>
+<table>
+  % for my $b (@$bills_by_blurb) {
+  %= include 'bills/_billrow', b => $b, columns => [ 'watch_button', 'id', 'title', 'sponsors', 'status' ]
+  % }
+</table>
+% }

@@ -1,0 +1,15 @@
+{
+   "2021-02-25" : {
+      "13:30:00" : {
+         "STBTC" : {
+            "bills" : ["SB11","SB84","SB118","SB252","SB262","SB299","SB58","SB179","SB204","SB189","SB106","SB325"],
+            "date" : "2021-02-25",
+            "datetime" : "2021-02-25T13:30:00",
+            "mtime" : "2021-02-24T14:20:13",
+            "name" : "STBTC",
+            "time" : "1:30 PM or 15 minutes after floor session",
+            "url" : "2021/02/STBTC/STBTCageFeb25.21.pdf"
+         }
+      }
+   }
+}

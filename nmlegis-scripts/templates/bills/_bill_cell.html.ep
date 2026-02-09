@@ -1,0 +1,18 @@
+  <td class="id"<%== $rowspan %>>
+    % # used in template pages when showing collapsed schedules
+    % if (my $sequence = $b->{sequence}) {
+    <small>(<%= $sequence %>)</small>
+    % }
+    %# FIXME: refactor this, to use in committee.html.ep voting table
+    % if ($b->cs) {
+    <small>CS/</small>&nbsp;
+    % }
+    <a href="<%= $b->url %>" target="_blank">
+      <%= $b->emergency =%><small><%= $b->chamber =%><%= $b->type =%></small><b><%= $b->number =%></b>
+    </a>
+    % if ($b->financial_report_available) {
+    &#x1F4B2;
+    % } else {
+    &nbsp;
+    % }
+  </td>

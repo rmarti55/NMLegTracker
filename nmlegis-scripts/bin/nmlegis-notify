@@ -1,0 +1,595 @@
+#!/usr/bin/perl
+#
+# nmlegis-mail - send out emails
+#
+package NMLegis::Notify;
+
+use v5.36;
+use strict;
+use warnings;
+use utf8;
+use open qw( :encoding(UTF-8) :std );
+
+(our $ME = $0) =~ s|.*/||;
+(our $VERSION = '$Revision: 1.30 $ ') =~ tr/[0-9].//cd;
+
+use NMLegis                     qw(:all);
+use NMLegis::UI::Model::DB;
+
+###############################################################################
+# BEGIN user-customizable section
+
+# END   user-customizable section
+###############################################################################
+
+use Date::Parse;
+use ESM::Sendmail;
+use Time::Piece;
+use FindBin                     qw($Bin);
+use File::stat;
+use File::Slurp                 qw(read_file);
+use JSON::XS;
+use List::Util                  qw(uniq);
+
+###############################################################################
+# BEGIN boilerplate args checking, usage messages
+
+sub usage {
+    print  <<"END_USAGE";
+Usage: $ME [OPTIONS] PATH
+
+blah blah blah
+
+OPTIONS:
+
+  -v, --verbose  show verbose progress indicators
+  -n, --dry-run  make no actual changes
+
+  --help         display this message
+  --man          display program man page
+  --version      display program name and version
+END_USAGE
+
+    exit;
+}
+
+# Command-line options.  Note that this operates directly on @ARGV !
+our $debug   = 0;
+our $force   = 0;
+our $verbose = 0;
+our $NOT     = '';              # print "blahing the blah$NOT\n" if $debug
+sub handle_opts {
+    use Getopt::Long;
+    GetOptions(
+        'debug!'     => \$debug,
+        'dry-run|n!' => sub { $NOT = ' [NOT]' },
+        'force'      => \$force,
+        'verbose|v'  => \$verbose,
+
+        help         => \&usage,
+        version      => sub { print "$ME version $VERSION\n"; exit 0 },
+    ) or die "Try `$ME --help' for help\n";
+}
+
+# END   boilerplate args checking, usage messages
+###############################################################################
+
+############################## CODE BEGINS HERE ###############################
+
+# The term is "modulino".
+__PACKAGE__->main()                                     unless caller();
+
+# Main code.
+sub main {
+    # Note that we operate directly on @ARGV, not on function parameters.
+    # This is deliberate: it's because Getopt::Long only operates on @ARGV
+    # and there's no clean way to make it use @_.
+    handle_opts();                      # will set package globals
+
+    # Fetch command-line arguments.  Barf if too many.
+    my $arg = shift(@ARGV)
+        or die "Usage: $ME [date | path]\n";
+    die "$ME: Too many arguments; try $ME --help\n"                 if @ARGV;
+
+    my ($which, @history) = get_history($arg);
+
+    send_notifications($which, @history);
+}
+
+
+###############################################################################
+# BEGIN get_history
+
+sub get_history( @keys ) {
+    if (@keys == 1) {
+        my $key = $keys[0];
+        return _get_history_from_single_json($key)  if $key =~ /\.json$/;
+        return _get_history_for_one_day($key)       if $key =~ /^\d+-\d+-\d+$/;
+    }
+    elsif (! grep { $_ !~ /\.json$/ } @keys) {
+        # All files are json
+        return _get_history_from_multiple_jsons(@keys);
+    }
+    die "$ME: Unimplemented! Unknown call to get_history()";
+}
+
+sub _get_history_from_single_json( $path ) {
+    -e $path
+        or die "$ME: No such file: $path\n";
+    my $json = JSON::XS->new->utf8(0);
+    $json->relaxed(1);  # Input files may include comments (nonstandard JSON)
+    my $tmp = $json->decode(scalar(read_file($path)));
+    $tmp->{_datetime} =~ /^([\d-]+T[\d:]+)$/
+        or die "Internal error: bad datetime '$tmp->{_datetime}'";
+    my $t = str2time($1);
+
+    # Some statuses are not worth emailing about
+    my @history = map { [ $t, @$_ ] }
+        grep { $_->[1] !~ /^(filed:|passed|not prntd|referred to|sent to|germane)/ }
+        @{$tmp->{history}};
+
+    # FIXME: actually check date and time
+    return 'instant', @history;
+}
+
+sub _get_history_from_multiple_jsons( @paths ) {
+    my @history;
+    for my $path (@paths) {
+        my (undef, @sub_history) = _get_history_from_single_json($path);
+        push @history, @sub_history;
+    }
+
+    # Consolidate
+  CONSOLIDATE:
+    for (my $i=0; $i < @history; $i++) {
+        last if $i >= @history;         # Can happen on a redo
+
+        my ($t_now, $bill_now, $action_now) = @{$history[$i]};
+        for (my $j=$i+1; $j < @history; $j++) {
+            my ($t_later, $bill_later, $action_later) = @{$history[$j]};
+
+            if ($bill_now eq $bill_later) {
+                # Scheduled, then removed: delete both
+                if ($action_now =~ /scheduled for (\S+) on \d+-(\S+)/) {
+                    my ($committee, $date) = ($1, $2);
+                    if ($action_later =~ /removed from (\S+) (\S+)/) {
+                        if ($1 eq $committee) {
+                            if ($2 eq $date) {
+                                splice @history, $j, 1;
+                                splice @history, $i, 1;
+                                redo CONSOLIDATE;
+                            }
+                            else {
+                                warn "$ME: WEIRD! $bill_now: inconsistent dates: ($action_now) ($action_later)\n";
+                            }
+                        }
+                        else {
+                            warn "$ME: WEIRD! $bill_now: inconsistent committees: ($action_now) ($action_later)\n";
+                        }
+                    }
+                }
+
+                # Removed, then scheduled: remove the first one
+                if ($action_now =~ /removed from (\S+)/) {
+                    my $committee = $1;
+                    if ($action_later =~ /scheduled for (\S+)/) {
+                        if ($1 eq $committee) {
+                            splice @history, $i, 1;
+                            redo CONSOLIDATE;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return 'multi', @history;
+}
+
+
+sub _get_history_for_one_day( $ymd ) {
+    # Canonicalize
+    my $t = localtime(str2time($ymd));
+    my $want_ymd = $t->ymd;
+
+    my $history_dir = "$Data_Dir/history/$want_ymd";
+    opendir my $dir_fh, $history_dir
+        or die "$ME: opendir $history_dir: $!";
+    my @json_files = map { "$history_dir/$_" }
+        sort grep { /^\d+:\d+:\d+\.json$/ } readdir $dir_fh;
+    closedir $dir_fh;
+
+    my (undef, @history) = _get_history_from_multiple_jsons(@json_files);
+
+    return 'daily', @history;
+}
+
+# END   get_history
+###############################################################################
+# BEGIN send_notifications
+
+sub send_notifications( $which, @history ) {
+    my $intro;
+    if ($which eq 'instant') {
+        $intro = "This is a quick heads-up of bill activity that happened just now.";
+    }
+    elsif ($which eq 'daily') {
+        $intro = "This is recap of daily activity from FIXME.";
+    }
+    else {
+        die "$ME: Unknown which=$which";
+    }
+
+    for my $u (NMLegis::UI::Model::DB->new->users) {
+        if (my $msg = _find_notifications($u, @history)) {
+            #        ...
+            printf "%s :\n", $u->firstname          if $debug;
+
+            $msg = sprintf(<<'END_BOILERPLATE', $u->firstname, $intro, $msg);
+Dear %s,
+
+%s
+
+%s
+
+--
+You are receiving this as a service from blah blah
+END_BOILERPLATE
+
+            # FIXME: add a footer
+            sendmail(
+                From    => q{"Ed's Bill Tracker" <noreply@nmlegiswatch.org>},
+                To      => 'nmlegis@edsantiago.com',        # FIXME
+                Bcc     => 'nmlegis@edsantiago.com',
+                Subject => "NM Legislative Update",
+                'List-Unsubscribe' => 'https://nmlegiswatch.org/settings',
+                Body    => [ $msg ],
+            );
+        }
+    }
+}
+
+
+sub _find_notifications( $u, @history ) {
+    my $uidb = NMLegis::UI::Model::DB->new;
+
+    # Called with an integer userid (from tests)
+    if (! ref($u)) {
+        $u = $uidb->user($u);
+    }
+
+    # Pass 1: find this user's tracker. Those are the first we'll show.
+    my %tracker_seen;
+    my @in_trackers_owned;
+    for my $t ($u->trackers_owned) {
+        next if $tracker_seen{ $t->id }++;
+        if (my @found = _find_in_tracker($t, @history)) {
+            push @in_trackers_owned, [ $t, @found ];
+        }
+    }
+
+    # Pass 2: other trackers
+    my @in_trackers_tracked;
+    for my $t ($u->trackers_subscribed_to) {
+        next if $tracker_seen{ $t->id }++;
+        if (my @found = _find_in_tracker($t, @history)) {
+            push @in_trackers_tracked, [ $t, @found ];
+        }
+    }
+
+    # Assemble
+    return unless @in_trackers_owned || @in_trackers_tracked;
+
+    _deduplicate_bills(\@in_trackers_owned, \@in_trackers_tracked);
+
+    my $msg = '';
+    if (@in_trackers_owned) {
+        $msg .= "Bills in YOUR tracker";
+        $msg .= "s" if @in_trackers_owned > 1;
+
+        $msg .= _tracker_messages(@in_trackers_owned);
+    }
+
+    if (@in_trackers_tracked) {
+        # Message can be empty if all bills have already been seen.
+        if (my $more = _tracker_messages(@in_trackers_tracked)) {
+            $msg .= "\n-------------------------------\n\n" if $msg =~ /YOUR/;
+            $msg .= "Bills in other trackers\n";
+            $msg .= $more;
+        }
+    }
+
+    $msg;
+}
+
+######################
+#  _find_in_tracker  #  For list of bills in @history, see if they're tracked
+######################
+sub _find_in_tracker( $tracker, @history ) {
+    my @intersection;
+
+    for my $tuple ($tracker->bill_list) {
+        my ($category, @bill_list) = @$tuple;
+        for my $bill (@bill_list) {
+            for my $match (grep { $_->[1] eq $bill->code } @history) {
+                # 0 is timestamp, 2 is action
+                push @intersection, +{
+                    bill      => $bill,
+                    tracker   => $tracker,
+                    category  => $category,
+                    timestamp => $match->[0],
+                    action    => $match->[2],
+                };
+            }
+        }
+    }
+
+    return @intersection;
+}
+
+
+########################
+#  _deduplicate_bills  #  Make only one reference to each bill
+########################
+sub _deduplicate_bills( $owned, $tracked ) {
+    my %seen;
+
+    for (my $i=0; $i < @$owned; $i++) {
+        for (my $j=1; $j < @{$owned->[$i]}; $j++) {
+            my $entry = $owned->[$i][$j] || next;
+
+            if (my $seen_ref = $seen{ $entry->{bill}->code }) {
+                push @{ $seen_ref->{also_in} }, $entry->{tracker};
+                splice @{$owned->[$i]}, $j, 1;
+                redo;
+            }
+            $seen{ $entry->{bill}->code } = $entry;
+        }
+    }
+
+    for (my $i=0; $i < @$tracked; $i++) {
+        for (my $j=1; $j < @{$tracked->[$i]}; $j++) {
+            my $entry = $tracked->[$i][$j] || next;
+            if (my $seen_ref = $seen{ $entry->{bill}->code }) {
+                push @{ $seen_ref->{also_in} }, $entry->{tracker};
+                splice @{$tracked->[$i]}, $j, 1;
+                redo;
+            }
+            $seen{ $entry->{bill}->code } = $entry;
+        }
+    }
+}
+
+
+#######################
+#  _tracker_messages  #  Bill messages for one or more trackers
+#######################
+sub _tracker_messages(@tracker_entries) {
+    my $msg = '';
+
+    for my $tuple (@tracker_entries) {
+        my ($tracker, @entries) = @$tuple;
+
+        # This can happen if user is watching another tracker, but that
+        # tracker only triggered on bills which were already seen in
+        # the user's own tracker.
+        next if !@entries;
+
+        # FIXME: sort by bill? By category?
+        # FIXME: check ACTION too! In full-day logs, we can have multiple
+        # actions for one bill
+        $msg .= "\n\n" . $tracker->description . "\n\n";
+
+        my $cat_heading = '';
+        for my $entry (sort _by_category_and_bill @entries) {
+            if ($entry->{category} ne $cat_heading) {
+                $msg .= sprintf(" = %s\n", $entry->{category});
+                $cat_heading = $entry->{category};
+            }
+
+            $msg .= sprintf("   %-7s %s\n           > %s\n",
+                            $entry->{bill}->code,
+                            $entry->{bill}->title,
+                            $entry->{action});
+            if (my $also = $entry->{also_in}) {
+                $msg .= sprintf("           [ also tracked in %s ]\n",
+                                join(', ', uniq map { $_->name } @$also));
+            }
+            $msg .= "\n";
+        }
+    }
+
+    $msg;
+}
+
+# END   send_notifications
+###############################################################################
+# BEGIN helpers
+
+sub _by_category_and_bill {
+    $a->{category} cmp $b->{category}
+        || _by_bill_number($a->{bill}->code, $b->{bill}->code);
+}
+
+sub _by_bill_number($a, $b) {
+    if ($a =~ /^([A-Z]+)([0-9]+)$/) {
+        my ($a_type, $a_number) = ($1, $2);
+
+        if ($b =~ /^([A-Z]+)([0-9]+)$/) {
+            my ($b_type, $b_number) = ($1, $2);
+
+            return $a_type cmp $b_type || $a_number <=> $b_number;
+        }
+        die "foo1 '$a' '$b'";
+    }
+    die "foo2 $a $b";
+}
+
+# END   helpers
+###############################################################################
+
+1;
+
+__END__
+
+    # Rearrange by bill
+    my %by_bill;
+    for my $ymd (sort keys %$history) {
+        for my $hms (sort keys %{$history->{$ymd}}) {
+            for my $log (@{$history->{$ymd}{$hms}{history}}) {
+                my ($bill, $action) = @$log;
+
+                $action =~ s{(\d+-\d+-\d+\s+\d+:\d+:\d+)}{
+                    my $t = localtime(str2time($1));
+                    my $repl = $t->strftime("%A, %b %e, %H:%M");
+                    unless ($action =~ /remove/) {
+                        if ($t->ymd eq localtime->ymd) {
+                            $repl .= " (TODAY)";
+                        }
+                        elsif ($t->ymd eq localtime(time+86400)->ymd) {
+                            $repl .= " (tomorrow)";
+                        }
+                    }
+                    $repl;
+                }gex;
+
+                push @{ $by_bill{$bill} }, [ $ymd, $hms, $action ];
+            }
+        }
+    }
+
+#    use Data::Dump; dd \%by_bill;
+
+    notify( \%by_bill, $subject, $blurb );
+}
+
+
+############
+#  notify  #  main loop: looks for all persons to be notified, sends mail
+############
+sub notify {
+    my $by_bill = shift;
+    my $subject = shift;
+    my $blurb   = shift;
+
+  BILLFILE:
+    for my $billfile (glob("/var/www/nmlegis/*/bills.txt")) {
+        # Only if active this year
+        next BILLFILE if -M $billfile > 100;
+
+        (my $dir = $billfile) =~ s|/[^/]+$||;
+
+        my @notify = read_notify($dir)
+            or next BILLFILE;
+
+        my @bills = read_billfile($billfile);
+
+        my $notification = '';
+
+        for my $block (@bills) {
+            my $topic = $block->{topic};
+
+          BILL:
+            for my $entry (@{$block->{bills}}) {
+                my $billno = $entry->{billno}           or next BILL;
+                my $changes = $by_bill->{$billno}       or next BILL;
+
+                $notification .= "== $topic\n\n"      if $topic;
+                $topic = '';
+                $notification .= sprintf("   %s %s\n",
+                                         $billno,
+                                         NMLegis::Bills->new($billno)->readable_title);
+
+                for my $delta (@$changes) {
+                    $notification .= sprintf("    - %s\n", $delta->[2]);
+                }
+
+                $notification .= "\n";
+            }
+        }
+
+        #        use Data::Dump; dd \@notifications;
+
+        next BILLFILE unless $notification;
+
+        #####################################################################
+        #
+        # Found something to notify
+
+        # "ACLU Priorities", or "Cecile", or whatever
+        my $title = read_file("$dir/title") || $dir;
+        chomp $title;
+        # Special case: use "the $title", unless there's an apostrophe
+        my $the = "";
+        $the = "the " unless $title =~ /^\S+\'s\s/;
+
+        (my $url_base = $dir) =~ s|^.*/||;
+        $notification .= <<"END_SIGNATURE";
+
+** You are receiving this email because you're watching
+   $the$title tracker at:
+
+   https://nmlegis.edsantiago.com/$url_base/
+
+And again, this email shows _changes_, not _schedules_. See the link
+above for current status.
+
+If you wish to stop these emails, please write to <nmlegis\@edsantiago.com>
+END_SIGNATURE
+
+        sendmail(
+            From    => q{"Ed's Bill Tracker" <nmlegis@edsantiago.com>},
+            To      => 'nmlegis@edsantiago.com',
+            Bcc     => 'nmlegis@edsantiago.com',
+            Subject => "$subject - $title",
+            'List-Unsubscribe' => '<mailto:nmlegis@edsantiago.com>',
+            Body    => [ $blurb . "\n\n" . $notification ],
+        );
+
+    }
+}
+
+sub read_billfile {
+    my $file = shift;
+
+    my @list;
+    open my $bill_fh, '<', $file
+        or die "$ME: Cannot read $file: $!\n";
+    while (my $line = <$bill_fh>) {
+        chomp $line;
+        if ($line =~ /^((H|S)\w+\d+)(\s+(\S.*))?/) {        # bill
+            push @{$list[-1]{bills}}, { billno => $1, title => $4||'' };
+        }
+        elsif ($line) {
+            push @list, { topic => $line, bills => [] };
+        }
+    }
+    close $bill_fh;
+
+    return @list;
+}
+
+sub read_notify {
+    my $dir = shift;
+
+    open my $notify_fh, '<', "$dir/notify"
+        or return 'esm';
+
+    # Read list of who wants email
+    my @notify;
+    while (my $line = <$notify_fh>) {
+        chomp $line;
+        next if $line =~ /^#/;
+        next unless $line;
+        # FIXME: add an "immediate" or "nightly" category?
+        # FIXME: allow specifying names
+        $line =~ /^\s*(\S+\@\S+\.\S+)\s*$/
+            or die "Invalid email address '$line'\n";
+        push @notify, $1;
+    }
+    close $notify_fh;
+
+    return @notify;
+}
+
+1;

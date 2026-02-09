@@ -1,0 +1,15 @@
+{
+   "2021-03-15" : {
+      "00:00:00" : {
+         "SJC" : {
+            "bills" : ["HB31","HB75","HB125","HB144","HB209","SJR2","HB12","SB288"],
+            "date" : "2021-03-15",
+            "datetime" : "2021-03-15T00:00:00",
+            "mtime" : "2021-03-14T20:35:32",
+            "name" : "SJC",
+            "time" : "AT THE CALL OF THE CHAIR",
+            "url" : "2021/03/SJC/SJCageMar15.21.pdf"
+         }
+      }
+   }
+}

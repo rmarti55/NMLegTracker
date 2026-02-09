@@ -1,0 +1,52 @@
+{
+   "H" : {
+      "B" : {
+         "1" : {
+            "actions" : "[1] HAFC-HAFC- DP [2] fl/a- PASSED/H (56-14)- m/rcnsr adptd- PASSED/H (59-11) [1] tbld/S [2] w/drn - PASSED/S (33-5) SGND BY GOV (Nov. 25) Ch. 1.",
+            "sponsors" : ["HLUND","HEGOL","HSAJO"],
+            "title" : "SESSION FUNDING & CORONAVIRUS RELIEF"
+         },
+         "2" : {
+            "actions" : "[1] not prntd-HRC API.",
+            "emergency" : "*",
+            "sponsors" : ["HNIBE","HSCHM","HGADV","HSCHM","HMONR","HDIXO","HSMAL"],
+            "title" : "EMERGENCY POWERS CHANGES"
+         }
+      },
+      "JM" : {
+         "1" : {
+            "actions" : "[1] HSEIC-HSEIC API.",
+            "sponsors" : ["HMONR","HSCHM","HBROW","HCROW","HGADV","HANYA","HGARR","HGURR","SPOPE","HROYB"],
+            "title" : "REVIEW GOVERNOR CORONAVIRUS RESPONSE"
+         }
+      },
+      "M" : {
+         "1" : {
+            "actions" : "[1] HHHC-HHHC API.",
+            "sponsors" : ["HSCHM"],
+            "title" : "FOCUSED PROTECTION CORONAVIRUS STRATEGIES"
+         }
+      }
+   },
+   "S" : {
+      "B" : {
+         "1" : {
+            "actions" : "[1] SCW-SCW API.",
+            "sponsors" : ["SSMIT"],
+            "title" : "SESSION FUNDING & CORONAVIRUS RELIEF"
+         },
+         "2" : {
+            "actions" : "[1] SCC/SFC-SCC API.",
+            "emergency" : "*",
+            "sponsors" : ["SPADI"],
+            "title" : "FED MONEY FOR BROADBAND"
+         },
+         "3" : {
+            "actions" : "[1] SCC/SFC-SCC API.",
+            "emergency" : "*",
+            "sponsors" : ["SBACA","SMOOR","SPIRT"],
+            "title" : "EMERGENCY POWERS CHANGES"
+         }
+      }
+   }
+}

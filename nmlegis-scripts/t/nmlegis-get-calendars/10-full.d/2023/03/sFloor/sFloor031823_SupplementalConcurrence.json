@@ -1,0 +1,14 @@
+{
+   "2023-03-18" : {
+      "00:00:00" : {
+         "Senate" : {
+            "bills" : ["SB210"],
+            "date" : "2023-03-18",
+            "mtime" : "2023-03-17T13:16:29",
+            "name" : "Senate",
+            "room" : "Senate Floor",
+            "url" : "2023/03/sFloor/sFloor031823_SupplementalConcurrence.pdf"
+         }
+      }
+   }
+}

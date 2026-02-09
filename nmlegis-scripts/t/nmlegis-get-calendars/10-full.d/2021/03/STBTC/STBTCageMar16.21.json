@@ -1,0 +1,15 @@
+{
+   "2021-03-16" : {
+      "00:00:00" : {
+         "STBTC" : {
+            "bills" : ["HB248","HB235","HB82","SM2","SB113","SB392","HB107","HB262","HB300","HB325","HB178","HB112"],
+            "date" : "2021-03-16",
+            "datetime" : "2021-03-16T00:00:00",
+            "mtime" : "2021-03-15T13:42:21",
+            "name" : "STBTC",
+            "time" : "15 minutes after the floor session",
+            "url" : "2021/03/STBTC/STBTCageMar16.21.pdf"
+         }
+      }
+   }
+}

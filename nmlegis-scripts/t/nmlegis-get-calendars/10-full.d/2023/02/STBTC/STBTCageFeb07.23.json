@@ -1,0 +1,17 @@
+{
+   "2023-02-07" : {
+      "00:00:00" : {
+         "STBTC" : {
+            "bills" : ["SB38","SB204","SB50","SB52","SB54","SB55","SB56","SB62","SB66","SB68"],
+            "date" : "2023-02-07",
+            "datetime" : "2023-02-07T00:00:00",
+            "mtime" : "2023-02-03T14:05:08",
+            "name" : "STBTC",
+            "room" : "321",
+            "time" : "After the floor session ends",
+            "url" : "2023/02/STBTC/STBTCageFeb07.23.pdf",
+            "zoom" : "https://us02web.zoom.us/j/4011289295"
+         }
+      }
+   }
+}

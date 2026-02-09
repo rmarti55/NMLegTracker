@@ -1,0 +1,17 @@
+{
+   "2022-01-25" : {
+      "09:00:00" : {
+         "SCONC" : {
+            "bills" : ["SB17","SB37","SB46","SB18"],
+            "date" : "2022-01-25",
+            "datetime" : "2022-01-25T09:00:00",
+            "mtime" : "2022-01-20T14:15:19",
+            "name" : "SCONC",
+            "room" : "311",
+            "time" : "9:00 AM",
+            "url" : "2022/01/SCONC/SCONCageJan25.22.pdf",
+            "zoom" : "https://us02web.zoom.us/j/86543845863"
+         }
+      }
+   }
+}

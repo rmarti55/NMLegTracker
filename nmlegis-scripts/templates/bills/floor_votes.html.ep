@@ -1,0 +1,40 @@
+% my @votes = $b->floor_votes($chamber) or return;
+% my $date = Time::Piece::localtime(Date::Parse::str2time($votes[0]{date}))->strftime("%B %e");
+%# FIXME: can there be more than one floor vote for a bill?
+<hr/>
+<div class="wrap-collapsible">
+  <input id="collapsible-floorvote-<%= $chamber %>" class="toggle" type="checkbox">
+  <label for="collapsible-floorvote-<%= $chamber %>" class="lbl-toggle"><%= $chamber %> Floor Vote : <%= $date %></label>
+  <div class="collapsible-content">
+    <div class="content-inner">
+      <br/>
+% my $_by_name = sub($$) { $_[0]->{legislator}->lastname cmp $_[1]->{legislator}->lastname || $_[0]->{legislator}->firstname cmp $_[1]->{legislator}->firstname };
+% my @lhs =  sort $_by_name grep { $_->{vote} eq 'yes' } @votes;
+% my @rhs =  sort $_by_name grep { $_->{vote} eq 'no' }  @votes;
+% push @rhs, sort $_by_name grep { $_->{vote} eq 'absent' }  @votes;
+% push @rhs, sort $_by_name grep { $_->{vote} eq 'excused' }  @votes;
+% my $max = scalar(@lhs);
+% $max = scalar(@rhs) if scalar(@rhs) > $max;
+%# FIXME! Date heading
+      <table>
+% for my $i (0 .. $max-1) {
+%     my $l1 = $lhs[$i]{legislator};
+%     my $l2 = $rhs[$i]{legislator};
+%     my $v1 = $lhs[$i]{vote};
+%     my $v2 = $rhs[$i]{vote};
+<tr>
+    % if ($l1) {
+  <td class="party-<%= $l1->party %><%= ' mylegislator' if $self->user->is_my_legislator($l1) %>"><%= link_to sprintf("%s, %s", $l1->lastname, $l1->firstname) => $l1->url %></td><td class="vote <%= $v1 %>"><%= $v1 %></td>
+    % } else {
+    <td colspan="2" style="border: 0px;">&nbsp;</td>
+    % }
+    <td style="width: 6em; border: 0px;"></td>
+    % if ($l2) {
+  <td class="party-<%= $l2->party %><%= ' mylegislator' if $self->user->is_my_legislator($l2) %>"><%= link_to sprintf("%s, %s", $l2->lastname, $l2->firstname) => $l2->url %></td><td class="vote <%= $v2 %>"><%= $v2 %></td>
+    % } else {
+    <td colspan="2" style="border: 0px;">&nbsp;</td>
+    % }
+% }
+      </table>
+    </div>
+  </div>

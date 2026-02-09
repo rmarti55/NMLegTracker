@@ -1,0 +1,16 @@
+{
+   "2024-02-01" : {
+      "11:00:00" : {
+         "Senate" : {
+            "bills" : ["SB137","SB153"],
+            "date" : "2024-02-01",
+            "datetime" : "2024-02-01T11:00:00",
+            "mtime" : "2024-01-31T16:15:11",
+            "name" : "Senate",
+            "room" : "Senate Floor",
+            "time" : "11:00 AM",
+            "url" : "2024/02/sFloor/sFloor020124.pdf"
+         }
+      }
+   }
+}

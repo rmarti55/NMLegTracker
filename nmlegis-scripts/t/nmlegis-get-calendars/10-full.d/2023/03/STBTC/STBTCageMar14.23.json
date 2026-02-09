@@ -1,0 +1,17 @@
+{
+   "2023-03-14" : {
+      "00:00:00" : {
+         "STBTC" : {
+            "bills" : ["SB523","SB498","HB46","HB75","HB141","HB267","HB287","HB364","HB366","HB376","HB424","HB449","HB459","HJR5","HJR6"],
+            "date" : "2023-03-14",
+            "datetime" : "2023-03-14T00:00:00",
+            "mtime" : "2023-03-14T15:05:25",
+            "name" : "STBTC",
+            "room" : "321",
+            "time" : "After the Floor Session",
+            "url" : "2023/03/STBTC/STBTCageMar14.23.pdf",
+            "zoom" : "https://us02web.zoom.us/j/85614440294"
+         }
+      }
+   }
+}

@@ -1,0 +1,16 @@
+{
+   "2021-03-12" : {
+      "11:30:00" : {
+         "HCEDC" : {
+            "bills" : ["HB328","SB66","HB327"],
+            "date" : "2021-03-12",
+            "datetime" : "2021-03-12T11:30:00",
+            "mtime" : "2021-03-11T14:50:43",
+            "name" : "HCEDC",
+            "time" : "11:30 AM",
+            "url" : "2021/03/HCEDC/HCEDCageMar12.21.pdf",
+            "zoom" : "https://us02web.zoom.us/j/83846715600"
+         }
+      }
+   }
+}

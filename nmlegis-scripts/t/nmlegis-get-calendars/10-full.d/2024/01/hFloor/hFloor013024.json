@@ -1,0 +1,16 @@
+{
+   "2024-01-30" : {
+      "11:15:00" : {
+         "House" : {
+            "bills" : ["HJM1","HM1","HM15","HM13","HM21","HM28","HB2","HB3","HB114","HM10"],
+            "date" : "2024-01-30",
+            "datetime" : "2024-01-30T11:15:00",
+            "mtime" : "2024-01-29T16:45:57",
+            "name" : "House",
+            "room" : "House Floor",
+            "time" : "11:15 AM",
+            "url" : "2024/01/hFloor/hFloor013024.pdf"
+         }
+      }
+   }
+}

@@ -1,0 +1,1343 @@
+#!/usr/bin/perl
+#
+# nmlegis-get-calendars - get nmlegis committee and floor calendars
+#
+# $Id: nmlegis-get-calendars,v 1.30 2022/02/08 23:02:13 esm Exp esm $
+#
+package ESM::NMLegisCalendars;
+
+use v5.14;
+use strict;
+use warnings;
+
+use utf8;
+use open qw( :encoding(UTF-8) :std );
+
+(our $ME = $0) =~ s|.*/||;
+(our $VERSION = '$Revision: 1.30 $ ') =~ tr/[0-9].//cd;
+
+use NMLegis             qw(:all);
+use NMLegis::Scrape;
+
+# For debugging, show data structures using DumpTree($var)
+#use Data::TreeDumper; $Data::TreeDumper::Displayaddress = 0;
+
+###############################################################################
+# BEGIN user-customizable section
+
+use Clone               qw(clone);
+use File::stat;
+use File::Slurp;
+use JSON::XS;
+use Time::Piece;
+our $YYYY = localtime->year;
+our $YY   = localtime->yy;
+
+our $Calendar_URL = "$NMLEGIS/Calendar/Session";
+
+# Our output file
+our $Output_File = "$Data_Dir/schedule.json";
+
+our %Chamber_Name = (H => 'House', S => 'Senate');
+
+# List of committee names and keywords. LHS is the abbreviation used on
+# the web site, RHS is key words to search for in the PDFs. [Brackets]
+# are words shared between multiple committees, so we can't use them
+# as distinctive identifiers.
+our $Committees = <<'END_COMMITTEES';
+HAAWC   Agriculture Acequias Water [Resources]
+HAFC    Appropriations Finance
+HCEDC   Commerce Economic [Development]
+HCPAC   Consumer [Public] [Affairs]
+HEC     Education
+HENRC   Energy Environment Natural [Resources]
+HGEIC   Government Elections Indian [Affairs]
+HHHC    Health Human Services
+HJC     Judiciary
+HLVMC   Labor Veterans Military [Affairs]
+HXRC    Rules Order Business
+HRDLC   Rural [Development] Land Grants Cultural [Affairs]
+HTRC    Taxation Revenue
+HTPWC   Transportation [Public] Works Capital Improvements
+HXPSC   Printing Supplies
+
+SXCC    Committees
+SCONC   Conservation
+SEC     Education
+SFC     Finance
+SHPAC   Health Public [Affairs]
+SIRC    Indian Rural Cultural [Affairs]
+SJC     Judiciary
+SRC     Rules
+STBTC   Tax Business Transportation
+END_COMMITTEES
+
+# Parse that
+my %Committee_Name;
+for my $line (split "\n", $Committees) {
+    my ($name, @keywords) = split(' ', $line);
+    next unless $name;
+
+    $name =~ /^(H|S)/
+        or die "$ME: Internal error: committee '$name' is not H or S";
+    my $chamber = $1;
+
+    for my $k (grep { $_ !~ /\[/ } @keywords) {
+        if (exists $Committee_Name{$chamber}{uc $k}) {
+            die "$ME: Internal error: '$k' found in $Committee_Name{$chamber}{uc $k} and $name";
+        }
+        $Committee_Name{$chamber}{uc $k} = $name;
+    }
+}
+
+# Current schema version. Should be updated only on breaking changes.
+our $JSON_Schema = '20230124';
+
+# END   user-customizable section
+###############################################################################
+
+use Cwd                         qw(abs_path);
+use Date::Parse;
+use HTML::Parser;
+
+###############################################################################
+# BEGIN boilerplate args checking, usage messages
+
+sub usage {
+    print  <<"END_USAGE";
+Usage: $ME [OPTIONS]
+
+$ME fetches and parses Committee
+(and, some day, floor?) calendars from nmlegis.gov . It:
+
+  * scrapes the top page: $Calendar_URL ;
+  * fetches all links matching '/Agendas/ (Floor | Standing) / *.pdf' ,
+    preserving them in a local cache directory;
+  * runs pdftotext on each one, getting committee names, meeting dates
+    and times, room numbers, Zoom links, and scheduled bills, saving each
+    under ~/.local/share/$ME/YYYY/MM-DD/COMMITTEENAME
+
+OPTIONS:
+
+  --debug        use local HTML cache (to avoid slamming nmlegis)
+
+  -v, --verbose  show verbose progress indicators
+  -n, --dry-run  make no actual changes
+
+  --help         display this message
+  --version      display program name and version
+END_USAGE
+
+    exit;
+}
+
+# Command-line options.  Note that this operates directly on @ARGV !
+our $debug   = 0;
+our $force   = 0;
+our $verbose = 0;
+our $NOT     = '';              # print "blahing the blah$NOT\n" if $debug
+sub handle_opts {
+    use Getopt::Long;
+    GetOptions(
+        'debug!'     => \$debug,
+        'dry-run|n!' => sub { $NOT = ' [NOT]' },
+        'force'      => \$force,
+        'verbose|v'  => \$verbose,
+
+        help         => \&usage,
+        version      => sub { print "$ME version $VERSION\n"; exit 0 },
+    ) or die "Try `$ME --help' for help\n";
+}
+
+# END   boilerplate args checking, usage messages
+###############################################################################
+
+############################## CODE BEGINS HERE ###############################
+
+# The term is "modulino".
+__PACKAGE__->main()                                     unless caller();
+
+# Main code.
+sub main {
+    # Note that we operate directly on @ARGV, not on function parameters.
+    # This is deliberate: it's because Getopt::Long only operates on @ARGV
+    # and there's no clean way to make it use @_.
+    handle_opts();                      # will set package globals
+
+    # Used by lower levels to avoid fetching from nmlegis
+    $ENV{NMLEGIS_USE_CACHE} //= $debug;
+
+    # { key = Committee, val = [ { date, time, room, ... }, ... ] }
+    my %schedule = (_schema => $JSON_Schema);
+    get_calendars(\%schedule);
+
+    if (my $web_json = shift(@ARGV)) {
+        system('rsync', '-a', $Output_File, $web_json);
+    }
+}
+
+
+sub get_calendars {
+    my $sched = shift;                  # in: HREF to main schedule object
+
+    my $scrape = NMLegis::Scrape->fetch($Calendar_URL);
+
+    my $calendar_html = $scrape->{html};
+
+    my $p = HTML::Parser->new(
+        api_version => 3,
+        handlers => {
+            start => [ \&cal_start, 'self, tagname, attr' ],
+        },
+    );
+
+    $p->{_context} = {};
+    $p->parse($calendar_html);
+
+    my %long_schedules;
+
+    # Now fetch and parse each of those. Start with a clean bill slate.
+  URL:
+    for my $url (@{ $p->{_context}{urls} }) {
+        $url =~ m!/([^/]+\.pdf)!
+            or die;
+        my $basename = $1;
+
+        my $full_url = $url;
+        $full_url = "$NMLEGIS$url"      if $url !~ /^http/;
+
+        my $scraped = NMLegis::Scrape->fetch($full_url);
+        my $pdf   = $scraped->{html};
+        my $mtime = $scraped->{mtime};
+
+        # Most PDFs include a ?t=NNNN string, where NNNN is something absurt
+        # (not a time_t). Strip it now, for better error messages.
+        $full_url =~ s/\?t=\d+$//;
+
+        if ($basename =~ m!^(h|s)Floor!) {
+            parse_floor($sched, $full_url, $pdf, $mtime, uc($1));
+        }
+        elsif ($basename =~ m!^((H|S)[A-Z]+C)age!) {
+            parse_single_committee($sched, $full_url, $pdf, $mtime, $1);
+        }
+        elsif ($basename =~ m!^(h|s)Sched!) {
+            # DO NOT PROCESS THESE YET. Save them for the end, and
+            # process in reverse order if there are more than one.
+            # That lets us give precedence to the newer one.
+            push @{$long_schedules{uc($1)}}, [ $full_url, $pdf, $mtime ];
+        }
+        else {
+            warn "$ME: Cannot determine name from '$basename', skipping\n";
+            next URL;
+        }
+    }
+
+    # *NOW* we can process the long multi-page committee schedules.
+    for my $chamber (sort keys %long_schedules) {
+        for my $args (reverse @{$long_schedules{$chamber}}) {
+            parse_long_schedule( $sched, @$args, $chamber );
+            $sched->{_long_schedule_today_only} = 1;
+        }
+        delete $sched->{_long_schedule_today_only};
+    }
+
+    # Weird: https://nmlegis.gov/Agendas/Standing/SHPACageFeb09.23.pdf
+    # has an entry for Feb 8. That's not relevant to us.
+    for my $ymd (sort keys %$sched) {
+        delete $sched->{$ymd} if $ymd lt localtime->ymd;
+    }
+
+    # FIXME! 2023-02-19 use bill list from HTML
+    _update_bill_list_from_html($sched);
+
+    write_json_outfile($sched, $Output_File);
+}
+
+
+############################
+#  parse_single_committee  #  Parse one single committee PDF
+############################
+sub parse_single_committee {
+    my $sched = shift;          # in: schedule hashref
+    my $url   = shift;          # in: URL to pdf
+    my $pdf   = shift;          # in: PDF, converted to text
+    my $mtime = shift;          # in: mtime of PDF
+    my $name  = shift;          # in: committee abbreviated name
+
+    # FIXME FIXME FIXME: special case: this is not an actual hearing
+    return if $url =~ /SXCCageJan21\.25/;
+
+    my %keys = (bills => [], name => $name, url => $url, mtime => $mtime);
+    for my $line (split "\n", $pdf) {
+        next if parse_date_time($line, \%keys);
+        next if parse_bill_entry($line, \%keys);
+        next if parse_zoom_link($line, \%keys);
+
+        # Often seen in SFC: two hearings in one day:
+        #     Wednesday, February 19, 2025   9:00A and 1:30P   322
+        #     9:00 Full Committee Hearing
+        #       ...speech, bills
+        #     1:30 Full Committee Hearing
+        #       ...bills
+        # Use save_schedule() to preserve both meeting times.
+        if ($line =~ /^\s*(\d+)[:;](\d\d)\s*((a|p)m)?\s+Full\s+committee\s+hearing/i) {
+            my ($h, $m, $ampm) = ($1, $2, $3 || 'AM');
+            $ampm = 'PM' if $h < 7;
+            save_schedule($sched, \%keys) if $keys{time} && @{$keys{bills}};
+            $keys{time} = "$h:$m $ampm";
+            $h += 12 if $h < 7;
+            $keys{datetime} = sprintf("%sT%02d:%02d:00", $keys{date}, $h, $m);
+            $keys{bills} = [];
+        }
+
+    }
+
+    save_schedule($sched, \%keys);
+}
+
+
+#########################
+#  parse_long_schedule  #  Parse a long PDF with lots of committees
+#########################
+sub parse_long_schedule {
+    my $sched   = shift;                # in: schedule hashref
+    my $url     = shift;                # in: URL to pdf
+    my $pdf     = shift;                # in: PDF, converted to text
+    my $mtime = shift;          # in: mtime of PDF
+    my $chamber = shift;                # in: H or S
+
+    my %keys = (bills => [], url => $url, mtime => $mtime);
+    my $prior_line = '';
+    for my $line (split "\n", $pdf) {
+        # DANGER WILL ROBINSON! This looks like a NOP but it's actually
+        # replacing what I think is a Unicode hyphen with an ASCII one.
+        $line =~ s/–/-/g;
+
+        # Unicode arrow thingies, used in some PDFs to prefix committee names.
+        # FIXME: Why does this show up as hex 0xEF8398 in hexdump, but F0D8
+        # in unicode??? https://unicodeplus.com/U+F0D8
+        $line =~ s/\N{U+F0D8}//g;
+
+        # hSched 021121 has this in ALL CAPS, which confused the
+        # committee-name code below. Make it lower case.
+        $line =~ s/(THERE (WILL NOT BE|IS NO).*COMMITTEE)/\L$1\E/;
+
+        # 2025-02-04 necessary because we changed the COMMITTEE regex below
+        # to accommodate sSched020425 which does not have a dash between
+        # "XXX COMMITTEE" and "Senator XYZ, Chair"
+        next if $line =~ /SCHEDULE OF COMMITTEE HEARINGS/;
+        next if $line =~ /FULL COMMITTEE HEARING/;
+
+        # 2025-03-10 a bill with "COMMITTEE" in its name :(
+        next if $line =~ /^\s{15,}COMMITTEE/;
+
+        # Committee name. 99% of the time this is something like:
+        #
+        #     FOO COMMITTEE - So and So, Chair
+        #
+        # ...but sSched030723 has just:
+        #
+        #     INDIAN, RURAL AND CULTURAL AFFAIRS COMMITTEE
+        #
+        # ...without the space-dash-space-name. This complicates things
+        # hugely, because COMMITTEE can appear in other contexts. Handle
+        # it by accepting only upper-case letters, plus a few other chars
+        # that appear in committee names.
+        # ARGH! sSched020425 does not have dash after committee!
+        if ($line =~ /^\s*([A-Z,&'’\s]+)\s+COMMITTEE(\s+(-\s+)?[A-Z]|\s*$)/) {
+            my $words = $1;
+            # 2025-02-15 seen in hSched 021525 : "HOUSE RURAL DEVEL ...
+            # AFFAIRS COMMITTEE" split into two lines. Deal with it
+            # by keeping track of the prior line, which, fortunately,
+            # has a "<dash><spaces><name>, CHAIR" substring.
+            if ($prior_line =~ s/\s+-\s*[A-Z0-9\s]+,?\s+CHAIR//) {
+                $words = "$prior_line $words";
+                $prior_line = '';
+            }
+            # Remove commas
+            $line =~ s/,/ /g;
+
+            # Remove trailing apostrophe from COMMITTEES' COMMITTEE
+            my @keywords = map { s/'$//; $_; } split(' ', $words);
+            shift(@keywords) if $keywords[0] =~ /^(HOUSE|SENATE)$/;
+
+            # Before we proceed: save existing data
+            save_schedule($sched, \%keys) if $keys{name};
+
+            my %match = map { ($Committee_Name{$chamber}{$_}||'') => 1 } @keywords;
+            delete $match{''};
+            my @match = sort keys(%match);
+            if (@match == 0) {
+                die "$ME: $url : No committee-name match for '$line'\n";
+            }
+            elsif (@match > 1) {
+                my $matches = join(', ', @match);
+                die "$ME: $url : Multiple committee-name matches for '$line': $matches\n";
+            }
+
+            %keys = (bills => [], name => $match[0], url => $url, mtime => $mtime);
+        }
+
+        # Often seen in SFC: two hearings in one day:
+        #     Wednesday, February 19, 2025   9:00A and 1:30P   322
+        #     9:00 Full Committee Hearing
+        #       ...speech, bills
+        #     1:30 Full Committee Hearing
+        #       ...bills
+        # Use save_schedule() to preserve both meeting times.
+        #
+        # This is the same code as in parse_single_committee() above.
+        # FIXME! Zoom link is at bottom, so first-half meetings don't get it
+        elsif ($line =~ /^\s*(\d+)[:;](\d\d)\s*((a|p)m)?\s+Full\s+committee\s+hearing/i) {
+            my ($h, $m, $ampm) = ($1, $2, uc($3||'AM'));
+            $ampm = 'PM' if $h < 7;
+            save_schedule($sched, \%keys) if $keys{time} && @{$keys{bills}};
+            $keys{time} = "$h:$m $ampm";
+            $h += 12 if $h < 7;
+            $keys{datetime} = sprintf("%sT%02d:%02d:00", $keys{date}, $h, $m);
+            $keys{bills} = [];
+        }
+
+        else {
+            # Preserve for use in next iteration
+            $prior_line = $line;
+
+            # Oh shit. 2022-02-11. HEC in hSched021122.pdf has multiple
+            # days under the same COMMITTEE heading.
+            # FIXME: we need regression tests for this case!
+            if ($line =~ /^\s*(\w+\.?,\s+\w+\.?\s+\d+,\s+\d+)[\s-]+/) {
+                if ($keys{name} && $keys{date}) {
+                    save_schedule($sched, \%keys);
+
+                    %keys = (bills => [], name => $keys{name}, url => $url, mtime => $mtime);
+                }
+            }
+
+            # line with date should also include the time and room
+            my $keyclone = clone(\%keys);
+            if (parse_date_time($line, \%keys)) {
+                if ($keyclone->{datetime}) {
+                    if ($keys{date} && $keys{date} ne ($keyclone->{date}||'')) {
+                        save_schedule($sched, $keyclone);
+                    }
+                }
+            }
+
+            next if parse_bill_entry($line, \%keys);
+            next if parse_zoom_link($line, \%keys);
+
+            # FIXME: anything else we should check here?
+        }
+    }
+
+    save_schedule($sched, \%keys);
+}
+
+
+#################
+#  parse_floor  #  Parse floor calendar. Get date, time, bills.
+#################
+sub parse_floor {
+    my $sched   = shift;                # in: schedule hashref
+    my $url     = shift;                # in: URL to pdf
+    my $pdf     = shift;                # in: PDF, converted to text
+    my $mtime   = shift;                # in: mtime of PDF
+    my $chamber = shift;                # in: H or S
+
+    my %keys = (bills => [], url => $url, mtime => $mtime);
+    $keys{name} = $Chamber_Name{$chamber};
+    $keys{room} = ($Chamber_Name{$chamber} . ' Floor');
+
+    for my $line (split "\n", $pdf) {
+        # Parse date. House and Senate do their calendars differently.
+        if ($line =~ s/^\s*Legis\w+\s+Day\s+\d+//i) {
+            # House
+            $line =~ s/^\s*((\w+\.?,\s+)?\w+\.?\s+\d+,\s+\d+)// or do {
+                warn "$ME: Was expecting a House date in '$line', from $url";
+                # Gulp, just assume it from the filename (hFloor021423_Supp*)
+                if ($url =~ m!Floor(\d\d)(\d\d)(\d\d)!) {
+                    $keys{date} = "20$3-$1-$2";
+                }
+                next;
+            };
+            my $date_string = $1;
+            $date_string =~ s/\.//g;          # Wed. -> Wed
+            my $date = str2time($date_string)
+                or die "$ME: Could not str2time $date_string in $keys{url}";
+            $keys{date} = localtime($date)->strftime("%Y-%m-%d");
+            next;
+        }
+        elsif ($line =~ s/\s+\d+\w+\s+legis\w+\s+day\s*$//i) {
+            # Senate
+            $line =~ s/^\s*(\w+,?\s+)?(\w+\.?\s+\d+,\s+\d+)// or do {
+                warn "$ME: Was expecting a Senate date in '$line', from $url";
+                if ($url =~ /oor(\d\d)(\d\d)(\d\d)\./) {
+                    $keys{date} = "20$3-$1-$2";
+                    warn " Using date from URL: $keys{date}";
+                }
+                next;
+            };
+            my $date_string = $2;
+            $date_string =~ s/\.//g;          # Wed. -> Wed
+            my $date = str2time($date_string)
+                or die "$ME: Could not str2time $date_string in $keys{url}";
+            $keys{date} = localtime($date)->strftime("%Y-%m-%d");
+            next;
+        }
+
+        # Time
+        elsif ($keys{_last_line_was_convenes}) {
+            #                 1   1    2   2   34   4               3
+            if ($line !~ /^\s*(\d+)[:;](\d+)\s*((a|p)\.?\s*m\.?|noon)/i) {
+                warn "$ME: $url: Last line was '$keys{_last_line_was_convenes}', but no time in '$line'";
+                next;
+            }
+            my $time_string = sprintf("%d:%02d", $1, $2);
+            $time_string .= sprintf(" %sM", uc($4)) if $4;
+            $keys{time} = $time_string;
+            # Don't set datetime, because we might not have a date here yet
+            delete $keys{_last_line_was_convenes};
+            $keys{_time} = sprintf("T%02d:%02d:00",
+                                   $1 + (12 * (uc($4||'') eq 'P')), $2);
+            $keys{_time} =~ s/T24:/T12:/;        # "12:00 PM"
+        }
+        elsif ($line =~ s/^\s*\w+\s+convenes(\s+at)?\b//i) {
+            #                 1   1       2    2   34   4               3
+            if ($line =~ /^\s*(\d+)[:;]\s*(\d\d)\s*((a|p)\.?\s*m\.?|noon)/i) {
+                my $time_string = sprintf("%d:%02d", $1, $2);
+                $time_string .= sprintf(" %sM", uc($4)) unless uc($3) eq 'NOON';
+                $keys{time} = $time_string;
+                $keys{_time} = sprintf("T%02d:%02d:00",
+                                       $1 + (12 * (uc($4||'') eq 'P')), $2);
+                $keys{_time} =~ s/T24:/T12:/;        # "12:00 PM"
+            }
+            # Same, without am/pm
+            elsif ($line =~ /^\s*(\d+)[:;]\s*(\d\d)(\s|$)/) {
+                my $time_string = sprintf("%d:%02d", $1, $2);
+                $time_string .= ($1 > 7 ? " AM" : " PM");
+                $keys{time} = $time_string;
+                $keys{_time} = sprintf("T%02d:%02d:00",
+                                       $1 + (12 * ($1 < 7)), $2);
+                $keys{_time} =~ s/T24:/T12:/;        # "12:00 PM"
+            }
+
+            elsif ($line =~ /^\s*(.*(call|chair|reces|subj).*)/i) {
+                $keys{time} = $1;
+            }
+            else {
+                $keys{_last_line_was_convenes} = "convenes ... $line";
+            }
+            next;
+        }
+        delete $keys{_last_line_was_convenes};
+        delete $keys{_last_line_was_datetime};
+
+        # CAREFUL HERE! If we're reading a Supplemental (floor) calendar,
+        # look for an existing Floor entry to attach it to.
+        if (! $keys{time} && $keys{url} =~ /_Suppl/) {
+            # Find an existing entry for this chamber
+            if ($keys{date} && exists $sched->{$keys{date}}) {
+                for my $hms (sort keys %{$sched->{$keys{date}}}) {
+                    if (exists $sched->{$keys{date}}->{$hms}->{$keys{name}}) {
+                        my $mtg = delete $sched->{$keys{date}}->{$hms}->{$keys{name}};
+                        $mtg->{urls} //= [ $mtg->{url} ];
+                        push @{ $mtg->{urls} }, $keys{url};
+                        %keys = %{$mtg};
+                        goto FOUND;
+                    }
+                }
+            }
+        }
+
+      FOUND:
+        #                            1   1      2     2      34     4      3 5
+        if ($line =~ m!^\s*\(\d+\)\s+(S|H)\w+\s+([A-Z])\w+\s+(([A-Z])\w+\s+)?(\d+)!) {
+            # AAARGH, senate!
+            push @{$keys{bills}}, join('', $1, $2, $4||'', $5);
+        }
+
+        # Ugh. This will handle:
+        #     1    HB 95  ...      (the usual case)
+        #
+        #     4    HJC Sub. for
+        #          HB 105
+        #
+        #    13    HRDLC Sub.
+        #          for HB 160
+        #
+        #     1    HAFC Sub.        <--- hFloor021523_SupplementalTemporary
+        #          For HB 2 & 3
+        #
+        elsif ($line =~ m!^\s*(\d+\s+|([Ss]ub[.\s]+)?([Ff]or\s+))(H|S)(B|JR|R|JM|M)\s{0,2}(\d+)(\s*\&\s*(\d+))?!) {
+            # House
+            push @{$keys{bills}}, "$4$5$6";
+            push @{$keys{bills}}, "$4$5$8"      if $7;  # "...HB 2 & 3"
+        }
+    }
+
+    if (my $t = delete $keys{_time}) {
+        $keys{datetime} = $keys{date} . $t;
+    }
+    save_schedule($sched, \%keys);
+}
+
+#####################
+#  parse_date_time  #  Parse "Tuesday, February 8 - 9:30 am - room 123"
+#####################
+sub parse_date_time {
+    my $line = shift;                   # in: line
+    my $keys = shift;                   # in: HREF to keys
+
+    # A number of pages, e.g. SIRC 2021-02-25, have a block like
+    #     *For public participation, blah blah by Wednesday,
+    #     February 24, 2021 by 5:00 p.m. You will be contacted
+    # ...which of course screws up our date parsing. Ignore those blocks.
+    if ($line =~ /^\s*\*/ || $line =~ /\spublic\s.*participa/i) {
+        $keys->{_in_footnote} = 1;
+        return;
+    }
+    elsif ($keys->{_in_footnote}) {
+        # Empty line indicates end of footnote
+        delete $keys->{_in_footnote}            if $line =~ /^\s*$/;
+        return;
+    }
+
+    # sSched 2023-01-25 has "Room\n321".
+    if ($keys->{_last_line_was_datetime}) {
+        if (! $keys->{room}) {
+            if ($line =~ /^[\s-]*(\d{3})\s*$/) {
+                $keys->{room} = $1;
+                delete $keys->{_last_line_was_datetime};
+                return;
+            }
+            # 2024-02-04 STBTC 2024-02-06 has two lines
+            #    blah blah   sdfom dsfo dsfo
+            #                or 30 minutes after ....      321  <--room
+            if ($line =~ s/^(.{30,60})\s{10,}(\d{3})\s*$/$1/) {
+                $keys->{room} = $2;
+            }
+        }
+    }
+
+    # sSched 2023-02-21 Rules Committee "Agenda will be updated...\nDATE"
+    if ($line =~ /agenda.*will.*updat/i) {
+        $keys->{_last_line_was_agenda_update} = 1;
+        return 1;
+    }
+    elsif (delete $keys->{_last_line_was_agenda_update}) {
+        # Ignore dates
+        if ($line =~ /\w+\s+\d+,\s+\d+/) {
+            return 1;
+        }
+    }
+
+    # hSched 021121 and lots of others in 2021
+    if ($line =~ m!there\s+(will\s+not\s+be|is\s+no)\s.*(committee|hearing)!i) {
+        delete $keys->{$_}      for qw(date time datetime);
+        $keys->{bills} = [];
+        return 1;
+    }
+    if ($line =~ m!the\s.*committee\s+((will|is)\s+not\s|.*cancel)!i) {
+        delete $keys->{$_}      for qw(date time datetime);
+        $keys->{bills} = [];
+        return 1;
+    }
+    # FIXME: does "no agenda" mean "no meeting"?
+#    if ($line =~ m!^\s*no\s+agenda\s!i) {
+#        delete $keys->{$_}      for qw(date time datetime);
+#        return 1;
+#    }
+
+    # Continuation of Zoom telephone numbers (2021 only?)
+    return if $line =~ /^\d{3,4}\s.*\+1\s+\d{3}\s+\d{3}\s+\d{4}(\s|$)/;
+
+    # Some 2021 PDFs have "CHAIR date ..."
+    $line =~ s/^\s*CHAIR\s+//;
+
+    # HH:MM at the beginning of a line - special case for committees
+    # with more than one meeting time in one day, e.g., SFC 2022-02-07
+    # (the first meeting time is just subcommittees, but still, this
+    # is the biggest FIXME we need to deal with).
+    #
+    # We need to check this *before* checking the usual case, because
+    # this can occur in any place mid-page. And, 2024-01-13 require
+    # at least one of ":MM" or "am/pm".
+    #                  1       12 3    32    45   5       4
+    if ($line =~ s/^\s*([01]?\d)(:(\d\d))?\s*((a|p)\.?m\.?)?//i && ($2 || $4)) {
+        my ($hh, $mm, $ampm) = ($1, $3, uc($5 || ''));
+        # HAFC 2024-01-16 has just '4:00 Full Committee Hearing'
+        if ($hh <= 5) {
+            $ampm = 'P';
+        }
+        else {
+            $ampm = 'A';
+        }
+
+        my $time_string = sprintf("%s:%s %sM", $hh, $mm, $ampm);
+        my $time_set = 0;               # 1 if we set a new time
+        if (my $ymd = $keys->{date}) {
+            # 2022-02-14 never override an already-existing time.
+            # Per Akkana, it's better to be early than late.
+            if (! $keys->{time}) {
+                $keys->{time} = $time_string;
+                $keys->{datetime} = sprintf("%sT%02d:%02d:00",
+                                            $ymd,
+                                            $hh + (12 * ($ampm eq 'P')), $mm);
+                $time_set = 1;
+                $keys->{datetime} =~ s/T24:/T12:/;        # "12:00 PM"
+            }
+        }
+        else {
+            warn "$ME: Saw '$line' but without a date\n";
+        }
+
+        if ($line =~ /^[\s-]+room\s*(\d+)/i) {
+            $keys->{room} = $1;
+        }
+
+        if ($line =~ /^\s+(or\s.*)/) {
+            $keys->{time} .= " $1"      if $time_set;
+        }
+
+        delete $keys->{_last_line_was_datetime};
+        return;
+    }
+
+    # Sigh. Special case for SIRCageFeb11.22.pdf
+    if ($line =~ /^\s*DATE\s+TIME\s+ROOM\s+(\d+)\s*$/) {
+        $keys->{room} = $1;
+        delete $keys->{_last_line_was_datetime};
+        return;
+    }
+
+    return if $line =~ /^\s*Revised\s/;
+
+    # This is the usual case we handle: a meeting date, time, (maybe room):
+    #    Friday, February 11, 2022   1:30 p.m. or ....   Room 123
+    # Some PDFs, with "or 15 minutes blah blah", split into two lines.
+    # The leading 'weekday, ' is optional: most pages have it, a few don't.
+    if ($line !~ s/^\s*((\w+\.?,?\s*)?\w+[\.\s]+\d+,\s+\d+)([\s-]+|$)//) {
+        # This is NOT a date/time line. But was the previous line one such?
+        if ($keys->{_last_line_was_datetime}) {
+            # Yes. Try to get a room number.
+            if (! $keys->{room}) {
+                $line =~ s/[\s-]+zoom[\s-]*$//i;
+                if ($line =~ s/\s*room\s*(\d+)\s*$//i) {
+                    $keys->{room} = $1;
+
+                    $line =~ s/[\s-]+$//;
+                    $keys->{time} .= " " . $line;
+                }
+
+                # sSched012523 (SJC) and 021323 (SHPAC): long line, room
+                # wraps onto next line.
+                elsif ($keys->{_last_line_was_datetime} =~ /\sroom\s*$/i) {
+                    if ($line =~ /^\s*(\d+)/) {
+                        $keys->{room} = $1;
+                    }
+                }
+            }
+            elsif ($line =~ /^\s{10,}(.*(call|chair|after(.*session)?))/i) {
+                $keys->{time} .= " " . $1;
+            }
+        }
+        delete $keys->{_last_line_was_datetime};
+        return;
+    }
+
+    # Hijack our keys hash as a state variable to remember where we are
+    $keys->{_last_line_was_datetime} = $line;
+
+    my $date_string = $1;
+    $date_string =~ s/\.//g;          # Wed. -> Wed
+    my $date = str2time($date_string)
+        or die "$ME: Could not str2time $date_string in $keys->{url}";
+    $keys->{date} = localtime($date)->strftime("%Y-%m-%d");
+    delete $keys->{datetime};
+    $keys->{bills} = [];
+
+    # Strip off "- Zoom" from end, and try to get room info
+    $line =~ s/[\s-]+zoom[\s-]*$//i;
+    if ($line =~ s/\s*(\d+)$//) {
+        $keys->{room} = $1;
+    }
+    $line =~ s/[\s-]+room$//i;
+
+    # The time is the value in the middle
+    $line =~ s/^\s*-\s+//;
+    #               12    23   4    4   5    53 1   6   6
+    if ($line =~ s/^((1?\d)(\s*(:|\.)\s*(\d\d))?)\s*(a|p)\.?m\.?//i) {
+        my ($hhmm, $mm, $ampm) = ($2, $5 || "00", uc($6));
+        # 2025-02-19 sSched021925 lists "1:30 am" which is clearly wrong.
+        $ampm = 'P' if $hhmm < 5;
+
+        $hhmm .= ":$mm";
+        my $time_string = sprintf("%s %sM", $hhmm, $ampm);
+        $keys->{time} = $time_string;
+
+        $keys->{datetime} = localtime(str2time("$date_string $time_string"))->datetime;
+
+        if ($line =~ /^\s*(\(?or\s+(\d|½|at\s).*)/i) {
+            $keys->{time} .= " $1";
+        }
+    }
+    # Sigh, time might not have am/pm
+    elsif ($line =~ s/^(\d+)[:;]\s*(\d\d)\s*//i) {
+        my $time_string = sprintf("%d:%02d", $1, $2);
+        if ($1 <= 5) {
+            $time_string .= " PM";
+        }
+        else {
+            $time_string .= " AM";
+        }
+
+        $keys->{time} = $time_string;
+
+        $keys->{datetime} = localtime(str2time("$date_string $time_string"))->datetime;
+
+        if ($line =~ /^\s*(\(?or\s+(\d|at\s).*)/i) {
+            $keys->{time} .= " $1";
+        }
+    }
+    elsif ($line =~ m!(\d+(/\d+)?\s+(minut|hour|hr).*)!) {
+        $keys->{time} = $1;
+    }
+    elsif ($line =~ m!^\s*((at\s.*)?call\s+of\s.*)!i) {
+        $keys->{time} = $1;
+    }
+    elsif ($line =~ m!^\s*after\s.*floor.*session!i) {
+        $keys->{time} = $line;
+    }
+    elsif ($line =~ m!will\s+not\s+(be\s+)?meet!i) {
+        # sSched030723 SIRC
+        delete $keys->{$_}      for qw(date time datetime);
+        return 1;
+    }
+    $keys->{datetime} //= "$keys->{date}T00:00:00";
+
+    return 1;
+}
+
+######################
+#  parse_bill_entry  #  e.g. '  CS/HB  101 NM BLAH BLAH...'
+######################
+sub parse_bill_entry {
+    my $line = shift;                   # in: line
+    my $keys = shift;                   # in: HREF to keys
+
+    # e.g.,
+    #     * HB 127       STORAGE OF CERTAIN RADIOACTIVE WASTE     (...
+    #      *HB   112/a   SUBSTANCE USE DISORDER PGMS & CLINICS    (...
+    #    CS/HB   101     NM REFORESTATION CENTER ACT              (...
+    #     C/SB     7     STATE EMPLOYEE MINIMUM WATE              (...
+    #   *CS/SB    12     AG OFFICE ...                            (...
+    # CS/CS/SB 14 /a ENACTING THE CLEAN FUEL  (multiple CS/)
+    $line =~ s!^\s*\**(CS?[\s/]*)*\**\s*(H|S)(B|JR|R|JM|M)\s*(\d+)!!
+        or return;
+
+    my ($chamber, $type, $id) = ($2, $3, $4);
+    push @{$keys->{bills}}, "$chamber$type$id";
+
+    # Argh. Seen in sSched021222.pdf
+    #    C/HB @ & 3 GENERAL APPROPRIATION ACT OF 2022
+    if ($line =~ /^\s+\&\s*(\d+)/) {
+        push @{$keys->{bills}}, "$chamber$type$1";
+    }
+
+    return 1;
+}
+
+#####################
+#  parse_zoom_link  #  Interpret a zoom link
+#####################
+sub parse_zoom_link {
+    my $line = shift;                   # in: line
+    my $keys = shift;                   # in: HREF to keys
+
+    # Not a useful link; but return 1 anyway because we can skip this line
+    # E.g. hSched011823 'Find your local number'
+    # FIXME: should we assume that only zoom **NUMBER** links are valid calls?
+    return 1 if $line =~ m!(international|find your).*num.*http.*zoom!i;
+
+    # 2023-02-04 zoom link meeting IDs must be 10 digits (or more?)
+    # Right now sSched has a misspelled 9-digit ID which is invalid.
+    if ($line =~ m!\b(https://\S*zoom\.us/\S*\d{10,}(\?\w+=\w+)?)!) {
+        if ($keys->{zoom} && ($keys->{zoom} ne $1)) {
+            # FIXME: show PDF URL? Committee name?
+            warn "$ME: Conflicting zoom links in $keys->{url} :\n";
+            warn "    $keys->{zoom}\n";
+            warn "    $1\n";
+        }
+        $keys->{zoom} = $1;
+        return 1;
+    }
+    elsif ($line =~ m!\b(https://\S*zoom\.us/j/\S+)!) {
+        # FIXME: 2023-02-04: new warning, may not be desired
+        my $msg = "$keys->{url}";
+        $msg .= " (in $keys->{name})" if $keys->{name};
+        warn "$ME: Warning: $msg: invalid zoom link in '$line'\n";
+    }
+
+    # Did not find a zoom link
+    return;
+}
+
+###################
+#  save_schedule  #  Save a committee schedule file for a given date
+###################
+sub save_schedule {
+    my $sched = shift;                  # in: master HREF (full list)
+    my $keys  = shift;                  # in: HREF with date, room, zoom
+
+    # We may have leftover internal state keys. Never save those.
+    for my $state_key (grep { /^_/ } keys %$keys) {
+        delete $keys->{$state_key};
+    }
+
+    my $name = $keys->{name}
+        or return;
+
+    # FIXME: if/when we start reading committee info, assume default room?
+    defined $keys->{room}
+        or warn "$ME: No room for $name in $keys->{url}\n";
+
+    # Clean up trailing whitespace, dashes from meeting time
+    if (defined $keys->{time}) {
+        $keys->{time} =~ s/[\s-]+$//;
+    }
+
+    if (! $keys->{date}) {
+        # If there are no bills, just forget it.
+        if (! @{$keys->{bills}}) {
+            warn "$ME: No date nor bills for $name in $keys->{url}, skipping\n";
+            return;
+        }
+
+        # There are bills on the agenda. Try to continue.
+        my $date;
+        if ($keys->{url} =~ /(\d\d)(\d\d)(\d\d)(_supp\w+)?\./i) {
+            $date = "20$3-$1-$2";
+        }
+        elsif ($keys->{url} =~ /age(\w\w\w)(\d\d)\.(\d\d)([_-]\d+)?\.pdf/i) {
+            $date = sprintf("20%02d-%02d-%02d", $3, $MoY{lc($1)}, $2);
+        }
+        if ($date) {
+            warn "$ME: No date for $name; assuming $date from $keys->{url}\n";
+            $keys->{date} = $date;
+        }
+        else {
+            warn "$ME: No date for $name, and cannot determine from URL $keys->{url} - skipping.\n";
+            return;
+        }
+    }
+
+    my $ymd = $keys->{date};
+    my $hms = '00:00:00';
+    if (($keys->{datetime}||'') =~ /T([\d:]+)$/) {
+        $hms = $1;
+    }
+
+    # DANGER: if we're processing an older multi-page schedule, use it
+    # only for meetings _today_. This happens late afternoon, when they
+    # publish sSched<tomorrow>.pdf, which (we hope) is more trustworthy.
+    if ($sched->{_long_schedule_today_only}) {
+        if ($ymd ne localtime->ymd) {
+            return;
+        }
+    }
+
+    # This happens all the time, e.g., when there are both hSched and HAFC
+    # calendars published. It's OK.
+    if (exists $sched->{$ymd}{$hms} && exists $sched->{$ymd}{$hms}{$name}) {
+        $keys = reconcile($sched->{$ymd}{$hms}{$name}, $keys);
+    }
+    else {
+        # Sigh. Look for a close-in-time match, e.g., HTRC 02-13 shows 08:30,
+        # hSched shows 08:00
+        if (exists $sched->{$ymd}) {
+            $hms =~ /^(\d+):(\d+):/ or die "Internal error: bad hms '$hms'";
+            my $this_hm = $1 * 60 + $2;
+
+            for my $other_hms (sort keys %{$sched->{$ymd}}) {
+                $other_hms =~ /^(\d+):(\d+):/
+                    or die "Internal error: bad hms '$other_hms'";
+                my $other_hm = $1 * 60 + $2;
+
+                if (abs($this_hm - $other_hm) < 90) {
+                    if (exists $sched->{$ymd}{$other_hms}{$name}) {
+                        # Ugh. Two different times for the same committee.
+                        my $other = $sched->{$ymd}{$other_hms}{$name};
+
+                        # Force the earlier one to win, by using fake mtimes
+                        $keys->{_preserved_mtime}  = $keys->{mtime};
+                        $other->{_preserved_mtime} = $other->{mtime};
+                        if ($this_hm < $other_hm) {
+                            $other->{mtime} = 1;
+                            $keys->{mtime}  = 2;
+                        }
+                        else {
+                            $keys->{mtime}  = 1;
+                            $other->{mtime} = 2;
+                        }
+
+                        # So we can track who won
+                        my $this_url = $keys->{url};
+
+                        $keys = reconcile($other, $keys);
+                        if ($keys->{url} ne $this_url) {
+                            # Other one wins
+                            if (($keys->{datetime}||'') =~ /T([\d:]+)$/) {
+                                $hms = $1;
+                            }
+                            else {
+                                # FIXME: can this happen?
+                                print STDERR "\n\n>>>>>>> CAN THIS HAPPEN \n\n\n";
+                                $hms = '00:00:00';
+                            }
+                        }
+                        else {
+                            # We win. Delete the other one.
+                            delete $sched->{$ymd}{$other_hms}{$name};
+                            delete $sched->{$ymd}{$other_hms}
+                                if ! keys(%{$sched->{$ymd}{$other_hms}});
+                        }
+
+                        # Restore real mtime
+                        $keys->{mtime} = delete $keys->{_preserved_mtime};
+                    }
+                }
+            }
+        }
+    }
+
+    $sched->{$ymd}{$hms}{$name} = { %$keys };
+}
+
+###############
+#  reconcile  #  Reconcile differences between two calendar items
+###############
+sub reconcile {
+    my $old  = shift;                   # in: old (existing) entry
+    my $new  = shift;                   # in: newly parsed entry
+
+    my $t = $new->{datetime};
+
+    # Indicate who wins (is most recent) between the two.
+    my ($old_wins, $new_wins) = ('', ' (*)');
+    if ($old->{mtime} gt $new->{mtime}) {
+        ($old_wins, $new_wins) = (' (*)', '');
+    }
+
+    # Preserve room & zoom from earlier one
+    for my $k (qw(room zoom datetime bills)) {
+        if (exists $old->{$k}) {
+            if (! exists $new->{$k}) {
+                $new->{$k} = $old->{$k};
+            }
+            elsif ($k eq 'bills') {
+                # Argh. 2022-02-12 has a "supplemental" calendar which should
+                # presumably be added to original. (02-15: also "concurrence")
+                if ($new->{url} =~ /floor.*(supplemental|concurrence)/i) {
+                    if (! $new_wins) {
+                        warn "$ME: WARNING: New is supplemental, but old wins";
+                    }
+                    unshift @{$new->{bills}}, @{$old->{bills}};
+                    $new->{urls} //= $old->{urls};
+                    push @{$new->{urls}}, $old->{url};
+                    next;
+                }
+                elsif ($old->{url} =~ /floor.*supplemental/i) {
+                    warn "$ME: WARNING: ***old is supplemental!*** FIXME!!";
+                }
+
+                if (my @d = bills_diff($old->{$k}, $new->{$k})) {
+                    unless (same_source_just_updated($old, $new)) {
+                        warn "$ME: $new->{name}/$t: $k:\n";
+                        warn "   - $d[0] in $old->{url}$old_wins\n";
+                        warn "   - $d[1] in $new->{url}$new_wins\n";
+                        warn "\n";
+                    }
+                }
+            }
+            elsif ($new->{$k} ne $old->{$k}) {
+                warn "$ME: $new->{name}/$t: $k:\n";
+                warn "  - $old->{$k} in $old->{url}$old_wins\n";
+                warn "  - $new->{$k} in $new->{url}$new_wins\n";
+                warn "\n";
+            }
+        }
+    }
+
+    # If the existing Schedule entry is more recent, leave it alone
+    # on the assumption that it is the correct one. (But if existing
+    # entry has no zoom link, and older one does, copy it over).
+    if ($old_wins) {
+        $old->{zoom} //= $new->{zoom};
+        return $old;
+    }
+
+    return $new;
+}
+
+
+
+################
+#  bills_diff  #  Compute readable 2-line diff of bills
+################
+sub bills_diff {
+    my ($a1, $a2) = @_;                         # in: two AREFs
+    use Algorithm::Diff;
+
+    # First quick pass: compare as sorted strings, because sometimes
+    # calendars just reorder the bills
+    return if join(" ",sort(@$a1)) eq join(" ",sort(@$a2));
+
+    my @diffs = Algorithm::Diff::diff($a1, $a2)
+        or return;
+#    use Data::Dumper; print Dumper(\@diffs);
+
+    # Lists differ. Make copies, so we can edit them.
+    my @a1 = @$a1;
+    my @a2 = @$a2;
+
+    # When we splice into each list, the offset reported by diff() will
+    # need to be adjusted. These two will compensate for each list.
+    my $i1 = 0;
+    my $i2 = 0;
+    for my $tuple (@diffs) {
+        for my $d (@$tuple) {
+            # e.g., '-', 0, 'HB102'
+            my ($type, $index, $bill) = @$d;
+
+            if ($type eq '-') {
+                # bill is not in a2
+                splice @a2, $index+$i2, 0, '-' x length($bill);
+                $i1++;
+            }
+            elsif ($type eq '+') {
+                # bill is not in a1
+                splice @a1, $index+$i1, 0, '-' x length($bill);
+                $i2++;
+            }
+        }
+    }
+
+    my $a1_new = join(' ', @a1);
+    my $a2_new = join(' ', @a2);
+    return ($a1_new, $a2_new);
+}
+
+##############################
+#  same_source_just_updated  #  true if both URLs are the same kind
+##############################
+#
+# e.g.,  both hSchedXXXXXX or HECage
+#
+sub same_source_just_updated {
+    my ($old, $new) = @_;
+
+    $old->{url} =~ m!/([^/]+)\.pdf$!
+        or do {
+            warn "$ME: old URL '$old->{url}' does not end in /foo.pdf";
+            return;
+        };
+    my $old_name = $1;
+    $new->{url} =~ m!/([^/]+)\.pdf$!
+        or do {
+            warn "$ME: new URL '$new->{url}' does not end in /foo.pdf";
+            return;
+        };
+    my $new_name = $1;
+
+    $old_name =~ s!^(h|s)(Floor|Sched).*!$1$2!;
+    $new_name =~ s!^(h|s)(Floor|Sched).*!$1$2!;
+    $old_name =~ s!^([HS][A-Z]{2,4})age.*$!$1!;
+    $new_name =~ s!^([HS][A-Z]{2,4})age.*$!$1!;
+
+    return ($old_name eq $new_name && $old->{date} le $new->{date});
+}
+
+###############################################################################
+# BEGIN HTML::Parser callbacks
+
+###############
+#  cal_start  #  HTML parser; basically only handles '<a href=/Agendas/*.pdf>'
+###############
+sub cal_start {
+    my ($self, $tag, $attr) = @_;
+    $tag = lc $tag;
+
+    # Only care about links to .pdf files under /Agendas
+    return unless $tag eq 'a';
+    my $href = $attr->{href}
+        or return;
+    $href =~ m!^/Agendas/(Floor|Standing)/(\S+\.pdf)!i
+        or return;
+
+    push @{ $self->{_context}{urls} }, $href;
+}
+
+# END   HTML::Parser callbacks
+###############################################################################
+# BEGIN _update_bill_list_from_html
+
+sub _update_bill_list_from_html {
+    my $sched = shift;                  # in: schedule HREF
+
+    (my $html_sched = $Output_File) =~ s|(\.json)$|-from-html$1|;
+    if (! -e $html_sched) {
+        warn "$ME: Warning: file not found, $html_sched; sticking to PDFs\n";
+        return;
+    }
+
+    my $st = stat($html_sched)
+        or do {
+            warn "$ME: Could not stat $html_sched: $!\n";
+            return;
+        };
+
+    if (time - $st->mtime > 72 * 3600) {
+        warn "$ME: file is >72 hours old, ignoring: $html_sched\n"
+            unless localtime->strftime("%m%d") le "0115";
+        return;
+    }
+
+    # Okay, read it
+    my $from_html = decode_json(read_file($html_sched));
+
+    # ...and interpolate. But go the other way: start with from_html,
+    # and map backwards to $sched. Reasons: (1) from_html doesn't have
+    # House/Senate floor calendars, (2) from_html may have more meetings
+    # further into the future.
+    for my $ymd (sort grep { $_ !~ /^_/ } keys %$from_html) {
+        # Skip the past (this should never happen)
+        next if $ymd lt localtime->ymd;
+
+        for my $hms (sort keys %{$from_html->{$ymd}}) {
+            for my $cname (sort keys %{$from_html->{$ymd}{$hms}}) {
+                my $mtg = $from_html->{$ymd}{$hms}{$cname};
+
+                if (my $in_sched = find_meeting($sched, $ymd, $hms, $cname)) {
+                    # FIXME: once we trust this code, switch bills and billx
+#                    $in_sched->{billx} = delete $in_sched->{bills};
+#                    $in_sched->{bills} = $mtg->{bills};
+                    $in_sched->{billh} = $mtg->{bills};
+                }
+                else {
+                    # Did not find meeting in $sched. Create one but
+                    # make sure the bills are flagged as coming from HTML
+                    $mtg->{billh} = delete $mtg->{bills};
+                    $sched->{$ymd}{$hms}{$cname} = $mtg;
+                }
+            }
+        }
+    }
+}
+
+sub find_meeting {
+    my ($json, $ymd, $hms, $cname) = @_;
+
+    if (! exists $json->{$ymd}) {
+#        warn "$ME: No data for $ymd in $json->{_which}\n";
+        return;
+    }
+
+    if (exists $json->{$ymd}{$hms}) {
+        if (exists $json->{$ymd}{$hms}{$cname}) {
+            return $json->{$ymd}{$hms}{$cname};
+        }
+    }
+
+    # OK, look for _any_ $cname meetings that day
+    $hms =~ /^(\d+)[:;](\d+):/ or die;
+    my $m1 = $1 * 60 + $2;
+
+    my $found;
+    my $delta_h_min = 9999;
+    for my $hms2 (sort keys %{$json->{$ymd}}) {
+        if (exists $json->{$ymd}{$hms2}{$cname}) {
+            $hms2 =~ /^(\d+):(\d+):/ or die;
+            my $delta_h = abs($1 * 60 + $2 - $m1);
+            if ($delta_h < 4 * 60) {
+                if ($delta_h < $delta_h_min) {
+                    $found = $json->{$ymd}{$hms2}{$cname};
+                    $found->{hms} = $hms2;
+                }
+            }
+        }
+    }
+
+    (my $md = $ymd) =~ s/^\d+-//;
+    (my $hm = $hms) =~ s/:\d+$//;
+    if ($found) {
+        warn "$ME: conflicting times for $cname $md $hm : pdf-sched $found->{url} claims $found->{hms}\n";
+        return $found;
+    }
+
+    # Sigh.... sometimes we can't figure out a time.
+    # FIXME: look for 00:00:00 in either one
+
+#    warn "$ME: $cname $md $hm not in $json->{_which}\n";
+    return;
+}
+
+
+
+# END   _update_bill_list_from_html
+###############################################################################
+# BEGIN compute_changelog
+
+sub compute_changelog {
+    my ($old, $new) = @_;
+
+    my @by_committee;
+    my @by_bill;
+
+    for my $ymd (sort grep { /^\d+-\d+-\d+$/ } keys %$new) {
+        for my $hms (sort keys %{$new->{$ymd}}) {
+            for my $cname (sort keys %{$new->{$ymd}{$hms}}) {
+                if (exists $old->{$ymd}{$hms}{$cname}) {
+                    my $o = $old->{$ymd}{$hms}{$cname}{bills};
+                    my $n = $new->{$ymd}{$hms}{$cname}{bills};
+
+                    if ($o && @$o && $n && @$n) {
+                        if ($n->[0] ne $o->[0]) {
+                            if (grep { $_ eq $n->[0] } @$o) {
+                                push @by_bill, [ $n->[0], "bumped to first in $cname agenda $ymd $hms" ];
+                            }
+                        }
+                    }
+
+                    my %o = map { $_ => 1 } @$o;
+                    my %n = map { $_ => 1 } @$n;
+                    for my $bill (@$o) {
+                        push @by_bill, [ $bill, "removed from $cname agenda $ymd $hms" ]
+                            if ! $n{$bill};
+                    }
+                    for my $bill (@$n) {
+                        push @by_bill, [ $bill, "added to $cname agenda on $ymd $hms" ]
+                            if ! $o{$bill};
+                    }
+                }
+                else {
+                    # New agenda
+                    push @by_committee, [ $cname, "agenda published for $ymd $hms" ];
+                    for my $bill (@{$new->{$ymd}{$hms}{$cname}{bills}}) {
+                        my $msg = "scheduled for $cname on";
+                        if ($cname =~ /house|senate/i) {
+                            $msg = "on $cname calendar for";
+                        }
+                        push @by_bill, [ $bill, "$msg $ymd $hms" ];
+                    }
+                }
+            }
+        }
+    }
+
+    return { by_bill => \@by_bill, by_committee => \@by_committee };
+}
+
+# END   compute_changelog
+###############################################################################
+
+1;

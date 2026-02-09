@@ -1,0 +1,90 @@
+{
+   "2025-02-19" : {
+      "08:30:00" : {
+         "SEC" : {
+            "bills" : ["SB314","SB325","SB344","SB286","SB345","SB354"],
+            "date" : "2025-02-19",
+            "datetime" : "2025-02-19T08:30:00",
+            "mtime" : "2025-02-18T18:14:45",
+            "name" : "SEC",
+            "room" : "311",
+            "time" : "8:30 AM",
+            "url" : "2025/02/sSched/sSched021925.pdf",
+            "zoom" : "https://us02web.zoom.us/j/89615593412"
+         },
+         "SRC" : {
+            "bills" : ["SB254","SB167","SB417","SB319"],
+            "date" : "2025-02-19",
+            "datetime" : "2025-02-19T08:30:00",
+            "mtime" : "2025-02-18T18:14:45",
+            "name" : "SRC",
+            "room" : "321",
+            "time" : "8:30 AM",
+            "url" : "2025/02/sSched/sSched021925.pdf",
+            "zoom" : "https://us02web.zoom.us/j/81944191844"
+         }
+      },
+      "09:00:00" : {
+         "SFC" : {
+            "bills" : ["SB220","SB33","SB81"],
+            "date" : "2025-02-19",
+            "datetime" : "2025-02-19T09:00:00",
+            "mtime" : "2025-02-18T18:14:45",
+            "name" : "SFC",
+            "room" : "322",
+            "time" : "9:00 AM",
+            "url" : "2025/02/sSched/sSched021925.pdf"
+         }
+      },
+      "13:30:00" : {
+         "SFC" : {
+            "bills" : ["SB38","SB242","SB48","SB49"],
+            "date" : "2025-02-19",
+            "datetime" : "2025-02-19T13:30:00",
+            "mtime" : "2025-02-18T18:14:45",
+            "name" : "SFC",
+            "room" : "322",
+            "time" : "1:30 PM",
+            "url" : "2025/02/sSched/sSched021925.pdf",
+            "zoom" : "https://us02web.zoom.us/j/81696207177"
+         },
+         "SHPAC" : {
+            "bills" : ["SB46","SB53","SB77","SB88","SB66","SB80","SB63"],
+            "date" : "2025-02-19",
+            "datetime" : "2025-02-19T13:30:00",
+            "mtime" : "2025-02-18T18:14:45",
+            "name" : "SHPAC",
+            "room" : "311",
+            "time" : "1:30 PM",
+            "url" : "2025/02/sSched/sSched021925.pdf",
+            "zoom" : "https://us02web.zoom.us/j/81287336647"
+         },
+         "SJC" : {
+            "bills" : ["HB8"],
+            "date" : "2025-02-19",
+            "datetime" : "2025-02-19T13:30:00",
+            "mtime" : "2025-02-18T18:14:45",
+            "name" : "SJC",
+            "room" : "321",
+            "time" : "1:30 PM or 30 minutes after floor session",
+            "url" : "2025/02/sSched/sSched021925.pdf",
+            "zoom" : "https://us02web.zoom.us/j/88109017169"
+         }
+      }
+   },
+   "2025-02-20" : {
+      "09:00:00" : {
+         "SCONC" : {
+            "bills" : ["SB56","SB264","SB339","SB342","SB358"],
+            "date" : "2025-02-20",
+            "datetime" : "2025-02-20T09:00:00",
+            "mtime" : "2025-02-18T18:14:45",
+            "name" : "SCONC",
+            "room" : "311",
+            "time" : "9:00 AM",
+            "url" : "2025/02/sSched/sSched021925.pdf",
+            "zoom" : "https://us02web.zoom.us/j/82404382748"
+         }
+      }
+   }
+}

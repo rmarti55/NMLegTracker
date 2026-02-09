@@ -1,0 +1,17 @@
+{
+   "2023-03-13" : {
+      "00:00:00" : {
+         "SJC" : {
+            "bills" : ["HB207","HB160","HB180","HB297","HB79","HB306","HB40","HB250","HB407"],
+            "date" : "2023-03-13",
+            "datetime" : "2023-03-13T00:00:00",
+            "mtime" : "2023-03-13T15:33:21",
+            "name" : "SJC",
+            "room" : "321",
+            "time" : "AT THE CALL OF THE CHAIR",
+            "url" : "2023/03/SJC/SJCageMar13.23.pdf",
+            "zoom" : "https://us02web.zoom.us/j/81502543362"
+         }
+      }
+   }
+}

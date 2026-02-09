@@ -1,0 +1,17 @@
+{
+   "2023-02-13" : {
+      "13:30:00" : {
+         "SHPAC" : {
+            "bills" : ["SB123","SB120","SB226","SB232","SB233","SB238","SB240","SB242","SB244","SB250","SB190","SB228","SB261"],
+            "date" : "2023-02-13",
+            "datetime" : "2023-02-13T13:30:00",
+            "mtime" : "2023-02-09T15:41:51",
+            "name" : "SHPAC",
+            "room" : "311",
+            "time" : "1:30 PM or 1/2 hr after floor session",
+            "url" : "2023/02/SHPAC/SHPACageFeb13.23.pdf",
+            "zoom" : "https://us02web.zoom.us/j/9124526531"
+         }
+      }
+   }
+}

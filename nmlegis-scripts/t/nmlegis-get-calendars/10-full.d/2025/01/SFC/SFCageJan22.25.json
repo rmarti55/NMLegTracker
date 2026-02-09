@@ -1,0 +1,17 @@
+{
+   "2025-01-22" : {
+      "00:00:00" : {
+         "SFC" : {
+            "bills" : ["HB1"],
+            "date" : "2025-01-22",
+            "datetime" : "2025-01-22T00:00:00",
+            "mtime" : "2025-01-22T11:39:15",
+            "name" : "SFC",
+            "room" : "322",
+            "time" : "At the call of the Chair",
+            "url" : "2025/01/SFC/SFCageJan22.25.pdf",
+            "zoom" : "https://us02web.zoom.us/j/81696207177"
+         }
+      }
+   }
+}

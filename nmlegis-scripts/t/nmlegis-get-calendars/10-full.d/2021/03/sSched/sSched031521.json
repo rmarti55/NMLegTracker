@@ -1,0 +1,70 @@
+{
+   "2021-03-15" : {
+      "00:00:00" : {
+         "SFC" : {
+            "bills" : ["HJR1"],
+            "date" : "2021-03-15",
+            "datetime" : "2021-03-15T00:00:00",
+            "mtime" : "2021-03-14T23:24:49",
+            "name" : "SFC",
+            "time" : "1/2 hour after floor session or Call of the Chair",
+            "url" : "2021/03/sSched/sSched031521.pdf"
+         },
+         "SJC" : {
+            "bills" : ["HB31","HB75","HB125","HB144","HB209","SJR2","HB12","SB288"],
+            "date" : "2021-03-15",
+            "datetime" : "2021-03-15T00:00:00",
+            "mtime" : "2021-03-14T23:24:49",
+            "name" : "SJC",
+            "time" : "At the Call of the Chair - Virtual Zoom Meeting",
+            "url" : "2021/03/sSched/sSched031521.pdf"
+         }
+      },
+      "08:30:00" : {
+         "SEC" : {
+            "bills" : ["HB6","HB331","HB184","HB188","HB219","HB266","HB287","HB189"],
+            "date" : "2021-03-15",
+            "datetime" : "2021-03-15T08:30:00",
+            "mtime" : "2021-03-14T23:24:49",
+            "name" : "SEC",
+            "time" : "8:30 AM",
+            "url" : "2021/03/sSched/sSched031521.pdf"
+         }
+      },
+      "09:00:00" : {
+         "SRC" : {
+            "bills" : ["HJR14","SB454"],
+            "date" : "2021-03-15",
+            "datetime" : "2021-03-15T09:00:00",
+            "mtime" : "2021-03-14T23:24:49",
+            "name" : "SRC",
+            "time" : "9:00 AM",
+            "url" : "2021/03/sSched/sSched031521.pdf"
+         }
+      },
+      "10:00:00" : {
+         "SFC" : {
+            "bills" : ["HB2","SB413","HB296","HB55"],
+            "date" : "2021-03-15",
+            "datetime" : "2021-03-15T10:00:00",
+            "mtime" : "2021-03-14T23:24:49",
+            "name" : "SFC",
+            "time" : "10:00 AM",
+            "url" : "2021/03/sSched/sSched031521.pdf"
+         }
+      }
+   },
+   "2021-03-16" : {
+      "10:00:00" : {
+         "SIRC" : {
+            "bills" : ["HB234"],
+            "date" : "2021-03-16",
+            "datetime" : "2021-03-16T10:00:00",
+            "mtime" : "2021-03-14T23:24:49",
+            "name" : "SIRC",
+            "time" : "10:00 AM",
+            "url" : "2021/03/sSched/sSched031521.pdf"
+         }
+      }
+   }
+}

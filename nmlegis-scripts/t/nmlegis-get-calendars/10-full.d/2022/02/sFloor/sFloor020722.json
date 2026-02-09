@@ -1,0 +1,16 @@
+{
+   "2022-02-07" : {
+      "11:30:00" : {
+         "Senate" : {
+            "bills" : ["SB40","SB123","SB141","SB39","SB134","SB144","SB172","SJM2","SM6","SM4","SM5","SM8","SM17","SM19","SM21","SM22","SM23","SM24"],
+            "date" : "2022-02-07",
+            "datetime" : "2022-02-07T11:30:00",
+            "mtime" : "2022-02-11T18:15:31",
+            "name" : "Senate",
+            "room" : "Senate Floor",
+            "time" : "11:30 AM",
+            "url" : "2022/02/sFloor/sFloor020722.pdf"
+         }
+      }
+   }
+}

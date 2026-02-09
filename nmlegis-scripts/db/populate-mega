@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# hardcoded 2343 is early January
+pushd data &>/dev/null
+tip=$(hg head|sed -ne 's/^changeset:[ ]\+\([0-9]\+\):.*/\1/p')
+hg update -r2399
+popd &>/dev/null
+
+db/populate --historical || exit 1
+
+# use 'hg identify -n' to figure out where we are
+for rev in $(seq 2400 $tip); do
+    if [[ $rev -ge 2714 && $rev -le 2715 ]]; then
+        continue
+    fi
+    echo $rev / $tip
+    pushd data &>/dev/null
+    hg update -r$rev
+    date=$(hg log -r$rev | sed -ne 's/^date:[ ]\+[^ ]\+ \(.*\) -.*/\1/p')
+    popd &>/dev/null
+
+    PERL5OPT="-MCarp=verbose" datefudge "$date" db/update --historical || exit 1
+done
+
+cd data
+hg update -rtip

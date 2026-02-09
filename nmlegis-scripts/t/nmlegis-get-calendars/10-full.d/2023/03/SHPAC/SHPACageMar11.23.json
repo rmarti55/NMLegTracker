@@ -1,0 +1,17 @@
+{
+   "2023-03-11" : {
+      "10:00:00" : {
+         "SHPAC" : {
+            "bills" : ["SB440","SB500","HB232","SJM2","SM30","SM37","SM52","HJM2"],
+            "date" : "2023-03-11",
+            "datetime" : "2023-03-11T10:00:00",
+            "mtime" : "2023-03-10T19:23:34",
+            "name" : "SHPAC",
+            "room" : "326",
+            "time" : "10:00 AM",
+            "url" : "2023/03/SHPAC/SHPACageMar11.23.pdf",
+            "zoom" : "https://us02web.zoom.us/j/81287336647"
+         }
+      }
+   }
+}

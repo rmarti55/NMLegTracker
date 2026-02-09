@@ -1,0 +1,153 @@
+#!/usr/bin/perl
+#
+# nmlegis-log-bill-history - once a day, log bills that were seen
+#
+package ESM::NMLegisLogBillHistory;
+
+use v5.14;
+use strict;
+use warnings;
+
+use utf8;
+use open qw( :encoding(UTF-8) :std );
+
+(our $ME = $0) =~ s|.*/||;
+(our $VERSION = '$Revision: 1.30 $ ') =~ tr/[0-9].//cd;
+
+use NMLegis                     qw(:all);
+use NMLegis::Bills              qw($Bills_Log);
+
+use File::Slurp                 qw(read_file);
+use JSON::XS;
+use Time::Piece;
+
+# For debugging, show data structures using DumpTree($var)
+#use Data::TreeDumper; $Data::TreeDumper::Displayaddress = 0;
+
+###############################################################################
+# BEGIN user-customizable section
+
+# END   user-customizable section
+###############################################################################
+
+###############################################################################
+# BEGIN boilerplate args checking, usage messages
+
+sub usage {
+    print  <<"END_USAGE";
+Usage: $ME [OPTIONS]
+
+$ME fetches and parses bills from nmlegis.gov .
+
+  * scrapes the top bills page;
+  * fetches all rows, saves them in a file FIXME FIXME
+
+OPTIONS:
+
+  --debug        use local HTML cache (to avoid slamming nmlegis)
+
+  -v, --verbose  show verbose progress indicators
+  -n, --dry-run  make no actual changes
+
+  --help         display this message
+  --version      display program name and version
+END_USAGE
+
+    exit;
+}
+
+# Command-line options.  Note that this operates directly on @ARGV !
+our $debug   = 0;
+our $force   = 0;
+our $verbose = 0;
+our $NOT     = '';              # print "blahing the blah$NOT\n" if $debug
+sub handle_opts {
+    use Getopt::Long;
+    GetOptions(
+        'debug!'     => \$debug,
+        'dry-run|n!' => sub { $NOT = ' [NOT]' },
+        'force'      => \$force,
+        'verbose|v'  => \$verbose,
+
+        help         => \&usage,
+        version      => sub { print "$ME version $VERSION\n"; exit 0 },
+    ) or die "Try `$ME --help' for help\n";
+}
+
+# END   boilerplate args checking, usage messages
+###############################################################################
+
+############################## CODE BEGINS HERE ###############################
+
+# The term is "modulino".
+__PACKAGE__->main()                                     unless caller();
+
+# Main code.
+sub main {
+    # Note that we operate directly on @ARGV, not on function parameters.
+    # This is deliberate: it's because Getopt::Long only operates on @ARGV
+    # and there's no clean way to make it use @_.
+    handle_opts();                      # will set package globals
+
+    if (localtime->hour < 20) {
+        warn "$ME: This script is intended to run ONLY ONCE PER DAY\n";
+        die "$ME: Use --force to continue\n" unless $force;
+    }
+
+    # Read the schedule
+    my $schedule_file = "/home/esm/.local/share/nmlegis/schedule.json";
+    my $schedule = decode_json(read_file($schedule_file));
+
+    my $schema = delete $schedule->{_schema}
+        or die;
+    $schema eq '20230124'
+        or die "$ME: FIXME: wrong schema '$schema'";
+
+    my $ymd = localtime->ymd;
+    if (!exists $schedule->{$ymd}) {
+        warn "$ME: No bills scheduled for committee hearings today\n"
+            unless localtime->wday == 1;
+        exit 0;
+    }
+
+    my %history;
+    for my $hms (sort keys %{$schedule->{$ymd}}) {
+        for my $cname (sort keys %{$schedule->{$ymd}{$hms}}) {
+            if (my $bills = $schedule->{$ymd}{$hms}{$cname}{bills}) {
+                for my $bill (@$bills) {
+                    if (exists $history{$bill}) {
+                        warn "$ME: Internal error: multiple hearings for $bill on $ymd: $history{$bill}, $cname";
+                    }
+
+                    $history{$bill} = $cname;
+                }
+            }
+        }
+    }
+
+    # FIXME: lock??
+    open my $out, '>>', $Bills_Log
+        or die "$ME: Cannot append to $Bills_Log: $!\n";
+    for my $b (sort _by_billid keys %history) {
+        printf { $out } "%-7s %-8s %s\n", $b, $history{$b}, $ymd;
+    }
+    close $out
+        or die "$ME: Error writing $Bills_Log: $!\n";
+
+    (my $logfile_base = $Bills_Log) =~ s|^.*/||;
+    system('hg', '--cwd' => $Data_Dir, 'add', $logfile_base);
+    system('hg', '--cwd' => $Data_Dir, 'diff', $logfile_base);
+    system('hg', '--cwd' => $Data_Dir, 'commit', $logfile_base, '-m', "Nightly bill history");
+}
+
+sub _by_billid {
+    $a =~ /^([A-Z]+)(\d+)$/
+        or die;
+    my ($a1, $a2) = ($1, $2);
+
+    $b =~ /^([A-Z]+)(\d+)$/
+        or die;
+    my ($b1, $b2) = ($1, $2);
+
+    $a1 cmp $b1 || $a2 <=> $b2;
+}

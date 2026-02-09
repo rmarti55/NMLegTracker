@@ -1,0 +1,16 @@
+Hello,
+
+Someone (possibly you) has requested a password reset for your account.
+
+If this was really you, please click here:
+
+    <%= $reset_url %>
+
+Or, copy this token and paste it into your web browser:
+
+    <%= $token %>
+
+IF YOU DID NOT REQUEST THIS, DON'T PANIC. Someone on the Internet is
+being nasty. (This happens, believe it or not). They have not gained
+access to your account, nor changed your settings. Simply delete
+this notification and carry on. Ed apologizes for wasting your time.

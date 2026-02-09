@@ -1,0 +1,55 @@
+{
+   "2024-02-15" : {
+      "00:00:00" : {
+         "House" : {
+            "bills" : ["HJM1","HJM3","SJM2","HM10","HM4","HM33","HM34","HM3","HM12","HM39","HM30","HM45","HM46","HM20"],
+            "date" : "2024-02-15",
+            "mtime" : "2024-02-15T09:57:01",
+            "name" : "House",
+            "room" : "House Floor",
+            "url" : "/home/esm/.cache/nmlegis/get-calendars/2024/02/hFloor/hFloor021524_Consent.pdf"
+         }
+      },
+      "08:30:00" : {
+         "House" : {
+            "bills" : ["HB114","HB27","HB133","HB116","HB127","HB184","HJR1","HJR2","HJR5","HJR7","HB123","HB241","HB288","HB71","SB87","HB301","SB126","HJM1","HJM2","HJM3","SJM2","HM1","HM15","HM10","HM4","HM5","HM17","HM29","HM25","HM33","HM34","HM44","HM3","HM12","HM39","HM51","HM30","HM45","HM46","HM42","HM20","HM56","HM50","HM59","HM13","HM21","HM28","HM60"],
+            "date" : "2024-02-15",
+            "datetime" : "2024-02-15T08:30:00",
+            "mtime" : "2024-02-14T21:31:53",
+            "name" : "House",
+            "room" : "House Floor",
+            "time" : "8:30 AM",
+            "url" : "/home/esm/.cache/nmlegis/get-calendars/2024/02/hFloor/hFloor021524.pdf"
+         }
+      },
+      "08:45:00" : {
+         "STBTC" : {
+            "bills" : ["HB251"],
+            "date" : "2024-02-15",
+            "datetime" : "2024-02-15T08:45:00",
+            "mtime" : "2024-02-14T22:02:49",
+            "name" : "STBTC",
+            "room" : "321",
+            "time" : "8:45 AM",
+            "url" : "/home/esm/.cache/nmlegis/get-calendars/2024/02/sSched/sSched021524.pdf",
+            "zoom" : "https://us02web.zoom.us/j/85614440294"
+         }
+      },
+      "09:00:00" : {
+         "Senate" : {
+            "bills" : ["SB69","SM4","SM5","SM7","SM8","SM11","SM15","SM16","SM17","HB270","HB207","HB98","HB303","HB186","HB130","HB271","HB134"],
+            "date" : "2024-02-15",
+            "datetime" : "2024-02-15T09:00:00",
+            "mtime" : "2024-02-15T08:26:01",
+            "name" : "Senate",
+            "room" : "Senate Floor",
+            "time" : "9:00 AM",
+            "url" : "/home/esm/.cache/nmlegis/get-calendars/2024/02/sFloor/sFloor021524.pdf",
+            "urls" : [
+               "/home/esm/.cache/nmlegis/get-calendars/2024/02/sFloor/sFloor021524.pdf",
+               "/home/esm/.cache/nmlegis/get-calendars/2024/02/sFloor/sFloor021524_Supplemental1.pdf"
+            ]
+         }
+      }
+   }
+}

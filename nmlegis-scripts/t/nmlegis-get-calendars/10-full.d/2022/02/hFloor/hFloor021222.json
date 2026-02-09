@@ -1,0 +1,15 @@
+{
+   "2022-02-12" : {
+      "00:00:00" : {
+         "House" : {
+            "bills" : ["HB102","HB101","HB104","HB116","HB126","HB144","HB87","HB134","HB160","HB164","HB165","HB166","HB175","HB43","HB151","HB171","HB193","HM5","HM21","HM11","HM26","HM4","HM15","HM18","HM22","HM3","HM24","HM36","HM33","HM38","HM35","HM43","HM48","HM1","HM7","HM13","HM17","HM31","HM34","HM37","HM39","HM40","HM41","HM50","HM51","HB227","HB92","HB94"],
+            "date" : "2022-02-12",
+            "mtime" : "2022-02-12T06:46:19",
+            "name" : "House",
+            "room" : "House Floor",
+            "time" : "Recess Subject to the Call of the Chair",
+            "url" : "2022/02/hFloor/hFloor021222.pdf"
+         }
+      }
+   }
+}

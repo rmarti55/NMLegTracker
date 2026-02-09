@@ -1,0 +1,17 @@
+{
+   "2023-03-06" : {
+      "13:30:00" : {
+         "SJC" : {
+            "bills" : ["HB4","SB264","SB33","SB388","SB472","SB295","SB471","SB336","SB50","SB17","SB373","SB172","SB315","SJR9","SB13","SB513"],
+            "date" : "2023-03-06",
+            "datetime" : "2023-03-06T13:30:00",
+            "mtime" : "2023-03-06T16:18:42",
+            "name" : "SJC",
+            "room" : "321",
+            "time" : "1:30 PM or 1/2 hour after floor session",
+            "url" : "2023/03/SJC/SJCageMar06.23.pdf",
+            "zoom" : "https://us02web.zoom.us/j/81502543362"
+         }
+      }
+   }
+}

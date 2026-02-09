@@ -1,0 +1,15 @@
+{
+   "2021-02-25" : {
+      "00:00:00" : {
+         "HCPAC" : {
+            "bills" : ["HB304","HB307","SB92","SB94"],
+            "date" : "2021-02-25",
+            "datetime" : "2021-02-25T00:00:00",
+            "mtime" : "2021-02-24T09:51:00",
+            "name" : "HCPAC",
+            "url" : "2021/02/HCPAC/HCPACageFeb25.21.pdf",
+            "zoom" : "https://us02web.zoom.us/j/89243737297"
+         }
+      }
+   }
+}

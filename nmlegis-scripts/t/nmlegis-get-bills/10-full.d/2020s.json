@@ -1,0 +1,268 @@
+{
+   "H" : {
+      "B" : {
+         "1" : {
+            "actions" : "[1] HAFC-HAFC [2] DP/a [3] PASSED/H (46-24) [4] SFC-SFC- DP [5] PASSED/S (30-12) SGND BY GOV (June 30) Ch. 5 (partial veto).",
+            "sponsors" : ["HLUND"],
+            "title" : "GENERAL APPROPRIATION ACT SANDING"
+         },
+         "10" : {
+            "actions" : "[1] not prntd-HRC",
+            "emergency" : "*",
+            "sponsors" : ["HNIBE","HTOWJ","HMONR","HPOWD"],
+            "title" : "EXTENSION OF EMERGENCY DECLARATIONS"
+         },
+         "11" : {
+            "actions" : "[1] not prntd-HRC",
+            "emergency" : "*",
+            "sponsors" : ["HSCHM"],
+            "title" : "ISOLATION, QUARANTINE & VACCINATIONS"
+         },
+         "12" : {
+            "actions" : "[1] not prntd-HRC",
+            "emergency" : "*",
+            "sponsors" : ["HBALA"],
+            "title" : "REMOTE NOTARIAL ACT PLATFORM"
+         },
+         "13" : {
+            "actions" : "[1] not prntd-HRC",
+            "emergency" : "*",
+            "sponsors" : ["HROAN","HELYD","HRUBI"],
+            "title" : "MORATORIUM ON CERTAIN EVICTIONS"
+         },
+         "14" : {
+            "actions" : "[1] not prntd-HRC",
+            "sponsors" : ["HMONR","HRUIL","HCROW","HREHM","HSWEE","HARMG","HCATE","HCHNI","HCUCA","HHERN","HJONJ","HLITC","HSEEL","HTHOE"],
+            "title" : "UNEMPLOYMENT CALCULATION CHANGES"
+         },
+         "15" : {
+            "actions" : "[1] HJC-HJC [3] DP/a",
+            "sponsors" : ["HROYB","HMARJ","SLOPE"],
+            "title" : "REDUCE INSTITUTIONAL RACISM"
+         },
+         "16" : {
+            "actions" : "[2] not prntd-HRC",
+            "emergency" : "*",
+            "sponsors" : ["HANDP","HGADV","HCHAT","HBLAC","HCROW"],
+            "title" : "CORONAVIRUS TORT CLAIM IMMUNITY"
+         },
+         "2" : {
+            "actions" : "[1] HAFC-HAFC [2] DP/a",
+            "emergency" : "*",
+            "sponsors" : ["HLUND","HSAJO"],
+            "title" : "BOND ISSUANCE AND FUND TRANSFERS"
+         },
+         "3" : {
+            "actions" : "[1] HCEDC-HCEDC [2] DP",
+            "emergency" : "*",
+            "sponsors" : ["HMAES","SPAPE"],
+            "title" : "REMOTE NOTARIAL ACTS"
+         },
+         "4" : {
+            "actions" : "[1] HCEDC-HCEDC",
+            "emergency" : "*",
+            "sponsors" : ["HMATT","HELYD","HROAN"],
+            "title" : "SMALL BUSINESS RECOVERY ACT OF 2020"
+         },
+         "5" : {
+            "actions" : "[1] HJC-HJC [2] DP/a [3] fl/aaa- PASSED/H (53-17) [4] SJC-SJC- DP/a [5] fl/a- PASSED/S (32-9) [3] h/cncrd SGND BY GOV (Jun. 26) Ch. 1.",
+            "emergency" : "*",
+            "sponsors" : ["HEGOL","HBASH","SORTI"],
+            "title" : "NM CIVIL RIGHTS COMMISSION"
+         },
+         "6" : {
+            "actions" : "[1] HTRC-HTRC [2] DP - fl/a- PASSED/H (69-1) [3] SCORC-SCORC [4] w/drn [5] fl/a- PASSED/S (42-0) [3] h/cncrd SGND BY GOV (June 29) Ch. 4.",
+            "emergency" : "*",
+            "sponsors" : ["HCHAN","HAKHI","HMARJ","SWIRT"],
+            "title" : "TEMPORARY TAX WAIVERS AND DISTRIBUTIONS"
+         },
+         "7" : {
+            "actions" : "[1] not prntd-HRC",
+            "emergency" : "*",
+            "sponsors" : ["HROYB","HCHAS"],
+            "title" : "LAW ENFORCEMENT USE OF FORCE REPORTING"
+         },
+         "8" : {
+            "actions" : "[1] not prntd-HRC",
+            "sponsors" : ["HROAN","HRUBI","HELYD"],
+            "title" : "RENT CONTROL ON CERTAIN PROPERTY"
+         },
+         "9" : {
+            "actions" : "[1] not prntd-HRC",
+            "sponsors" : ["HDOWR","HROMA","HCHAT","HARMG","HMAES","HANMA","SCERV","HCHAL","HGAMP","HHEJO","SNACI","HROAN","HROYB","HRUBI","SSEDI"],
+            "title" : "MEAT INSPECTIONS"
+         }
+      },
+      "M" : {
+         "1" : {
+            "actions" : "[2] nt prntd-nt ref com-tbld",
+            "sponsors" : ["HLENT","HMARJ","HRUBI","HCADA","HEGOL","HHEPA","HROYB"],
+            "title" : "OPPOSE DISMISSING YAZZIE V. STATE LAWSUIT"
+         },
+         "2" : {
+            "actions" : "[2] nt prntd-nt ref com-tbld- w/drn - PASSED/H (70-0) [3] SGND.",
+            "sponsors" : ["HSTAP"],
+            "title" : "\"JUNETEENTH FREEDOM DAY\""
+         },
+         "3" : {
+            "actions" : "[3] nt prntd-nt ref com-tbld",
+            "sponsors" : ["HHOCH","HCHAS"],
+            "title" : "STUDY MODEL LAW ENFORCEMENT TRAINING"
+         },
+         "4" : {
+            "actions" : "[3] nt prntd-nt ref com-tbld",
+            "sponsors" : ["HROYB","HSTAP","HTHOE","HTRUL"],
+            "title" : "SOLIDARITY & RACIAL EQUALITY"
+         }
+      },
+      "R" : {
+         "1" : {
+            "actions" : "[1] HRC-HRC- DP - fl/a- PASSED/H (43-24) [3] SGND.",
+            "sponsors" : ["HELYD"],
+            "title" : "EMERGENCY HOUSE RULES"
+         }
+      }
+   },
+   "S" : {
+      "B" : {
+         "1" : {
+            "actions" : "[1] SCORC-SCORC [4] DP/a",
+            "sponsors" : ["SWIRT","HCHAN"],
+            "title" : "TAX CHANGES"
+         },
+         "10" : {
+            "actions" : "[1] SCC-SCC",
+            "emergency" : "*",
+            "sponsors" : ["SPADI"],
+            "title" : "TRANSFER OF FEDERAL AID FOR BROADBAND"
+         },
+         "11" : {
+            "actions" : "[1] SCC-SCC",
+            "sponsors" : ["SPADI"],
+            "title" : "FIRST RESPONDER INCOME TAX EXEMPTION"
+         },
+         "12" : {
+            "actions" : "[1] SCC-SCC",
+            "emergency" : "*",
+            "sponsors" : ["SORTI"],
+            "title" : "NO COLLECTION OF CERTAIN TAX PAYMENTS"
+         },
+         "13" : {
+            "actions" : "[1] SCC-SCC",
+            "emergency" : "*",
+            "sponsors" : ["SSACL"],
+            "title" : "UNEMPLOYMENT CALCULATION CHANGES"
+         },
+         "14" : {
+            "actions" : "[1] SCC-SCC",
+            "emergency" : "*",
+            "sponsors" : ["SPIRT"],
+            "title" : "GROSS RECEIPTS PENALTY WAIVER"
+         },
+         "15" : {
+            "actions" : "[1] SCC-SCC",
+            "sponsors" : ["SPIRT"],
+            "title" : "SMALL BUSINESS PANDEMIC TAKINGS REPARATIONS"
+         },
+         "16" : {
+            "actions" : "[1] SCC-SCC",
+            "emergency" : "*",
+            "sponsors" : ["SBACA"],
+            "title" : "CREATE CRIME OF LOOTING"
+         },
+         "17" : {
+            "actions" : "[1] SCC-SCC",
+            "emergency" : "*",
+            "sponsors" : ["SSEDI","HCHAS","HROYB","SORTI"],
+            "title" : "LAW ENFORCEMENT USE OF FORCE REPORTING"
+         },
+         "18" : {
+            "actions" : "[1] SCC-SCC",
+            "emergency" : "*",
+            "sponsors" : ["SPIRT"],
+            "title" : "FOOD FREEDOM ACT"
+         },
+         "19" : {
+            "actions" : "[1] SCC-SCC",
+            "emergency" : "*",
+            "sponsors" : ["SBACA"],
+            "title" : "PUBLIC HEALTH ORDER TERMINATIONS"
+         },
+         "2" : {
+            "actions" : "[1] SCORC-SCORC [4] DP",
+            "emergency" : "*",
+            "sponsors" : ["SPAPE"],
+            "title" : "GOVERNOR'S EMERGENCY POWERS"
+         },
+         "20" : {
+            "actions" : "[1] SCC-SCC",
+            "emergency" : "*",
+            "sponsors" : ["SMOOR","SBACA","SPAYN","SGRIG"],
+            "title" : "NO CIVIL PENALTY FOR HEALTH ORDER VIOLATIONS"
+         },
+         "21" : {
+            "actions" : "[5] SCC-SCC",
+            "sponsors" : ["SORTI"],
+            "title" : "HEALTH INSURANCE PREMIUM SURTAX INCREASE"
+         },
+         "3" : {
+            "actions" : "[1] SFC-SFC- DP [4] fl/aaa- PASSED/S (26-11) [3] HCEDC-HCEDC- DP - PASSED/H (59-5) SGND BY GOV (July 7) Ch. 6.",
+            "emergency" : "*",
+            "sponsors" : ["SCAND","SSAPI","SSRUE","HELYD","HMATT","SBRAC","SCAMP","SCERV","SDUHI","SFIGU","SGONZ","HHEPA","SMAEM","SOMAL","SPADI","SSOUL","SSTEF","SWIRT"],
+            "title" : "SMALL BUSINESS RECOVERY ACT OF 2020"
+         },
+         "4" : {
+            "actions" : "[1] SRC-SRC [2] DP/a [3] fl/aaa- PASSED/S (40-2) [2] HJC-HJC [3] DP - FAILED/H (32-38)- m/rcnsr adptd- PASSED/H (44-26) SGND BY GOV (June 26) Ch. 2.",
+            "emergency" : "*",
+            "sponsors" : ["SIVEY","SRAMO","HTRUL","HJOHD"],
+            "title" : "TEMPORARY ELECTION CHANGES"
+         },
+         "5" : {
+            "actions" : "[1] SFC-SFC- DP/a [3] PASSED/S (36-6) [2] HAFC-HAFC- DP [3] PASSED/H (68-1) SGND BY GOV (June 26) Ch. 3 (partial veto).",
+            "emergency" : "*",
+            "sponsors" : ["SMUNO","SINGL"],
+            "title" : "SOLVENCY MEASURES"
+         },
+         "6" : {
+            "actions" : "[1] SFC-SFC [4] DP/a",
+            "sponsors" : ["SSMIT","SNEVI"],
+            "title" : "GENERAL APPROPRIATION ACT SANDING"
+         },
+         "7" : {
+            "actions" : "[1] SJC-SJC [4] DP/a - PASSED/S (29-12) [3] HJC-HJC- DP/a",
+            "sponsors" : ["SLOPE","HROYB","HMARJ"],
+            "title" : "REDUCE INSTITUTIONAL RACISM"
+         },
+         "8" : {
+            "actions" : "[1] SJC-SJC [3] DP/a [4] fl/aa [3] PASSED/S (31-11)- HJC-HJC- DP - PASSED/H (44-26) SGND BY GOV (July 8) Ch. 7.",
+            "sponsors" : ["SCERV"],
+            "title" : "LAW ENFORCEMENT BODY CAMERAS"
+         },
+         "9" : {
+            "actions" : "[1] SCC-SCC",
+            "emergency" : "*",
+            "sponsors" : ["SCAND"],
+            "title" : "TAX DISTRIBUTIONS TO LOCAL GOVERNMENTS"
+         }
+      },
+      "M" : {
+         "1" : {
+            "actions" : "[3] SJC-SJC",
+            "sponsors" : ["SSEDI"],
+            "title" : "STUDY MODEL LAW ENFORCEMENT TRAINING"
+         },
+         "2" : {
+            "actions" : "[4] nt prntd-nt ref com-tbld- w/drn - PASSED/S (43-0).",
+            "sponsors" : ["SWIRT","SINGL"],
+            "title" : "SEVEN OUTGOING SENATORS, IN RECOGNITION"
+         }
+      },
+      "R" : {
+         "1" : {
+            "actions" : "[1] SRC-SRC- DNP-CS/DP [2] fl/aa- PASSED/S (29-12)- SGND.",
+            "sponsors" : ["SLOPE"],
+            "title" : "SENATE RULE CHANGES"
+         }
+      }
+   }
+}

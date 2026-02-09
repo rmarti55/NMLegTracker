@@ -1,0 +1,17 @@
+% layout 'default';
+% title  'Password Reset Sent';
+
+<h1>Password Reset</h1>
+
+%= form_for '/login/reset' => (method => 'POST') => begin
+<p>
+  Check your email.
+</p>
+<p>
+  Click on the link, or paste the token here:
+  <%= text_field 'token', size => 25, required => 1 %>
+  <button type="submit">Continue</button>
+</p>
+% end
+
+% $self->stash('skip_legend' => 1);

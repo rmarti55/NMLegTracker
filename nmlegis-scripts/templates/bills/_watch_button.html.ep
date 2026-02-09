@@ -1,0 +1,27 @@
+<td class="watchstatus"<%== $rowspan %>>
+% if ($self->user) {
+%     my @owned = $self->user->trackers_owned;
+%     # FIXME! What if this is a tracker page, and user has w access?
+%     if (! @owned) {
+%         ...
+%     } elsif (@owned == 1) {
+%         # the easy case: user owns only one tracker
+%         if (my $tracker_context = $self->stash('tracker_context')) {
+%             # User owns one tracker, and this IS a tracker page, and...
+%             if ($tracker_context->id != $owned[0]->id) {
+%                 # ...this is NOT their tracker page. It is safe to
+%                 # delete the watch status for this tracker, because,
+%                 # duh, all bills on this page are on this tracker.
+%                 delete $w->{$tracker_context->name};
+%             }
+%=            include 'bills/_watch_button_own1', b => $b, w => $w, t => $owned[0];
+%         } else {
+%             # User owns 1 tracker, NOT on a tracker page
+%=            include 'bills/_watch_button_own1', b => $b, w => $w, t => $owned[0]
+%         }
+%     } else {           # @owned
+%         # User owns more than one tracker. FIXME!
+%         ...
+%     }
+% }
+</td>

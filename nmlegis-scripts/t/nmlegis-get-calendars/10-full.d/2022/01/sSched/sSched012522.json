@@ -1,0 +1,119 @@
+{
+   "2022-01-25" : {
+      "00:00:00" : {
+         "STBTC" : {
+            "bills" : ["SB21","SB30"],
+            "date" : "2022-01-25",
+            "datetime" : "2022-01-25T00:00:00",
+            "mtime" : "2022-01-24T17:25:44",
+            "name" : "STBTC",
+            "room" : "321",
+            "time" : "30 minutes after floor session",
+            "url" : "2022/01/sSched/sSched012522.pdf",
+            "zoom" : "https://us02web.zoom.us/j/84895112616"
+         }
+      },
+      "09:00:00" : {
+         "SCONC" : {
+            "bills" : ["SB17","SB37","SB46","SB18"],
+            "date" : "2022-01-25",
+            "datetime" : "2022-01-25T09:00:00",
+            "mtime" : "2022-01-24T17:25:44",
+            "name" : "SCONC",
+            "room" : "311",
+            "time" : "9:00 AM",
+            "url" : "2022/01/sSched/sSched012522.pdf",
+            "zoom" : "https://us02web.zoom.us/j/86543845863"
+         },
+         "SFC" : {
+            "bills" : [],
+            "date" : "2022-01-25",
+            "datetime" : "2022-01-25T09:00:00",
+            "mtime" : "2022-01-24T17:25:44",
+            "name" : "SFC",
+            "room" : "322",
+            "time" : "9:00 AM",
+            "url" : "2022/01/sSched/sSched012522.pdf",
+            "zoom" : "https://us02web.zoom.us/j/81679647964"
+         }
+      },
+      "10:00:00" : {
+         "SIRC" : {
+            "bills" : [],
+            "date" : "2022-01-25",
+            "datetime" : "2022-01-25T10:00:00",
+            "mtime" : "2022-01-24T17:25:44",
+            "name" : "SIRC",
+            "room" : "303",
+            "time" : "10:00 AM",
+            "url" : "2022/01/sSched/sSched012522.pdf",
+            "zoom" : "https://us02web.zoom.us/j/87300724547"
+         }
+      }
+   },
+   "2022-01-26" : {
+      "09:00:00" : {
+         "SEC" : {
+            "bills" : ["SB1","SB32","SB36","SB38","SB50"],
+            "date" : "2022-01-26",
+            "datetime" : "2022-01-26T09:00:00",
+            "mtime" : "2022-01-24T17:25:44",
+            "name" : "SEC",
+            "room" : "311",
+            "time" : "9:00 AM",
+            "url" : "2022/01/sSched/sSched012522.pdf",
+            "zoom" : "https://us02web.zoom.us/j/83582297843"
+         }
+      },
+      "13:30:00" : {
+         "SFC" : {
+            "bills" : [],
+            "date" : "2022-01-26",
+            "datetime" : "2022-01-26T13:30:00",
+            "mtime" : "2022-01-24T17:25:44",
+            "name" : "SFC",
+            "room" : "322",
+            "time" : "1:30 PM",
+            "url" : "2022/01/sSched/sSched012522.pdf"
+         }
+      }
+   },
+   "2022-01-27" : {
+      "09:00:00" : {
+         "SFC" : {
+            "bills" : [],
+            "date" : "2022-01-27",
+            "datetime" : "2022-01-27T09:00:00",
+            "mtime" : "2022-01-24T17:25:44",
+            "name" : "SFC",
+            "room" : "322",
+            "time" : "9:00 AM",
+            "url" : "2022/01/sSched/sSched012522.pdf"
+         },
+         "SIRC" : {
+            "bills" : ["SB39","SB97"],
+            "date" : "2022-01-27",
+            "datetime" : "2022-01-27T09:00:00",
+            "mtime" : "2022-01-24T17:25:44",
+            "name" : "SIRC",
+            "room" : "303",
+            "time" : "9:00 AM",
+            "url" : "2022/01/sSched/sSched012522.pdf"
+         }
+      }
+   },
+   "2022-01-28" : {
+      "13:30:00" : {
+         "SFC" : {
+            "bills" : [],
+            "date" : "2022-01-28",
+            "datetime" : "2022-01-28T13:30:00",
+            "mtime" : "2022-01-24T17:25:44",
+            "name" : "SFC",
+            "room" : "322",
+            "time" : "1:30 PM",
+            "url" : "2022/01/sSched/sSched012522.pdf"
+         }
+      }
+   }
+}

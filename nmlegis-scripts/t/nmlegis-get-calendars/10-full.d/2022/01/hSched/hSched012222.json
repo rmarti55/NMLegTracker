@@ -1,0 +1,145 @@
+{
+   "2022-01-22" : {
+      "10:00:00" : {
+         "HAFC" : {
+            "bills" : [],
+            "date" : "2022-01-22",
+            "datetime" : "2022-01-22T10:00:00",
+            "mtime" : "2022-01-21T19:51:00",
+            "name" : "HAFC",
+            "room" : "307",
+            "time" : "10:00 AM",
+            "url" : "2022/01/hSched/hSched012222.pdf",
+            "zoom" : "https://us02web.zoom.us/j/83190294368"
+         }
+      },
+      "11:00:00" : {
+         "HENRC" : {
+            "bills" : ["HB11","HB34","HB35"],
+            "date" : "2022-01-22",
+            "datetime" : "2022-01-22T11:00:00",
+            "mtime" : "2022-01-21T19:51:00",
+            "name" : "HENRC",
+            "room" : "317",
+            "time" : "11:00 AM",
+            "url" : "2022/01/hSched/hSched012222.pdf",
+            "zoom" : "https://us02web.zoom.us/j/85698671738"
+         }
+      }
+   },
+   "2022-01-24" : {
+      "08:00:00" : {
+         "HEC" : {
+            "bills" : ["HB13","HB59","HB73"],
+            "date" : "2022-01-24",
+            "datetime" : "2022-01-24T08:00:00",
+            "mtime" : "2022-01-21T19:51:00",
+            "name" : "HEC",
+            "room" : "309",
+            "time" : "8:00 AM",
+            "url" : "2022/01/hSched/hSched012222.pdf",
+            "zoom" : "https://us02web.zoom.us/j/82380513568"
+         }
+      },
+      "08:30:00" : {
+         "HGEIC" : {
+            "bills" : ["HB62","HB86","HB5","HM11","HJR3"],
+            "date" : "2022-01-24",
+            "datetime" : "2022-01-24T08:30:00",
+            "mtime" : "2022-01-21T19:51:00",
+            "name" : "HGEIC",
+            "room" : "305",
+            "time" : "8:30 AM",
+            "url" : "2022/01/hSched/hSched012222.pdf",
+            "zoom" : "https://us02web.zoom.us/j/88201222358"
+         },
+         "HHHC" : {
+            "bills" : ["HB16","HB17","HB38","HB23","HB32"],
+            "date" : "2022-01-24",
+            "datetime" : "2022-01-24T08:30:00",
+            "mtime" : "2022-01-21T19:51:00",
+            "name" : "HHHC",
+            "room" : "315",
+            "time" : "8:30 AM",
+            "url" : "2022/01/hSched/hSched012222.pdf",
+            "zoom" : "https://us02web.zoom.us/j/84182969724"
+         }
+      },
+      "09:00:00" : {
+         "HTRC" : {
+            "bills" : [],
+            "date" : "2022-01-24",
+            "datetime" : "2022-01-24T09:00:00",
+            "mtime" : "2022-01-21T19:51:00",
+            "name" : "HTRC",
+            "room" : "317",
+            "time" : "9:00 AM",
+            "url" : "2022/01/hSched/hSched012222.pdf",
+            "zoom" : "https://us02web.zoom.us/j/84861630345"
+         }
+      },
+      "13:30:00" : {
+         "HAFC" : {
+            "bills" : [],
+            "date" : "2022-01-24",
+            "datetime" : "2022-01-24T13:30:00",
+            "mtime" : "2022-01-21T19:51:00",
+            "name" : "HAFC",
+            "room" : "307",
+            "time" : "1:30 PM",
+            "url" : "2022/01/hSched/hSched012222.pdf",
+            "zoom" : "https://us02web.zoom.us/j/81159410294"
+         },
+         "HCEDC" : {
+            "bills" : [],
+            "date" : "2022-01-24",
+            "datetime" : "2022-01-24T13:30:00",
+            "mtime" : "2022-01-21T19:51:00",
+            "name" : "HCEDC",
+            "room" : "317",
+            "time" : "1:30 PM",
+            "url" : "2022/01/hSched/hSched012222.pdf",
+            "zoom" : "https://us02web.zoom.us/j/82467984562"
+         },
+         "HJC" : {
+            "bills" : ["HB92","HM2"],
+            "date" : "2022-01-24",
+            "datetime" : "2022-01-24T13:30:00",
+            "mtime" : "2022-01-21T19:51:00",
+            "name" : "HJC",
+            "room" : "309",
+            "time" : "1:30 PM",
+            "url" : "2022/01/hSched/hSched012222.pdf",
+            "zoom" : "https://us02web.zoom.us/j/85381395136"
+         }
+      }
+   },
+   "2022-01-25" : {
+      "08:30:00" : {
+         "HAAWC" : {
+            "bills" : [],
+            "date" : "2022-01-25",
+            "datetime" : "2022-01-25T08:30:00",
+            "mtime" : "2022-01-21T19:51:00",
+            "name" : "HAAWC",
+            "room" : "312",
+            "time" : "8:30 AM",
+            "url" : "2022/01/hSched/hSched012222.pdf",
+            "zoom" : "https://us02web.zoom.us/j/86337399512"
+         }
+      },
+      "09:00:00" : {
+         "HRDLC" : {
+            "bills" : ["HB8","HM5"],
+            "date" : "2022-01-25",
+            "datetime" : "2022-01-25T09:00:00",
+            "mtime" : "2022-01-21T19:51:00",
+            "name" : "HRDLC",
+            "room" : "309",
+            "time" : "9:00 AM",
+            "url" : "2022/01/hSched/hSched012222.pdf",
+            "zoom" : "https://us02web.zoom.us/j/88579435878"
+         }
+      }
+   }
+}

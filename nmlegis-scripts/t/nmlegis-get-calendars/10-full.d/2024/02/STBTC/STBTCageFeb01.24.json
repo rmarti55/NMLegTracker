@@ -1,0 +1,17 @@
+{
+   "2024-02-01" : {
+      "13:30:00" : {
+         "STBTC" : {
+            "bills" : ["SB121","SB119","SB181","SB232","SB184","SB25","SB217","SB148","SB151","SB72","SB100"],
+            "date" : "2024-02-01",
+            "datetime" : "2024-02-01T13:30:00",
+            "mtime" : "2024-01-31T21:18:31",
+            "name" : "STBTC",
+            "room" : "321",
+            "time" : "1:30 PM or 30 minutes after floor session",
+            "url" : "2024/02/STBTC/STBTCageFeb01.24.pdf",
+            "zoom" : "https://us02web.zoom.us/j/85614440294"
+         }
+      }
+   }
+}

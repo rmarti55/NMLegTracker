@@ -1,0 +1,112 @@
+{
+   "2023-03-05" : {
+      "13:30:00" : {
+         "SHPAC" : {
+            "bills" : ["SB426","SB427","SB428","HB26","HB31","HB48","HB75","HB95","HB106","HB370"],
+            "date" : "2023-03-05",
+            "datetime" : "2023-03-05T13:30:00",
+            "mtime" : "2023-03-04T22:32:20",
+            "name" : "SHPAC",
+            "room" : "311",
+            "time" : "1:30 PM",
+            "url" : "2023/03/sSched/sSched030623.pdf",
+            "zoom" : "https://us02web.zoom.us/j/81287336647"
+         }
+      }
+   },
+   "2023-03-06" : {
+      "09:00:00" : {
+         "SFC" : {
+            "bills" : ["SB442","SB124","HB127","SB157","SB176","HB201","SB337","SB433","SB492"],
+            "date" : "2023-03-06",
+            "datetime" : "2023-03-06T09:00:00",
+            "mtime" : "2023-03-04T22:32:20",
+            "name" : "SFC",
+            "room" : "322",
+            "time" : "9:00 AM",
+            "url" : "2023/03/sSched/sSched030623.pdf",
+            "zoom" : "https://us02web.zoom.us/j/81696207177"
+         },
+         "SRC" : {
+            "bills" : ["SB218","SB517","HB274","HB125","SM38","HJM2","SJM10","SM44","SM37"],
+            "date" : "2023-03-06",
+            "datetime" : "2023-03-06T09:00:00",
+            "mtime" : "2023-03-04T22:32:20",
+            "name" : "SRC",
+            "room" : "321",
+            "time" : "9:00 AM",
+            "url" : "2023/03/sSched/sSched030623.pdf",
+            "zoom" : "https://us02web.zoom.us/j/81944191844"
+         }
+      },
+      "13:30:00" : {
+         "SHPAC" : {
+            "bills" : ["SB285","SB412","SB417","SB363","SB371","SB375","SB424","SB429","SB449","SB452"],
+            "date" : "2023-03-06",
+            "datetime" : "2023-03-06T13:30:00",
+            "mtime" : "2023-03-04T22:32:20",
+            "name" : "SHPAC",
+            "room" : "311",
+            "time" : "1:30 PM OR 1/2 AFTER FLOOR SESSION",
+            "url" : "2023/03/sSched/sSched030623.pdf",
+            "zoom" : "https://us02web.zoom.us/j/81287336647"
+         }
+      }
+   },
+   "2023-03-07" : {
+      "00:00:00" : {
+         "STBTC" : {
+            "bills" : ["SB345","SB51","SB130","SB155","SB164","SB232","SB266","SB281","HB27","HB78","HB90","HB160"],
+            "date" : "2023-03-07",
+            "datetime" : "2023-03-07T00:00:00",
+            "mtime" : "2023-03-04T22:32:20",
+            "name" : "STBTC",
+            "room" : "321",
+            "time" : "After floor session",
+            "url" : "2023/03/sSched/sSched030623.pdf",
+            "zoom" : "https://us02web.zoom.us/j/85614440294"
+         }
+      },
+      "08:30:00" : {
+         "SCONC" : {
+            "bills" : ["SB520","HB197","HB268","HB365"],
+            "date" : "2023-03-07",
+            "datetime" : "2023-03-07T08:30:00",
+            "mtime" : "2023-03-04T22:32:20",
+            "name" : "SCONC",
+            "room" : "311",
+            "time" : "8:30 AM",
+            "url" : "2023/03/sSched/sSched030623.pdf",
+            "zoom" : "https://us02web.zoom.us/j/82404382748"
+         }
+      },
+      "13:30:00" : {
+         "SFC" : {
+            "bills" : ["HB76","SB66","HB175","HB298","SB8","SB194","SB272","SB316","SB423"],
+            "date" : "2023-03-07",
+            "datetime" : "2023-03-07T13:30:00",
+            "mtime" : "2023-03-04T22:32:20",
+            "name" : "SFC",
+            "room" : "322",
+            "time" : "1:30 PM",
+            "url" : "2023/03/sSched/sSched030623.pdf",
+            "zoom" : "https://us02web.zoom.us/j/81696207177"
+         }
+      }
+   },
+   "2023-03-08" : {
+      "13:30:00" : {
+         "SFC" : {
+            "bills" : ["SB159","SB203","SB346","SB374","SB385","SB467","SB493","SB521"],
+            "date" : "2023-03-08",
+            "datetime" : "2023-03-08T13:30:00",
+            "mtime" : "2023-03-04T22:32:20",
+            "name" : "SFC",
+            "room" : "322",
+            "time" : "1:30 PM",
+            "url" : "2023/03/sSched/sSched030623.pdf",
+            "zoom" : "https://us02web.zoom.us/j/81696207177"
+         }
+      }
+   }
+}

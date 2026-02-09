@@ -1,0 +1,16 @@
+{
+   "2022-01-28" : {
+      "11:30:00" : {
+         "House" : {
+            "bills" : ["HM5","HM21","HM1","HM6","HM7","HM8","HM10","HM13","HM17","HM19","HM28","HM11"],
+            "date" : "2022-01-28",
+            "datetime" : "2022-01-28T11:30:00",
+            "mtime" : "2022-01-27T17:04:54",
+            "name" : "House",
+            "room" : "House Floor",
+            "time" : "11:30 AM",
+            "url" : "2022/01/hFloor/hFloor012822.pdf"
+         }
+      }
+   }
+}

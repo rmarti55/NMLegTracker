@@ -1,0 +1,152 @@
+#!/usr/bin/perl
+#
+# verify-diffs - verify diffs if we change the date parsing code
+#
+# $Id$
+#
+package NMLegis::VerifyCalendarDiffs;
+
+use v5.14;
+use utf8;
+use open qw( :encoding(UTF-8) :std );
+
+use strict;
+use warnings;
+
+(our $ME = $0) =~ s|.*/||;
+(our $VERSION = '$Revision: 0.0 $ ') =~ tr/[0-9].//cd;
+
+# For debugging, show data structures using DumpTree($var)
+#use Data::TreeDumper; $Data::TreeDumper::Displayaddress = 0;
+
+###############################################################################
+# BEGIN user-customizable section
+
+our $PDF_Dir = "$ENV{HOME}/.cache/nmlegis/get-calendars";
+
+our $Dir = "t/nmlegis-get-calendars/10-full.d";
+
+# Too hard to handle multi-page diffs
+$ENV{DELTA_PAGER} = 'cat';
+
+# END   user-customizable section
+###############################################################################
+
+###############################################################################
+# BEGIN boilerplate args checking, usage messages
+
+sub usage {
+    print  <<"END_USAGE";
+Usage: $ME [OPTIONS] ARGS [...]
+
+blah blah blah
+
+OPTIONS:
+
+  -v, --verbose  show verbose progress indicators
+  -n, --dry-run  make no actual changes
+
+  --help         display this message
+  --version      display program name and version
+END_USAGE
+
+    exit;
+}
+
+# Command-line options.  Note that this operates directly on @ARGV !
+our $debug   = 0;
+our $force   = 0;
+our $verbose = 0;
+our $NOT     = '';              # print "blahing the blah$NOT\n" if $debug
+sub handle_opts {
+    use Getopt::Long;
+    GetOptions(
+        'debug!'     => \$debug,
+        'dry-run|n!' => sub { $NOT = ' [NOT]' },
+        'force'      => \$force,
+        'verbose|v'  => \$verbose,
+
+        help         => \&usage,
+        version      => sub { print "$ME version $VERSION\n"; exit 0 },
+    ) or die "Try `$ME --help' for help\n";
+}
+
+# END   boilerplate args checking, usage messages
+###############################################################################
+
+############################## CODE BEGINS HERE ###############################
+
+# The term is "modulino".
+__PACKAGE__->main()                                     unless caller();
+
+# Main code.
+sub main {
+    # Note that we operate directly on @ARGV, not on function parameters.
+    # This is deliberate: it's because Getopt::Long only operates on @ARGV
+    # and there's no clean way to make it use @_.
+    handle_opts();                      # will set package globals
+
+    # Fetch command-line arguments.  Barf if too many.
+    die "$ME: Too many arguments; try $ME --help\n"                 if @ARGV;
+
+    # FIXME: do code here
+    my @changed = changed_test_files();
+
+    my $i = 1;
+    for my $base (@changed) {
+        my $pdf_file = "$PDF_Dir/$base.pdf";
+        -e $pdf_file
+            or die "$ME: Internal error: no $pdf_file\n";
+
+        system('clear');
+        system('git', 'diff', "$Dir/$base.json");
+        print "\n";
+
+        my $kidpid = fork;
+        defined $kidpid
+            or die "$ME: could not fork: $!\n";
+        if ($kidpid == 0) {
+            # We are the child
+            close STDOUT;
+            close STDERR;
+            exec 'zathura', $pdf_file;
+        }
+
+        $| = 1;
+        printf "\n[%d/%d] %s - [y/N/q] ", $i++, scalar(@changed), $base;
+        chomp(my $ans = <STDIN>);
+        kill 2 => $kidpid;
+
+        if ($ans =~ /^q/i) {
+            exit 0;
+        }
+        if ($ans =~ /^y/i) {
+            system('git', 'add', "$Dir/$base.json");
+        }
+    }
+}
+
+
+
+sub changed_test_files {
+    -d $Dir
+        or die "$ME: Dir does not exist: $Dir\n";
+    my @cmd = qw(git status --porcelain --untracked-files=no);
+
+    my @changed;
+    open my $git, '-|', @cmd, $Dir
+        or die "$ME: could not fork: @cmd $Dir\n";
+    while (my $line = <$git>) {
+        if ($line =~ m!^\sM\s+$Dir/(\S+)\.json$!) {
+            push @changed, $1;
+        }
+    }
+
+    close $git
+        or die "$ME: Command failed: @cmd $Dir\n";
+
+    return @changed;
+}
+
+
+1;

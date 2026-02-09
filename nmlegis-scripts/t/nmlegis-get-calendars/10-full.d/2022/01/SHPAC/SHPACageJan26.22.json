@@ -1,0 +1,17 @@
+{
+   "2022-01-26" : {
+      "13:30:00" : {
+         "SHPAC" : {
+            "bills" : ["SB7","SB125","SB62","SB63","SB64","SB65","SB80","SB35","SB45"],
+            "date" : "2022-01-26",
+            "datetime" : "2022-01-26T13:30:00",
+            "mtime" : "2022-01-25T14:53:40",
+            "name" : "SHPAC",
+            "room" : "311",
+            "time" : "1:30 PM or 1/2 hr after floor session",
+            "url" : "2022/01/SHPAC/SHPACageJan26.22.pdf",
+            "zoom" : "https://us02web.zoom.us/j/87967039414"
+         }
+      }
+   }
+}

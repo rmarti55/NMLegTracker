@@ -1,0 +1,17 @@
+{
+   "2025-01-28" : {
+      "09:00:00" : {
+         "HRDLC" : {
+            "bills" : ["HB21","HB24","HB41"],
+            "date" : "2025-01-28",
+            "datetime" : "2025-01-28T09:00:00",
+            "mtime" : "2025-01-27T14:20:11",
+            "name" : "HRDLC",
+            "room" : "305",
+            "time" : "9:00 AM",
+            "url" : "2025/01/HRDLC/HRDLCageJan28.25.pdf",
+            "zoom" : "https://us02web.zoom.us/j/83538472931"
+         }
+      }
+   }
+}

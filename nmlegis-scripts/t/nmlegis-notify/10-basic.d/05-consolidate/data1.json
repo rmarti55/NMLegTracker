@@ -1,0 +1,15 @@
+{
+    "_datetime" : "2026-01-27T08:00:00",
+    "_schema"   : "20230201",
+    "history"   : [
+        # This will be overridden by a subsequent "removed from" entry.
+        # Neither entry will show up in history.
+        [ "HB123", "scheduled for HCPAC on 2026-01-30 13:30:00" ],
+
+        # This one will be preserved.
+        [ "HB200", "scheduled for HITHERE on 2026-01-31 09:00:00" ],
+
+        # This one gets overridden by a subsequent "scheduled for"
+        [ "HB201", "removed from HELLO 01-30" ]
+    ]
+}

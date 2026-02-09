@@ -1,0 +1,17 @@
+{
+   "2025-02-20" : {
+      "13:30:00" : {
+         "STBTC" : {
+            "bills" : ["SB183","SB39","SB186","SB202","SB213","SB289","SB221","SB226","SB227","SB199","SB215","SB206"],
+            "date" : "2025-02-20",
+            "datetime" : "2025-02-20T13:30:00",
+            "mtime" : "2025-02-19T12:45:19",
+            "name" : "STBTC",
+            "room" : "321",
+            "time" : "1:30 PM or 30 minutes after floor session.",
+            "url" : "2025/02/STBTC/STBTCageFeb20.25.pdf",
+            "zoom" : "https://us02web.zoom.us/j/85614440294"
+         }
+      }
+   }
+}

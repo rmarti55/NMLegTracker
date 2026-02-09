@@ -1,0 +1,82 @@
+{
+   "2025-01-23" : {
+      "09:00:00" : {
+         "HAAWC" : {
+            "bills" : [],
+            "date" : "2025-01-23",
+            "datetime" : "2025-01-23T09:00:00",
+            "mtime" : "2025-01-22T17:35:31",
+            "name" : "HAAWC",
+            "room" : "315",
+            "time" : "9:00 AM",
+            "url" : "2025/01/hSched/hSched012325.pdf"
+         },
+         "HENRC" : {
+            "bills" : [],
+            "date" : "2025-01-23",
+            "datetime" : "2025-01-23T09:00:00",
+            "mtime" : "2025-01-22T17:35:31",
+            "name" : "HENRC",
+            "room" : "317",
+            "time" : "9:00 AM",
+            "url" : "2025/01/hSched/hSched012325.pdf"
+         },
+         "HRDLC" : {
+            "bills" : [],
+            "date" : "2025-01-23",
+            "datetime" : "2025-01-23T09:00:00",
+            "mtime" : "2025-01-22T17:35:31",
+            "name" : "HRDLC",
+            "room" : "305",
+            "time" : "9:00 AM",
+            "url" : "2025/01/hSched/hSched012325.pdf"
+         },
+         "HTPWC" : {
+            "bills" : [],
+            "date" : "2025-01-23",
+            "datetime" : "2025-01-23T09:00:00",
+            "mtime" : "2025-01-22T17:35:31",
+            "name" : "HTPWC",
+            "room" : "309",
+            "time" : "9:00 AM",
+            "url" : "2025/01/hSched/hSched012325.pdf"
+         }
+      },
+      "13:30:00" : {
+         "HAFC" : {
+            "bills" : [],
+            "date" : "2025-01-23",
+            "datetime" : "2025-01-23T13:30:00",
+            "mtime" : "2025-01-22T17:35:31",
+            "name" : "HAFC",
+            "room" : "307",
+            "time" : "1:30 PM",
+            "url" : "2025/01/hSched/hSched012325.pdf",
+            "zoom" : "https://us02web.zoom.us/j/88154987441"
+         },
+         "HCPAC" : {
+            "bills" : [],
+            "date" : "2025-01-23",
+            "datetime" : "2025-01-23T13:30:00",
+            "mtime" : "2025-01-22T17:35:31",
+            "name" : "HCPAC",
+            "room" : "317",
+            "time" : "1:30 PM",
+            "url" : "2025/01/hSched/hSched012325.pdf"
+         }
+      },
+      "14:00:00" : {
+         "HJC" : {
+            "bills" : [],
+            "date" : "2025-01-23",
+            "datetime" : "2025-01-23T14:00:00",
+            "mtime" : "2025-01-22T17:35:31",
+            "name" : "HJC",
+            "room" : "309",
+            "time" : "2:00 PM",
+            "url" : "2025/01/hSched/hSched012325.pdf",
+            "zoom" : "https://us02web.zoom.us/j/85681041953"
+         }
+      }
+   }
+}

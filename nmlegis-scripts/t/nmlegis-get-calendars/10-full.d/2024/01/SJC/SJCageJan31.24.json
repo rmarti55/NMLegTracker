@@ -1,0 +1,17 @@
+{
+   "2024-01-31" : {
+      "13:30:00" : {
+         "SJC" : {
+            "bills" : ["SB167","SB37","SB61","SB69"],
+            "date" : "2024-01-31",
+            "datetime" : "2024-01-31T13:30:00",
+            "mtime" : "2024-01-30T17:03:46",
+            "name" : "SJC",
+            "room" : "321",
+            "time" : "1:30 PM or 1/2 hour after floor session",
+            "url" : "2024/01/SJC/SJCageJan31.24.pdf",
+            "zoom" : "https://us02web.zoom.us/j/81502543362"
+         }
+      }
+   }
+}

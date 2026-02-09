@@ -1,0 +1,7 @@
+% layout 'default';
+% title  'Hearing Schedule';
+
+<h1>Hearing Schedule</h1>
+
+%# This is the full committee schedule page. House and Floor are too long.
+%= include 'committees/_all_schedules', schedule => $schedule, skip_chambers => 1

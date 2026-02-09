@@ -1,0 +1,17 @@
+{
+   "2022-02-16" : {
+      "00:00:00" : {
+         "SJC" : {
+            "bills" : ["SB242","HB55","HB65"],
+            "date" : "2022-02-16",
+            "datetime" : "2022-02-16T00:00:00",
+            "mtime" : "2022-02-16T14:24:49",
+            "name" : "SJC",
+            "room" : "321",
+            "time" : "CALL OF THE CHAIR",
+            "url" : "2022/02/SJC/SJCageFeb16.22.pdf",
+            "zoom" : "https://us02web.zoom.us/j/83347538157"
+         }
+      }
+   }
+}

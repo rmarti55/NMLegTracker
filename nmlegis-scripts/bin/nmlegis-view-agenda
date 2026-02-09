@@ -1,0 +1,254 @@
+#!/usr/bin/perl
+#
+# nmlegis-view-agenda - show (txt, pdf, html) a given agenda file
+#
+package ESM::NMLegis::ViewAgenda;
+
+use v5.14;
+use utf8;
+use open qw( :encoding(UTF-8) :std );
+
+(our $ME = $0) =~ s|.*/||;
+
+use NMLegis             qw(:all);
+
+# For debugging, show data structures using DumpTree($var)
+#use Data::TreeDumper; $Data::TreeDumper::Displayaddress = 0;
+
+###############################################################################
+# BEGIN user-customizable section
+
+our @PDFtoTxt = qw(pdftotext -q -nopgbrk);
+
+# Use cache dir for get-calendar script
+our $Cache_Dir = "/home/esm/.cache/nmlegis/get-calendars";
+
+# END   user-customizable section
+###############################################################################
+
+use File::Slurp         qw(read_dir);
+use Time::Piece;
+
+###############################################################################
+# BEGIN boilerplate args checking, usage messages
+
+sub usage {
+    print  <<"END_USAGE";
+Usage: $ME [OPTIONS] COMMITTEE DATE
+
+$ME shows you a PDF calendar
+
+OPTIONS:
+
+  --txt          runs pdftotxt
+  --html         runs pdftotext with -bbox-layout
+  --path         shows the path to the file, does not run anything
+
+  -v, --verbose  show verbose progress indicators
+  -n, --dry-run  make no actual changes
+
+  --help         display this message
+  --version      display program name and version
+END_USAGE
+
+    exit;
+}
+
+# Command-line options.  Note that this operates directly on @ARGV !
+our $txt;
+our $html;
+our $path;
+our $debug   = 0;
+our $force   = 0;
+our $verbose = 0;
+our $NOT     = '';              # print "blahing the blah$NOT\n" if $debug
+sub handle_opts {
+    use Getopt::Long;
+    GetOptions(
+        'txt'        => \$txt,
+        'text'       => \$txt,
+        'html'       => \$html,
+        'path'       => \$path,
+
+        'debug!'     => \$debug,
+        'dry-run|n!' => sub { $NOT = ' [NOT]' },
+        'force'      => \$force,
+        'verbose|v'  => \$verbose,
+
+        help         => \&usage,
+    ) or die "Try `$ME --help' for help\n";
+}
+
+# END   boilerplate args checking, usage messages
+###############################################################################
+
+############################## CODE BEGINS HERE ###############################
+
+# The term is "modulino".
+__PACKAGE__->main()                                     unless caller();
+
+# Main code.
+sub main {
+    # Note that we operate directly on @ARGV, not on function parameters.
+    # This is deliberate: it's because Getopt::Long only operates on @ARGV
+    # and there's no clean way to make it use @_.
+    handle_opts();                      # will set package globals
+
+    die "$ME: Cannot combine --txt and --html\n" if $txt && $html;
+
+    usage() if !@ARGV;
+    my $pdf = find_pdf(@ARGV)
+        or die "$ME: Could not find a pdf for '@ARGV'\n";
+
+    print $pdf, "\n" if $verbose || $debug;
+
+    my @cmd = ('xpdf', $pdf);
+    if ($txt) {
+        @cmd = (@PDFtoTxt, '-layout', $pdf, '-');
+    }
+    if ($html) {
+        @cmd = (@PDFtoTxt, '-bbox-layout', $pdf, '-');
+    }
+    if ($path) {
+        print $pdf, "\n";
+        exit 0;
+    }
+    system(@cmd);
+}
+
+sub find_pdf {
+    my ($yyyy, $mm, $dd, $supplemental, $name);
+
+    $yyyy = $YYYY;
+
+    # Pass 1: try to identify tokens
+    for my $element (@_) {
+        # yyyy-mm-dd or mm-dd
+        if ($element =~ /^((\d{4})-)?(\d+)-(\d+)$/) {
+            $yyyy = $2 if $1;
+            $mm = sprintf("%02d", $3);
+            $dd = sprintf("%02d", $4);
+        }
+
+        # mmddyy, because that's the convention used in hFloor
+        elsif ($element =~ /^(\d\d)(\d\d)(\d\d)$/) {
+            $mm = $1;
+            $dd = $2;
+            $yyyy = "20$3";
+        }
+
+        # number by itself, start by assuming it's the day of the month.
+        # If there are two numeric args, rearrange the first one so it's month
+        # and then the second arg is day. Then, if there are three, the
+        # last one is a supplemental.
+        elsif ($element =~ /^(\d*)(\d\d)$/) {
+            if ($1) {
+                $mm = sprintf("%02d", $1);
+                $dd = sprintf("%02d", $2);
+            }
+            elsif ($mm && $dd) {
+                $supplemental = $2;
+            }
+            elsif ($dd) {
+                $mm = $dd;
+                $dd = sprintf("%02d", $2);
+            }
+            else {
+                $dd = sprintf("%02d", $2);
+            }
+        }
+
+        # Supplemental identifier
+        elsif ($element =~ /^(\d)$/) {
+            $supplemental = $1;
+        }
+
+        # month name
+        elsif ($element =~ /^(\w{3})\w*$/ && $MoY{lc($2)}) {
+            $mm = sprintf("%02d", $MoY{lc($1)});
+        }
+        elsif ($name) {
+            die "$ME: Don't know how to parse '$element' (already got '$name')";
+        }
+        elsif ($element =~ /^(h|s)(c?)$/) {
+            # h => hFloor, hc => hSched
+            $name = lc($1) . ($2 ? 'Sched' : 'Floor');
+        }
+        else {
+            $name = $element;
+        }
+    }
+
+    die "$ME: Could not determine agenda name from '@_'\n" if !$name;
+    # If no month/day, assume today
+    $mm //= sprintf("%02d", localtime->mon);
+    $dd //= sprintf("%02d", localtime->mday);
+
+    my $d = "$Cache_Dir/$yyyy/$mm";
+    # Look for an exact match (committee name) first, then starting-string
+    my @match = grep { /^$name$/i } read_dir($d);
+    if (! @match) {
+        @match = grep { /^$name/i } read_dir($d)
+            or die "$ME: No match for committee '$name' in $d\n";
+    }
+    @match == 1
+        or die "$ME: Too many matches for '$name' in $d: @match\n";
+
+    $d .= "/$match[0]";
+
+    my @pdfs = sort _supplemental_last read_dir($d);
+    my $re;
+    if (grep { /Cage[A-Z]/ } @pdfs) {
+        # e.g., SFCageFeb10.22.pdf
+        $re = qr{$MoY[$mm-1]$dd\.};
+    }
+    else {
+        # e.g., sFloor021022.pdf
+        $re = qr{$mm$dd\d\d[_.]};
+    }
+    my @found = grep { /$re/ } @pdfs or do {
+        warn "$ME: No match for '$re' in $d\n";
+        warn "$ME: Available PDFs are:\n";
+        warn "     $_\n"   for @pdfs;
+        exit 1;
+    };
+
+    if (@found == 1) {
+        if ($supplemental) {
+            die "$ME: Cannot grok '$supplemental' in '@_'\n";
+        }
+        return "$d/$found[0]";
+    }
+
+    # More than one PDF
+    if ($supplemental) {
+        if ($supplemental > @found) {
+            die "$ME: Cannot grok '$supplemental' in '@_'\n";
+        }
+        return "$d/$found[$supplemental-1]";
+    }
+
+    print  "Multiple matches, please call me with an additional number:\n";
+    printf "  %2d. %s\n", $_+1, $found[$_]      for 0..$#found;
+    exit 0;
+}
+
+# Otherwise, we get SFCageFeb13.22-2.pdf before SFCageFeb13.22.pdf
+sub _supplemental_last {
+    if ($a =~ /(-|suppl[a-z]+)(\d+)\.pdf/i) {
+        my $s_a = $2;
+        if ($b =~ /(-|suppl[a-z]+)(\d+)\.pdf/i) {
+            my $s_b = $2;
+            return $s_a <=> $s_b;
+        }
+        else {
+            return 1;
+        }
+    }
+    elsif ($b =~ /(-|suppl[a-z]+)(\d+)\.pdf/i) {
+        return -1;
+    }
+    else {
+        return $a cmp $b;
+    }
+}

@@ -1,0 +1,17 @@
+{
+   "2022-02-14" : {
+      "13:30:00" : {
+         "HCEDC" : {
+            "bills" : ["HB220","HM45"],
+            "date" : "2022-02-14",
+            "datetime" : "2022-02-14T13:30:00",
+            "mtime" : "2022-02-14T08:09:57",
+            "name" : "HCEDC",
+            "room" : "317",
+            "time" : "1:30 PM",
+            "url" : "2022/02/HCEDC/HCEDCageFeb14.22.pdf",
+            "zoom" : "https://us02web.zoom.us/j/88683384400"
+         }
+      }
+   }
+}

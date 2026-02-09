@@ -1,0 +1,24 @@
+Bills in other trackers
+
+
+Tracker 4 with many subscribers and many bills
+
+ = Category 4-1
+   HB99    House Bill 99 Name
+           > scheduled for HCPAC on 2026-01-25 13:30:00
+
+ = Category 4-2
+   SB123   Senate Bill 123 Name
+           > scheduled for SCONC on 2026-01-27 09:00:00
+
+ = Category 4-3
+   HJR30   House Joint Resolution 30 Name
+           > scheduled for HJC on 2026-01-27 09:00:00
+
+ = Category 4-4
+   HM50    House Memorial 50 Name
+           > scheduled for House on 2026-01-27 11:00:00
+
+ = Category 4-5
+   HB22    House Bill 22 Name
+           > scheduled for HCPAC on 2026-01-27 09:00:00

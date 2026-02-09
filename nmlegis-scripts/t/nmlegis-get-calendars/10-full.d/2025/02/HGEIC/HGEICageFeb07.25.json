@@ -1,0 +1,17 @@
+{
+   "2025-02-07" : {
+      "08:00:00" : {
+         "HGEIC" : {
+            "bills" : ["HB16","HB91","HB93","HB118","HJR5","HB120","HB123","HB143","HB6"],
+            "date" : "2025-02-07",
+            "datetime" : "2025-02-07T08:00:00",
+            "mtime" : "2025-02-06T08:11:32",
+            "name" : "HGEIC",
+            "room" : "305",
+            "time" : "8:00 AM",
+            "url" : "2025/02/HGEIC/HGEICageFeb07.25.pdf",
+            "zoom" : "https://us02web.zoom.us/j/89282948977"
+         }
+      }
+   }
+}

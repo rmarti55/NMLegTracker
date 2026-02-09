@@ -1,0 +1,119 @@
+% layout 'default';
+% title  $committee->name;
+
+<h1><%= $committee->code %> <%= $committee->{_is_chamber} ? 'Floor' : "- " . $committee->name %> <small>[view on <%= link_to 'nmlegis.gov' => $committee->nmlegis_url, target => '_blank' %>]</small></h1>
+
+<table class="legislatortable">
+% for my $l ($committee->members) {
+% my $is_my_legislator = $self->user->is_my_legislator($l);
+<tr class="party-<%= $l->party %><%== ' mylegislator' if $is_my_legislator %>">
+  <th class="legislatorname"><a href="<%== $l->url %>"><%= $l->name %></a></th>
+  <td><%= $l->role %></td>
+  <td><%= $l->office %></td>
+  % my $phone = $l->phone || $l->office_phone || $l->alt_phone;
+  % if ($phone) {
+  %     (my $phone_ref = $phone) =~ s/\D//g;
+  %     $phone_ref = "505$phone_ref" if length($phone_ref) < 10;
+    <td style="text-align: right"><a href="tel:+1<%= $phone_ref %>"><%= $phone %></a></td>
+  % }
+  % if ($is_my_legislator) {
+    <td>&larr; This is your <%= $l->title %></td>
+  % } else {
+    <td style="background: #f8f8f8; border: none;"></td>
+  % }
+</tr>
+% }
+</table>
+
+% if (keys %$schedule) {
+<hr/>
+<h2>Schedule</h2>
+<p>Upcoming hearings.
+  % if ($committee->_is_chamber) {
+  <i>For Floor activity, you're probably better off viewing
+    <%= link_to 'viewing directly on nmlegis.gov' => 'https://sg001-harmony.sliq.net/00293/harmony', target => '_blank' %></i>
+  % }
+  </p>
+%= include 'committees/_all_schedules', schedule => $schedule
+% } else {
+<h2>No hearings scheduled in the next few days</h2>
+% }
+
+%# vote history
+% if (my @votes = $committee->vote_history) {
+%     # Reorganize by date, bill, member
+%     my %by_date;
+%     for my $v (@votes) {
+%         $by_date{$v->{date}}{$v->{billid}}{$v->{legislatorid}} = $v->{vote};
+%         $by_date{$v->{date}}{$v->{billid}}{"_$v->{vote}"}++;
+%     }
+<hr/>
+<h2>Vote Record</h2>
+<table>
+%     my $headerbar = begin
+ <tr>
+  <th>Date</th>
+% if ($self->user) {
+  <th>Track</th>
+% }
+  <th>Bill</th>
+  <th>Sponsor</th>
+  <th>Vote</th>
+%    for my $l ($committee->members) {
+%        my $class = 'party-' . $l->party;
+%        $class = 'mylegislator' if $self->user->is_my_legislator($l);
+  <th class="<%= $class %>"><%= link_to $l->lastname => $l->url %></th>
+%     }
+ </tr>
+%     end
+%=    $headerbar->();
+%     my $row = 0;
+%     for my $date (sort keys %by_date) {
+%         # FIXME: sort!
+%         if ($row >= 15) {       # this can be a very long table
+%=            $headerbar->(); $row = 0;
+%         }
+%         my $rowspan = '';
+%         my @bills = sort keys %{$by_date{$date}};
+%         $rowspan = sprintf(' rowspan="%d"', scalar(@bills)) if @bills > 1;
+ <tr style="vertical-align: top;">
+   <th<%== $rowspan %>><a name="vote-<%= $date %>"><%= $date %></a></th>
+%         my $tr = '';
+%         for my $bill_id (@bills) {
+%             my ($b) = $self->db->bills(billid => $bill_id);
+<%== $tr %>
+% if ($self->user) {
+%= include 'bills/_watch_button', b => $b, rowspan => '', w => $self->user->is_watching($b)
+% }
+%= include 'bills/_bill_cell', b => $b, rowspan => ''
+%= include 'bills/_sponsors_cell', b => $b, rowspan => ''
+<td><%= $by_date{$date}{$bill_id}{_yes} || 0 %>-<%= $by_date{$date}{$bill_id}{_no} || 0 %></td>
+%             for my $l ($committee->members) {
+%                 my $vote = $by_date{$date}{$bill_id}{$l->id} // 'N/A';
+   <td class="vote <%= $vote %>"><%= ucfirst($vote) %></td>
+%             }
+ </tr>
+%                ++$row;
+%                $tr = "<tr>";
+%         }
+%     }
+</table>
+% }
+
+% if (my @updates = $committee->updates) {
+<br/>
+<div class="wrap-collapsible">
+  <input id="collapsible-update-history" class="toggle" type="checkbox">
+  <label for="collapsible-update-history" class="lbl-toggle">Action History</label>
+  <div class="collapsible-content">
+    <div class="content-inner">
+      <p>
+        This table shows a chronological list of updates for this committee:
+        room number changes, membership updates.
+        It is probably way more than you want to know.
+      </p>
+
+%= include 'common/update_table', updates => \@updates
+    </div>
+  </div>
+% }

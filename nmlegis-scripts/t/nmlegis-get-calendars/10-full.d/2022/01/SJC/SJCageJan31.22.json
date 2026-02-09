@@ -1,0 +1,17 @@
+{
+   "2022-01-31" : {
+      "14:30:00" : {
+         "SJC" : {
+            "bills" : ["SB164","SB120","SB12","SB38","SB144","SJR8"],
+            "date" : "2022-01-31",
+            "datetime" : "2022-01-31T14:30:00",
+            "mtime" : "2022-01-31T10:32:30",
+            "name" : "SJC",
+            "room" : "321",
+            "time" : "2:30 PM or 1/2 hr. after floor",
+            "url" : "2022/01/SJC/SJCageJan31.22.pdf",
+            "zoom" : "https://us02web.zoom.us/j/83347538157"
+         }
+      }
+   }
+}

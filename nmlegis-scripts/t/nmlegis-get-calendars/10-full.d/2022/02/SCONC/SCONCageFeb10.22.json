@@ -1,0 +1,17 @@
+{
+   "2022-02-10" : {
+      "09:00:00" : {
+         "SCONC" : {
+            "bills" : ["SB252","HB37"],
+            "date" : "2022-02-10",
+            "datetime" : "2022-02-10T09:00:00",
+            "mtime" : "2022-02-11T18:15:31",
+            "name" : "SCONC",
+            "room" : "311",
+            "time" : "9:00 AM",
+            "url" : "2022/02/SCONC/SCONCageFeb10.22.pdf",
+            "zoom" : "https://us02web.zoom.us/j/86543845863"
+         }
+      }
+   }
+}

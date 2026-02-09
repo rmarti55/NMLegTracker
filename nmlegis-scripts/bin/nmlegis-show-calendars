@@ -1,0 +1,347 @@
+#!/usr/bin/perl
+#
+# nmlegis-show-calendars - show complete nmlegis schedule
+#
+package ESM::NMLegisShowCalendars;
+
+use v5.14;
+use strict;
+use warnings;
+use utf8;
+use open qw( :encoding(UTF-8) :std );
+
+(our $ME = $0) =~ s|.*/||;
+(our $VERSION = '$Revision: 1.30 $ ') =~ tr/[0-9].//cd;
+
+use NMLegis                     qw(:all);
+use NMLegis::Bills;
+use NMLegis::Committees;
+
+# For debugging, show data structures using DumpTree($var)
+#use Data::TreeDumper; $Data::TreeDumper::Displayaddress = 0;
+
+###############################################################################
+# BEGIN user-customizable section
+
+# Schema of schedule.json
+our $Expected_Schema = '20230124';
+
+our $Bill_URL      = "$NMLEGIS/Legislation/Legislation?Chamber=%s&LegType=%s&LegNo=%s&year=$YY";
+
+# END   user-customizable section
+###############################################################################
+
+use Date::Parse;
+use File::Slurp                 qw(read_file);
+use JSON::XS;
+use Time::Piece;
+
+###############################################################################
+# BEGIN boilerplate args checking, usage messages
+
+sub usage {
+    print  <<"END_USAGE";
+Usage: $ME [OPTIONS] PATH
+
+blah blah blah
+
+OPTIONS:
+
+  -v, --verbose  show verbose progress indicators
+  -n, --dry-run  make no actual changes
+
+  --help         display this message
+  --man          display program man page
+  --version      display program name and version
+END_USAGE
+
+    exit;
+}
+
+# Command-line options.  Note that this operates directly on @ARGV !
+our $debug   = 0;
+our $force   = 0;
+our $verbose = 0;
+our $NOT     = '';              # print "blahing the blah$NOT\n" if $debug
+sub handle_opts {
+    use Getopt::Long;
+    GetOptions(
+        'debug!'     => \$debug,
+        'dry-run|n!' => sub { $NOT = ' [NOT]' },
+        'force'      => \$force,
+        'verbose|v'  => \$verbose,
+
+        help         => \&usage,
+        version      => sub { print "$ME version $VERSION\n"; exit 0 },
+    ) or die "Try `$ME --help' for help\n";
+}
+
+# END   boilerplate args checking, usage messages
+###############################################################################
+
+############################## CODE BEGINS HERE ###############################
+
+# The term is "modulino".
+__PACKAGE__->main()                                     unless caller();
+
+# Main code.
+sub main {
+    # Note that we operate directly on @ARGV, not on function parameters.
+    # This is deliberate: it's because Getopt::Long only operates on @ARGV
+    # and there's no clean way to make it use @_.
+    handle_opts();                      # will set package globals
+
+    # Fetch command-line arguments.  Barf if too many.
+    my $html_out = '/var/www/nmlegis/committee-calendars.html';
+    if (@ARGV) {
+        $html_out = shift(@ARGV);
+    }
+    die "$ME: Too many arguments; try $ME --help\n"                 if @ARGV;
+
+    my $schedule = read_json("schedule.json");
+    my $schema = delete $schedule->{_schema};
+    $schema eq $Expected_Schema
+        or warn "$ME: WARNING: schema is $schema, I only grok $Expected_Schema";
+    write_html($html_out, $schedule);
+}
+
+sub write_html {
+    my $html_out = shift;
+    my $schedule = shift;
+
+    # Write HTML file
+    my $html_tmp = "$html_out.tmp.$$";
+    open my $html_fh, '>', $html_tmp
+        or die "$ME: Cannot create $html_tmp: $!\n";
+    print { $html_fh } <<"END_HTML";
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+ <title>NM Legis Committee Calendar</title>
+<link rel="stylesheet" href="nmlegis.css" />
+<link rel="stylesheet" href="collapsible.css" />
+<link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+<h1>NM Legis Committee Calendars</h1>
+<p style="color: #c00; margin-left: 2em; margin-right: 2em; font-size: 125%;"><i>
+DEPRECATION WARNING: This site (all of nmlegis.edsantiago.com) is
+being deprecated. In February 2025 I (Ed) rewrote the entire web&nbsp;UI,
+and as of February&nbsp;25 it seems to be working fairly well, so I'm
+encouraging everyone to move there instead.
+<br/>
+The new site is
+ <b><a href="https://nmlegiswatch.org/committees/schedules">nmlegiswatch.org</a></b>
+</p>
+END_HTML
+
+    # Legislators I care about: show committees in which they sit
+    my @my_legislators = map { NMLegis::Legislators->new($_) } qw(h43 s5);
+
+    for my $ymd (sort keys %$schedule) {
+        my $t = str2time($ymd)
+            or die;
+        my $lt = localtime($t);
+
+        printf { $html_fh } "<hr/>\n<h2>%s</h2>\n", $lt->strftime("%A, %B %e");
+
+        for my $hms (sort keys %{$schedule->{$ymd}}) {
+            # Override $lt to include hour
+            $lt = localtime(str2time("${ymd}T${hms}"));
+
+            for my $abbr (sort keys %{$schedule->{$ymd}{$hms}}) {
+                my $mtg = $schedule->{$ymd}{$hms}{$abbr};
+                my $committee = NMLegis::Committees->new($mtg->{name});
+                my $bref = $mtg->{billh} || $mtg->{bills};
+                my @bills = @{ $bref };
+
+                my $time = $mtg->{time} || '[COULD NOT DETERMINE TIME]';
+                if (my $pdf = $mtg->{url}) {
+                    my $alt = "PDF calendar source";
+                    if (my $mtime = $mtg->{mtime}) {
+                        $alt .= ", last updated $mtime";
+                    }
+
+                    # 1F5D3 = calendar
+                    $time .= sprintf("&nbsp;<a href=\"%s\" title=\"%s\" target=\"_blank\">&#x1F5D3;</a>",
+                                     $pdf, $alt);
+                }
+
+                my $room = $mtg->{room};
+                if ($room) {
+                    if (my $usual_room = $mtg->{committee_info}{room}) {
+                        if ($room ne $usual_room) {
+                            $room .= " <i>[NOTE CHANGE FROM USUAL $usual_room]</i>";
+                        }
+                    }
+                    $room = "Room $room";
+                }
+                else {
+                    $room = "[room unknown]";
+                }
+                my $z = $mtg->{zoom};
+                if (! $z && $abbr =~ /^(House|Senate)/) {
+                    # No sane way to scrape this
+                    $z = 'https://sg001-harmony.sliq.net/00293/harmony';
+                }
+                if ($z) {
+                    # 1F4F9 = video camera
+                    $room .= sprintf("&nbsp;<a href=\"%s\" target=\"_blank\"><button><big>&#x1f4f9;</big></button></a>", $z);
+                }
+
+                # FIXME: room, zoom, link to committee, to PDF
+                # FIXME: popup with committee members
+                # FIXME: escapehtml
+                my $id = sprintf("%s-%s", $lt->strftime("%m%d-%H%M"), $abbr);
+                printf { $html_fh } <<"END_HTML", $committee->url, $committee->name;
+<a name="$id" />
+<table>
+ <tr><th class="time" colspan="3">$time</th><th class="room">$room</th></tr>
+ <tr><th class="committeename" colspan="4"><a href="%s">%s</a></th></tr>
+END_HTML
+
+                # Are any of our legislators in this committee?
+                my @on_committee;
+                for my $l (@my_legislators) {
+                    if (my $role = $l->on_committee($committee)) {
+                        (my $css = lc($role)) =~ s/\s+//g;
+                        printf { $html_fh } <<"END_HTML", $css, $l->name, $role;
+ <tr><td colspan="5" class="committee-%s">%s, %s</td></tr>
+END_HTML
+                    }
+                }
+
+                # Bill list
+                for my $billname (@bills) {
+                    my $b = NMLegis::Bills->new($billname);
+
+                    my $classes = join(' ', $b->css_classes);
+                    printf { $html_fh } <<"END_HTML", $classes, map { $b->get($_) } qw(local_url html_name readable_title);
+<tr class='%s'><td class='id'><a href="%s" target="_blank">%s</a></td><td colspan="2">%s</td>
+END_HTML
+
+                    if (my $s = $b->sponsor) {
+                        printf { $html_fh } "<td>%s</td></tr>", $s->full_link('lastname', { bill => $b });
+                    }
+                    else {
+                        # HB1?
+                        print  { $html_fh } "<td>-</td></tr>\n";
+                    }
+                }
+                print { $html_fh } "</table>\n<br/>\n";
+            }
+        }
+    }
+
+    # Show standing-committee calendar
+    print { $html_fh } <<'END_HTML';
+<hr/>
+<h1>Standing Meeting Times</h1>
+<table class='committee-weekview'>
+END_HTML
+
+    # FIXME: move this to Committees.pm
+    my @DoW = qw(Mon Tue Wed Thu Fri);
+    my %DoW = map { $DoW[$_] => $_ } (0..$#DoW);
+
+    printf { $html_fh } "<tr><th></th>%s</tr>\n",
+        join("", map { "<th>$_</th>" } @DoW);
+    my %by_time_and_day;
+    my @at_call;
+    for my $c (NMLegis::Committees::all()) {
+        my $days = $c->days
+            or die "$ME: Committee $c has no days";
+        if ($days =~ /at call/i) {
+            push @at_call, $c;
+            next;
+        }
+        # Override with nicely parsed array of weekdays
+        $days = $c->days_parsed;
+
+        my $t = $c->time
+            or die "$ME: Committee $c has no time";
+        $t =~ /^(\d+):(\d+)\s*(a|p)/i
+            or die "$ME: Committee $c: weird time '$t'";
+        $t = sprintf("%02d:%02d", $1 + 12 * (uc($3) eq 'P'), $2);
+        for my $wday (grep { $_ } @$days) {
+            push @{ $by_time_and_day{$t}{$wday} }, $c;
+        }
+    }
+
+    # Each ROW is one time of day
+    for my $t (sort keys %by_time_and_day) {
+        printf { $html_fh } "<tr><th class=\"time\">$t</th>";
+
+        # Each COLUMN is one day of the week...
+        for my $d (@DoW) {
+            print { $html_fh } "<td>";
+            if (my $mtgs = $by_time_and_day{$t}{$d}) {
+                # ...but within each cell, there are multiple rows
+                my $chamber = '';
+                for my $c (@$mtgs) {
+                    (my $name = $c->name) =~ s!^(house|senate)\s+!!i
+                        or die "$ME: Weird: no chamber in '$c'";
+                    if ($1 ne $chamber) {
+                        print  { $html_fh } "<span class=\"committee-chamber\">$1</span><br/>\n";
+                        $chamber = $1;
+                    }
+
+                    $name =~ s/\s+Committee\s*$//i;
+                    printf { $html_fh } "<span class=\"committee-row\"><a href=\"%s\">%s</a></span><br/>\n",
+                        $c->local_url, $name;
+                    # FIXME: check if Leo/Chris are on this committee
+                }
+            }
+            print { $html_fh } "</td>\n";
+        }
+        print { $html_fh } "</tr>\n";
+    }
+    print { $html_fh } "</table>\n";
+
+    # No fixed meeting times
+    if (@at_call) {
+        print  { $html_fh } "<h2>At Call of Chair</h2>\n<ul>\n";
+        printf { $html_fh } " <li><a href=\"%s\">%s</a></li>\n",
+            $_->url, $_->name           for @at_call;
+        print  { $html_fh } "</ul>\n";
+    }
+
+    printf { $html_fh } <<'END_HTML', localtime->datetime, $ME;
+</div>
+<hr/>
+<span class='signature'>Updated: %s by %s</span>
+</body>
+</html>
+END_HTML
+
+    close $html_fh
+        or die "$ME: Error writing $html_tmp: $!\n";
+    rename $html_tmp => $html_out
+        or die "$ME: Error renaming $html_tmp: $!\n";
+}
+
+###############################################################################
+# BEGIN read schedule/committees JSON
+
+sub read_json {
+    my $file = shift;
+
+    my $json = read_file("$Data_Dir/$file");
+    return decode_json($json);
+}
+
+sub bill_title {
+    my $bill = shift;
+
+    my $path = "$ENV{HOME}/.local/share/nmlegis-watch/$YYYY/$bill";
+    return unless -e $path;
+    my $status = do $path;
+    return $status->{title};
+}
+
+
+# END   read schedule/committees JSON
+###############################################################################

@@ -1,0 +1,8 @@
+{
+    "_datetime" : "2026-01-25T07:45:00",
+    "_schema"   : "20230201",
+    "history"   : [
+        [ "HB123", "scheduled for HCPAC on 2026-01-29 13:30:00" ],
+        [ "SB123", "scheduled for SCONC on 2026-01-29 09:00:00" ]
+    ]
+}

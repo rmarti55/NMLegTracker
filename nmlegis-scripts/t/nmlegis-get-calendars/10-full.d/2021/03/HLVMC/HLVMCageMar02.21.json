@@ -1,0 +1,16 @@
+{
+   "2021-03-02" : {
+      "14:00:00" : {
+         "HLVMC" : {
+            "bills" : ["HB297","SB35","SB52","SB146"],
+            "date" : "2021-03-02",
+            "datetime" : "2021-03-02T14:00:00",
+            "mtime" : "2021-03-01T08:19:35",
+            "name" : "HLVMC",
+            "time" : "2:00 PM",
+            "url" : "2021/03/HLVMC/HLVMCageMar02.21.pdf",
+            "zoom" : "https://us02web.zoom.us/j/84249828480"
+         }
+      }
+   }
+}

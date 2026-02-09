@@ -1,0 +1,41 @@
+{
+   "2022-02-12" : {
+      "09:00:00" : {
+         "STBTC" : {
+            "bills" : ["SB198","HB47","HB82","HB95","HB71"],
+            "date" : "2022-02-12",
+            "datetime" : "2022-02-12T09:00:00",
+            "mtime" : "2022-02-11T18:15:31",
+            "name" : "STBTC",
+            "room" : "321",
+            "time" : "9:00 AM",
+            "url" : "2022/02/sSched/sSched021222.pdf",
+            "zoom" : "https://us02web.zoom.us/j/84895112616"
+         }
+      },
+      "10:00:00" : {
+         "SFC" : {
+            "bills" : ["HB2","HB3","SB12"],
+            "date" : "2022-02-12",
+            "datetime" : "2022-02-12T10:00:00",
+            "mtime" : "2022-02-11T18:15:31",
+            "name" : "SFC",
+            "room" : "322",
+            "time" : "10:00 AM or Call of Chair",
+            "url" : "2022/02/sSched/sSched021222.pdf",
+            "zoom" : "https://us02web.zoom.us/j/81679647964"
+         },
+         "SJC" : {
+            "bills" : ["HB55","SB100","HB135","SB152","SB178"],
+            "date" : "2022-02-12",
+            "datetime" : "2022-02-12T10:00:00",
+            "mtime" : "2022-02-11T18:15:31",
+            "name" : "SJC",
+            "room" : "311",
+            "time" : "10:00 AM",
+            "url" : "2022/02/sSched/sSched021222.pdf",
+            "zoom" : "https://us02web.zoom.us/j/83347538157"
+         }
+      }
+   }
+}

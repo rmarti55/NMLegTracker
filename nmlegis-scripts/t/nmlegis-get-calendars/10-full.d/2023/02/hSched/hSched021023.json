@@ -1,0 +1,279 @@
+{
+   "2023-02-10" : {
+      "08:30:00" : {
+         "HEC" : {
+            "bills" : ["HB189","HB209","HB216"],
+            "date" : "2023-02-10",
+            "datetime" : "2023-02-10T08:30:00",
+            "mtime" : "2023-02-09T20:02:18",
+            "name" : "HEC",
+            "room" : "309",
+            "time" : "8:30 AM",
+            "url" : "2023/02/hSched/hSched021023.pdf",
+            "zoom" : "https://us02web.zoom.us/j/82501768249"
+         },
+         "HGEIC" : {
+            "bills" : ["HB179","HB192","HB193"],
+            "date" : "2023-02-10",
+            "datetime" : "2023-02-10T08:30:00",
+            "mtime" : "2023-02-09T20:02:18",
+            "name" : "HGEIC",
+            "room" : "305",
+            "time" : "8:30 AM",
+            "url" : "2023/02/hSched/hSched021023.pdf",
+            "zoom" : "https://us02web.zoom.us/j/81850374006"
+         },
+         "HHHC" : {
+            "bills" : ["HB191","HB196","HB211","HB219","HB220","HB230"],
+            "date" : "2023-02-10",
+            "datetime" : "2023-02-10T08:30:00",
+            "mtime" : "2023-02-09T20:02:18",
+            "name" : "HHHC",
+            "room" : "307",
+            "time" : "8:30 AM",
+            "url" : "2023/02/hSched/hSched021023.pdf",
+            "zoom" : "https://us02web.zoom.us/j/84266137922"
+         },
+         "HTRC" : {
+            "bills" : ["HJR5","HJR6","HB120","HB144"],
+            "date" : "2023-02-10",
+            "datetime" : "2023-02-10T08:30:00",
+            "mtime" : "2023-02-09T20:02:18",
+            "name" : "HTRC",
+            "room" : "317",
+            "time" : "8:30 AM",
+            "url" : "2023/02/hSched/hSched021023.pdf",
+            "zoom" : "https://us02web.zoom.us/j/89087836680"
+         }
+      },
+      "13:30:00" : {
+         "HAFC" : {
+            "bills" : [],
+            "date" : "2023-02-10",
+            "datetime" : "2023-02-10T13:30:00",
+            "mtime" : "2023-02-09T20:02:18",
+            "name" : "HAFC",
+            "room" : "307",
+            "time" : "1:30 PM",
+            "url" : "2023/02/hSched/hSched021023.pdf"
+         },
+         "HCEDC" : {
+            "bills" : ["HB23","HB55"],
+            "date" : "2023-02-10",
+            "datetime" : "2023-02-10T13:30:00",
+            "mtime" : "2023-02-09T20:02:18",
+            "name" : "HCEDC",
+            "room" : "317",
+            "time" : "1:30 PM",
+            "url" : "2023/02/hSched/hSched021023.pdf",
+            "zoom" : "https://us02web.zoom.us/j/81561067239"
+         },
+         "HJC" : {
+            "bills" : ["HB72","HB113","HB185","HB155","HB159","HB106"],
+            "date" : "2023-02-10",
+            "datetime" : "2023-02-10T13:30:00",
+            "mtime" : "2023-02-09T20:02:18",
+            "name" : "HJC",
+            "room" : "309",
+            "time" : "1:30 PM",
+            "url" : "2023/02/hSched/hSched021023.pdf",
+            "zoom" : "https://us02web.zoom.us/j/81793611432"
+         }
+      }
+   },
+   "2023-02-11" : {
+      "09:00:00" : {
+         "HCPAC" : {
+            "bills" : ["HB212","HB224","HB238","HB225","HB232","HB317"],
+            "date" : "2023-02-11",
+            "datetime" : "2023-02-11T09:00:00",
+            "mtime" : "2023-02-09T20:02:18",
+            "name" : "HCPAC",
+            "room" : "309",
+            "time" : "9:00 AM",
+            "url" : "2023/02/hSched/hSched021023.pdf",
+            "zoom" : "https://us02web.zoom.us/j/83498727886"
+         }
+      },
+      "13:00:00" : {
+         "HGEIC" : {
+            "bills" : ["HB201","HB207","HB217","HB239"],
+            "date" : "2023-02-11",
+            "datetime" : "2023-02-11T13:00:00",
+            "mtime" : "2023-02-09T20:02:18",
+            "name" : "HGEIC",
+            "room" : "309",
+            "time" : "1:00 PM",
+            "url" : "2023/02/hSched/hSched021023.pdf",
+            "zoom" : "https://us02web.zoom.us/j/88261854647"
+         }
+      }
+   },
+   "2023-02-13" : {
+      "08:30:00" : {
+         "HEC" : {
+            "bills" : ["HB226","HB145","HB256","HB156"],
+            "date" : "2023-02-13",
+            "datetime" : "2023-02-13T08:30:00",
+            "mtime" : "2023-02-09T20:02:18",
+            "name" : "HEC",
+            "room" : "309",
+            "time" : "8:30 AM",
+            "url" : "2023/02/hSched/hSched021023.pdf",
+            "zoom" : "https://us02web.zoom.us/j/82501768249"
+         },
+         "HGEIC" : {
+            "bills" : ["HB233","HB184","HJR10","HB250","HB251"],
+            "date" : "2023-02-13",
+            "datetime" : "2023-02-13T08:30:00",
+            "mtime" : "2023-02-09T20:02:18",
+            "name" : "HGEIC",
+            "room" : "305",
+            "time" : "8:30 AM",
+            "url" : "2023/02/hSched/hSched021023.pdf",
+            "zoom" : "https://us02web.zoom.us/j/81850374006"
+         },
+         "HTRC" : {
+            "bills" : ["HB137","HB323","HB124"],
+            "date" : "2023-02-13",
+            "datetime" : "2023-02-13T08:30:00",
+            "mtime" : "2023-02-09T20:02:18",
+            "name" : "HTRC",
+            "room" : "317",
+            "time" : "8:30 AM",
+            "url" : "2023/02/hSched/hSched021023.pdf",
+            "zoom" : "https://us02web.zoom.us/j/89087836680"
+         }
+      },
+      "13:30:00" : {
+         "HCEDC" : {
+            "bills" : ["HB228","HB28","HB25"],
+            "date" : "2023-02-13",
+            "datetime" : "2023-02-13T13:30:00",
+            "mtime" : "2023-02-09T20:02:18",
+            "name" : "HCEDC",
+            "room" : "317",
+            "time" : "1:30 PM",
+            "url" : "2023/02/hSched/hSched021023.pdf",
+            "zoom" : "https://us02web.zoom.us/j/81561067239"
+         },
+         "HJC" : {
+            "bills" : ["HB4","HJR2","HJR8"],
+            "date" : "2023-02-13",
+            "datetime" : "2023-02-13T13:30:00",
+            "mtime" : "2023-02-09T20:02:18",
+            "name" : "HJC",
+            "room" : "309",
+            "time" : "1:30 PM",
+            "url" : "2023/02/hSched/hSched021023.pdf",
+            "zoom" : "https://us02web.zoom.us/j/81793611432"
+         }
+      }
+   },
+   "2023-02-14" : {
+      "08:30:00" : {
+         "HAAWC" : {
+            "bills" : ["HB354","HB352","HB346","HB330"],
+            "date" : "2023-02-14",
+            "datetime" : "2023-02-14T08:30:00",
+            "mtime" : "2023-02-09T20:02:18",
+            "name" : "HAAWC",
+            "room" : "315",
+            "time" : "8:30 AM",
+            "url" : "2023/02/hSched/hSched021023.pdf",
+            "zoom" : "https://us02web.zoom.us/j/85936697460"
+         },
+         "HENRC" : {
+            "bills" : ["HB350","HM35"],
+            "date" : "2023-02-14",
+            "datetime" : "2023-02-14T08:30:00",
+            "mtime" : "2023-02-09T20:02:18",
+            "name" : "HENRC",
+            "room" : "317",
+            "time" : "8:30 AM",
+            "url" : "2023/02/hSched/hSched021023.pdf",
+            "zoom" : "https://us02web.zoom.us/j/82140964843"
+         }
+      },
+      "09:00:00" : {
+         "HTPWC" : {
+            "bills" : ["HB56","HB270","HB271"],
+            "date" : "2023-02-14",
+            "datetime" : "2023-02-14T09:00:00",
+            "mtime" : "2023-02-09T20:02:18",
+            "name" : "HTPWC",
+            "room" : "305",
+            "time" : "9:00 AM",
+            "url" : "2023/02/hSched/hSched021023.pdf",
+            "zoom" : "https://us02web.zoom.us/j/83429763870"
+         }
+      },
+      "13:30:00" : {
+         "HCPAC" : {
+            "bills" : ["HB111","HB241","HB253","HB273","HB279","HB282"],
+            "date" : "2023-02-14",
+            "datetime" : "2023-02-14T13:30:00",
+            "mtime" : "2023-02-09T20:02:18",
+            "name" : "HCPAC",
+            "room" : "317",
+            "time" : "1:30 PM",
+            "url" : "2023/02/hSched/hSched021023.pdf",
+            "zoom" : "https://us02web.zoom.us/j/89037370054"
+         },
+         "HLVMC" : {
+            "bills" : ["HB151","HB186","HB215","HB245","HB255"],
+            "date" : "2023-02-14",
+            "datetime" : "2023-02-14T13:30:00",
+            "mtime" : "2023-02-09T20:02:18",
+            "name" : "HLVMC",
+            "room" : "315",
+            "time" : "1:30 PM",
+            "url" : "2023/02/hSched/hSched021023.pdf",
+            "zoom" : "https://us02web.zoom.us/j/83177147401"
+         }
+      }
+   },
+   "2023-02-15" : {
+      "08:30:00" : {
+         "HGEIC" : {
+            "bills" : ["HB259","HM20","HB262","HB265","HJR11"],
+            "date" : "2023-02-15",
+            "datetime" : "2023-02-15T08:30:00",
+            "mtime" : "2023-02-09T20:02:18",
+            "name" : "HGEIC",
+            "room" : "305",
+            "time" : "8:30 AM",
+            "url" : "2023/02/hSched/hSched021023.pdf",
+            "zoom" : "https://us02web.zoom.us/j/81850374006"
+         }
+      },
+      "13:30:00" : {
+         "HCEDC" : {
+            "bills" : ["HB163","HB83","HB281","HB322"],
+            "date" : "2023-02-15",
+            "datetime" : "2023-02-15T13:30:00",
+            "mtime" : "2023-02-09T20:02:18",
+            "name" : "HCEDC",
+            "room" : "317",
+            "time" : "1:30 PM",
+            "url" : "2023/02/hSched/hSched021023.pdf",
+            "zoom" : "https://us02web.zoom.us/j/81561067239"
+         }
+      }
+   },
+   "2023-02-16" : {
+      "09:00:00" : {
+         "HTPWC" : {
+            "bills" : ["HB141","HB240","HB287"],
+            "date" : "2023-02-16",
+            "datetime" : "2023-02-16T09:00:00",
+            "mtime" : "2023-02-09T20:02:18",
+            "name" : "HTPWC",
+            "room" : "305",
+            "time" : "9:00 AM",
+            "url" : "2023/02/hSched/hSched021023.pdf",
+            "zoom" : "https://us02web.zoom.us/j/82326335475"
+         }
+      }
+   }
+}

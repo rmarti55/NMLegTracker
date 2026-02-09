@@ -1,0 +1,31 @@
+% layout 'default';
+% title  'Login';
+
+<h1>Login</h1>
+
+%= form_for '/login' => (method => 'POST') => begin
+  <table class="auth">
+    <tr>
+      <td><%= label_for email => 'Email' %></td>
+      <td><%= text_field 'email', size => 20, required => 1 %></td>
+    </tr>
+    <tr>
+      <td><%= label_for password => 'Password' %></td>
+      <td><%= password_field 'password', size => 20, required => 1 %></td>
+    </tr>
+    <tr>
+      <td colspan="2"><button type="submit">Login</button>
+      &nbsp;[<a href="/login/reset">reset password</a>]</td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        New here? <a href="/register"><b>Register a login!</b></a>
+        It's not necessary, but you get a <i>lot</i> more features.
+      </td>
+    </tr>
+  </table>
+  % if (my $referer = $self->stash('referer')) {
+  <input type="hidden" name="referer" value="<%= $referer %>" />
+  % }
+% end
+% $self->stash('skip_legend' => 1);

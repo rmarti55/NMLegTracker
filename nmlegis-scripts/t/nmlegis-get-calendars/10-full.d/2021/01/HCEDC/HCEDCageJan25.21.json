@@ -1,0 +1,15 @@
+{
+   "2021-01-25" : {
+      "00:00:00" : {
+         "HCEDC" : {
+            "bills" : ["HB5","HB82"],
+            "date" : "2021-01-25",
+            "datetime" : "2021-01-25T00:00:00",
+            "mtime" : "2021-01-25T13:48:14",
+            "name" : "HCEDC",
+            "url" : "2021/01/HCEDC/HCEDCageJan25.21.pdf",
+            "zoom" : "https://us02web.zoom.us/j/82162614729"
+         }
+      }
+   }
+}

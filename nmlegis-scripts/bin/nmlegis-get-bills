@@ -1,0 +1,386 @@
+#!/usr/bin/perl
+#
+# nmlegis-get-bills - get nmlegis bills
+#
+package ESM::NMLegisBills;
+
+use v5.14;
+use strict;
+use warnings;
+
+use utf8;
+use open qw( :encoding(UTF-8) :std );
+
+(our $ME = $0) =~ s|.*/||;
+(our $VERSION = '$Revision: 1.30 $ ') =~ tr/[0-9].//cd;
+
+use NMLegis                     qw(:all);
+use NMLegis::Bills;
+use NMLegis::Legislators;
+
+# For debugging, show data structures using DumpTree($var)
+#use Data::TreeDumper; $Data::TreeDumper::Displayaddress = 0;
+
+###############################################################################
+# BEGIN user-customizable section
+
+# Current schema version. Should be updated only on breaking changes.
+# It is defined here, in this script, not in the module, because this
+# script is the one that defines how we save data. (The module reads it,
+# though, so maybe I need to rethink that)
+our $JSON_Schema = '20230118';
+
+# END   user-customizable section
+###############################################################################
+
+use HTML::TableExtract;
+use HTML::TreeBuilder;
+
+###############################################################################
+# BEGIN boilerplate args checking, usage messages
+
+sub usage {
+    print  <<"END_USAGE";
+Usage: $ME [OPTIONS]
+
+$ME fetches and parses bills from nmlegis.gov .
+
+  * scrapes the top bills page;
+  * fetches all rows, saves them in a file FIXME FIXME
+
+OPTIONS:
+
+  --debug        use local HTML cache (to avoid slamming nmlegis)
+
+  -v, --verbose  show verbose progress indicators
+  -n, --dry-run  make no actual changes
+
+  --help         display this message
+  --version      display program name and version
+END_USAGE
+
+    exit;
+}
+
+# Command-line options.  Note that this operates directly on @ARGV !
+our $debug   = 0;
+our $force   = 0;
+our $verbose = 0;
+our $NOT     = '';              # print "blahing the blah$NOT\n" if $debug
+sub handle_opts {
+    use Getopt::Long;
+    GetOptions(
+        'debug!'     => \$debug,
+        'dry-run|n!' => sub { $NOT = ' [NOT]' },
+        'force'      => \$force,
+        'verbose|v'  => \$verbose,
+
+        help         => \&usage,
+        version      => sub { print "$ME version $VERSION\n"; exit 0 },
+    ) or die "Try `$ME --help' for help\n";
+}
+
+# END   boilerplate args checking, usage messages
+###############################################################################
+
+############################## CODE BEGINS HERE ###############################
+
+# The term is "modulino".
+__PACKAGE__->main()                                     unless caller();
+
+# Main code.
+sub main {
+    # Note that we operate directly on @ARGV, not on function parameters.
+    # This is deliberate: it's because Getopt::Long only operates on @ARGV
+    # and there's no clean way to make it use @_.
+    handle_opts();                      # will set package globals
+
+    # Used by lower levels to avoid fetching from nmlegis
+    $ENV{NMLEGIS_USE_CACHE} //= $debug;
+
+    my $bills = get_bills();
+
+    # Bills from nmlegis-mirror-bills but not actually on nmlegis views
+    also_get_bills_not_on_web_site($bills);
+
+    $bills->{_schema} = $JSON_Schema;
+
+    unless ($NOT) {
+        my $output_file = $NMLegis::Bills::Bills_File;
+        my $changed = write_json_outfile($bills, $output_file);
+
+        if (my $web_json = shift(@ARGV)) {
+            system('rsync', '-a', $output_file, $web_json);
+        }
+
+        if ($changed) {
+            print "\n", "-" x 70, "\n";
+            system('nmlegis-refresh-pages');
+        }
+    }
+}
+
+###############
+#  get_bills  #  Scrape the main list page, collecting bill info
+###############
+sub get_bills {
+    my %bills;
+
+    my $fetch = NMLegis::Bills::fetch_html();
+
+    my @columns = ('Bill ID', 'Title', 'Sponsor', 'Actions', 'Session');
+    my $te = HTML::TableExtract->new(headers => \@columns, keep_html => 1);
+    $te->parse($fetch->{html});
+
+    for my $table ($te->tables) {
+        for my $row ($table->rows) {
+            my @cols = map { HTML::TreeBuilder->new_from_content($_) } @$row;
+
+#            for my $cell (@cols) {
+#                print $cell->as_HTML, "\n\n";
+            #            }
+
+            my %bill = _get_bill_info($cols[0]);
+
+            ($bill{title} = $cols[1]->as_text) =~ s/^\s+|\s+$//g;
+
+            # This one is tricky: the one-page bill list shows a max of 5
+            # sponsors, so if we see 5, we need to fetch the actual bill
+            # page and check for more.
+            _get_bill_sponsors(\%bill, $cols[2]);
+
+#            $cols[3]->as_text =~ /$YYYY Regular/ or die "sdfdsf";
+
+            ($bill{actions} = $cols[3]->as_text) =~ s/^\s+|\s+$//g;
+
+            my $c = delete $bill{chamber};
+            my $t = delete $bill{type};
+            my $n = delete $bill{number};
+            if (exists $bills{$c}{$t}{$n}) {
+                die "$ME: Internal error: duplicate $c$t$n";
+            }
+
+            # These are dups, not needed for saving in json
+            delete $bill{$_} for qw(session name);
+
+            $bills{$c}{$t}{$n} = \%bill;
+        }
+    }
+
+    return \%bills;
+}
+
+sub _get_bill_info {
+    my $cell = shift;                   # in: HTML::Element
+
+    (my $txt = $cell->as_text) =~ s/^\s+|\s+$//g;
+    my $bill = NMLegis::Bills->new($txt);
+
+    return %$bill;
+}
+
+sub _get_bill_sponsors {
+    my $bill = shift;                   # in: hashref with bill info
+    my $cell = shift;                   # in: HTML::Element
+    my @sponsors;                       # out: list of XXXXX SponCodes
+
+    my $html = $cell->as_HTML;
+    while ($html =~ /sponcode=((H|S)[A-Z]{4,5})/gi) {
+        push @sponsors, uc($1);
+    }
+
+    # If we see five, load actual bill page and get them all.
+    # FIXME: is there a better way to get all sponsors?
+    if (@sponsors >= 5) {
+        my $fetched = NMLegis::Bills::fetch_html($bill->{name});
+
+        my $want = 'MainContent_tabContainerLegislation_tabPanelSponsors_dataListSponsors';
+        my $te = HTML::TableExtract->new(attribs => { id => $want }, keep_html => 1);
+        $te->parse($fetched->{html});
+
+        # We should get only one table, because of the ID request
+        for my $table ($te->tables) {
+          ROW:
+            for my $row ($table->rows) {
+                # Each row is exactly one column, containing a wide button
+                @$row == 1
+                    or warn "$ME: WARNING: $bill->{name} sponsor table: columns != 1";
+                next ROW unless $row->[0] =~ /\S/;      # Ignore blank rows
+                # 2025-03-11 HM56 has 5 sponsors in main page, none in tab
+                next ROW if     $row->[0] =~ /No Sponsors Found/;
+
+                $row->[0] =~ /linkSponsor.*href.*SponCode=([A-Z]+)/
+                    or do {
+                        warn "$ME: WARNING: $bill->{name}: did not find SponCode in '$row->[0]'";
+                        next ROW;
+                    };
+                my $sponsor = $1;
+                push @sponsors, $sponsor  if !grep { $_ eq $sponsor } @sponsors;
+            }
+        }
+    }
+
+    $bill->{sponsors} = \@sponsors;
+}
+
+
+####################################
+#  also_get_bills_not_on_web_site  #
+####################################
+sub also_get_bills_not_on_web_site {
+    my $bills = shift;                          # in: HREF to real bills
+
+    my $cache_dir = "$ENV{HOME}/.cache/nmlegis/mirror-bills/$YYYY";
+    opendir my $dir_fh, $cache_dir or do {
+        warn "$ME: Could not opendir $cache_dir: $!";
+        warn "$ME: will not check for mirrored-but-not-on-web-site bills\n";
+        return;
+    };
+
+    for my $f (sort readdir $dir_fh) {
+        next unless $f =~ /^(S|H)(B|M|R|CR|JM|JR)0*(\d+)\.html$/i;
+        my ($chamber, $type, $num) = (uc($1), uc($2), $3);
+
+        next if exists $bills->{$chamber}{$type}{$num};
+
+        # Does not exist. Create it.
+        $bills->{$chamber}{$type}{$num} //= prefile($chamber, "$cache_dir/$f");
+    }
+    closedir $dir_fh;
+}
+
+sub prefile {
+    my $chamber = shift;
+    my $path = shift;
+
+    my %info = (actions => "${chamber}PREF", sponsors => []);
+
+    # 180, so we can parse SHORT TITLE in one line
+    my @cmd = ('w3m', '-T' => 'text/html', '-dump', '-cols' => 180, $path);
+    open my $fh, '-|', @cmd
+        or die "$ME: Could not fork: $!";
+
+    my $body = do { local $/ = undef; <$fh>; };
+    close $fh;
+
+    # SHORT TITLE ... cited as the "Foo Bar Act"
+    if ($body =~ /SHORT\s+TITLE.*cited\s+as.*?"(.*?[Aa]ct)"/) {
+        $info{title} = $1;
+    }
+
+    # No short title. Try to find sponsor.
+    if ($body =~ /INTRODUCED\s*BY\n\n([A-Z][\w-]+(\h+([\w\"\.-]+)){1,8})/) {
+        # FIXME (maybe some day): try to match $1 against legislator list
+        (my $who = $1) =~ s/\hand.*//;
+        if (my $l = NMLegis::Legislators->by_name($chamber, $who)) {
+            $info{sponsors} = [ $l->code ];
+            $info{title} //= "[Prefiled; not yet on nmlegis]";
+        }
+        $info{title} //= "[Prefiled by $who; not yet on nmlegis]";
+    }
+    $info{title} //= "[Unknown prefile; not yet on nmlegis]";
+
+    return \%info;
+}
+
+
+
+
+###############################################################################
+# diffs
+
+sub compute_changelog {
+    my ($old, $new) = @_;
+
+    my @diffs;
+
+    # FIXME: 2023-02-02: prevent losing bills, that just screws us up!
+    # (we temporarily lost SB204)
+    my $lost_bills = 0;
+    for my $chamber (sort grep { /^(H|S)/ } keys %$old) {
+        for my $type (sort keys %{$old->{$chamber}}) {
+            for my $billno (sort { $a <=> $b } keys %{$old->{$chamber}{$type}}) {
+                if (! exists $new->{$chamber}{$type}{$billno}) {
+                    warn "$ME: new data is missing $chamber$type$billno\n";
+                    # ++$lost_bills;
+                    #$new->{$chamber}{$type}{$billno} = $old->{$chamber}{$type}{$billno};
+                    $new->{$chamber}{$type}{$billno} = +{
+                            actions => '',
+                            title   => 'LOST BILL???',
+                            sponsors => [],
+                    };
+                }
+            }
+        }
+    }
+    die "$ME: FATAL: Cannot continue due to missing bills." if $lost_bills;
+
+    for my $chamber (sort grep { /^(H|S)/ } keys %$new) {
+        for my $type (sort keys %{$new->{$chamber}}) {
+            for my $billno (sort { $a <=> $b } keys %{$new->{$chamber}{$type}}) {
+                my $n = $new->{$chamber}{$type}{$billno};
+                my $delta;
+
+                if (exists $old->{$chamber}{$type}{$billno}) {
+                    # FIXME: right now we only care about actions
+                    # FIXME: some day, maybe care about sponsors, title?
+                    my $o = $old->{$chamber}{$type}{$billno};
+
+                    if ($o->{actions} ne $n->{actions}) {
+                        # Action strings can (should?) only grow, not
+                        # shrink, except that "-T" (On Speaker's Table)
+                        # can be removed.
+                        my $oas = $o->{actions};        # old action string
+                        my $nas = $n->{actions};        # new
+
+                        $oas =~ s/-T\s*$//;             # "speakers table"
+                        $oas =~ s/[.-]+$//;             # trailing dot or dash
+                        if ($nas !~ /^\Q$oas/ && $oas !~ /PREF/) {
+                            warn "$ME: $chamber$type$billno: actions shrank!\n";
+                            warn "     old: $o->{actions}\n";
+                            warn "     new: $nas\n";
+                            warn "\n";
+                        }
+
+                        my $oa = NMLegis::Bills::_parse_actions($o->{actions});
+                        my $na = NMLegis::Bills::_parse_actions($n->{actions});
+
+                        my $oh = $oa->{history} or next;
+                        my $nh = $na->{history} or next;
+
+                        splice @$nh, 0, scalar(@$oh);
+                        my @deltas;
+                        for my $event (@$nh) {
+                            my (undef, $what, @rest) = @$event;
+                            if ($what eq 'passed') {
+                                push @deltas, "$what $rest[0]";
+                            }
+                            elsif ($what =~ /sent|refer/) {
+                                push @deltas, "$what to $rest[0]";
+                            }
+                            else {
+                                push @deltas, $what;
+                            }
+                        }
+                        $delta = join("; ", @deltas);
+
+                        # This is not helpful
+                        $delta =~ s/withdrawn;\s+//;
+                    }
+                }
+                else {
+                    $delta = "filed: $n->{title}";
+                }
+
+                if ($delta) {
+                    push @diffs, [ "$chamber$type$billno", $delta ];
+                }
+            }
+        }
+    }
+
+    return +{ by_bill => \@diffs };
+}
+
+
+1;

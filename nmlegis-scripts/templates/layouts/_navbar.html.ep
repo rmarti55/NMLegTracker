@@ -1,0 +1,78 @@
+  <form method="get" action="/search">
+    <nav role="navigation" class="topnav">
+      % (my $urlbase = $self->req->url->path) =~ s!^(.+)/.*!$1!;
+      <% my $navbarlink = begin %>
+      % my ($link, $title, $isdropdown) = @_;
+      % if ($isdropdown) {
+      %     if ($link eq $urlbase) {
+      <b class="active"><%= $title %>&nbsp;&dtrif;</b>
+      %     } else {
+      <b><%= $title %>&nbsp;&dtrif;</b>
+      %     }
+      % } else {
+      <a href="<%= $link %>"<%== ' class="active"' if $link eq $urlbase %>><%= $title %></a>
+      % }
+      <% end %>
+      <ul>
+        <li><%= $navbarlink->("/", "Home") %></li>
+        <li><%= $navbarlink->("/bills", "Bills", 1) %>
+          <ul class="dropdown">
+            <li><a href="/bills">All Bills</a></li>
+            <li><a href="/bills/history">Filing History</a></li>
+            <li><a href="/bills/halfpassed">Half-Passed</a></li>
+            <li><a href="/bills/pending">Pending Signature</a></li>
+            <br/><li><a href="/bills/signed">Signed</a></li>
+            <br/><li><a href="/bills/vetoed">Vetoed</a></li>
+          </ul>
+        </li>
+        % my $u = $self->user;
+        % if ($u && ($u->hdistrict || $u->sdistrict)) {
+        <li><%= $navbarlink->("/legislators", "Legislators", 1) %>
+          <ul class="dropdown">
+            <li><%= link_to 'All Legislators' => '/legislators' %></li>
+            % for my $chamber ('H', 'S') {
+            %     if (my $l = $u->my_legislator($chamber)) {
+                <li><%= link_to sprintf("%3.3s. %s", $l->title, $l->name) => $l->url %></li>
+            %     }
+            % }
+          </ul>
+        </li>
+        % } else {
+        <li><%= $navbarlink->("/legislators", "Legislators") %></li>
+        % }
+        <li><%= $navbarlink->("/committees", "Committees", 1) %>
+          <ul class="dropdown">
+            <li><%= link_to 'All Committees' => '/committees' %></li>
+            <li><%= link_to 'House'  => '/House' %></li>
+            <li><%= link_to 'Senate' => '/Senate' %></li>
+            <li><%= link_to 'Schedules' => '/committees/schedules' %></li>
+          </ul>
+        </li>
+        % my @trackers = $self->db->trackers('all_accessible_by' => $self->user);
+        <li><%= $navbarlink->("/trackers", "Trackers", scalar(@trackers)) %>
+          % if (@trackers) {
+          <ul class="dropdown">
+            <li><%= link_to "All Trackers" => "/trackers" %></li>
+          %     for my $tuple (@trackers) {
+          %         for my $i (1 .. $#{$tuple}) {
+            <br/><li><%= link_to $tuple->[$i]->description => $tuple->[$i]->url %></li>
+          %         }
+          %     }
+          </ul>
+          % }
+        </li>
+        <li id="search"><input name="q" type="text" size="15" style="font-size: 110%" /></li>
+        % if ($self->session('userid')) {
+        <li style="float: right"><b><span style="font-size: 150%;">&#x2699;</span></b>
+          <ul class="dropdown">
+            <li><%= link_to "My Settings" => "/settings" %></li><br/>
+            <li><%= link_to "Edit Trackers" => "/trackers/edit" %></li><br/>
+            <li><%= link_to "Log Out" => "/logout" %></li>
+          </ul>
+        </li>
+        % } else {
+        <li><%= $navbarlink->("/login", "Log In") %></li>
+        % }
+      </ul>
+    </nav>
+  </form>

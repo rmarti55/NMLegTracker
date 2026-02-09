@@ -1,0 +1,17 @@
+{
+   "2025-02-21" : {
+      "13:30:00" : {
+         "SJC" : {
+            "bills" : ["SB57","SB65","SB119","SB128","SB283","SB329","SB330","SB381"],
+            "date" : "2025-02-21",
+            "datetime" : "2025-02-21T13:30:00",
+            "mtime" : "2025-02-20T17:21:07",
+            "name" : "SJC",
+            "room" : "321",
+            "time" : "1:30 PM or 1/2 hour after floor session",
+            "url" : "2025/02/SJC/SJCageFeb21.25.pdf",
+            "zoom" : "https://us02web.zoom.us/j/88109017169"
+         }
+      }
+   }
+}

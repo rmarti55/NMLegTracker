@@ -1,0 +1,15 @@
+{
+   "2021-02-22" : {
+      "13:30:00" : {
+         "SHPAC" : {
+            "bills" : ["SB128","SB232","SB244","SB238","SB227","SB274","SB242","SB245","SB246","SB247","SB251","SB255"],
+            "date" : "2021-02-22",
+            "datetime" : "2021-02-22T13:30:00",
+            "mtime" : "2021-02-19T18:56:51",
+            "name" : "SHPAC",
+            "time" : "1:30 PM or ½ hr after flr session   Virtual",
+            "url" : "2021/02/SHPAC/SHPACageFeb22.21.pdf"
+         }
+      }
+   }
+}

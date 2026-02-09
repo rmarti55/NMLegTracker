@@ -1,0 +1,17 @@
+{
+   "2023-01-24" : {
+      "08:30:00" : {
+         "HENRC" : {
+            "bills" : ["HB32","HB67","HB91","HB96"],
+            "date" : "2023-01-24",
+            "datetime" : "2023-01-24T08:30:00",
+            "mtime" : "2023-01-19T15:16:09",
+            "name" : "HENRC",
+            "room" : "317",
+            "time" : "8:30 AM",
+            "url" : "2023/01/HENRC/HENRCageJan23.23.pdf",
+            "zoom" : "https://us02web.zoom.us/j/82140964843"
+         }
+      }
+   }
+}

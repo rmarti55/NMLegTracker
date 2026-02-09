@@ -1,0 +1,30 @@
+% layout 'default';
+% title 'About';
+
+<h1>About This Site</h1>
+
+<p>
+First of all, <b>this is in no way affiliated with <%= link_to 'nmlegis.gov' => 'https://nmlegis.gov' %></b>. That is the official New Mexico Legislature web site. I just happen to think that it's a little hard to navigate at times, so in 2017 I wrote something that I think is easier. And then in 2025 I rewrote much of it.
+</p>
+<p>
+If you like this, please use it to engage with your legislators. That's what I care about. If you think others would find this useful, please spread the word.
+</p>
+<p>
+-- Ed
+</p>
+
+% if (@$changelog) {
+<hr/>
+<h3>Change History</h3>
+<ul>
+%     for my $row (@$changelog) {
+<li><%= $row->[0] %><ul>
+%         for my $entry (@{$row->[1]}) {
+    <li><%= $entry %></li>
+%         }
+</ul>
+%     }
+</ul>
+% }
+
+% $self->stash('skip_legend' => 1);

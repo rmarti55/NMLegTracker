@@ -1,0 +1,17 @@
+{
+   "2024-02-02" : {
+      "08:00:00" : {
+         "SRC" : {
+            "bills" : ["SJR2","SJR5","SJM1","SJR6","SJR16","SJM2"],
+            "date" : "2024-02-02",
+            "datetime" : "2024-02-02T08:00:00",
+            "mtime" : "2024-02-01T15:03:57",
+            "name" : "SRC",
+            "room" : "321",
+            "time" : "8:00 AM",
+            "url" : "2024/02/SRC/SRCageFeb02.24.pdf",
+            "zoom" : "https://us02web.zoom.us/j/81944191844"
+         }
+      }
+   }
+}

@@ -1,0 +1,96 @@
+{
+   "2025-01-27" : {
+      "09:00:00" : {
+         "SEC" : {
+            "bills" : [],
+            "date" : "2025-01-27",
+            "datetime" : "2025-01-27T09:00:00",
+            "mtime" : "2025-01-24T14:47:00",
+            "name" : "SEC",
+            "room" : "311",
+            "time" : "9:00 AM",
+            "url" : "2025/01/sSched/sSched012725.pdf",
+            "zoom" : "https://us02web.zoom.us/j/89615593412"
+         },
+         "SRC" : {
+            "bills" : ["SB5","SB85"],
+            "date" : "2025-01-27",
+            "datetime" : "2025-01-27T09:00:00",
+            "mtime" : "2025-01-24T14:47:00",
+            "name" : "SRC",
+            "room" : "321",
+            "time" : "9:00 AM",
+            "url" : "2025/01/sSched/sSched012725.pdf"
+         }
+      },
+      "13:00:00" : {
+         "SJC" : {
+            "bills" : ["SB54"],
+            "date" : "2025-01-27",
+            "datetime" : "2025-01-27T13:00:00",
+            "mtime" : "2025-01-24T14:47:00",
+            "name" : "SJC",
+            "room" : "321",
+            "time" : "1:00 PM",
+            "url" : "2025/01/sSched/sSched012725.pdf",
+            "zoom" : "https://us02web.zoom.us/j/88109017169"
+         }
+      },
+      "13:30:00" : {
+         "SFC" : {
+            "bills" : [],
+            "date" : "2025-01-27",
+            "datetime" : "2025-01-27T13:30:00",
+            "mtime" : "2025-01-24T14:47:00",
+            "name" : "SFC",
+            "room" : "322",
+            "time" : "1:30 PM",
+            "url" : "2025/01/sSched/sSched012725.pdf",
+            "zoom" : "https://us02web.zoom.us/j/81696207177"
+         }
+      }
+   },
+   "2025-01-28" : {
+      "09:00:00" : {
+         "SCONC" : {
+            "bills" : ["SB4","SB21","SB22","SB23"],
+            "date" : "2025-01-28",
+            "datetime" : "2025-01-28T09:00:00",
+            "mtime" : "2025-01-24T14:47:00",
+            "name" : "SCONC",
+            "room" : "311",
+            "time" : "9:00 AM",
+            "url" : "2025/01/sSched/sSched012725.pdf",
+            "zoom" : "https://us02web.zoom.us/j/82404382748"
+         }
+      },
+      "13:30:00" : {
+         "STBTC" : {
+            "bills" : [],
+            "date" : "2025-01-28",
+            "datetime" : "2025-01-28T13:30:00",
+            "mtime" : "2025-01-24T14:47:00",
+            "name" : "STBTC",
+            "room" : "321",
+            "time" : "1:30 PM or 30 minutes after floor session",
+            "url" : "2025/01/sSched/sSched012725.pdf",
+            "zoom" : "https://us02web.zoom.us/j/85614440294"
+         }
+      }
+   },
+   "2025-01-29" : {
+      "09:00:00" : {
+         "SRC" : {
+            "bills" : [],
+            "date" : "2025-01-29",
+            "datetime" : "2025-01-29T09:00:00",
+            "mtime" : "2025-01-24T14:47:00",
+            "name" : "SRC",
+            "room" : "321",
+            "time" : "9:00 AM",
+            "url" : "2025/01/sSched/sSched012725.pdf",
+            "zoom" : "https://us02web.zoom.us/j/81944191844"
+         }
+      }
+   }
+}

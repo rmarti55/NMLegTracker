@@ -1,0 +1,488 @@
+#!/usr/bin/perl
+#
+# nmlegis-show-misc - show priorities based on config file
+#
+package ESM::NMLegisShowMisc;
+
+use v5.14;
+use strict;
+use warnings;
+use utf8;
+use open qw( :encoding(UTF-8) :std );
+
+(our $ME = $0) =~ s|.*/||;
+(our $VERSION = '$Revision: 1.30 $ ') =~ tr/[0-9].//cd;
+
+use NMLegis                     qw(:all);
+use NMLegis::Bills;
+use NMLegis::Committees;
+use NMLegis::Legislators;
+
+###############################################################################
+# BEGIN user-customizable section
+
+# END   user-customizable section
+###############################################################################
+
+use Date::Parse;
+use File::stat;
+use File::Slurp                 qw(read_file);
+use HTML::Entities;
+use JSON::XS;
+use LWP::Simple                 qw(mirror);
+use String::Similarity;
+use Time::Piece;
+
+###############################################################################
+# BEGIN boilerplate args checking, usage messages
+
+sub usage {
+    print  <<"END_USAGE";
+Usage: $ME [OPTIONS] PATH
+
+blah blah blah
+
+OPTIONS:
+
+  -v, --verbose  show verbose progress indicators
+  -n, --dry-run  make no actual changes
+
+  --help         display this message
+  --man          display program man page
+  --version      display program name and version
+END_USAGE
+
+    exit;
+}
+
+# Command-line options.  Note that this operates directly on @ARGV !
+our $debug   = 0;
+our $force   = 0;
+our $verbose = 0;
+our $NOT     = '';              # print "blahing the blah$NOT\n" if $debug
+sub handle_opts {
+    use Getopt::Long;
+    GetOptions(
+        'debug!'     => \$debug,
+        'dry-run|n!' => sub { $NOT = ' [NOT]' },
+        'force'      => \$force,
+        'verbose|v'  => \$verbose,
+
+        help         => \&usage,
+        version      => sub { print "$ME version $VERSION\n"; exit 0 },
+    ) or die "Try `$ME --help' for help\n";
+}
+
+# END   boilerplate args checking, usage messages
+###############################################################################
+
+############################## CODE BEGINS HERE ###############################
+
+# The term is "modulino".
+__PACKAGE__->main()                                     unless caller();
+
+# Main code.
+sub main {
+    # Note that we operate directly on @ARGV, not on function parameters.
+    # This is deliberate: it's because Getopt::Long only operates on @ARGV
+    # and there's no clean way to make it use @_.
+    handle_opts();                      # will set package globals
+
+    # Fetch command-line arguments.  Barf if too many.
+    my $dir = shift(@ARGV)
+        or die "Usage: $ME /path/to/nmlegis/subdir\n";
+
+    my $bill_list = read_bills("$dir/bills.txt");
+
+    write_html($bill_list, $dir);
+}
+
+sub write_html {
+    my $list     = shift;               # in: bill list
+    my $dir      = shift;               # in: destination directory
+
+    my $html_out = "$dir/index.html";
+
+    my $title = eval { read_file("$dir/title") } || 'Tracking';
+    chomp $title;
+    my $blurb = eval { read_file("$dir/blurb.html") } || '';
+
+    (my $basename = $dir) =~ s|^.*/||;
+
+    my $now = localtime->strftime("%A, %B %e, %l:%M %p");
+    # Write HTML file
+    my $html_tmp = "$html_out.tmp.$$";
+    open my $html_fh, '>', $html_tmp
+        or die "$ME: Cannot create $html_tmp: $!\n";
+    print { $html_fh } <<"END_HTML";
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+ <title>$title</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../nmlegis.css" />
+<link rel="stylesheet" href="../collapsible.css" />
+<link rel="stylesheet" href="../popup.css" />
+</head>
+<body>
+<div id="nav"><a href="../bills/">All Bills</a>&nbsp;&rarr;&nbsp;<a href="../committee-calendars.html">Committee Calendars</a>&nbsp;&rarr;&nbsp;<b>$title</b></div>
+
+<h1>$title</h1>
+$blurb
+
+<p style="color: #c00; margin-left: 2em; margin-right: 2em; font-size: 125%;"><i>
+DEPRECATION WARNING: This site (all of nmlegis.edsantiago.com) is
+being deprecated. In February 2025 I (Ed) rewrote the entire web&nbsp;UI,
+and as of February&nbsp;25 it seems to be working fairly well, so I'm
+encouraging everyone to move there instead.
+<br/>
+The new site is
+ <b><a href="https://nmlegiswatch.org/trackers/$basename">nmlegiswatch.org</a></b>
+</p>
+
+
+<p>
+This page is updated hourly, automatically. Last update: <b>$now</b>.
+</p>
+<p>
+Bills scheduled for committee hearing are displayed prominently. Bills
+NOT scheduled are grayed out.
+
+Dollar sign '&#x1F4B2;' next to a bill means there is at least one
+fiscal report (FIR, LESC, LFC) available for it.
+
+Scroll down for a chronological view
+of upcoming committee hearings and the bills in each, and scroll
+to very bottom for a list of noteworthy bill changes today and in the
+past few days.
+</p>
+<hr />
+END_HTML
+
+    my %by_day;
+    my %seen;                   # track dups
+
+    for my $block (@$list) {
+        my $topic = $block->{topic} || do {
+            warn "$ME: Missing 'topic' in block in json\n";
+            '[No Topic]';
+        };
+
+        printf { $html_fh } <<"END_HTML", encode_entities($topic);
+<h2>%s</h2>
+<table class="bills">
+END_HTML
+
+      ENTRY:
+        for my $entry (@{$block->{bills}}) {
+            my $billno = $entry->{billno} || '';
+            my $bill;
+            if ($billno) {
+                $bill = eval { NMLegis::Bills->new($billno) };
+                warn "$@" if $@;
+            }
+            if (! $bill) {
+                printf { $html_fh } "<tr class='inactive'><td class='id'>%s</td><td>%s</td><td colspan='6'></td></tr>\n",
+                    $billno || 'N/A',
+                    encode_entities($entry->{title} || '???');
+                next ENTRY;
+            }
+
+            if ($seen{$billno}++ && -t *STDIN) {
+                warn "$ME: duplicate entries for $billno in $title\n";
+            }
+
+            $bill->_load;
+            # Remove esm-specific details
+            delete $bill->{_am_tracking};
+            $bill->{is_evil} = $entry->{oppose} || ($entry->{title} =~ /oppose/i);
+
+            # Approximate string comparison on title, because LWV table
+            # sometimes has the wrong bill number
+            if (similarity(lc($bill->title), lc($entry->{title})) < 0.5) {
+                if ($ENV{NMLEGIS_WARN}) {
+                    warn "$ME: $billno: title discrepancy:\n";
+                    warn "     LWV: $entry->{title}\n";
+                    warn "    real: " . $bill->readable_title . "\n";
+                    warn "\n";
+                }
+            }
+
+            print  { $html_fh } $bill->html_row();
+
+            # Hearings, sorted by day/time
+            if (my $loc = $bill->location) {
+                $by_day{$loc->{ymd}}{$loc->{hms}}{$loc->{cname}} //= {
+                    loc => $loc,
+                    bills => [],
+                };
+                push @{$by_day{$loc->{ymd}}{$loc->{hms}}{$loc->{cname}}{bills}}, $bill;
+            }
+        }
+
+        print { $html_fh } "</table>\n";
+    }
+
+    #######################################################################
+    # Schedule list
+    print  { $html_fh } <<"END_HTML";
+<hr />
+<h1>By Schedule</h1>
+<p>
+Tables below show upcoming commitee meetings, with tracked
+bills scheduled for hearing. &#x1f4f9; icon, if present, offers
+a Zoom link. Please do not rely entirely on that: my code for
+finding those is not 100% reliable.
+</p>
+
+
+END_HTML
+
+    # Reset the bill-seen list.
+    %seen = ();
+
+    # Legislators I care about: show committees in which they sit
+    my @my_legislators = map { NMLegis::Legislators->new($_) } qw(h43 s5);
+
+    # So we can skip past entries; usually only necessary on early morning
+    # runs, before get-calendars has fetched updates.
+    my $ymd_today = localtime->ymd;
+
+    for my $ymd (sort keys %by_day) {
+        next if $ymd lt $ymd_today;     # Rarely necessary
+        my $t = localtime(str2time($ymd));
+        printf { $html_fh } "<hr/>\n<h2>%s</h2>\n", $t->strftime("%A, %B %e");
+
+        for my $hms (sort keys %{$by_day{$ymd}}) {
+            for my $cname (sort keys %{$by_day{$ymd}{$hms}}) {
+                my $tuple = $by_day{$ymd}{$hms}{$cname};
+                my $mtg = $tuple->{loc};
+                my $bills = $tuple->{bills};
+
+                my $time = $mtg->time;
+                if (my $pdf = $mtg->{url}) {
+                    my $alt = "PDF calendar source";
+                    if (my $mtime = $mtg->{mtime}) {
+                        $alt .= ", last updated $mtime";
+                    }
+
+                    # 1F5D3 = calendar
+                    $time .= sprintf("&nbsp;<a href=\"%s\" title=\"%s\" target=\"_blank\">&#x1F5D3;</a>",
+                                     $pdf, $alt);
+                }
+
+                my $room = $mtg->room;
+                if ($room ne (my $usual_room = $mtg->committee->room)) {
+                    $room .= " <i>[NOTE CHANGE FROM USUAL $usual_room]</i>";
+                }
+                my $zoom = $mtg->zoom_button;
+
+                # Highlight differently depending on whether meeting is
+                # way-past, current-ish or soon, or future-day
+                my $meeting_class = 'future';
+                if ($ymd eq $ymd_today) {
+                    $meeting_class = 'current';
+                    if ($hms le "12:30:00" && localtime->hour >= 12) {
+                        $meeting_class = 'past';
+                    }
+                    if ($hms le "16:00:00" && localtime->hour >= 17) {
+                        $meeting_class = 'past';
+                    }
+                }
+                elsif (localtime->hour >= 17) {
+                    if ($ymd eq localtime(time + 86400)->ymd) {
+                        $meeting_class = 'current';
+                    }
+                }
+
+                my $committee = $mtg->committee;
+                printf { $html_fh } <<"END_HTML", $committee->abbr, $committee->name;
+<div class="meeting meeting-$meeting_class">
+<table>
+ <tr><th class="time" colspan="3">$time</th><th class="room">$room&nbsp;$zoom</th></tr>
+ <tr><th class="committeename" colspan="4">
+<span class="popup-container"><label class="popup-button popup--committee--current"><a href="/committees/%s/">%s</a></label></span></th></tr>
+END_HTML
+
+                # Are any of our legislators in this committee?
+                my @on_committee;
+                for my $l (@my_legislators) {
+                    if (my $role = $l->on_committee($committee)) {
+                        (my $css = lc($role)) =~ s/\s+//g;
+                        printf { $html_fh } <<"END_HTML", $css, $l->name, $role;
+ <tr><td colspan="5" class="committee-%s">%s, %s</td></tr>
+END_HTML
+                    }
+                }
+
+                # FIXME: time, room
+              BILL:
+                for my $bill (@$bills) {
+                    # Above, we can show bills in two places (different
+                    # categories). Here, it would be stupid.
+                    next if $seen{$bill->name}++;
+
+                    my $classes = join(' ', $bill->css_classes);
+
+                    printf { $html_fh } <<"END_HTML", $classes, map { $bill->get($_) } qw(local_url html_name readable_title);
+<tr class='%s'><td class='id'><a href="%s" target="_blank">%s</a></td><td colspan="2">%s</td>
+END_HTML
+
+                    # Sponsor
+                    printf { $html_fh } "<td>%s</td>",
+                        $bill->sponsor->full_link('lastname', { bill => $bill});
+
+                    print { $html_fh } "</tr>\n";
+                }
+
+                print  { $html_fh } "</table>\n</div>\n";
+            }
+        }
+    }
+
+    #########################################################################
+    # Bill History
+    my $updates = NMLegis::Bills::updates(5);
+    my %bill_filter;
+    for my $block (@$list) {
+        for my $bill (@{$block->{bills}}) {
+            $bill_filter{$bill->{billno}} = 1;
+        }
+    }
+
+    my $counter = '000';
+    print { $html_fh } "<hr/>\n<h1>History</h1>\n";
+    for my $ymd (reverse sort keys %$updates) {
+        # Find events of note
+        my @events;
+
+        my $is_today = (localtime->ymd eq $ymd);
+
+        for my $hms (sort keys(%{$updates->{$ymd}})) {
+            for my $log (@{$updates->{$ymd}{$hms}{history}}) {
+                my ($bill, $action) = @$log;
+                $action =~ s{(\d+-\d+-\d+\s+\d+:\d+:\d+)}{
+                    localtime(str2time($1))->strftime("%A, %b %e, %H:%M")
+                }gex;
+                if ($bill_filter{$bill}) {
+                    my @match = grep { $_->[0] eq $bill } @events;
+                    if (@match && !$is_today) {
+                        $match[0][2] .= "; $action";
+                    }
+                    else {
+                        my $hm  = substr($hms, 0, 5);
+                        push @events, [ "[$hm] ", $bill, $action ];
+                    }
+                }
+            }
+        }
+
+        next unless @events;
+
+        my $ymd_friendly = localtime(str2time($ymd))->strftime("%A, %b %e");
+        if ($is_today) {
+            $ymd_friendly = "TODAY ($ymd_friendly)";
+        }
+        else {
+            $ymd_friendly = "on $ymd_friendly";
+        }
+
+        print { $html_fh } <<"END_HTML";
+        <div class="wrap-collabsible">
+  <input id="collapsible$counter" class="toggle" type="checkbox">
+  <label for="collapsible$counter" class="lbl-toggle">Updates seen $ymd_friendly</label>
+  <div class="collapsible-content">
+    <div class="content-inner">
+      <ul>
+END_HTML
+        ++$counter;
+
+        for my $e (reverse @events) {
+            my ($hms, $bill, $action) = @$e;
+            $hms = '' if !$is_today;
+
+            printf { $html_fh} "<li>%s<b>%s</b> <span style=\"font-family: mono\">%s</span><ul><li>%s</li></ul></li>\n",
+                $hms,
+                $bill,
+                encode_entities(NMLegis::Bills->new($bill)->readable_title),
+                $action;
+        }
+
+        print { $html_fh } "    </ul>\n";
+        print { $html_fh } "<p><i>[HH:MM] indicates the time Ed's system noticed the change, it has no meaningful relation to legislative activity</i></p>\n" if $is_today;
+        print { $html_fh } "    </div>\n  </div>\n</div>\n<hr/>\n";
+    }
+
+    printf { $html_fh } <<'END_HTML', localtime->datetime, $ME;
+<hr/>
+<h3>Legend:</h3>
+<table>
+ <tr>
+  <th>Legislators:</th>
+  <td class="party-D">Democratic sponsorship</td>
+  <td class="party-R">Republican sponsorship</td>
+  <td class="party-DTS">Bipartisan sponsorship</td>
+ </tr>
+ <tr>
+  <th>Bill Rows:</th>
+  <td class="active"><b>Active</b> -- hearings scheduled</td>
+  <td class="inactive">Inactive -- no hearings scheduled</td>
+ </tr>
+ <tr>
+  <th>Bill Progress:</th>
+  <td class="passed">Passed</td>
+  <td class="failed">Failed Vote</td>
+  <td class="tabled">Tabled</td>
+ </tr>
+ <tr>
+  <th>Incomplete Data:</th>
+  <td class="heard">Heard(?)<br/>(was scheduled for hearing recently)</td>
+  <td class="heard-long-ago">Heard Long Ago<br/>(was scheduled for hearing many days ago)</td>
+  <td></td>
+  <td>(There is very little I can do about these because nmlegis.gov
+       does not report real-time results)</td>
+ </tr>
+</table>
+<hr/>
+<span class='signature'>Updated: %s by %s.
+</body>
+</html>
+END_HTML
+
+    close $html_fh
+        or die "$ME: Error writing $html_tmp: $!\n";
+    rename $html_tmp => $html_out
+        or die "$ME: Error renaming $html_tmp: $!\n";
+}
+
+###############################################################################
+# BEGIN utils
+
+sub read_bills {
+    my $file = shift;
+    my @list;
+
+    open my $fh, '<', $file
+        or die "$ME: Cannot read $file: $!\n";
+    while (my $line = <$fh>) {
+        chomp $line;
+        #              12   2      13 3 4   5    54
+        if ($line =~ /^((H|S)\w+\d+)(-)?(\s+(\S.*))?/) {        # bill
+            push @{$list[-1]{bills}}, { billno => $1, oppose => $3, title => $5||'' };
+        }
+        elsif ($line) {
+            push @list, { topic => $line, bills => [] };
+        }
+    }
+    close $fh;
+
+    return \@list;
+}
+
+# END   utils
+###############################################################################
+
+1;

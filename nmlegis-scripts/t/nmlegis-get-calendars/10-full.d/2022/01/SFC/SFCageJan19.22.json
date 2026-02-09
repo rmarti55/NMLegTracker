@@ -1,0 +1,17 @@
+{
+   "2022-01-19" : {
+      "13:30:00" : {
+         "SFC" : {
+            "bills" : ["HB1"],
+            "date" : "2022-01-19",
+            "datetime" : "2022-01-19T13:30:00",
+            "mtime" : "2022-01-19T16:00:55",
+            "name" : "SFC",
+            "room" : "322",
+            "time" : "1:30 PM after the Floor Session",
+            "url" : "2022/01/SFC/SFCageJan19.22.pdf",
+            "zoom" : "https://us02web.zoom.us/j/83313102742"
+         }
+      }
+   }
+}

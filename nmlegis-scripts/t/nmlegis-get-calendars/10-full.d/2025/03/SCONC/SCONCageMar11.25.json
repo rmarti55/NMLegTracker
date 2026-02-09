@@ -1,0 +1,17 @@
+{
+   "2025-03-11" : {
+      "09:00:00" : {
+         "SCONC" : {
+            "bills" : ["HB93","HB284","SM3"],
+            "date" : "2025-03-11",
+            "datetime" : "2025-03-11T09:00:00",
+            "mtime" : "2025-03-10T09:15:06",
+            "name" : "SCONC",
+            "room" : "311",
+            "time" : "9:00 AM",
+            "url" : "2025/03/SCONC/SCONCageMar11.25.pdf",
+            "zoom" : "https://us02web.zoom.us/j/82404382748"
+         }
+      }
+   }
+}

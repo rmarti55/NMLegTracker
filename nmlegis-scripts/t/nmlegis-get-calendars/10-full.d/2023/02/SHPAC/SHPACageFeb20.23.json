@@ -1,0 +1,16 @@
+{
+   "2023-02-20" : {
+      "13:30:00" : {
+         "SHPAC" : {
+            "bills" : ["SB207","SB233","SB198","SB255","SB260","SB287","SB191","SB278","SB279","SB285","SB295","SB130","SB298","SB302","SB312"],
+            "date" : "2023-02-20",
+            "datetime" : "2023-02-20T13:30:00",
+            "mtime" : "2023-02-20T15:23:09",
+            "name" : "SHPAC",
+            "room" : "311",
+            "time" : "1:30 PM or 1/2 hr after floor session",
+            "url" : "2023/02/SHPAC/SHPACageFeb20.23.pdf"
+         }
+      }
+   }
+}

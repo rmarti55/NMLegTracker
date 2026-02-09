@@ -1,0 +1,17 @@
+{
+   "2024-01-24" : {
+      "13:00:00" : {
+         "SHPAC" : {
+            "bills" : ["SB61","SB46","SB77","SB78","SB89","SB69","SB87","SB124"],
+            "date" : "2024-01-24",
+            "datetime" : "2024-01-24T13:00:00",
+            "mtime" : "2024-01-24T13:05:06",
+            "name" : "SHPAC",
+            "room" : "311",
+            "time" : "1:00 PM",
+            "url" : "2024/01/SHPAC/SHPACageJan24.24.pdf",
+            "zoom" : "https://us02web.zoom.us/j/81287336647"
+         }
+      }
+   }
+}

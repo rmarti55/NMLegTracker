@@ -1,0 +1,149 @@
+{
+   "2022-02-15" : {
+      "08:30:00" : {
+         "HAAWC" : {
+            "bills" : [],
+            "date" : "2022-02-15",
+            "datetime" : "2022-02-15T08:30:00",
+            "mtime" : "2022-02-14T21:01:12",
+            "name" : "HAAWC",
+            "room" : "315",
+            "time" : "8:30 AM",
+            "url" : "2022/02/hSched/hSched021522.pdf"
+         },
+         "HENRC" : {
+            "bills" : [],
+            "date" : "2022-02-15",
+            "datetime" : "2022-02-15T08:30:00",
+            "mtime" : "2022-02-14T21:01:12",
+            "name" : "HENRC",
+            "room" : "317",
+            "time" : "8:30 AM",
+            "url" : "2022/02/hSched/hSched021522.pdf"
+         },
+         "HGEIC" : {
+            "bills" : ["SB38","SJR10","SB123","SB14"],
+            "date" : "2022-02-15",
+            "datetime" : "2022-02-15T08:30:00",
+            "mtime" : "2022-02-14T21:01:12",
+            "name" : "HGEIC",
+            "room" : "305",
+            "time" : "8:30 AM",
+            "url" : "2022/02/hSched/hSched021522.pdf",
+            "zoom" : "https://us02web.zoom.us/j/88201222358"
+         }
+      },
+      "09:00:00" : {
+         "HTPWC" : {
+            "bills" : ["SB174","SB84"],
+            "date" : "2022-02-15",
+            "datetime" : "2022-02-15T09:00:00",
+            "mtime" : "2022-02-14T21:01:12",
+            "name" : "HTPWC",
+            "room" : "305",
+            "time" : "9:00 AM",
+            "url" : "2022/02/hSched/hSched021522.pdf",
+            "zoom" : "https://us02web.zoom.us/j/84841772756"
+         }
+      },
+      "09:30:00" : {
+         "HRDLC" : {
+            "bills" : [],
+            "date" : "2022-02-15",
+            "datetime" : "2022-02-15T09:30:00",
+            "mtime" : "2022-02-14T21:01:12",
+            "name" : "HRDLC",
+            "room" : "309",
+            "time" : "9:30 AM",
+            "url" : "2022/02/hSched/hSched021522.pdf"
+         }
+      },
+      "13:30:00" : {
+         "HCPAC" : {
+            "bills" : [],
+            "date" : "2022-02-15",
+            "datetime" : "2022-02-15T13:30:00",
+            "mtime" : "2022-02-14T21:01:12",
+            "name" : "HCPAC",
+            "room" : "314",
+            "time" : "1:30 PM",
+            "url" : "2022/02/hSched/hSched021522.pdf"
+         },
+         "HJC" : {
+            "bills" : ["SB144","SB6","SB158"],
+            "date" : "2022-02-15",
+            "datetime" : "2022-02-15T13:30:00",
+            "mtime" : "2022-02-14T21:01:12",
+            "name" : "HJC",
+            "room" : "309",
+            "time" : "1:30 PM",
+            "url" : "2022/02/hSched/hSched021522.pdf",
+            "zoom" : "https://us02web.zoom.us/j/82729617459"
+         },
+         "HLVMC" : {
+            "bills" : ["SB7"],
+            "date" : "2022-02-15",
+            "datetime" : "2022-02-15T13:30:00",
+            "mtime" : "2022-02-14T21:01:12",
+            "name" : "HLVMC",
+            "room" : "315",
+            "time" : "1:30 PM or 15 minutes after floor session",
+            "url" : "2022/02/hSched/hSched021522.pdf",
+            "zoom" : "https://us02web.zoom.us/j/89015442467"
+         }
+      }
+   },
+   "2022-02-16" : {
+      "08:00:00" : {
+         "HEC" : {
+            "bills" : ["SB140","SB243"],
+            "date" : "2022-02-16",
+            "datetime" : "2022-02-16T08:00:00",
+            "mtime" : "2022-02-14T21:01:12",
+            "name" : "HEC",
+            "room" : "309",
+            "time" : "8:00 AM",
+            "url" : "2022/02/hSched/hSched021522.pdf",
+            "zoom" : "https://us02web.zoom.us/j/82380513568"
+         }
+      },
+      "08:30:00" : {
+         "HHHC" : {
+            "bills" : [],
+            "date" : "2022-02-16",
+            "datetime" : "2022-02-16T08:30:00",
+            "mtime" : "2022-02-14T21:01:12",
+            "name" : "HHHC",
+            "room" : "315",
+            "time" : "8:30 AM",
+            "url" : "2022/02/hSched/hSched021522.pdf"
+         }
+      }
+   },
+   "2022-02-17" : {
+      "08:30:00" : {
+         "HAAWC" : {
+            "bills" : [],
+            "date" : "2022-02-17",
+            "datetime" : "2022-02-17T08:30:00",
+            "mtime" : "2022-02-14T21:01:12",
+            "name" : "HAAWC",
+            "room" : "315",
+            "time" : "8:30 AM",
+            "url" : "2022/02/hSched/hSched021522.pdf"
+         }
+      },
+      "09:00:00" : {
+         "HTPWC" : {
+            "bills" : [],
+            "date" : "2022-02-17",
+            "datetime" : "2022-02-17T09:00:00",
+            "mtime" : "2022-02-14T21:01:12",
+            "name" : "HTPWC",
+            "room" : "305",
+            "time" : "9:00 AM",
+            "url" : "2022/02/hSched/hSched021522.pdf"
+         }
+      }
+   }
+}

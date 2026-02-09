@@ -1,0 +1,17 @@
+{
+   "2022-02-14" : {
+      "00:00:00" : {
+         "HAFC" : {
+            "bills" : ["HB24","HB177","HB186","SB1","SB17","SB36","SB37","SB48"],
+            "date" : "2022-02-14",
+            "datetime" : "2022-02-14T00:00:00",
+            "mtime" : "2022-02-14T08:26:52",
+            "name" : "HAFC",
+            "room" : "307",
+            "time" : "At the call of the Chair",
+            "url" : "2022/02/HAFC/HAFCageFeb14.22.pdf",
+            "zoom" : "https://us02web.zoom.us/j/89912384169"
+         }
+      }
+   }
+}

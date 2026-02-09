@@ -1,0 +1,101 @@
+{
+   "2021-02-22" : {
+      "09:00:00" : {
+         "SEC" : {
+            "bills" : ["SB135","SB330","SB289","SB302","SB318","SB348","SB337","SB341","SB353"],
+            "date" : "2021-02-22",
+            "datetime" : "2021-02-22T09:00:00",
+            "mtime" : "2021-02-20T09:02:56",
+            "name" : "SEC",
+            "time" : "9:00 AM",
+            "url" : "2021/02/sSched/sSched022221.pdf"
+         },
+         "SRC" : {
+            "bills" : ["SB367","SB387","SB48"],
+            "date" : "2021-02-22",
+            "datetime" : "2021-02-22T09:00:00",
+            "mtime" : "2021-02-20T09:02:56",
+            "name" : "SRC",
+            "time" : "9:00 AM",
+            "url" : "2021/02/sSched/sSched022221.pdf"
+         }
+      },
+      "13:00:00" : {
+         "SFC" : {
+            "bills" : ["SB29","SB43","SB40"],
+            "date" : "2021-02-22",
+            "datetime" : "2021-02-22T13:00:00",
+            "mtime" : "2021-02-20T09:02:56",
+            "name" : "SFC",
+            "time" : "1:00 PM or at the Call of the Chair",
+            "url" : "2021/02/sSched/sSched022221.pdf"
+         }
+      },
+      "13:30:00" : {
+         "SHPAC" : {
+            "bills" : ["SB242","SB245","SB246","SB247","SB251","SB255"],
+            "date" : "2021-02-22",
+            "datetime" : "2021-02-22T13:30:00",
+            "mtime" : "2021-02-20T09:02:56",
+            "name" : "SHPAC",
+            "time" : "1:30 PM",
+            "url" : "2021/02/sSched/sSched022221.pdf"
+         },
+         "SJC" : {
+            "bills" : ["SB66","SB38","SB60","SB75","SB146","SB183"],
+            "date" : "2021-02-22",
+            "datetime" : "2021-02-22T13:30:00",
+            "mtime" : "2021-02-20T09:02:56",
+            "name" : "SJC",
+            "time" : "1:30 PM",
+            "url" : "2021/02/sSched/sSched022221.pdf"
+         }
+      }
+   },
+   "2021-02-23" : {
+      "09:00:00" : {
+         "SCONC" : {
+            "bills" : ["SB297","SB312","SB347","HB57"],
+            "date" : "2021-02-23",
+            "datetime" : "2021-02-23T09:00:00",
+            "mtime" : "2021-02-20T09:02:56",
+            "name" : "SCONC",
+            "time" : "9:00 AM",
+            "url" : "2021/02/sSched/sSched022221.pdf"
+         },
+         "SIRC" : {
+            "bills" : ["SB399","SB398","SB400","SB385"],
+            "date" : "2021-02-23",
+            "datetime" : "2021-02-23T09:00:00",
+            "mtime" : "2021-02-20T09:02:56",
+            "name" : "SIRC",
+            "time" : "9:00 AM",
+            "url" : "2021/02/sSched/sSched022221.pdf"
+         }
+      },
+      "13:30:00" : {
+         "STBTC" : {
+            "bills" : ["SB11","SB84","SB118","SB124","SB252","SB269","SB299"],
+            "date" : "2021-02-23",
+            "datetime" : "2021-02-23T13:30:00",
+            "mtime" : "2021-02-20T09:02:56",
+            "name" : "STBTC",
+            "time" : "1:30 PM",
+            "url" : "2021/02/sSched/sSched022221.pdf"
+         }
+      }
+   },
+   "2021-02-25" : {
+      "09:00:00" : {
+         "SIRC" : {
+            "bills" : ["SB397","SB407","SB415"],
+            "date" : "2021-02-25",
+            "datetime" : "2021-02-25T09:00:00",
+            "mtime" : "2021-02-20T09:02:56",
+            "name" : "SIRC",
+            "time" : "9:00 AM",
+            "url" : "2021/02/sSched/sSched022221.pdf"
+         }
+      }
+   }
+}

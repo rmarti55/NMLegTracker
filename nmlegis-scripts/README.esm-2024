@@ -1,0 +1,12 @@
+2024-01-18
+  - HOME/.local/share/nmlegis/schedule-from-html.json is empty.
+    At this writing (06:30) there are two bills scheduled for hearings,
+       - Jan 18 3pm - HLVMC - HB5
+       - Jan 19 9am - HGEIC - HB29
+    ...according to PDFs *and* the zip file with accdb. However, the
+    respective committee pages do not show any meetings nor bills:
+        https://nmlegis.gov/Committee/Standing_Committee?CommitteeCode=HLVMC
+        https://nmlegis.gov/Committee/Standing_Committee?CommitteeCode=HGEIC
+    The "Agenda" block is empty.
+
+    CONCLUSION: PDF calendars are more trustworthy

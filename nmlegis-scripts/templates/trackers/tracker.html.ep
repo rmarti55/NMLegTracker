@@ -1,0 +1,86 @@
+% layout 'default';
+% title  $t->name . ' Tracker';
+
+<h1><%= $t->description %> Bill Tracker<%= link_to(" (learn more)" => $t->website) if $t->website %></h1>
+
+% if ($self->user) {
+%     if ($t->owner == $self->user->id) {
+<h2>This is your <%= $t->is_public ? 'public' : 'private' %> tracker. <a href="/trackers/edit/<%= $t->name %>">Edit it</a>.</h2>
+%     } elsif ($t->is_writable_by($self->user->id)) {
+<h2>You have write access to this tracker. <a href="/trackers/edit/<%= $t->name %>">Edit it</a>.</h2>
+%     } elsif ($t->is_subscribed_to_by($self->user->id)) {
+%=        form_for '/trackers/unsubscribe' => (method => 'POST') => begin
+%=          hidden_field trackerid => $t->id
+<table><tr><td>
+%=          submit_button 'Unsubscribe'
+</td><td>You can always subscribe again.</td></tr></table>
+%         end
+%     } else {
+%=        form_for '/trackers/subscribe' => (method => 'POST') => begin
+%=          hidden_field trackerid => $t->id
+<table><tr><td>
+%=          submit_button 'Subscribe'
+    </td><td>Subscribing to a tracker is useful when you're viewing
+      bills on other pages, like committee schedules: a small icon
+      will appear next to bills that are being tracked by all
+      trackers that you subscribe to. And, you can always easily
+      unsubscribe.
+      </td></tr></table>
+%         end
+%     }
+% } else {
+<p class="plug">
+  <b><%= link_to 'Log in' => '/login' %></b> or
+  <b><%= link_to 'register' => '/register' %></b>
+  to subscribe to this tracker.<br/>
+  Subscribing adds little icons to tracked bills when you view other
+  pages, like hearing schedules or voting records; this makes it easier
+  to navigate other parts of the site (such as legislator voting records)
+  and spot the bills you care about.<br/>
+  Registering also lets you make your own tracking list.<br/>
+  Registering also makes it very easy to spot committees where your
+  representative or senator sit, so when a bill you're tracking goes
+  to their committee, you can contact them.<br/>
+  See <b><%= link_to 'home page' => '/' %></b> for a visual illustration
+  of the advantages.
+</p>
+% }
+
+% for my $row (@$bills) {
+<h3><%= shift(@$row) %> <small style="font-weight: normal;"> - [jump to <a href="#schedules">hearing schedules</a>]</small></h3>
+<table>
+%     for my $b (@$row) {
+%=        include 'bills/_billrow', b => $b, columns => [ 'watch_button', 'id', 'title', 'sponsors', 'status', 'update' ]
+%     }
+</table>
+% }
+
+% if ($schedule) {
+<h2><a name="schedules">Hearings Scheduled</a></h2>
+<p>Schedules below only show committees that are hearing bills
+  you are tracking. See <b><%= link_to 'full committee schedules' => '/committees/schedules' %></b> for everything.</p>
+%= include 'committees/_all_schedules', schedule => $schedule
+% }
+
+%# history of changes (only when user has write access)
+% if ($t->is_writable_by($self->user)) {
+<hr/>
+<h2>History</h2>
+% if (my @history = $t->history) {
+<table>
+  % for my $h (@history) {
+  %# FIXME! link to bill.
+  %# FIXME: different CSS for adding and removing?
+  %# FIXME: preprocessing: if stop/start within short while, skip?
+  <tr>
+    <td><%= $h->{lt}->strftime("%b %e %H:%M") %></td>
+    <td><%= $h->{bill}->code %>: <%= $h->{bill}->title %></td>
+    <td><%= $h->{comment} %></td>
+    <td><%= $h->{firstname} %> <%= $h->{lastname} %></td>
+  </tr>
+  % }
+</table>
+% } else {
+<h4>No history available</h4>
+% }
+% }

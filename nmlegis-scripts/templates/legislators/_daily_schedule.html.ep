@@ -1,0 +1,79 @@
+%# called with $l, $committees, $introduced
+%
+% my %committee_attendance;
+% for my $c (@$committees) {
+%     for my $sched ($c->schedules) {
+%         my $ymd = $sched->{ymd};
+%         my $hms = $sched->{hms};
+%         my $bucket = ($hms le "12:00:00" ? 0 : 1);
+%
+%         push @{$committee_attendance{$bucket}{$ymd}{on_committee}},
+%              [ $sched, "Role: " . $c->role ];
+%     }
+% }
+%
+% # Committees only; exclude House and Senate
+% for my $sched (grep { $_->{cname} =~ /^[HS][A-Z]+$/ } NMLegis::Agendas::all()) {
+%     my $ymd = $sched->{ymd};
+%     my $hms = $sched->{hms};
+%     my $bucket = ($hms le "12:00:00" ? 0 : 1);
+%
+%     for my $billcode (@{$sched->{bills}}) {
+%         if (my @mine = grep { $billcode eq $_->code } @$introduced) {
+%             my $b = $self->db->bill($billcode);
+%             my $text = sprintf("%s %s", link_to($b->code, $b->url),$b->title);
+%             push @{$committee_attendance{$bucket}{$ymd}{bill_heard}},
+%                  [ $sched, $text ];
+%         }
+%     }
+% }
+
+<hr/>
+<h2>Daily Schedule - fixed commitments</h2>
+<table>
+  <tr><th>&nbsp;</th>
+% for my $d (0, 1, 2) {
+%    my $title = Time::Piece::localtime(time + $d * 86400)->strftime("%A");
+%    $title .= " (Today)"    if $d == 0;
+%    $title .= " (Tomorrow)" if $d == 1;
+%    $title .= " (Schedules may be incomplete)" if $d == 2;
+<th><%= $title %></th>
+% }
+</tr>
+
+% my @buckets = qw(Morning Afternoon);
+% my %row_title = (on_committee => 'Committee Meetings',
+%                  bill_heard   => 'Sponsored Bills Being Heard in Committee');
+% for my $bucket (0, 1) {
+<tr><th rowspan="2"><%= $buckets[$bucket] %></th>
+%
+%     # First row: committee seats; second row: bills being heard
+%     for my $row (qw(on_committee bill_heard)) {
+%         for my $d (0, 1, 2) {
+%             my $ymd = Time::Piece::localtime(time + $d * 86400)->ymd;
+%
+<td>
+%             my $busy = $committee_attendance{$bucket}{$ymd}{$row};
+%             if ($busy) {
+<b><%= $row_title{$row} %>:</b><br/>
+%                 for my $event (@$busy) {
+%                     my ($s, $text) = @$event;
+%                     (my $linkto_id = $s->{datetime}) =~
+%                           s/^\d+-(\d\d)-(\d\d)T(\d\d):(\d\d).*/$1$2-$3$4/;
+%                     $linkto_id .= "-" . $event->[0]->{cname};
+&nbsp;<b><%= link_to $s->cname => "/committees/".$s->cname %></b> - <%= $s->time %> <%= $s->room %><br/>
+&nbsp;&nbsp;&nbsp;<%== $text %><br/>
+%                 }
+%             } else {
+</td>
+%             }
+%         }
+</tr>
+%     }
+%
+%     # Separator
+%     if ($bucket == 0) {
+<tr><th colspan="4"></th></tr>
+%     }
+% }
+</table>

@@ -1,0 +1,17 @@
+{
+   "2024-01-31" : {
+      "13:30:00" : {
+         "HAFC" : {
+            "bills" : ["HB193","HB33","HB82","HB5","HB88","HB91"],
+            "date" : "2024-01-31",
+            "datetime" : "2024-01-31T13:30:00",
+            "mtime" : "2024-01-30T11:36:58",
+            "name" : "HAFC",
+            "room" : "307",
+            "time" : "1:30 PM or at the call of the Chair",
+            "url" : "2024/01/HAFC/HAFCageJan31.24.pdf",
+            "zoom" : "https://us02web.zoom.us/j/84052541475"
+         }
+      }
+   }
+}

@@ -1,0 +1,17 @@
+{
+   "2024-01-26" : {
+      "13:30:00" : {
+         "HCEDC" : {
+            "bills" : ["HB83","HB159","HB117","HB81"],
+            "date" : "2024-01-26",
+            "datetime" : "2024-01-26T13:30:00",
+            "mtime" : "2024-01-25T13:35:10",
+            "name" : "HCEDC",
+            "room" : "317",
+            "time" : "1:30 PM",
+            "url" : "2024/01/HCEDC/HCEDCageJan26.24.pdf",
+            "zoom" : "https://us02web.zoom.us/j/85993976266"
+         }
+      }
+   }
+}

@@ -1,0 +1,16 @@
+{
+   "2021-01-28" : {
+      "13:30:00" : {
+         "HCPAC" : {
+            "bills" : ["HB40","HB70","HB111","HB114","HB127"],
+            "date" : "2021-01-28",
+            "datetime" : "2021-01-28T13:30:00",
+            "mtime" : "2021-01-27T15:30:47",
+            "name" : "HCPAC",
+            "time" : "1:30 PM",
+            "url" : "2021/01/HCPAC/HCPACageJan28.21.pdf",
+            "zoom" : "https://us02web.zoom.us/j/88589309206"
+         }
+      }
+   }
+}

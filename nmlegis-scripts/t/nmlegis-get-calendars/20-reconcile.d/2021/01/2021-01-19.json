@@ -1,0 +1,39 @@
+{
+   "2021-01-19" : {
+      "12:00:00" : {
+         "House" : {
+            "bills" : [],
+            "date" : "2021-01-19",
+            "datetime" : "2021-01-19T12:00:00",
+            "mtime" : "2021-01-18T18:06:48",
+            "name" : "House",
+            "room" : "House Floor",
+            "time" : "12:00 PM",
+            "url" : "/home/esm/.cache/nmlegis/get-calendars/2021/01/hFloor/hFloor011921.pdf"
+         },
+         "Senate" : {
+            "bills" : [],
+            "date" : "2021-01-19",
+            "datetime" : "2021-01-19T12:00:00",
+            "mtime" : "2021-01-18T16:56:44",
+            "name" : "Senate",
+            "room" : "Senate Floor",
+            "time" : "12:00",
+            "url" : "/home/esm/.cache/nmlegis/get-calendars/2021/01/sFloor/sFloor011921.pdf"
+         }
+      },
+      "15:00:00" : {
+         "HAFC" : {
+            "bills" : ["HB1"],
+            "date" : "2021-01-19",
+            "datetime" : "2021-01-19T15:00:00",
+            "mtime" : "2021-01-19T14:48:32",
+            "name" : "HAFC",
+            "room" : "307",
+            "time" : "3:00 PM",
+            "url" : "/home/esm/.cache/nmlegis/get-calendars/2021/01/HAFC/HAFCageJan19.21.pdf",
+            "zoom" : "https://us02web.zoom.us/j/89073905943"
+         }
+      }
+   }
+}

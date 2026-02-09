@@ -1,0 +1,29 @@
+% layout 'default';
+% title  'Bills Pending';
+
+% if (! @$bills) {
+<h1>No Bills Pending</h1>
+<p>
+  There are no bills right now awaiting the Governor's signature.
+</p>
+% $self->stash('skip_legend' => 1);
+% } else {
+
+<h1>Bills Pending</h1>
+
+<p>
+  This page shows bills <b>that have passed both houses</b> but
+  not yet been signed.
+</p>
+<p>
+  Not all of these may be on the Governor's desk. Some may be
+  awaiting concurrence. It's hard for me to tell. So, take this
+  with a grain of salt.
+</p>
+
+<table>
+% for my $b (@$bills) {
+%= include 'bills/_billrow', b => $b, columns => [ 'watch_button', 'id', 'title', 'sponsors', 'status' ]
+% }
+</table>
+% }

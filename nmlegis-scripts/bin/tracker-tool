@@ -1,0 +1,271 @@
+#!/usr/bin/perl
+#
+# tracker-tool - command-line tool for viewing/updating trackers
+#
+# $Id$
+#
+package ESM::NMLegis::TrackerTool;
+
+use v5.14;
+use utf8;
+use open qw( :encoding(UTF-8) :std );
+
+use strict;
+use warnings;
+
+(our $ME = $0) =~ s|.*/||;
+(our $VERSION = '$Revision: 0.0 $ ') =~ tr/[0-9].//cd;
+
+# For debugging, show data structures using DumpTree($var)
+#use Data::TreeDumper; $Data::TreeDumper::Displayaddress = 0;
+
+use NMLegis                     qw(:all);
+use NMLegis::Bills;
+use NMLegis::Committees;
+use NMLegis::Legislators;
+
+use DBIx::Simple;
+use Date::Parse;
+use File::Slurp;
+use FindBin                     qw($Bin);
+use JSON::XS;
+use Time::Piece;
+
+###############################################################################
+# BEGIN user-customizable section
+
+# END   user-customizable section
+###############################################################################
+
+###############################################################################
+# BEGIN boilerplate args checking, usage messages
+
+sub usage {
+    print  <<"END_USAGE";
+Usage: $ME [OPTIONS] ACTION [tracker [bills...]]
+
+ACTION can be
+
+    list [TRACKERID]
+    add TRACKERID BILL [...]
+
+OPTIONS:
+
+  -v, --verbose  show verbose progress indicators
+  -n, --dry-run  make no actual changes
+
+  --help         display this message
+  --version      display program name and version
+END_USAGE
+
+    exit;
+}
+
+# Command-line options.  Note that this operates directly on @ARGV !
+our $Historical;                # Populating DB with historical data
+our $debug   = 0;
+our $force   = 0;
+our $verbose = 0;
+our $NOT     = '';              # print "blahing the blah$NOT\n" if $debug
+sub handle_opts {
+    use Getopt::Long;
+    GetOptions(
+        'historical' => \$Historical,
+        'debug!'     => \$debug,
+        'dry-run|n!' => sub { $NOT = ' [NOT]' },
+        'force'      => \$force,
+        'verbose|v'  => \$verbose,
+
+        help         => \&usage,
+        version      => sub { print "$ME version $VERSION\n"; exit 0 },
+    ) or die "Try `$ME --help' for help\n";
+}
+
+# END   boilerplate args checking, usage messages
+###############################################################################
+
+############################## CODE BEGINS HERE ###############################
+
+# The term is "modulino".
+__PACKAGE__->main()                                     unless caller();
+
+# Main code.
+sub main {
+    # Note that we operate directly on @ARGV, not on function parameters.
+    # This is deliberate: it's because Getopt::Long only operates on @ARGV
+    # and there's no clean way to make it use @_.
+    handle_opts();                      # will set package globals
+
+    my $action = shift(@ARGV)
+        or die "$ME: Missing ACTION; see $ME --help\n";
+    my $helper = __PACKAGE__->can("do_$action")
+        or die "$ME: invalid action '$action'; see $ME --help\n";
+
+    # cd to the right place
+    chdir "$Bin/../db"
+        or die "$ME: Cannot cd $Bin/../db: $!";
+
+    # Connect to db
+    my $db = "nmlegis.sqlite";
+    my $dbix = DBIx::Simple->connect(
+        "dbi:SQLite:dbname=$db",
+        undef, undef,
+        {
+            sqlite_unicode => 1,
+            foreign_keys   => 1,
+        });
+    $dbix->query('PRAGMA journal_mode = WAL');
+    $dbix->query('PRAGMA synchronous = NORMAL');
+
+    $helper->($dbix, @ARGV);
+}
+
+#############
+#  do_list  #  list all trackers, or list the contents of one
+#############
+sub do_list {
+    my $dbix = shift;
+
+    if (@_) {
+        my $tracker = shift;
+
+        # Given a name? Convert to ID
+        if ($tracker =~ /\D/) {
+            $tracker = find_tracker_by_name($dbix, $tracker);
+        }
+
+        # Show bills in this tracker
+        my @tracked = $dbix->query(<<'END_SQL', $tracker, $YYYY)->hashes;
+SELECT * FROM tracked JOIN bills ON tracked.billid==bills.id
+  WHERE tracked.trackerid=?
+    AND session=?
+  ORDER BY category ASC, bills.chamber ASC, bills.type ASC, bills.number ASC
+END_SQL
+
+        #use Data::Dump; dd \@tracked;
+        # Sort by category
+        my %by_category;
+        for my $ent (@tracked) {
+            my $cat = $ent->{category} || 'Uncategorized';
+            push @{$by_category{$cat}}, $ent;
+        }
+
+        for my $cat (sort keys %by_category) {
+            print "\n", $cat, "\n";
+            for my $ent (@{$by_category{$cat}}) {
+                printf "  %-6s %s\n", $ent->{code}, $ent->{title};
+            }
+        }
+        return;
+    }
+
+    # No args. List all trackers.
+    my %trackers = $dbix->query('SELECT * FROM trackers')->map_hashes('id');
+
+    for my $t (sort { $a <=> $b } keys %trackers) {
+        printf "%3d %s - %s%s\n", $t,
+            $trackers{$t}{name}, $trackers{$t}{description},
+            ($trackers{$t}{hidden} ? ' [PRIVATE]' : '');
+    }
+}
+
+
+sub do_add {
+    my $dbix = shift;
+    my $tracker = shift || die "$ME: 'add' action requires a tracker name\n";
+
+    if ($tracker =~ /\D/) {
+        $tracker = find_tracker_by_name($dbix, $tracker);
+    }
+
+    die "$ME: 'add' action requires one or more bills\n" if ! @_;
+
+  BILL:
+    for my $bill (@_) {
+        my $cat = '';
+        my $oppose = 0;
+
+        # - or ! at beginning or end means "oppose"
+        if ($bill =~ s/^[!-]// || $bill =~ s/[!-]$//) {
+            $oppose = 1;
+        }
+
+        # HB123:Category or HB123=Category
+        if ($bill =~ s/[:=](.*)$//) {
+            $cat = $1;
+        }
+
+        $dbix->query('SELECT id FROM bills WHERE code=? AND session=?',
+                     uc($bill), $YYYY)
+            ->into(my $bill_id);
+        die "$ME: unknown bill '$bill'\n"       if ! $bill_id;
+
+        # Is bill already tracked?
+        $dbix->query(<<'END_SQL', $tracker, $bill_id)->into(my ($cur_cat, $cur_oppose));
+SELECT category,oppose FROM tracked
+ WHERE trackerid=?
+   AND billid=?
+END_SQL
+
+        if (defined $cur_cat) {
+            # Already being tracked. See if we're changing category
+            if (($cat) && ($cat ne $cur_cat)) {
+                printf "%s: already tracked. Changing category from %s to %s\n",
+                    uc($bill), $cur_cat, $cat;
+                $dbix->query(<<'END_SQL', $cat, $tracker, $bill_id);
+UPDATE tracked SET category=?
+ WHERE trackerid=?
+   AND billid=?
+END_SQL
+                add_history($dbix, $tracker, $bill_id, "category -> $cat");
+                next BILL;
+            }
+
+            if ($oppose != $cur_oppose) {
+                my $msg = 'Flagging as ' . ($oppose ? 'OPPOSED' : 'SUPPORT');
+                printf "%s: already tracked. %s\n", uc($bill), $msg;
+                $dbix->query(<<'END_SQL', $oppose, $tracker, $bill_id);
+UPDATE tracked SET oppose=?
+ WHERE trackerid=?
+   AND billid=?
+END_SQL
+
+                add_history($dbix, $tracker, $bill_id, $msg);
+                next BILL;
+            }
+        }
+
+        # Not found
+        $dbix->query(<<'END_SQL', $tracker, $bill_id, $cat, $oppose);
+INSERT INTO tracked VALUES (?, ?, ?, ?)
+END_SQL
+
+        my $msg = 'Started tracking';
+        $msg .= " under $cat" if $cat;
+
+        add_history($dbix, $tracker, $bill_id, $msg);
+    }
+}
+
+sub find_tracker_by_name {
+    my $dbix = shift;
+    my $name = shift;
+
+    $dbix->query('SELECT id FROM trackers WHERE name=?', $name)
+        ->into(my $trackerid);
+    die "$ME: unknown tracker '$name'\n" if ! $trackerid;
+    return $trackerid;
+}
+
+
+sub add_history {
+    my $dbix    = shift;
+    my $tracker = shift;
+    my $bill_id = shift;
+    my $msg     = shift;
+
+    $dbix->query('INSERT INTO tracking_history VALUES (??)',
+                 undef, time, 2, $tracker, $bill_id, $msg);
+}
+
+1;

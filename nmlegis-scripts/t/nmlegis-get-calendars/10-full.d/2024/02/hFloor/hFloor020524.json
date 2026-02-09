@@ -1,0 +1,16 @@
+{
+   "2024-02-05" : {
+      "11:00:00" : {
+         "House" : {
+            "bills" : ["HB114","HB27","HB48","HB133","HB33","HB88","HB91","HB98","HB116","HB127","HB134","HB184","HB195","HJR11","HJM1","HM1","HM15","HM10","HM4","HM5","HM17","HM29","HM13","HM21","HM28","HB209","HJR1","HJR2","HJR5","HJR7"],
+            "date" : "2024-02-05",
+            "datetime" : "2024-02-05T11:00:00",
+            "mtime" : "2024-02-04T14:51:57",
+            "name" : "House",
+            "room" : "House Floor",
+            "time" : "11:00 AM",
+            "url" : "2024/02/hFloor/hFloor020524.pdf"
+         }
+      }
+   }
+}

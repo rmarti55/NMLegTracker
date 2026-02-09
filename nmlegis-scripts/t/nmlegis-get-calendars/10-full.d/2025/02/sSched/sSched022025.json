@@ -1,0 +1,69 @@
+{
+   "2025-02-20" : {
+      "09:00:00" : {
+         "SCONC" : {
+            "bills" : ["SB56","SB264","SB339","SB342","SB358"],
+            "date" : "2025-02-20",
+            "datetime" : "2025-02-20T09:00:00",
+            "mtime" : "2025-02-19T18:31:34",
+            "name" : "SCONC",
+            "room" : "311",
+            "time" : "9:00 AM",
+            "url" : "2025/02/sSched/sSched022025.pdf",
+            "zoom" : "https://us02web.zoom.us/j/82404382748"
+         }
+      },
+      "10:00:00" : {
+         "SIRC" : {
+            "bills" : ["SB41","SB276","SB308","SB379","SB409","SJM2"],
+            "date" : "2025-02-20",
+            "datetime" : "2025-02-20T10:00:00",
+            "mtime" : "2025-02-19T18:31:34",
+            "name" : "SIRC",
+            "room" : "303",
+            "time" : "10:00 AM",
+            "url" : "2025/02/sSched/sSched022025.pdf",
+            "zoom" : "https://us02web.zoom.us/j/83279870726"
+         }
+      },
+      "13:30:00" : {
+         "SFC" : {
+            "bills" : ["SB21","SB133","SB92","SB282"],
+            "date" : "2025-02-20",
+            "datetime" : "2025-02-20T13:30:00",
+            "mtime" : "2025-02-19T18:31:34",
+            "name" : "SFC",
+            "room" : "322",
+            "time" : "1:30 PM",
+            "url" : "2025/02/sSched/sSched022025.pdf",
+            "zoom" : "https://us02web.zoom.us/j/81696207177"
+         },
+         "STBTC" : {
+            "bills" : ["SB183","SB39","SB186","SB202","SB213","SB289","SB221","SB226","SB227","SB199","SB215","SB206"],
+            "date" : "2025-02-20",
+            "datetime" : "2025-02-20T13:30:00",
+            "mtime" : "2025-02-19T18:31:34",
+            "name" : "STBTC",
+            "room" : "321",
+            "time" : "1:30 PM or 30 minutes after floor session",
+            "url" : "2025/02/sSched/sSched022025.pdf",
+            "zoom" : "https://us02web.zoom.us/j/85614440294"
+         }
+      }
+   },
+   "2025-02-21" : {
+      "09:00:00" : {
+         "SEC" : {
+            "bills" : ["SB325","SB354","SJR3","SJR6","SB380","SB386","SB387","SB394"],
+            "date" : "2025-02-21",
+            "datetime" : "2025-02-21T09:00:00",
+            "mtime" : "2025-02-19T18:31:34",
+            "name" : "SEC",
+            "room" : "311",
+            "time" : "9:00 AM",
+            "url" : "2025/02/sSched/sSched022025.pdf",
+            "zoom" : "https://us02web.zoom.us/j/89615593412"
+         }
+      }
+   }
+}

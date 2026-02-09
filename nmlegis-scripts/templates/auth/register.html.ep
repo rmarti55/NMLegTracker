@@ -1,0 +1,21 @@
+% layout 'default';
+% title  'Successful Registration';
+
+<h1>Yay!</h1>
+
+<p>Recommended starting point: visit the <b>public trackers</b>
+(menu top right) and get a sense for the bills they're watching.
+Or use the <b>search</b> form, also top right. Search by keyword,
+bill number, or legislator name.</p>
+
+<p>You can <b>subscribe</b> to a tracker, or <b>add to your tracker</b>.
+Eithr way, you'll see little tracking icons next to bills of interest
+when you visit any page: a hearing schedule, committee vote record,
+whatever. The difference is that, on your tracker, you can add/remove
+bills any time, edit categories, mark bills as opposed. Play around.</p>
+
+<p>This site is under heavy development. Please excuse hiccups.
+If you find bugs, or have suggestions, please let Ed know.</p>
+
+<p>Thank you!</p>
+% $self->stash('skip_legend' => 1);

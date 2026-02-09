@@ -1,0 +1,16 @@
+{
+   "2025-03-01" : {
+      "13:00:00" : {
+         "Senate" : {
+            "bills" : ["SB5","SB299","SB201","SB41","SB199","SB319","SB57","SB142","SB417","SB126","SB113","SB83","SB227","SB186","SJM2","SM2","SM4","SM5","SM7","SM17","HJM3"],
+            "date" : "2025-03-01",
+            "datetime" : "2025-03-01T13:00:00",
+            "mtime" : "2025-03-01T08:24:53",
+            "name" : "Senate",
+            "room" : "Senate Floor",
+            "time" : "1:00 PM",
+            "url" : "2025/03/sFloor/sFloor030125.pdf"
+         }
+      }
+   }
+}

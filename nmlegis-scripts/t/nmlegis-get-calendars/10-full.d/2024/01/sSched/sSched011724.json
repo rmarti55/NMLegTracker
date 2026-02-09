@@ -1,0 +1,41 @@
+{
+   "2024-01-17" : {
+      "00:00:00" : {
+         "SFC" : {
+            "bills" : [],
+            "date" : "2024-01-17",
+            "datetime" : "2024-01-17T00:00:00",
+            "mtime" : "2024-01-16T18:39:22",
+            "name" : "SFC",
+            "room" : "322",
+            "time" : "at call of chair",
+            "url" : "2024/01/sSched/sSched011724.pdf",
+            "zoom" : "https://us02web.zoom.us/j/81696207177"
+         }
+      },
+      "10:00:00" : {
+         "SRC" : {
+            "bills" : [],
+            "date" : "2024-01-17",
+            "datetime" : "2024-01-17T10:00:00",
+            "mtime" : "2024-01-16T18:39:22",
+            "name" : "SRC",
+            "room" : "321",
+            "time" : "10:00 AM",
+            "url" : "2024/01/sSched/sSched011724.pdf"
+         }
+      },
+      "14:00:00" : {
+         "SJC" : {
+            "bills" : [],
+            "date" : "2024-01-17",
+            "datetime" : "2024-01-17T14:00:00",
+            "mtime" : "2024-01-16T18:39:22",
+            "name" : "SJC",
+            "room" : "321",
+            "time" : "2:00 PM",
+            "url" : "2024/01/sSched/sSched011724.pdf"
+         }
+      }
+   }
+}

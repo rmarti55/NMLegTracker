@@ -1,0 +1,16 @@
+{
+   "2025-02-05" : {
+      "10:30:00" : {
+         "House" : {
+            "bills" : ["HM3","HM5","HM8","HM10","HM11","HM13","HM14","HJM3","HM2"],
+            "date" : "2025-02-05",
+            "datetime" : "2025-02-05T10:30:00",
+            "mtime" : "2025-02-04T17:21:35",
+            "name" : "House",
+            "room" : "House Floor",
+            "time" : "10:30 AM",
+            "url" : "2025/02/hFloor/hFloor020525.pdf"
+         }
+      }
+   }
+}

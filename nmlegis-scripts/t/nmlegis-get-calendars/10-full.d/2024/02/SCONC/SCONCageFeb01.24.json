@@ -1,0 +1,17 @@
+{
+   "2024-02-01" : {
+      "09:00:00" : {
+         "SCONC" : {
+            "bills" : ["SB169","SB228","SB213","SB215"],
+            "date" : "2024-02-01",
+            "datetime" : "2024-02-01T09:00:00",
+            "mtime" : "2024-01-31T13:29:18",
+            "name" : "SCONC",
+            "room" : "311",
+            "time" : "9:00 AM",
+            "url" : "2024/02/SCONC/SCONCageFeb01.24.pdf",
+            "zoom" : "https://us02web.zoom.us/j/82404382748"
+         }
+      }
+   }
+}

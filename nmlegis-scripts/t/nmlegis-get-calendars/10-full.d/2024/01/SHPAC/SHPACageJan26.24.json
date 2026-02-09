@@ -1,0 +1,17 @@
+{
+   "2024-01-26" : {
+      "13:00:00" : {
+         "SHPAC" : {
+            "bills" : ["SB69","SB87","SB95","SB113","SB21","SB71","SB102","SB122","SB126"],
+            "date" : "2024-01-26",
+            "datetime" : "2024-01-26T13:00:00",
+            "mtime" : "2024-01-25T10:35:33",
+            "name" : "SHPAC",
+            "room" : "311",
+            "time" : "1:00 PM or 1/2 HR after floor session",
+            "url" : "2024/01/SHPAC/SHPACageJan26.24.pdf",
+            "zoom" : "https://us02web.zoom.us/j/81287336647"
+         }
+      }
+   }
+}

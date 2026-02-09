@@ -1,0 +1,246 @@
+#!/usr/bin/perl
+#
+# nmlegis-get-accdb - fetch and unpack the .zip file with the accdb
+#
+package ESM::NMLegisGetAccdb;
+
+use v5.14;
+use strict;
+use warnings;
+
+use utf8;
+use open qw( :encoding(UTF-8) :std );
+
+(our $ME = $0) =~ s|.*/||;
+(our $VERSION = '$Revision: 1.30 $ ') =~ tr/[0-9].//cd;
+
+use NMLegis                     qw(:all);
+
+use File::stat;
+use File::Temp                  qw(tempdir);
+use JSON::XS;
+use LWP::Simple                 qw(mirror);
+use Time::Piece;
+
+###############################################################################
+# BEGIN user-customizable section
+
+our $ZipURL = "https://nmlegis.gov/Sessions/$YY%20Regular/other/LegInfo$YY.zip";
+
+(our $ZipLocal = "$ENV{HOME}/.cache/$ME/LegInfo$YY.zip")
+    =~ s|/nmlegis-|/nmlegis/|;
+
+# Current schema version. Should be updated only on breaking changes.
+# It is defined here, in this script, not in the module, because this
+# script is the one that defines how we save data. (The module reads it,
+# though, so maybe I need to rethink that)
+our $JSON_Schema = '20230118';
+
+# END   user-customizable section
+###############################################################################
+
+###############################################################################
+# BEGIN boilerplate args checking, usage messages
+
+sub usage {
+    print  <<"END_USAGE";
+Usage: $ME [OPTIONS]
+
+$ME fetches and unpacks the nmlegis.gov accdb.
+
+OPTIONS:
+
+  --debug        use local cache (to avoid slamming nmlegis)
+
+  -v, --verbose  show verbose progress indicators
+  -n, --dry-run  make no actual changes
+
+  --help         display this message
+  --version      display program name and version
+END_USAGE
+
+    exit;
+}
+
+# Command-line options.  Note that this operates directly on @ARGV !
+our $debug   = 0;
+our $force   = 0;
+our $verbose = 0;
+our $NOT     = '';              # print "blahing the blah$NOT\n" if $debug
+sub handle_opts {
+    use Getopt::Long;
+    GetOptions(
+        'debug!'     => \$debug,
+        'dry-run|n!' => sub { $NOT = ' [NOT]' },
+        'force'      => \$force,
+        'verbose|v'  => \$verbose,
+
+        help         => \&usage,
+        version      => sub { print "$ME version $VERSION\n"; exit 0 },
+    ) or die "Try `$ME --help' for help\n";
+}
+
+# END   boilerplate args checking, usage messages
+###############################################################################
+
+############################## CODE BEGINS HERE ###############################
+
+# The term is "modulino".
+__PACKAGE__->main()                                     unless caller();
+
+# Main code.
+sub main {
+    # Note that we operate directly on @ARGV, not on function parameters.
+    # This is deliberate: it's because Getopt::Long only operates on @ARGV
+    # and there's no clean way to make it use @_.
+    handle_opts();                      # will set package globals
+
+    # Used by lower levels to avoid fetching from nmlegis
+    $ENV{NMLEGIS_USE_CACHE} //= $debug;
+
+    unless ($ENV{NMLEGIS_USE_CACHE}) {
+        my $code = mirror($ZipURL, $ZipLocal);
+        if ($code >= 400) {
+            die "$ME: mirror exited with code $code"
+              unless localtime->strftime("%m%d") le "0115";
+        }
+        if ($code >= 300) {
+            print "[no change]\n"       if $verbose || -t *STDIN;
+            exit 0;
+        }
+    }
+
+    # FIXME unpack
+    unpack_zip($ZipLocal);
+}
+
+sub unpack_zip {
+    my $zip_path = shift;
+
+    my $tmpdir = tempdir("$ME.XXXXXXX", TMPDIR => 1, CLEANUP => !$debug);
+
+    my @cmd = ('unzip', '-q', $zip_path, -d => $tmpdir);
+    system(@cmd) == 0
+        or die "$ME: command failed: @cmd\n";
+
+    chdir $tmpdir
+        or die "$ME: cd $tmpdir: $!";
+
+    my ($accdb) = glob("*.accdb");
+    $accdb =~ /LegInfo/
+        or die "$ME: unexpected accdb filename $accdb";
+
+    my $sql = 'foo.sql';
+    my @tables = dump_schema($accdb, $sql);
+    for my $t (@tables) {
+        dump_table($accdb, $t, $sql);
+
+        if (-d (my $explore_dir = "$ENV{HOME}/tmp/nmlegis/accdb")) {
+            write_local_json_for_ed($accdb, $t, $explore_dir);
+        }
+    }
+
+    # Read it into a new sqlite db
+    my $db_file = "$ENV{HOME}/.local/share/nmlegis/nmlegis.db";
+    my $db_file_tmp = "$db_file.tmp.$$";
+
+    my $kidpid = fork;
+    defined $kidpid
+        or die "$ME: Could not fork: $!";
+    if ($kidpid == 0) {
+        # We are the child
+        open *STDIN, '<', $sql
+            or die "$ME: Could not reopen STDIN: $!";
+        exec('sqlite3', $db_file_tmp) == 0
+            or die "$ME: Could not exec sqlite3";
+    }
+
+    # We are the parent
+    waitpid $kidpid, 0;
+
+    # Match time with zip file
+    my $st = stat($zip_path)
+        or die "$ME: Internal error: could not stat $zip_path: $!";
+    utime $st->mtime, $st->mtime, $db_file_tmp;
+
+    # Make read-only and move into place
+    chmod 0444 => $db_file_tmp;
+    rename $db_file_tmp => $db_file;
+
+    chdir '/';
+}
+
+
+sub dump_schema {
+    my $accdb   = shift;
+    my $outfile = shift;
+    my @tables;
+
+    my @cmd = ('mdb-schema', $accdb, 'sqlite');
+    open my $fh_in, '-|', @cmd
+        or die "$ME: Cannot fork: $!";
+    open my $fh_out, '>', $outfile
+        or die "$ME: Cannot create $outfile: $!";
+    while (my $line = <$fh_in>) {
+        print { $fh_out } $line;
+
+        if ($line =~ /^CREATE\s+TABLE\s+`(.*)`/) {
+            push @tables, $1;
+        }
+   }
+    close $fh_in
+        or die "$ME: Error running @cmd\n";
+    close $fh_out
+        or die "$ME: Error writing $outfile: $!\n";
+
+    return @tables;
+}
+
+sub dump_table {
+    my $accdb = shift;
+    my $table = shift;
+    my $outfile = shift;
+
+    my @cmd = ('mdb-export', '--insert' => 'sqlite', '-0' => 'z', '--bin' => 'octal', '-q' => "'", $accdb, $table);
+    open my $fh_in, '-|', @cmd
+        or die "$ME: Cannot fork: $!";
+    open my $fh_out, '>>', $outfile
+        or die "$ME: Cannot append to $outfile: $!";
+    print { $fh_out } "\n";
+
+    while (my $line = <$fh_in>) {
+        print { $fh_out } $line;
+   }
+    close $fh_in
+        or die "$ME: Error running @cmd\n";
+    close $fh_out
+        or die "$ME: Error appending to $outfile: $!\n";
+}
+
+# 2024-01-18 for exploring to see what changes over time
+sub write_local_json_for_ed {
+    my $accdb  = shift;
+    my $table  = shift;
+    my $outdir = shift;
+
+    # Don't blindly write the mdb-json output: that's a list of rows,
+    # and some of the rows are super long, making it impossible to see
+    # small changes.
+    my @rows;
+    my @cmd = ('mdb-json', $accdb, $table);
+    open my $fh_in, '-|', @cmd
+        or die "$ME: Cannot fork: $!";
+    while (my $line = <$fh_in>) {
+        chomp $line;
+        push @rows, JSON::XS->new->utf8(0)->decode($line);
+    }
+    close $fh_in
+        or die "$ME: Error running @cmd: $!";
+
+    # This function tracks everything in hg
+    write_json_outfile(\@rows, "$outdir/$table");
+}
+
+
+
+1;

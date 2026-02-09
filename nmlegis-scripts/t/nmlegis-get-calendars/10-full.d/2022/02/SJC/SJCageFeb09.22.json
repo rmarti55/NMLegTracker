@@ -1,0 +1,17 @@
+{
+   "2022-02-09" : {
+      "13:30:00" : {
+         "SJC" : {
+            "bills" : ["SB8","SJR6","SB84","SB54","SB12"],
+            "date" : "2022-02-09",
+            "datetime" : "2022-02-09T13:30:00",
+            "mtime" : "2022-02-11T18:15:31",
+            "name" : "SJC",
+            "room" : "321",
+            "time" : "1:30 PM or 1/2 hour after floor",
+            "url" : "2022/02/SJC/SJCageFeb09.22.pdf",
+            "zoom" : "https://us02web.zoom.us/j/83347538157"
+         }
+      }
+   }
+}

@@ -1,0 +1,198 @@
+{
+   "2022-01-20" : {
+      "09:00:00" : {
+         "HENRC" : {
+            "bills" : [],
+            "date" : "2022-01-20",
+            "datetime" : "2022-01-20T09:00:00",
+            "mtime" : "2022-01-19T18:48:55",
+            "name" : "HENRC",
+            "room" : "317",
+            "time" : "9:00 AM",
+            "url" : "/home/esm/.cache/nmlegis/get-calendars/2022/01/hSched/hSched012022.pdf",
+            "zoom" : "https://us02web.zoom.us/j/89262589978"
+         },
+         "HRDLC" : {
+            "bills" : [],
+            "date" : "2022-01-20",
+            "datetime" : "2022-01-20T09:00:00",
+            "mtime" : "2022-01-19T18:48:55",
+            "name" : "HRDLC",
+            "room" : "315",
+            "time" : "9:00 AM",
+            "url" : "/home/esm/.cache/nmlegis/get-calendars/2022/01/hSched/hSched012022.pdf",
+            "zoom" : "https://us02web.zoom.us/j/81957035636"
+         },
+         "HTPWC" : {
+            "bills" : [],
+            "date" : "2022-01-20",
+            "datetime" : "2022-01-20T09:00:00",
+            "mtime" : "2022-01-19T18:48:55",
+            "name" : "HTPWC",
+            "room" : "305",
+            "time" : "9:00 AM",
+            "url" : "/home/esm/.cache/nmlegis/get-calendars/2022/01/hSched/hSched012022.pdf",
+            "zoom" : "https://us02web.zoom.us/j/85747137421"
+         },
+         "SFC" : {
+            "bills" : [],
+            "date" : "2022-01-20",
+            "datetime" : "2022-01-20T09:00:00",
+            "mtime" : "2022-01-19T17:37:30",
+            "name" : "SFC",
+            "room" : "322",
+            "time" : "9:00 AM",
+            "url" : "/home/esm/.cache/nmlegis/get-calendars/2022/01/sSched/sSched012022.pdf",
+            "zoom" : "https://us02web.zoom.us/j/83313102742"
+         }
+      },
+      "10:00:00" : {
+         "SCONC" : {
+            "bills" : [],
+            "date" : "2022-01-20",
+            "datetime" : "2022-01-20T10:00:00",
+            "mtime" : "2022-01-19T17:37:30",
+            "name" : "SCONC",
+            "room" : "311",
+            "time" : "10:00 AM",
+            "url" : "/home/esm/.cache/nmlegis/get-calendars/2022/01/sSched/sSched012022.pdf",
+            "zoom" : "https://us02web.zoom.us/j/86543845863"
+         }
+      },
+      "11:30:00" : {
+         "House" : {
+            "bills" : [],
+            "date" : "2022-01-20",
+            "datetime" : "2022-01-20T11:30:00",
+            "mtime" : "2022-01-19T15:54:42",
+            "name" : "House",
+            "room" : "House Floor",
+            "time" : "11:30 AM",
+            "url" : "/home/esm/.cache/nmlegis/get-calendars/2022/01/hFloor/hFloor012022.pdf"
+         }
+      },
+      "12:00:00" : {
+         "Senate" : {
+            "bills" : ["SM3","SM4","SM5","SM8"],
+            "date" : "2022-01-20",
+            "datetime" : "2022-01-20T12:00:00",
+            "mtime" : "2022-01-19T17:51:07",
+            "name" : "Senate",
+            "room" : "Senate Floor",
+            "time" : "12:00",
+            "url" : "/home/esm/.cache/nmlegis/get-calendars/2022/01/sFloor/sFloor012022.pdf"
+         }
+      },
+      "13:30:00" : {
+         "HAFC" : {
+            "bills" : [],
+            "date" : "2022-01-20",
+            "datetime" : "2022-01-20T13:30:00",
+            "mtime" : "2022-01-19T18:48:55",
+            "name" : "HAFC",
+            "room" : "307",
+            "time" : "1:30 PM",
+            "url" : "/home/esm/.cache/nmlegis/get-calendars/2022/01/hSched/hSched012022.pdf",
+            "zoom" : "https://us02web.zoom.us/j/81883944382"
+         }
+      }
+   },
+   "2022-01-21" : {
+      "10:00:00" : {
+         "HHHC" : {
+            "bills" : [],
+            "date" : "2022-01-21",
+            "datetime" : "2022-01-21T10:00:00",
+            "mtime" : "2022-01-19T18:48:55",
+            "name" : "HHHC",
+            "room" : "315",
+            "time" : "10:00 AM",
+            "url" : "/home/esm/.cache/nmlegis/get-calendars/2022/01/hSched/hSched012022.pdf",
+            "zoom" : "https://us02web.zoom.us/j/82329588136"
+         }
+      },
+      "13:30:00" : {
+         "HJC" : {
+            "bills" : [],
+            "date" : "2022-01-21",
+            "datetime" : "2022-01-21T13:30:00",
+            "mtime" : "2022-01-19T18:48:55",
+            "name" : "HJC",
+            "room" : "309",
+            "time" : "1:30 PM",
+            "url" : "/home/esm/.cache/nmlegis/get-calendars/2022/01/hSched/hSched012022.pdf",
+            "zoom" : "https://us02web.zoom.us/j/83818625975"
+         }
+      }
+   },
+   "2022-01-24" : {
+      "09:00:00" : {
+         "SFC" : {
+            "bills" : [],
+            "date" : "2022-01-24",
+            "datetime" : "2022-01-24T09:00:00",
+            "mtime" : "2022-01-19T17:37:30",
+            "name" : "SFC",
+            "room" : "322",
+            "time" : "9:00 AM",
+            "url" : "/home/esm/.cache/nmlegis/get-calendars/2022/01/sSched/sSched012022.pdf"
+         }
+      }
+   },
+   "2022-01-25" : {
+      "09:00:00" : {
+         "SFC" : {
+            "bills" : [],
+            "date" : "2022-01-25",
+            "datetime" : "2022-01-25T09:00:00",
+            "mtime" : "2022-01-19T17:37:30",
+            "name" : "SFC",
+            "room" : "322",
+            "time" : "9:00 AM",
+            "url" : "/home/esm/.cache/nmlegis/get-calendars/2022/01/sSched/sSched012022.pdf"
+         }
+      }
+   },
+   "2022-01-26" : {
+      "13:30:00" : {
+         "SFC" : {
+            "bills" : [],
+            "date" : "2022-01-26",
+            "datetime" : "2022-01-26T13:30:00",
+            "mtime" : "2022-01-19T17:37:30",
+            "name" : "SFC",
+            "room" : "322",
+            "time" : "1:30 PM",
+            "url" : "/home/esm/.cache/nmlegis/get-calendars/2022/01/sSched/sSched012022.pdf"
+         }
+      }
+   },
+   "2022-01-27" : {
+      "09:00:00" : {
+         "SFC" : {
+            "bills" : [],
+            "date" : "2022-01-27",
+            "datetime" : "2022-01-27T09:00:00",
+            "mtime" : "2022-01-19T17:37:30",
+            "name" : "SFC",
+            "room" : "322",
+            "time" : "9:00 AM",
+            "url" : "/home/esm/.cache/nmlegis/get-calendars/2022/01/sSched/sSched012022.pdf"
+         }
+      }
+   },
+   "2022-01-28" : {
+      "13:30:00" : {
+         "SFC" : {
+            "bills" : [],
+            "date" : "2022-01-28",
+            "datetime" : "2022-01-28T13:30:00",
+            "mtime" : "2022-01-19T17:37:30",
+            "name" : "SFC",
+            "room" : "322",
+            "time" : "1:30 PM",
+            "url" : "/home/esm/.cache/nmlegis/get-calendars/2022/01/sSched/sSched012022.pdf"
+         }
+      }
+   }
+}

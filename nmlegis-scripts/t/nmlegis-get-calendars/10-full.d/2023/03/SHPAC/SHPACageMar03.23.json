@@ -1,0 +1,17 @@
+{
+   "2023-03-03" : {
+      "13:30:00" : {
+         "SHPAC" : {
+            "bills" : ["SB389","SB421","SB453","SB463","SB484","SB485"],
+            "date" : "2023-03-03",
+            "datetime" : "2023-03-03T13:30:00",
+            "mtime" : "2023-03-01T12:59:27",
+            "name" : "SHPAC",
+            "room" : "311",
+            "time" : "1:30 PM or 1/2 hr after floor sesssion",
+            "url" : "2023/03/SHPAC/SHPACageMar03.23.pdf",
+            "zoom" : "https://us02web.zoom.us/j/81287336647"
+         }
+      }
+   }
+}

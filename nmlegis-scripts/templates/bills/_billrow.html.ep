@@ -1,0 +1,60 @@
+% return unless $b;
+% my @committee_progress;
+% my $rowspan = '';
+% if (grep { /^status/ } @$columns) {
+%     # This is passed along to old-code html row; we highlight our committees
+%     my @mylegiscodes;
+%     if ($self->user) {
+%         for my $chamber (qw(H S)) {
+%             if (my $l = $self->user->my_legislator($chamber)) {
+%                 push @mylegiscodes, $l->code, map { $_->code } $l->committees;
+%             }
+%         }
+%     }
+%     @committee_progress = $b->html_progress_table(@mylegiscodes);
+%     if (@committee_progress > 1 && grep { /^status/ } @$columns) {
+%         $rowspan = sprintf(" rowspan=\"%d\"", scalar(@committee_progress));
+%     }
+% }
+% my $watching = $self->user->is_watching($b);
+% my @css_classes = $b->css_classes;
+% push @css_classes, 'watching' if $watching;
+% push @css_classes, 'oppose'   if grep { $watching->{$_} < 0 } keys %$watching;
+% my $css_classes = join(' ', @css_classes);
+<tr class="<%= $css_classes %>">
+% if (grep { /^watch_button/ } @$columns) {
+%= include 'bills/_watch_button', b => $b, w => $watching, rowspan => $rowspan
+% }
+% if (grep { /^tracker_form/ } @$columns) {
+%= include 'trackers/_edit_buttons', b => $b, w => $watching, rowspan => $rowspan
+% }
+%= include 'bills/_bill_cell', b => $b, rowspan => $rowspan
+  <td class="billtitle"<%== $rowspan %>><%= $b->title %></td>
+
+  % if (grep { /^sponsor/ } @$columns) {
+  %= include 'bills/_sponsors_cell', b => $b, rowspan => $rowspan
+  % }
+
+  % if (grep { /^status/ } @$columns) {
+  %     $css_classes =~ s|\bnewbill\b||;
+  %     if (@committee_progress) {
+  %         my $need_tr;
+  %             for my $cell (@committee_progress) {
+  %                 if ($need_tr) {
+  <tr class="<%= $css_classes %>">
+  %                 }
+  <%== $cell %>
+
+  %# FIXME! EXPERIMENTAL (02-24): way for users to update bills
+  %                 if (!$need_tr && grep { /^update/ } @$columns) {
+  %=                    include 'bills/_status_update_button', b => $b, rcspan => $rowspan
+  %                 }
+  </tr>
+  %             $need_tr = 1;
+  %         }
+  %     } else {
+  %# The long ASDF-ASDF-ASDF string
+  <td colspan='4'><%= $b->actions %></td></tr>
+  %     }
+  % }
+</tr>

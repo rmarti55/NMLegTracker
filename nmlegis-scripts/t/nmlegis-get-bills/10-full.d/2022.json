@@ -1,0 +1,3278 @@
+{
+   "H" : {
+      "B" : {
+         "1" : {
+            "actions" : "[1] HAFC-HAFC [2] DP/a - PASSED/H (63-0) [1] SFC-SFC [3] DP [4] PASSED/S (36-0) [2] SGND BY GOV (Jan. 21) Ch. 1.",
+            "emergency" : "*",
+            "sponsors" : ["HMARJ"],
+            "title" : "FEED BILL"
+         },
+         "10" : {
+            "actions" : "HPREF [2] not prntd-HRC API.",
+            "emergency" : "*",
+            "sponsors" : ["HBOUN","HROYB"],
+            "title" : "ASIAN AMERICAN, PACIFIC ISLE & HAWAIIAN DAY"
+         },
+         "100" : {
+            "actions" : "[2] not prntd-HRC API.",
+            "sponsors" : ["HLANE","HSWEE","HDOWR","HROAN","HPETT","HGARR","HGOAN","HSARI"],
+            "title" : "CERTAIN PEACE OFFICER SURVIVOR'S BENEFITS"
+         },
+         "101" : {
+            "actions" : "[2] HENRC/HAFC-HENRC [3] DNP-CS/DP-HAFC [6] DP/a API.",
+            "sponsors" : ["HSARI","HMATT","HORTE","HMCQU","HANDP","HARMG","HDOWR","HFERJ","SSTEF"],
+            "title" : "NM REFORESTATION CENTER ACT"
+         },
+         "102" : {
+            "actions" : "[2] HCEDC/HTRC-HCEDC [4] DP-HTRC [6] DP/a [8] PASSED/H (68-0) [11] STBTC-STBTC [14] DP [17] PASSED/S (28-0) SGND BY GOV (Mar. 8) Ch. 46.",
+            "sponsors" : ["HCADA","HHARP"],
+            "title" : "ENTITY-LEVEL TAX INCOME & PAYMENT"
+         },
+         "103" : {
+            "actions" : "[2] HEC/HAFC-HEC [4] DP-HAFC API.",
+            "sponsors" : ["HSERR","HDIXO","SHICK"],
+            "title" : "CNM VENTURE STUDIO"
+         },
+         "104" : {
+            "actions" : "[2] HCEDC/HAFC-HCEDC [4] DP-HAFC [6] DP/a [8] PASSED/H (49-20) [11] STBTC-STBTC [14] DP [17] PASSED/S (27-0) SGND BY GOV (Mar. 1) Ch. 21.",
+            "sponsors" : ["HDIXO","HSERR","HMARJ","HMAES","SHICK","HHEJO","HLUTA","SSTEF"],
+            "title" : "VENTURE CAPITAL PROGRAM ACT"
+         },
+         "105" : {
+            "actions" : "[2] not prntd-HRC-germane-prntd- - ref HLVMC/HJC-HLVMC API.",
+            "sponsors" : ["HREHM","HBLAC","HANDP","SSEDI","HHOCH","HREEB"],
+            "title" : "PUBLIC RETIREES RETURNING TO WORK"
+         },
+         "106" : {
+            "actions" : "[2] not prntd-HRC-germane-prntd- - ref HLVMC/HJC-HLVMC API.",
+            "sponsors" : ["HREHM","HANDP","HBLAC","SSEDI","HHOCH","HDUNC"],
+            "title" : "LAW ENFORCEMENT RETIREES RETURNING TO WORK"
+         },
+         "107" : {
+            "actions" : "[2] HAFC-HAFC API.",
+            "sponsors" : ["HSMAL","HSWEE","HLUND"],
+            "title" : "GENERAL APPROPRIATION ACT OF 2022"
+         },
+         "108" : {
+            "actions" : "[2] HAAWC/HAFC-HAAWC [5] DP-HAFC API.",
+            "sponsors" : ["HZAMO","HTOWJ"],
+            "title" : "STATEWIDE WEATHER STATION NETWORK"
+         },
+         "109" : {
+            "actions" : "[2] HEC/HAFC-HEC [4] DP-HAFC API.",
+            "sponsors" : ["HSERR","HDIXO"],
+            "title" : "UNEMPLOYED WORKER BOOT CAMP TRAINING"
+         },
+         "11" : {
+            "actions" : "HPREF [2] HENRC/HTRC-HENRC- DP/a-HTRC API.",
+            "sponsors" : ["HSARI","HDIXO","SSTEW","SSTEF"],
+            "title" : "ENERGY STORAGE SYSTEM TAX CREDIT"
+         },
+         "110" : {
+            "actions" : "[2] HLVMC/HJC-HLVMC API.",
+            "sponsors" : ["HANDP"],
+            "title" : "JUDICIAL RETIREMENT FUND SOLVENCY"
+         },
+         "111" : {
+            "actions" : "[2] HHHC/HAFC-HHHC API.",
+            "sponsors" : ["HGAMP"],
+            "title" : "SOUTH VALLEY TREE CUTTING SERVICES"
+         },
+         "112" : {
+            "actions" : "[2] HHHC/HAFC-HHHC [4] DP/a-HAFC [6] DP [7] PASSED/H (66-0) [11] SFC-SFC API.",
+            "emergency" : "*",
+            "sponsors" : ["HGAMP"],
+            "title" : "SUBSTANCE USE DISORDER PGMS & CLINICS"
+         },
+         "113" : {
+            "actions" : "[2] HHHC/HAFC-HHHC API.",
+            "sponsors" : ["HGAMP"],
+            "title" : "SOUTH VALLEY MULTIPURPOSE SENIOR CENTER"
+         },
+         "114" : {
+            "actions" : "[2] HGEIC/HAFC-HGEIC [4] DP-HAFC API.",
+            "sponsors" : ["HMATT"],
+            "title" : "BERNALILLO CRIMINAL JUSTICE DATA-SHARING"
+         },
+         "115" : {
+            "actions" : "[2] HEC/HAFC-HEC API.",
+            "sponsors" : ["HLUTA","HHEPA","SHEMP"],
+            "title" : "SCHOOL STEM PILOT PROGRAM"
+         },
+         "116" : {
+            "actions" : "[2] not prntd-HJC/HAFC-HJC [4] DP/a-HAFC [6] DP/a API.",
+            "sponsors" : ["HMAES","HEGOL","HMARJ","HGADO"],
+            "title" : "REVISOR OF STATUTES"
+         },
+         "117" : {
+            "actions" : "[2] HRDLC/HAFC-HRDLC [3] DP-HAFC API.",
+            "sponsors" : ["HSWEE","HARMG","HANDP"],
+            "title" : "NM HISTORIC WOMEN MARKER INITIATIVE"
+         },
+         "118" : {
+            "actions" : "[2] HEC/HAFC-HEC API.",
+            "sponsors" : ["HLENT"],
+            "title" : "EARLY CHILDHOOD DEPT. & TRIBAL AGREEMENTS"
+         },
+         "119" : {
+            "actions" : "[2] HEC/HAFC-HEC [3] DP-HAFC [6] DP [8] PASSED/H (62-0) [11] SEC-SEC [12] DP [14] PASSED/S (34-0) SGND BY GOV (Mar. 1) Ch. 22.",
+            "sponsors" : ["HROMA"],
+            "title" : "ADJUST CERTAIN SCHOOL DISTRIBUTIONS"
+         },
+         "12" : {
+            "actions" : "HPREF [2] HEC/HAFC-HEC [3] DP-HAFC API.",
+            "sponsors" : ["HSARI"],
+            "title" : "LANDSCAPE ASSESSMENT FOR AMERICASERVES"
+         },
+         "120" : {
+            "actions" : "[2] not prntd-HRC API.",
+            "sponsors" : ["HGARR","HFIGU","HCHAN","HSWEE","HHERS","SFIGU","HGURR","HTOLE"],
+            "title" : "BROADBAND CHANGES & DEFINITIONS"
+         },
+         "121" : {
+            "actions" : "[2] HAAWC/HAFC-HAAWC [5] DP-HAFC API.",
+            "sponsors" : ["HHERS","HCAST","HORTE","HROAN","HLENT","HSISA"],
+            "title" : "ACEQUIA & COMMUNITY DITCH FUND"
+         },
+         "122" : {
+            "actions" : "[2] HEC/HAFC-HEC [6] DNP-CS/DP-HAFC API.",
+            "sponsors" : ["HDOWR","HMADR","HLARA","HGARR"],
+            "title" : "SCHOOL CYBERSECURITY PROGRAM"
+         },
+         "123" : {
+            "actions" : "[2] HCPAC/HTRC-HCPAC API.",
+            "emergency" : "*",
+            "sponsors" : ["HDOWR","HANDP"],
+            "title" : "FACE MASK SALE GROSS RECEIPTS"
+         },
+         "124" : {
+            "actions" : "[2] HJC/HAFC-HJC [4] DP/a-HAFC [6] DP/a [7] fl/a- PASSED/H (66-0) [11] SFC-SFC API.",
+            "sponsors" : ["HBROW"],
+            "title" : "CREATE ADDITIONAL JUDGESHIPS"
+         },
+         "125" : {
+            "actions" : "[2] HENRC/HTRC-HENRC [6] DP-HTRC API.",
+            "sponsors" : ["HORTE","HLUTA"],
+            "title" : "SUSTAINABLE BUILDING TAX CREDIT DATES"
+         },
+         "126" : {
+            "actions" : "[2] HLVMC/HGEIC-HLVMC [5] DP-HGEIC [6] DP API.",
+            "sponsors" : ["HLUTA","HHEPA","HROYB","SLOPE"],
+            "title" : "STATE PERSONNEL DIVERSITY ACT"
+         },
+         "127" : {
+            "actions" : "[2] HENRC/HJC-HENRC [5] DP-HJC [6] DP/a [8] tbld/H API.",
+            "emergency" : "*",
+            "sponsors" : ["HMCQU","HLUTA","SSTEI"],
+            "title" : "STORAGE OF CERTAIN RADIOACTIVE WASTE"
+         },
+         "128" : {
+            "actions" : "[2] HTPWC/HAFC-HTPWC [5] DP-HAFC API.",
+            "sponsors" : ["HEZZE","HNIBE","HSCOT","HCOOK","HANDP","HSZCZ"],
+            "title" : "HIGHWAY 380 PROJECTS"
+         },
+         "129" : {
+            "actions" : "[2] HCEDC/HTRC-HCEDC [5] DNP-CS/w/o rec-HTRC API.",
+            "sponsors" : ["HSWEE","HMAES","HARMG"],
+            "title" : "BUSINESS INCOME BY SINGLE SALES FACTOR"
+         },
+         "13" : {
+            "actions" : "HPREF [2] HEC/HAFC-HEC [3] DP/a-HAFC [6] DP/a [7] PASSED/H (64-0) [11] SEC-SEC [12] DP [14] PASSED/S (36-0) SGND BY GOV (Mar. 1) Ch. 17.",
+            "sponsors" : ["HSARI","HGARR","SSOUL","SSTEW","HLANE","HARMG","HCHNI","HCUCA","HHERN","HJONJ","HLITC","HSEEL","HTHOE"],
+            "title" : "TEACHER RESIDENCY CHANGES"
+         },
+         "130" : {
+            "actions" : "[2] HEC/HAFC-HEC API.",
+            "sponsors" : ["HMAES","HMADR","HSWEE","HALLI","HPOWD","HBORR","HHEPA"],
+            "title" : "PERSONAL FINANCE AS SCHOOL ELECTIVE"
+         },
+         "131" : {
+            "actions" : "[2] HAAWC/HAFC-HAAWC [5] DP-HAFC API.",
+            "sponsors" : ["HROAN","HLUTA"],
+            "title" : "WATER DATA ACT IMPLEMENTATION"
+         },
+         "132" : {
+            "actions" : "[2] HCPAC/HJC-HCPAC [4] DP/a-HJC [5] DP/a [6] fl/aaa- PASSED/H (51-18) [9] SHPAC/SJC-SHPAC [11] DP/a-SJC [14] DP/a [16] fl/aa- PASSED/S (19-8) [8] h/cncrd SGND BY GOV (Mar. 1) Ch. 23.",
+            "sponsors" : ["HHERS","HEGOL","HGARR","HANDP","HELYD","HBORR"],
+            "title" : "INTEREST RATES FOR CERTAIN LOANS"
+         },
+         "133" : {
+            "actions" : "[2] not prntd-HRC API.",
+            "sponsors" : ["HHERN"],
+            "title" : "MUNICIPAL COURT RESTITUTION ORDERS"
+         },
+         "134" : {
+            "actions" : "[2] HCEDC/HAFC-HCEDC [4] DNP-CS/DP-HAFC [7] DP/a [8] PASSED/H (64-0) [11] SIRC-SIRC [14] DP [19] PASSED/S (39-0) VETO.",
+            "sponsors" : ["HMAES","HLANE","SONEI"],
+            "title" : "REINSTITUTE SPORTS AUTHORITY"
+         },
+         "135" : {
+            "actions" : "[2] not prntd-HRC- w/drn -germane-prntd- - ref HHHC/HGEIC-HHHC [4] DNP-CS/DP-HGEIC [5] DP [6] PASSED/H (52-12) [8] SIRC/SJC-SIRC [11] DP/a-SJC [12] DP/a [14] fl/a- PASSED/S (33-4) [8] h/cncrd SGND BY GOV (Mar. 3) Ch. 41.",
+            "sponsors" : ["HLOUI","SIVEY","HCADA"],
+            "title" : "INDIAN FAMILY PROTECTION ACT"
+         },
+         "136" : {
+            "actions" : "[2] not prntd-HRC API.",
+            "sponsors" : ["HSARI"],
+            "title" : "CRIMINAL OFFENDER EMPLOYMENT & SCHOOLS"
+         },
+         "137" : {
+            "actions" : "[2] not prntd-HRC API.",
+            "sponsors" : ["HDOWR","HGAMP"],
+            "title" : "PUBLIC CONTRACTS & MINIMUM WAGE INCREASES"
+         },
+         "138" : {
+            "actions" : "[2] not prntd-HRC API.",
+            "sponsors" : ["HSTRI","HALLI","HMONR","HLANE"],
+            "title" : "ELECTRIC GENERATING EMISSION STANDARDS DATES"
+         },
+         "139" : {
+            "actions" : "[2] not prntd-HRC API.",
+            "emergency" : "*",
+            "sponsors" : ["HREHM"],
+            "title" : "VOTER EDUCATION & ELECTIONS TASK FORCE"
+         },
+         "14" : {
+            "actions" : "HPREF [2] HENRC/HTRC-HENRC API.",
+            "sponsors" : ["HCHAN","HSARI","HSMAL","HLUTA"],
+            "title" : "BONDS & GRT DEDUCTION FOR ELECTRIC STORAGE"
+         },
+         "140" : {
+            "actions" : "[2] HCPAC/HJC/HAFC-HCPAC [5] DP-HJC API.",
+            "sponsors" : ["HREHM","HMATT"],
+            "title" : "NO 2ND DEGREE MURDER PROSECUTION TIME LIMIT"
+         },
+         "141" : {
+            "actions" : "[2] not prntd-HRC API.",
+            "sponsors" : ["HDIXO","HGADO","HREHM"],
+            "title" : "ENHANCE LAW ENFORCEMENT DEATH BENEFITS"
+         },
+         "142" : {
+            "actions" : "[2] HEC/HAFC-HEC [5] DP-HAFC API.",
+            "emergency" : "*",
+            "sponsors" : ["HSERR"],
+            "title" : "PROTECTIVE PERSONAL EQUIPMENT FOR SCHOOLS"
+         },
+         "143" : {
+            "actions" : "[2] HCEDC/HAFC-HCEDC [6] DP-HAFC API.",
+            "sponsors" : ["HSERR"],
+            "title" : "HIGHER ED INNOVATION ACCELERATOR PROJECT"
+         },
+         "144" : {
+            "actions" : "[2] not prntd-HRC- w/drn -germane-prntd- - ref HCEDC/HTPWC-HCEDC [5] DP-HTPWC [6] DP/a [8] PASSED/H (67-0) [11] STBTC-STBTC [14] DP [17] PASSED/S (25-0) SGND BY GOV (Mar. 1) Ch. 24.",
+            "sponsors" : ["HRUBI","HMARJ"],
+            "title" : "COMMERCIAL DRIVER'S LICENSE REQUIREMENTS"
+         },
+         "145" : {
+            "actions" : "[2] HJC/HAFC-HJC [8] DNP-CS/DP-HAFC- w/drn - PASSED/H (68-0) [11] SHPAC-SHPAC API.",
+            "sponsors" : ["HFAJA","SGADM","HSWEE","SHEMP","HCADA","HDIXO","HHERN"],
+            "title" : "CHILD WELFARE OMBUDSMAN ACT"
+         },
+         "146" : {
+            "actions" : "[2] HENRC/HTRC-HENRC [4] w/o rec-HTRC API.",
+            "sponsors" : ["HTERR","SHEMP","SDIAM","HSWEE","HDOWR","HCHNI","HDELA","HGARR","HREEB"],
+            "title" : "DISTRIBUTION OF COPPER TAX"
+         },
+         "147" : {
+            "actions" : "[2] not prntd-HRC API.",
+            "sponsors" : ["HCAST","HMAES"],
+            "title" : "ACCESS TO ELECTRONIC EVENT TICKETS"
+         },
+         "148" : {
+            "actions" : "[2] HCEDC/HTRC-HCEDC [5] DP-HTRC [8] DP - PASSED/H (68-0) [11] STBTC-STBTC [14] DP [19] PASSED/S (41-0) SGND BY GOV (Mar. 1) Ch. 25.",
+            "sponsors" : ["HDOWR","HMARJ"],
+            "title" : "SMALL BUSINESS RECOVERY LOAN APPLICATIONS"
+         },
+         "149" : {
+            "actions" : "[3] not prntd-HRC API.",
+            "sponsors" : ["HMCQU","HTOWJ","HGARR","STALL"],
+            "title" : "DISCLOSURE ACT"
+         },
+         "15" : {
+            "actions" : "HPREF [2] HGEIC/HTRC-HGEIC- DP-HTRC [4] DP/a [5] PASSED/H (60-7) [8] SIRC/SFC-SIRC [11] DP/a-SFC [14] DP [19] PASSED/S (35-5) [8] h/cncrd POCKET VETO.",
+            "sponsors" : ["HLOUI"],
+            "title" : "TRIBAL GROSS RECEIPTS RATES"
+         },
+         "150" : {
+            "actions" : "[3] not prntd-HRC API.",
+            "sponsors" : ["HDOWR","HPETT"],
+            "title" : "REQUIRE STATE EMPLOYEE PHYSICAL PRESENCE"
+         },
+         "151" : {
+            "actions" : "[3] HJC/HAFC-HJC [5] DP/a-HAFC [7] DP [8] tbld/H API.",
+            "sponsors" : ["HHOCH"],
+            "title" : "NM SUPREME COURT JUSTICE SALARIES"
+         },
+         "152" : {
+            "actions" : "[3] HHHC/HAFC-HHHC [4] DP-HAFC API.",
+            "sponsors" : ["HGARR"],
+            "title" : "BERNALILLO COUNTY CRIME PREVENTION"
+         },
+         "153" : {
+            "actions" : "[3] HTRC-HTRC [8] DNP-CS/DP - PASSED/H (66-2) [11] SFC-SFC [14] DP - PASSED/S (37-0) SGND BY GOV (Mar. 9) Ch. 55 (partial veto).",
+            "emergency" : "*",
+            "sponsors" : ["HCHAN"],
+            "title" : "GENERAL OBLIGATION BOND PROJECTS"
+         },
+         "154" : {
+            "actions" : "[3] not prntd-HRC API.",
+            "sponsors" : ["HTRCH"],
+            "title" : "\"QUALIFIED STUDENT\" DEFINITION"
+         },
+         "155" : {
+            "actions" : "[3] HHHC/HAFC-HHHC [4] DP-HAFC API.",
+            "sponsors" : ["HTRCH","HTHOE"],
+            "title" : "DEV. DISABILITY PROVIDER REIMBURSEMENT"
+         },
+         "156" : {
+            "actions" : "[3] HCPAC/HJC/HAFC-HCPAC API.",
+            "sponsors" : ["HROYB"],
+            "title" : "POSSESSION OF LARGE CAPACITY GUN MAGAZINE"
+         },
+         "157" : {
+            "actions" : "[3] HHHC/HAFC-HHHC [5] DP/a-HAFC [7] DP/a - tbld/H API.",
+            "emergency" : "*",
+            "sponsors" : ["HCAST","HSTRI","HFAJA","HTRCH","HGADO","HDOWR","HJONJ"],
+            "title" : "SURRENDER OF INFANTS"
+         },
+         "158" : {
+            "actions" : "[3] HCPAC/HTRC-HCPAC API.",
+            "sponsors" : ["HSERR"],
+            "title" : "REAL ESTATE TRANSFER TAXES & SOCIAL SECURITY"
+         },
+         "159" : {
+            "actions" : "[3] HEC/HAFC-HEC API.",
+            "sponsors" : ["HSERR","HLUTA"],
+            "title" : "COLLEGE & CAREER READINESS PROGRAMS"
+         },
+         "16" : {
+            "actions" : "HPREF [2] HHHC/HAFC-HHHC [3] DP-HAFC API.",
+            "sponsors" : ["HGAMP"],
+            "title" : "GUN VIOLENCE VICTIM ADVOCATE FUNDING"
+         },
+         "160" : {
+            "actions" : "[3] HCEDC/HAFC-HCEDC [5] DP-HAFC [7] DP/a API.",
+            "sponsors" : ["HSERR","HMAES"],
+            "title" : "HIST. UNDERUTILIZED BUSINESS OPPORTUNITIES"
+         },
+         "161" : {
+            "actions" : "[3] HCEDC/HTRC-HCEDC API.",
+            "sponsors" : ["HPOWD","HSERR","HFIGU","HBROW","HCROW","HSEEL"],
+            "title" : "ANGEL INVESTMENT TAX CREDIT DATES"
+         },
+         "162" : {
+            "actions" : "[3] not prntd-HRC API.",
+            "sponsors" : ["HPOWD","HREHM","HBACB","HBROW","HCROW","HDELA","HDIXO"],
+            "title" : "LAW ENFORCEMENT- BLUE ALERT ACT"
+         },
+         "163" : {
+            "actions" : "[3] HTRC-HTRC [8] DNP-CS/DP - fl/a- PASSED/H (59-9) [14] SFC-SFC [19] DP/a - fl/a- PASSED/S (39-0) [8] h/cncrd SGND BY GOV (Mar. 8) Ch. 47.",
+            "sponsors" : ["HCHAN","HMARJ","SWIRT","HCADA","SPADI","HCHNI","HREEB"],
+            "title" : "TAX CHANGES"
+         },
+         "164" : {
+            "actions" : "[3] HENRC/HAFC-HENRC [6] DNP-CS/DP-HAFC [7] DP/a [8] PASSED/H (64-0) [11] SCONC-SCONC [14] DP [17] PASSED/S (26-0) SGND BY GOV (Mar. 1) Ch. 26.",
+            "sponsors" : ["HSARI","HALLI","HJOHD","SSTEI"],
+            "title" : "URANIUM MINE CLEANUP"
+         },
+         "165" : {
+            "actions" : "[3] HEC/HAFC-HEC [6] DP/a-HAFC [7] DP/a API.",
+            "sponsors" : ["HROMA"],
+            "title" : "WEB-BASED NATIVE AMERICAN STUDENT TOOL"
+         },
+         "166" : {
+            "actions" : "[3] HEC/HAFC-HEC [6] DP-HAFC [7] DP/a API.",
+            "sponsors" : ["HROMA"],
+            "title" : "WEB-BASED AT-RISK STUDENT RESOURCE TOOL"
+         },
+         "167" : {
+            "actions" : "[3] HGEIC/HTRC-HGEIC [4] DP-HTRC [6] DP [7] PASSED/H (64-1) [11] SFC-SFC [14] DP - PASSED/S (25-14) SGND BY GOV (Mar. 8) Ch. 48.",
+            "sponsors" : ["HLOUI","HHARP"],
+            "title" : "TRIBE & PUEBLO CAR EXCISE TAX CREDIT"
+         },
+         "168" : {
+            "actions" : "[3] HLVMC/HAFC-HLVMC [7] DP-HAFC API.",
+            "sponsors" : ["HDOWR","HGAHA","HBACB","HCROW","HTERR","HPARA"],
+            "title" : "DISABLED VETERAN TRANSPORTATION"
+         },
+         "169" : {
+            "actions" : "[3] HAAWC/HAFC-HAAWC [6] DP-HAFC API.",
+            "sponsors" : ["HZAMO","HTOWJ"],
+            "title" : "DAIRY FACILITY FUNDING"
+         },
+         "17" : {
+            "actions" : "HPREF [2] HHHC/HTRC-HHHC [3] DP-HTRC API.",
+            "sponsors" : ["HGAMP"],
+            "title" : "EXPAND RURAL HEALTH PRACTITIONER TAX CREDIT"
+         },
+         "170" : {
+            "actions" : "[3] not prntd-HRC API.",
+            "sponsors" : ["HHERS","HCHAN","HRUBI","HALLI","HMARJ"],
+            "title" : "PUBLIC EMPLOYEE MINIMUM WAGE"
+         },
+         "171" : {
+            "actions" : "[4] HTPWC/HAFC-HTPWC [5] DP-HAFC [7] DP/a [8] PASSED/H (67-0) [12] STBTC-STBTC [14] DP [19] fl/a- PASSED/S (39-0) [8] h/cncrd SGND BY GOV (Feb. 28) Ch. 11.",
+            "sponsors" : ["HHOCH","SGONZ"],
+            "title" : "RURAL AIR SVC. ENHANCEMENT GRANT CHANGES"
+         },
+         "172" : {
+            "actions" : "[4] HCPAC/HAFC-HCPAC API.",
+            "sponsors" : ["HCADA","HLUND","HHOCH"],
+            "title" : "INTEREST RATES ON CERTAIN LOANS"
+         },
+         "173" : {
+            "actions" : "[4] HRDLC/HAFC-HRDLC [6] DNP-CS/DP-HAFC API.",
+            "sponsors" : ["HMORO","SJARA","HHERS","HDOWR"],
+            "title" : "RURAL INFRASTRUCTURE CRISIS RESPONSE ACT"
+         },
+         "174" : {
+            "actions" : "[4] not prntd-HRC API.",
+            "sponsors" : ["HTRCH"],
+            "title" : "HEARING AID HEALTH INSURANCE COVERAGE"
+         },
+         "175" : {
+            "actions" : "[4] HHHC/HAFC-HHHC [6] DNP-CS/DP-HAFC [7] DP API.",
+            "sponsors" : ["HSERR"],
+            "title" : "ALZHEIMER'S OUTREACH"
+         },
+         "176" : {
+            "actions" : "[4] HCEDC/HAFC-HCEDC [6] DP-HAFC API.",
+            "sponsors" : ["HSERR","STALL"],
+            "title" : "RETIREMENT SAVINGS FACILITATION TAX CREDIT"
+         },
+         "177" : {
+            "actions" : "[4] HAAWC/HAFC-HAAWC [7] DP-HAFC API.",
+            "sponsors" : ["HSWEE","HLARA"],
+            "title" : "NM WINERY WINE PRODUCTION"
+         },
+         "178" : {
+            "actions" : "[4] not prntd-HRC API.",
+            "sponsors" : ["HBACB","HTOWJ","HHERS","HLANE"],
+            "title" : "SIGN LANGUAGE AS BILINGUAL LEARNER"
+         },
+         "179" : {
+            "actions" : "[4] not prntd-HRC API.",
+            "sponsors" : ["HCHAT","HDOWR","HSWEE","HHERS","HALLI"],
+            "title" : "BONDS FOR WATER PROJECTS"
+         },
+         "18" : {
+            "actions" : "HPREF [2] not prntd-HRC API.",
+            "sponsors" : ["HGAMP"],
+            "title" : "PROFESSIONAL ENGINEER LICENSURE REQUIREMENTS"
+         },
+         "180" : {
+            "actions" : "[4] not prntd-HRC [5]germane-prntd- - ref HCPAC/HJC-HCPAC- w/drn-HJC [6] DP [7] PASSED/H (65-1) [11] SJC-SJC [14] DP - PASSED/S (34-0) SGND BY GOV (Mar. 1) Ch. 27.",
+            "emergency" : "*",
+            "sponsors" : ["HELYD","HNIBE"],
+            "title" : "REPEAL PART OF IPRA LAW ON NOTARIAL ACTS"
+         },
+         "181" : {
+            "actions" : "[4] HGEIC/HTRC-HGEIC API.",
+            "sponsors" : ["HCHAT","HDOWR","HCROW","HZAMO","HBLAC"],
+            "title" : "PAYMENT IN LIEU OF TAXES FOR REAL PROPERTY"
+         },
+         "182" : {
+            "actions" : "[4] not prntd-HRC API.",
+            "sponsors" : ["HREHM"],
+            "title" : "SCHOOL DISTRICT REDISTRICTING"
+         },
+         "183" : {
+            "actions" : "[4] HTPWC/HTRC-HTPWC [7] DP-HTRC API.",
+            "sponsors" : ["HMONR","HTOWJ","HMADR","HCAST","HBROW"],
+            "title" : "MOTOR VEHICLE TAX DISTRIBUTIONS"
+         },
+         "184" : {
+            "actions" : "[4] HEC/HAFC-HEC [7] DP-HAFC API.",
+            "sponsors" : ["HROMA"],
+            "title" : "SCHOOL MICRO-CREDENTIAL PROJECT"
+         },
+         "185" : {
+            "actions" : "[4] HEC/HAFC-HEC API.",
+            "sponsors" : ["HLENT","HRUBI"],
+            "title" : "DEVELOP COMPREHENSIVE EDUCATION PLAN"
+         },
+         "186" : {
+            "actions" : "[4] HAAWC/HAFC-HAAWC [7] DP-HAFC API.",
+            "sponsors" : ["HHEPA"],
+            "title" : "PROMOTE EXPANSION OF AG PRODUCTS"
+         },
+         "187" : {
+            "actions" : "[4] not prntd-HRC API.",
+            "sponsors" : ["HDOWR","HBLAC","HBROW","HPETT","HSCOT"],
+            "title" : "CYFD ACTION IN MISSING CHILD CASES"
+         },
+         "188" : {
+            "actions" : "[4] not prntd-HRC API.",
+            "sponsors" : ["HDOWR","HLORD"],
+            "title" : "CONFIDENTIALITY OF ABUSE & NEGLECT RECORDS"
+         },
+         "189" : {
+            "actions" : "[4] not prntd-HRC API.",
+            "sponsors" : ["HBACB","HDOWR"],
+            "title" : "MOTOR VEHICLE DEFINITIONS & TOWING"
+         },
+         "19" : {
+            "actions" : "HPREF [2] HHHC/HAFC-HHHC API.",
+            "sponsors" : ["HGAMP"],
+            "title" : "ANTON CHICO LAND GRANT SENIOR SERVICES"
+         },
+         "190" : {
+            "actions" : "[4] HTRC-HTRC API.",
+            "sponsors" : ["HCHAN","HGADO"],
+            "title" : "INCOME TAX CREDIT FOR NM NURSES"
+         },
+         "191" : {
+            "actions" : "[4] HCEDC/HGEIC-HCEDC [6] DNP-CS/DP-HGEIC [7] DP/a [8] fl/a- PASSED/H (63-0) [11] SHPAC-SHPAC [14] DP [16] PASSED/S (37-0) SGND BY GOV (Mar. 3) Ch. 39.",
+            "sponsors" : ["HGADO","HARMG","HHOCH","HDOWR","SIVEY"],
+            "title" : "PROFESSIONAL & OCCUPATIONAL LICENSURE CHANGES"
+         },
+         "192" : {
+            "actions" : "[4] not prntd-HRC API.",
+            "sponsors" : ["HELYD"],
+            "title" : "SURVIVAL OF TORT ACTIONS"
+         },
+         "193" : {
+            "actions" : "[5] HEC/HGEIC-HEC [7] DP-HGEIC- DP/a API.",
+            "sponsors" : ["HSARI","HTRCH","HHERS","HGARR","HMATT"],
+            "title" : "SCHOOL PERSONNEL BACKGROUND CHECKS"
+         },
+         "194" : {
+            "actions" : "[4] HGEIC/HTRC-HGEIC [5] DP-HTRC API.",
+            "sponsors" : ["HHOCH"],
+            "title" : "DISTRIBUTION OF LIQUOR TAX TO COUNTIES"
+         },
+         "195" : {
+            "actions" : "[5] HLVMC/HTRC-HLVMC [7] DP/a-HTRC API.",
+            "sponsors" : ["HBLAC","HHERN","HSARI","HCROW","HHERS"],
+            "title" : "TAX PROOF OF DISABLED VETERAN STATUS"
+         },
+         "196" : {
+            "actions" : "[5] HJC/HAFC-HJC API.",
+            "sponsors" : ["HPETT","HDOWR","HLORD","HCAST"],
+            "title" : "NO REVERSION OF LAW ENFORCEMENT FUND"
+         },
+         "197" : {
+            "actions" : "[5] not prntd-HRC API.",
+            "sponsors" : ["HDOWR"],
+            "title" : "REPLACE CYFD SEC. WITH GOVERNING BOARD"
+         },
+         "198" : {
+            "actions" : "[5] not prntd-HRC API.",
+            "emergency" : "*",
+            "sponsors" : ["HDOWR"],
+            "title" : "RULEMAKING DURING PUBLIC HEALTH ORDERS"
+         },
+         "199" : {
+            "actions" : "[5] not prntd-HRC API.",
+            "sponsors" : ["HLANE"],
+            "title" : "MAILED COPIES OF LIENS IN CERTAIN COUNTIES"
+         },
+         "2" : {
+            "actions" : "[2] HAFC-HAFC [4] DNP-CS/DP [5] PASSED/H (56-13) [7] SFC-SFC [12] DP/a [14] PASSED/S (37-3) [8] h/fld cncr [16] s/fld recede- CC- [8] h/rpt adptd [17] s/rpt adptd SGND BY GOV (Mar. 9) Ch. 54 (partial veto).",
+            "sponsors" : ["HLUND"],
+            "title" : "GENERAL APPROPRIATION ACT OF 2022"
+         },
+         "20" : {
+            "actions" : "HPREF [2] HRDLC/HAFC-HRDLC API.",
+            "sponsors" : ["HGAMP"],
+            "title" : "TIERRA AMARILLA LAND GRANT PROGRAMS"
+         },
+         "200" : {
+            "actions" : "[5] not prntd-HRC API.",
+            "sponsors" : ["HTOWJ","HSCOT","HMONR"],
+            "title" : "ASSESSMENT OF OIL & GAS RULES"
+         },
+         "201" : {
+            "actions" : "[5] not prntd-HRC API.",
+            "sponsors" : ["HTOWJ","HMONR"],
+            "title" : "ASSESSMENT OF NEW MANDATES ON INDUSTRY"
+         },
+         "202" : {
+            "actions" : "[5] not prntd-HRC API.",
+            "sponsors" : ["HTOWJ","HMONR"],
+            "title" : "INTERIM LEGISLATIVE MEETINGS AS OPEN MTGS."
+         },
+         "203" : {
+            "actions" : "[5] not prntd-HRC API.",
+            "sponsors" : ["HTOWJ","HNIBE","HMONR"],
+            "title" : "PERJURY IN LEGISLATIVE PROCEEDINGS"
+         },
+         "204" : {
+            "actions" : "[5] HAFC-HAFC API.",
+            "sponsors" : ["HANDP","HHERS","HALLI","HTRCH","HDIXO"],
+            "title" : "SEXUAL ASSAULT SERVICES PROGRAMS"
+         },
+         "205" : {
+            "actions" : "[5] not prntd-HRC API.",
+            "emergency" : "*",
+            "sponsors" : ["HSTRI","HNIBE","HMONR","HLANE","HALLI"],
+            "title" : "GEOLOGIC CARBON DIOXIDE SEQUESTRATION ACT"
+         },
+         "206" : {
+            "actions" : "[5] not prntd-HRC API.",
+            "sponsors" : ["HBACB","HLARA"],
+            "title" : "SECONDARY INSTRUCTORS ACT"
+         },
+         "207" : {
+            "actions" : "[5] HTRC-HTRC API.",
+            "sponsors" : ["HHARP","HSTRI"],
+            "title" : "BUSINESS-TO-BUSINESS SERVICE GROSS RECEIPTS"
+         },
+         "208" : {
+            "actions" : "[5] not prntd-HRC API.",
+            "sponsors" : ["HEGOL"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "209" : {
+            "actions" : "[5] not prntd-HRC API.",
+            "sponsors" : ["HEGOL"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "21" : {
+            "actions" : "HPREF [2] HRDLC/HAFC-HRDLC API.",
+            "sponsors" : ["HGAMP"],
+            "title" : "ANTON CHICO LAND GRANT YOUTH & ED PROGRAMS"
+         },
+         "210" : {
+            "actions" : "[5] not prntd-HRC API.",
+            "sponsors" : ["HEGOL"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "211" : {
+            "actions" : "[5] not prntd-HRC API.",
+            "sponsors" : ["HEGOL"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "212" : {
+            "actions" : "[5] not prntd-HRC API.",
+            "sponsors" : ["HEGOL"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "213" : {
+            "actions" : "[5] not prntd-HRC [7] w/drn - ref HTRC-HTRC API.",
+            "sponsors" : ["HMARJ"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "214" : {
+            "actions" : "[5] not prntd-HRC API.",
+            "sponsors" : ["HMARJ"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "215" : {
+            "actions" : "[5] not prntd-HRC API.",
+            "sponsors" : ["HMARJ"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "216" : {
+            "actions" : "[5] not prntd-HRC API.",
+            "sponsors" : ["HGADO"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "217" : {
+            "actions" : "[5] not prntd-HRC API.",
+            "sponsors" : ["HGADO"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "218" : {
+            "actions" : "[5] not prntd-HRC API.",
+            "sponsors" : ["HGADO"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "219" : {
+            "actions" : "[5] not prntd-HRC- w/drn - ref HGEIC-HGEIC [8] DNP-CS/DP - PASSED/H (66-0) [16] SHPAC-SHPAC [17] DP [19] PASSED/S (38-0) POCKET VETO.",
+            "sponsors" : ["HPETT","HLORD"],
+            "title" : "ELECTED COUNTY OFFICIAL SALARY CAP"
+         },
+         "22" : {
+            "actions" : "HPREF [2] HGEIC/HAFC-HGEIC- DP-HAFC [6] DP/a [7] PASSED/H (42-23) [11] SHPAC-SHPAC [14] DP [16] PASSED/S (38-0) SGND BY GOV (Mar. 1) Ch. 18.",
+            "sponsors" : ["HROYB","SSEDI","HBOUN","SSTEW"],
+            "title" : "LIMITED ENGLISH ACCESS TO STATE PROGRAMS"
+         },
+         "220" : {
+            "actions" : "[5] not prntd-HRC [8] w/drn - ref HCEDC-HCEDC API.",
+            "sponsors" : ["HTOWJ"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "221" : {
+            "actions" : "[5] not prntd-HRC API.",
+            "sponsors" : ["HTOWJ"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "222" : {
+            "actions" : "[5] not prntd-HRC [8] w/drn - ref HLVMC-HLVMC API.",
+            "sponsors" : ["HMONR"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "223" : {
+            "actions" : "[5] not prntd-HRC [8] w/drn - ref HCPAC-HCPAC API.",
+            "sponsors" : ["HMONR"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "224" : {
+            "actions" : "[5] not prntd-HRC API.",
+            "sponsors" : ["HMONR"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "225" : {
+            "actions" : "[5] not prntd-HRC API.",
+            "sponsors" : ["HLENT"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "226" : {
+            "actions" : "[5] not prntd-HRC API.",
+            "sponsors" : ["HLENT"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "227" : {
+            "actions" : "[5] not prntd-HRC- w/drn - ref HAFC-HAFC [6] w/drn-tbld API.",
+            "sponsors" : ["HLUND"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "228" : {
+            "actions" : "[5] not prntd-HRC [6] w/drn - ref HCEDC-HCEDC [8] DNP-CS/DP - tbld/H API.",
+            "emergency" : "*",
+            "sponsors" : ["HLUND"],
+            "title" : "HYDROGEN HUB DEVELOPMENT ACT"
+         },
+         "229" : {
+            "actions" : "[5] not prntd-HRC API.",
+            "sponsors" : ["HMAES"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "23" : {
+            "actions" : "HPREF [2] HHHC/HAFC-HHHC [3] DP-HAFC API.",
+            "sponsors" : ["HTRCH","HLUTA","HORTE","SSTEF","SHEMP","HCATE","HHERS","HROYB"],
+            "title" : "HUMAN PAPILLOMAVIRUS PAP REGISTRY"
+         },
+         "230" : {
+            "actions" : "[5] not prntd-HRC API.",
+            "sponsors" : ["HMAES"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "231" : {
+            "actions" : "[5] not prntd-HRC API.",
+            "sponsors" : ["HFERJ"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "232" : {
+            "actions" : "[5] not prntd-HRC API.",
+            "sponsors" : ["HFERJ"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "233" : {
+            "actions" : "[5] not prntd-HRC API.",
+            "sponsors" : ["HROMA"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "234" : {
+            "actions" : "[5] not prntd-HRC API.",
+            "sponsors" : ["HROMA"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "235" : {
+            "actions" : "[5] not prntd-HRC API.",
+            "sponsors" : ["HMCQU"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "236" : {
+            "actions" : "[5] not prntd-HRC API.",
+            "sponsors" : ["HMCQU"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "237" : {
+            "actions" : "[5] not prntd-HRC API.",
+            "sponsors" : ["HLOUI"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "238" : {
+            "actions" : "[5] not prntd-HRC API.",
+            "sponsors" : ["HLOUI"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "239" : {
+            "actions" : "[5] not prntd-HRC [7] w/drn - ref HHHC-HHHC API.",
+            "sponsors" : ["HTHOE"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "24" : {
+            "actions" : "HPREF [2] HAAWC/HAFC-HAAWC [7] DP/a-HAFC API.",
+            "sponsors" : ["HLUTA","HROAN"],
+            "title" : "STATE ENGINEER WATER PLANNING & MANAGEMENT"
+         },
+         "240" : {
+            "actions" : "[5] not prntd-HRC API.",
+            "sponsors" : ["HTHOE"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "241" : {
+            "actions" : "[5] not prntd-HRC API.",
+            "sponsors" : ["HCHAS"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "242" : {
+            "actions" : "[5] not prntd-HRC API.",
+            "sponsors" : ["HCHAS"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "243" : {
+            "actions" : "[5] not prntd-HRC [7] w/drn - ref HLVMC-HLVMC [8] DNP-CS/DP - FAILED/H (33-35).",
+            "sponsors" : ["HALCO","HLORD","HDOWR","HMONR"],
+            "title" : "PERA MAX PENSION AMOUNT"
+         },
+         "244" : {
+            "actions" : "[5] not prntd-HRC API.",
+            "sponsors" : ["HALCO"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "245" : {
+            "actions" : "[5] not prntd-HRC API.",
+            "sponsors" : ["HHERS"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "246" : {
+            "actions" : "[5] not prntd-HRC API.",
+            "sponsors" : ["HHERS"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "247" : {
+            "actions" : "[5] not prntd-HRC API.",
+            "sponsors" : ["HCHAN"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "248" : {
+            "actions" : "[5] not prntd-HRC API.",
+            "sponsors" : ["HCHAN"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "249" : {
+            "actions" : "[5] not prntd-HRC API.",
+            "sponsors" : ["HRUBI"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "25" : {
+            "actions" : "HPREF [2] not prntd-HRC- nt germane.",
+            "sponsors" : ["HREHM","HLORD","HDOWR"],
+            "title" : "CHANGE SOME STATUTES OF LIMITATION"
+         },
+         "250" : {
+            "actions" : "[5] not prntd-HRC API.",
+            "sponsors" : ["HRUBI"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "26" : {
+            "actions" : "HPREF [2] not prntd-HRC-germane-prntd- - ref HCPAC/HJC/HAFC-HCPAC API.",
+            "sponsors" : ["HREHM"],
+            "title" : "UNLAWFUL FIREARMS WHILE TRAFFICKING"
+         },
+         "27" : {
+            "actions" : "HPREF [2] not prntd-HRC-germane-prntd- - ref HCPAC/HJC/HAFC-HCPAC API.",
+            "emergency" : "*",
+            "sponsors" : ["HREHM","HLORD","HDOWR"],
+            "title" : "PRETRIAL RELEASE OF CERTAIN PERSONS"
+         },
+         "28" : {
+            "actions" : "HPREF [2] not prntd-HRC-germane-prntd- - ref HCPAC/HJC/HAFC-HCPAC API.",
+            "sponsors" : ["HREHM"],
+            "title" : "FELON IN POSSESSION OF FIREARM PENALTY"
+         },
+         "29" : {
+            "actions" : "HPREF [2] not prntd-HRC API.",
+            "sponsors" : ["HREHM","HLORD"],
+            "title" : "ORGANIZED RETAIL CRIME"
+         },
+         "3" : {
+            "actions" : "[2] HTPWC/HAFC-HTPWC [3] DP/a-HAFC [4] (Succeeding entries: H 2).",
+            "sponsors" : ["HRUBI"],
+            "title" : "DEPT. OF TRANSPORTATION APPROPRIATION ACT"
+         },
+         "30" : {
+            "actions" : "HPREF [2] not prntd-HRC API.",
+            "sponsors" : ["HREHM"],
+            "title" : "LIMIT CAR SALE LOCATIONS & SELLERS"
+         },
+         "31" : {
+            "actions" : "HPREF [2] not prntd-HRC API.",
+            "sponsors" : ["HREHM","HLORD"],
+            "title" : "ADDITIONAL VIOLENT FELONIES"
+         },
+         "32" : {
+            "actions" : "HPREF [2] HHHC/HTRC-HHHC [3] DP-HTRC API.",
+            "sponsors" : ["HTRCH","HORTE","HLUTA"],
+            "title" : "FEMININE HYGIENE PRODUCT GROSS RECEIPTS"
+         },
+         "33" : {
+            "actions" : "HPREF [2] HHHC/HTRC-HHHC API.",
+            "sponsors" : ["HFERJ","HLUTA","SHICK"],
+            "title" : "CIGARETTE AND TOBACCO PRODUCTS TAX"
+         },
+         "34" : {
+            "actions" : "HPREF [2] HENRC/HTRC-HENRC- DP-HTRC API.",
+            "sponsors" : ["HFERJ","SSOUL","HLUTA"],
+            "title" : "SOLAR MARKET DEVELOPMENT TAX CREDIT EXTENSION"
+         },
+         "35" : {
+            "actions" : "HPREF [2] HENRC/HTRC-HENRC- DP-HTRC API.",
+            "sponsors" : ["HFERJ","SSOUL","HLUTA"],
+            "title" : "GEOTHERMAL GROUND-COUPLED HEAT PUMPS"
+         },
+         "36" : {
+            "actions" : "HPREF [2] not prntd-HRC API.",
+            "sponsors" : ["HORTE","HMCQU"],
+            "title" : "NATURAL HERITAGE CONSERVATION ACT AMENDMENTS"
+         },
+         "37" : {
+            "actions" : "[2] HCPAC/HENRC-HCPAC [3] DP-HENRC [4] DP/a [6] PASSED/H (44-24) [8] SCONC/SFC-SCONC [9] DP-SFC [14] DP [16] PASSED/S (26-14) SGND BY GOV (Feb. 28) Ch. 10.",
+            "sponsors" : ["HORTE","HSARI","HROYB","HLUTA","SSTEW","HCATE"],
+            "title" : "COMMUNITY ENERGY EFFICIENCY DEV BLOCK GRANT"
+         },
+         "38" : {
+            "actions" : "HPREF [2] HHHC/HTRC-HHHC [3] DP-HTRC API.",
+            "sponsors" : ["HALLI"],
+            "title" : "RURAL HEALTH CARE PRACTITIONER TAX CREDIT"
+         },
+         "39" : {
+            "actions" : "HPREF [2] HEC/HTRC-HEC [3] DP-HTRC [4] DP [6] PASSED/H (67-1) [8] STBTC/SFC-STBTC [11] DP-SFC [14] DP [17] PASSED/S (28-2) SGND BY GOV (Mar. 8) Ch. 50.",
+            "sponsors" : ["HGADO"],
+            "title" : "GRT DEDUCTION FOR NONATHLETIC SPECIAL EVENTS"
+         },
+         "4" : {
+            "actions" : "[2] HENRC/HTRC-HENRC API.",
+            "emergency" : "*",
+            "sponsors" : ["HLUND","HSMAL","HMARJ","HGAHA"],
+            "title" : "HYDROGEN HUB DEVELOPMENT ACT"
+         },
+         "40" : {
+            "actions" : "HPREF [2] not prntd-HRC API.",
+            "emergency" : "*",
+            "sponsors" : ["HNIBE","HELYD","HPETT","HLORD","HBLAC","HBORR","HCHNI","HSAJO","SSTEF"],
+            "title" : "TERMINATION OF STATES OF EMERGENCY"
+         },
+         "41" : {
+            "actions" : "HPREF [2] HAAWC/HAFC-HAAWC [4] DP-HAFC API.",
+            "sponsors" : ["HHERS"],
+            "title" : "WATER TRUST FUND"
+         },
+         "42" : {
+            "actions" : "HPREF [2] not prntd-HRC-germane-prntd- - ref HAFC-HAFC [6] DP/a [7] PASSED/H (63-0) [11] SCONC-SCONC [14] DP - PASSED/S (27-0) SGND BY GOV (Feb. 28) Ch. 7.",
+            "emergency" : "*",
+            "sponsors" : ["HHERS"],
+            "title" : "PUBLIC PROJECT REVOLVING FUND PROJECTS"
+         },
+         "43" : {
+            "actions" : "HPREF [2] HEC/HAFC-HEC [6] DP/a-HAFC [7] DP [8] PASSED/H (64-0) [11] SEC-SEC [16] DP [19] PASSED/S (41-0) SGND BY GOV (Mar. 1) Ch. 19.",
+            "sponsors" : ["HGARR","HDIXO","HBROW","HHERN","SHEMP","HBORR","HSAJO"],
+            "title" : "CHARTER SCHOOL FACILITY IMPROVEMENTS"
+         },
+         "44" : {
+            "actions" : "HPREF [2] not prntd-HRC- nt germane.",
+            "sponsors" : ["HTHOE","HARMS","HROMA"],
+            "title" : "AFFIRMATIVE CONSENT POLICY IN SCHOOLS"
+         },
+         "45" : {
+            "actions" : "HPREF [2] not prntd-HRC API.",
+            "sponsors" : ["HFERJ"],
+            "title" : "PROGRAM UNITS FOR LICENSED SCHOOL EMPLOYEES"
+         },
+         "46" : {
+            "actions" : "HPREF [2] not prntd-HRC [4] w/drn -germane-prntd- - ref HCPAC/HJC-HCPAC [5] DNP-CS/DP-HJC [6] DP [7] fl/sub adptd- PASSED/H (65-0) [11] SJC-SJC [14] DP [16] PASSED/S (35-2) SGND BY GOV (Mar. 8) Ch. 51.",
+            "sponsors" : ["HCHAS","SLOPE"],
+            "title" : "FAMILY REPRESENTATION AND ADVOCACY ACT"
+         },
+         "47" : {
+            "actions" : "HPREF [2] HHHC/HTRC-HHHC [3] DP/a-HTRC [4] DP [6] PASSED/H (62-3) [8] STBTC/SFC-STBTC [11] DP-SFC API.",
+            "emergency" : "*",
+            "sponsors" : ["HCHAN","HARMS","HARMG","HBROW","SHICK","HBACB","SBERG","SFIGU","HLARA","HMIRA","SPOPE","HROYB","SSTEW"],
+            "title" : "EXCLUDE HOME HEALTH CARE FROM DSB SOURCING"
+         },
+         "48" : {
+            "actions" : "HPREF [2] HLVMC/HTRC-HLVMC [5] DP-HTRC API.",
+            "sponsors" : ["HBROW","HARMG","HPETT","HSWEE","HDOWR","HCHAT","HSAJO"],
+            "title" : "EXEMPT SOCIAL SECURITY INCOME FROM INCOME TAX"
+         },
+         "49" : {
+            "actions" : "HPREF [2] HCPAC/HTRC-HCPAC [5] DP-HTRC API.",
+            "sponsors" : ["HARMG","HBROW","HPETT","HSWEE","HDOWR","SBERG","HGARR"],
+            "title" : "EXEMPT SOCIAL SECURITY INCOME FROM INCOME TAX"
+         },
+         "5" : {
+            "actions" : "[2] not prntd-HRC- w/drn -germane-prntd- - ref HGEIC/HJC-HGEIC [4] DP-HJC [7] DNP-CS/DP API.",
+            "emergency" : "*",
+            "sponsors" : ["HMATT","HDIXO","HREHM","SLOPE","HFIGU"],
+            "title" : "PRETRIAL RELEASE CONDITIONS"
+         },
+         "50" : {
+            "actions" : "HPREF [2] HLVMC/HJC-HLVMC API.",
+            "sponsors" : ["HANDP","HGAHA","HDOWR"],
+            "title" : "PUBLIC RETIREES RETURNING TO WORK"
+         },
+         "51" : {
+            "actions" : "HPREF [2] not prntd-HRC API.",
+            "sponsors" : ["HANDP","SMUNO"],
+            "title" : "PERA BOARD MEMBERS, ELECTION & NOTICE"
+         },
+         "52" : {
+            "actions" : "HPREF [2] HHHC/HJC-HHHC [3] DP-HJC [4] DP [6] PASSED/H (56-10) [8] SHPAC/SJC-SHPAC [11] DP-SJC- DP [14] PASSED/S (32-3) SGND BY GOV (Feb. 28) Ch. 4.",
+            "sponsors" : ["HLUTA","HHOCH","SDUHI","HCHAN","SLOPE","HREEB","HTERR"],
+            "title" : "HARM REDUCTION ACT AMENDMENTS"
+         },
+         "53" : {
+            "actions" : "HPREF [2] not prntd-HRC API.",
+            "sponsors" : ["HREHM"],
+            "title" : "DWI BLOOD TESTING"
+         },
+         "54" : {
+            "actions" : "HPREF [2] not prntd-HRC API.",
+            "sponsors" : ["HREHM"],
+            "title" : "CANNABIS & DWI TESTING"
+         },
+         "55" : {
+            "actions" : "HPREF [2] HCEDC/HJC-HCEDC- w/drn - ref HTPWC/HJC-HTPWC [3] DP-HJC [5] DNP-CS/DP [7] fl/a- PASSED/H (63-2) [9] SJC/SFC-SJC API.",
+            "sponsors" : ["HGARR","HLUND","HBROW","HPOWD","SGONZ","HBLOC","HBORR","HMAAL","HVINC"],
+            "title" : "PUBLIC-PRIVATE PARTNERSHIP ACT"
+         },
+         "56" : {
+            "actions" : "HPREF [2] not prntd-HRC [4] w/drn -germane-prntd- - ref HCPAC/HGEIC-HCPAC [5] DP-HGEIC- DP [7] PASSED/H (63-0) [9] SHPAC-SHPAC [14] DP - PASSED/S (35-0) SGND BY GOV (Feb. 28) Ch. 8.",
+            "sponsors" : ["HMARJ","SIVEY","HFAJA","HANDP"],
+            "title" : "TEMPORARY VETERINARY PERMITS"
+         },
+         "57" : {
+            "actions" : "HPREF [2] HEC/HAFC-HEC [4] DP/a-HAFC [6] DP [7] PASSED/H (65-0) [11] SEC-SEC [12] DP [14] PASSED/S (38-0) SGND BY GOV (Feb. 28) Ch. 9.",
+            "sponsors" : ["HROMA"],
+            "title" : "2023 TRANSPORTATION DISTRIBUTION CALCULATIONS"
+         },
+         "58" : {
+            "actions" : "HPREF [2] HEC/HAFC-HEC API.",
+            "sponsors" : ["HHERN"],
+            "title" : "ADULT ONLINE LEARNER SCHOLARSHIP ACT"
+         },
+         "59" : {
+            "actions" : "HPREF [2] HEC/HAFC-HEC [3] DP-HAFC API.",
+            "sponsors" : ["HLARA","HROMA","HALLI","HFIGU","HMADR","HREEB","HTERR"],
+            "title" : "SCHOOL GROUP INSURANCE CONTRIBUTIONS"
+         },
+         "6" : {
+            "actions" : "HPREF [2] HENRC/HGEIC-HENRC [4] DNP-CS/w/o rec-HGEIC [8] DNP-CS/DP API.",
+            "sponsors" : ["HSMAL","HEGOL","SHEMP","SSTEW","HORTE"],
+            "title" : "CLEAN FUTURE ACT"
+         },
+         "60" : {
+            "actions" : "HPREF [2] HEC/HAFC-HEC [5] DP-HAFC [7] DP/a - PASSED/H (63-0) [11] SEC/SFC-SEC [12] DP/a-SFC [14] w/drn - PASSED/S (34-0) [8] h/cncrd SGND BY GOV (Mar. 3) Ch. 40.",
+            "sponsors" : ["HLENT"],
+            "title" : "NATIVE AMERICAN LANGUAGE CERTIFICATE SALARIES"
+         },
+         "61" : {
+            "actions" : "HPREF [2] not prntd-HRC API.",
+            "sponsors" : ["HLENT"],
+            "title" : "TRIBAL AGREEMENTS WITH EARLY CHILDHOOD DEPT."
+         },
+         "62" : {
+            "actions" : "HPREF [2] HGEIC/HAFC-HGEIC- DP-HAFC [6] DP/a [8] PASSED/H (65-1) [11] SFC-SFC [14] DP [17] PASSED/S (30-5) POCKET VETO.",
+            "sponsors" : ["HDIXO","HHERS","HCHAN","HORTE","SHICK","HHEJO","HMURP","HROYB","SWOOD"],
+            "title" : "GRANT OPPORTUNITIES COUNCIL"
+         },
+         "63" : {
+            "actions" : "HPREF [2] not prntd-HRC API.",
+            "sponsors" : ["HGAMP"],
+            "title" : "HEALTH COMMITTEE AS PERMANENT COMMITTEE"
+         },
+         "64" : {
+            "actions" : "HPREF [2] not prntd-HRC API.",
+            "sponsors" : ["HGAMP"],
+            "title" : "BRANDISHING FIREARM IN GUILTY PLEAS"
+         },
+         "65" : {
+            "actions" : "HPREF [2] HCPAC/HJC-HCPAC [3] DP-HJC [4] DP [6] fl/a- PASSED/H (38-27) [8] SHPAC/SJC-SHPAC [11] w/o rec/a-SJC API.",
+            "sponsors" : ["HROAN","HORTE","HRUBI","HSERR"],
+            "title" : "HOUSING MODERNIZATION CHANGES"
+         },
+         "66" : {
+            "actions" : "HPREF [2] HAAWC/HAFC-HAAWC [4] DP-HAFC API.",
+            "sponsors" : ["HCHAT","HARMG","HSMAL","HDOWR","HSWEE","HCHAN","SFIGU"],
+            "title" : "MEAT INSPECTIONS"
+         },
+         "67" : {
+            "actions" : "HPREF [2] HCEDC/HTRC-HCEDC [3] DP-HTRC [4] DP/a [7] PASSED/H (66-0) [9] STBTC/SFC-STBTC [11] DP-SFC [14] DP/a - PASSED/S (35-0) [8] h/cncrd SGND BY GOV (Mar. 8) Ch. 45.",
+            "sponsors" : ["HCHAN","HHARP","SJARA"],
+            "title" : "TECH READINESS GROSS RECEIPTS TAX CREDIT"
+         },
+         "68" : {
+            "actions" : "HPREF [2] HCPAC/HJC/HAFC-HCPAC [4] w/o rec/a-HJC [6] DNP-CS/DP-HAFC [7] DP [8] fl/a- PASSED/H (50-17) [11] SJC-SJC [17] DP/a [19] fl/aa- PASSED/S (41-0) [8] h/cncrd SGND BY GOV (Mar. 9) Ch. 56.",
+            "sponsors" : ["HDIXO","HHEPA","HMATT"],
+            "title" : "CRIMINAL CODE CHANGES"
+         },
+         "69" : {
+            "actions" : "HPREF [2] HCPAC/HJC/HAFC-HCPAC [3] DP-HJC [4] DP/a-HAFC [5] w/drn [7] PASSED/H (62-5) [11] SJC-SJC API.",
+            "sponsors" : ["HDIXO","HGARR","HREHM","HFIGU","HHERN","HANMA","SSTEW"],
+            "title" : "CREATE CRIME OF OPERATING A CHOP SHOP"
+         },
+         "7" : {
+            "actions" : "[2] not prntd-HRC-germane-prntd- - ref HCEDC/HAFC-HCEDC [5] DP/a-HAFC [7] DP [8] fl/aa- PASSED/H (36-28) [11] SHPAC/SFC-SHPAC [14] DP-SFC- DP [16] PASSED/S (24-13) SGND BY GOV (Mar. 9) Ch. 57.",
+            "sponsors" : ["HDIXO","HEGOL","HSERR","HMARJ"],
+            "title" : "OPPORTUNITY ENTERPRISE ACT"
+         },
+         "70" : {
+            "actions" : "HPREF [2] not prntd-HRC API.",
+            "sponsors" : ["HFIGU"],
+            "title" : "RAISING CAP ON RURAL UNIVERSAL SERVICE FUND"
+         },
+         "71" : {
+            "actions" : "HPREF [2] HCPAC/HTRC-HCPAC [3] DP-HTRC [5] DP/a [7] PASSED/H (38-24) [11] STBTC/SFC-STBTC API.",
+            "sponsors" : ["HMCQU","HHARP","HLUTA"],
+            "title" : "LIMIT PROPERTY TAX VALUATION INCREASE"
+         },
+         "72" : {
+            "actions" : "HPREF [2] HCEDC/HTRC-HCEDC API.",
+            "sponsors" : ["HMCQU","HHARP"],
+            "title" : "SPACE TICKET GROSS RECEIPTS"
+         },
+         "73" : {
+            "actions" : "HPREF [2] HEC/HLVMC-HEC [3] DP/a-HLVMC [7] DP [8] PASSED/H (62-1) [11] SEC-SEC [12] DP [17] PASSED/S (41-0) SGND BY GOV (Mar. 1) Ch. 20.",
+            "sponsors" : ["HGARR","HANDP","HLANE"],
+            "title" : "EDUCATIONAL RETIREES RETURNING TO WORK"
+         },
+         "74" : {
+            "actions" : "HPREF [2] not prntd-HRC API.",
+            "sponsors" : ["HFIGU"],
+            "title" : "RETIREE HEALTH CARE FUND CONTRIBUTIONS"
+         },
+         "75" : {
+            "actions" : "HPREF [2] HCEDC/HAFC-HCEDC API.",
+            "sponsors" : ["HROYB","SSTEI"],
+            "title" : "PUBLIC BANKING ACT"
+         },
+         "76" : {
+            "actions" : "HPREF [2] HLVMC/HTRC-HLVMC [3] DP-HTRC API.",
+            "sponsors" : ["HANDP","HGAHA","HLANE","HGARR","HPOWD","HARMG","HDOWR","HMASO","HPETT"],
+            "title" : "MILITARY RETIREMENT INCOME TAX EXEMPTION"
+         },
+         "77" : {
+            "actions" : "HPREF [2] not prntd-HRC API.",
+            "sponsors" : ["HROYB"],
+            "title" : "INVESTMENT STAFF PAY PARITY"
+         },
+         "78" : {
+            "actions" : "HPREF [2] not prntd-HRC API.",
+            "sponsors" : ["HROYB"],
+            "title" : "CAP ON CERTAIN INTEREST RATES"
+         },
+         "79" : {
+            "actions" : "HPREF [2] HCPAC/HJC/HAFC-HCPAC [3] DP-HJC [5] DP-HAFC [7] DP - PASSED/H (66-0) [11] SJC-SJC API.",
+            "sponsors" : ["HELYD","HMAES","HREHM","SDUHI","HMATT","HREEB"],
+            "title" : "SECOND DEGREE MURDER TIME & SENTENCING"
+         },
+         "8" : {
+            "actions" : "[2] HRDLC/HTRC-HRDLC [3] DP-HTRC [4] DP/a [5] fl/a- PASSED/H (62-7) [7] SIRC/SFC-SIRC [9] DP-SFC [11] DP [14] PASSED/S (30-6) SGND BY GOV (Mar. 2) Ch. 32.",
+            "sponsors" : ["HMCQU","HEGOL","HORTE","HMORO","HROAN"],
+            "title" : "LAND GRANT-MERCED ASSISTANCE FUND"
+         },
+         "80" : {
+            "actions" : "HPREF [2] HCEDC/HTRC-HCEDC [4] DNP-CS/DP-HTRC API.",
+            "sponsors" : ["HSERR","HDIXO","HHERN","SHICK"],
+            "title" : "ANGEL INVESTMENT CREDIT REFUNDABLE"
+         },
+         "81" : {
+            "actions" : "[2] HCPAC/HJC-HCPAC [3] DP-HJC [4] DP [7] PASSED/H (45-21) [9] SHPAC/SJC-SHPAC API.",
+            "sponsors" : ["HCADA"],
+            "title" : "FINE, FEE & COST PAYMENT FLEXIBILITY"
+         },
+         "82" : {
+            "actions" : "[2] HHHC/HTRC-HHHC [3] DP-HTRC [5] DP/a [7] PASSED/H (61-0) [11] STBTC-STBTC- DP [14] PASSED/S (36-0) SGND BY GOV (Mar. 8) Ch. 49.",
+            "sponsors" : ["HCADA"],
+            "title" : "DIALYSIS FACILITY GROSS RECEIPTS"
+         },
+         "83" : {
+            "actions" : "[2] not prntd-HRC- w/drn -germane-prntd- - ref HAAWC/HENRC-HAAWC API.",
+            "sponsors" : ["HROAN"],
+            "title" : "QUALIFICATIONS FOR HEAD OF OSE"
+         },
+         "84" : {
+            "actions" : "[2] not prntd-HRC- w/drn -germane-prntd- - ref HCPAC/HJC-HCPAC [4] DP-HJC [6] DP [7] PASSED/H (64-0) [11] SJC-SJC API.",
+            "sponsors" : ["HELYD","HHOCH"],
+            "title" : "CRIME REDUCTION GRANT PURPOSES"
+         },
+         "85" : {
+            "actions" : "[2] not prntd-HRC API.",
+            "emergency" : "*",
+            "sponsors" : ["HROAN"],
+            "title" : "\"MISSING IN NEW MEXICO EVENT\""
+         },
+         "86" : {
+            "actions" : "[2] HGEIC/HAFC-HGEIC- DP-HAFC [6] DP/a [7] PASSED/H (61-1) [11] SFC-SFC API.",
+            "sponsors" : ["HDIXO","HFIGU","HMATT","HLANE","HCROW","HCHAL"],
+            "title" : "LAW ENFORCEMENT RETENTION FUND"
+         },
+         "87" : {
+            "actions" : "[2] HEC/HAFC-HEC [4] DP/a-HAFC [7] DP/a API.",
+            "sponsors" : ["HLENT"],
+            "title" : "INDIAN EDUCATION FUND DISTRIBUTIONS"
+         },
+         "88" : {
+            "actions" : "[2] HEC/HAFC-HEC [4] DP/a-HAFC API.",
+            "sponsors" : ["HLENT"],
+            "title" : "YAZZIE LAWSUIT APPROPRIATIONS"
+         },
+         "89" : {
+            "actions" : "[2] HGEIC/HAFC-HGEIC- DP-HAFC API.",
+            "sponsors" : ["HLENT"],
+            "title" : "TRIBAL EDUCATIONAL RESOURCE PROJECTS"
+         },
+         "9" : {
+            "actions" : "[2] not prntd-HRC-germane-prntd- - ref HCPAC/HJC/HAFC-HCPAC [3] w/o rec-HJC [6] DNP-CS/DP-HAFC API.",
+            "sponsors" : ["HHEPA","SIVEY","SSEDI","HSARI","HROYB","HANMA","SCERV","HCHAL","HGAMP","HHEJO","SNACI","HROAN","HRUBI"],
+            "title" : "UNLAWFUL ACCESS TO FIREARM BY MINOR"
+         },
+         "90" : {
+            "actions" : "[2] HEC/HAFC-HEC [4] DP/a-HAFC API.",
+            "sponsors" : ["HLENT"],
+            "title" : "APPROPRIATIONS FOR YAZZIE LAWSUIT"
+         },
+         "91" : {
+            "actions" : "[2] not prntd-HRC API.",
+            "sponsors" : ["HDOWR","HTERR","HTOWJ","HEZZE","HPETT","HMATT"],
+            "title" : "PROHIBIT CRITICAL RACE THEORY TEACHING"
+         },
+         "92" : {
+            "actions" : "[2] HJC/HAFC-HJC [3] DP-HAFC [6] DP/a [7] tbld/H API.",
+            "sponsors" : ["HHOCH","HROYB"],
+            "title" : "MAGISTRATE JUDGE RETIREMENT CHANGES"
+         },
+         "93" : {
+            "actions" : "[2] not prntd-HRC API.",
+            "sponsors" : ["HHOCH"],
+            "title" : "MOBILITY LIMITATION LICENSE PLATES"
+         },
+         "94" : {
+            "actions" : "[2] HLVMC/HAFC-HLVMC [5] DP-HAFC [7] DP/a - tbld/H API.",
+            "sponsors" : ["HHOCH","HROYB"],
+            "title" : "JUDICIAL RETIREMENT CHANGES"
+         },
+         "95" : {
+            "actions" : "[2] not prntd-HRC- w/drn -germane-prntd- - ref HHHC/HTRC-HHHC [4] DP/a-HTRC [6] DP [7] PASSED/H (66-0) [11] STBTC-STBTC- DP [14] PASSED/S (38-0) SGND BY GOV (Mar. 2) Ch. 33.",
+            "sponsors" : ["HTHOE","HBABR","SSTEF","SMCKE","HCHAN","HHOCH"],
+            "title" : "HEALTH- EASY ENROLLMENT ACT"
+         },
+         "96" : {
+            "actions" : "[2] HCPAC/HAFC-HCPAC [3] DP-HAFC [6] DP/a [8] PASSED/H (44-20) [11] SJC/SFC-SJC API.",
+            "sponsors" : ["HCHAS"],
+            "title" : "VIOLENCE INTERVENTION PROGRAM ACT"
+         },
+         "97" : {
+            "actions" : "[2] HHHC/HAFC-HHHC [3] DP-HAFC API.",
+            "sponsors" : ["HMATT","HHOCH","HCAST","HTRCH","HSARI","HABMI","HTHOE"],
+            "title" : "RURAL HEALTH CARE PROJECT LOANS"
+         },
+         "98" : {
+            "actions" : "[2] HAFC-HAFC API.",
+            "sponsors" : ["HLUND"],
+            "title" : "GENERAL APPROPRIATION ACT OF 2022"
+         },
+         "99" : {
+            "actions" : "[2] not prntd-HRC- w/drn -germane-prntd- - ref HCPAC/HJC/HAFC-HCPAC [4] DP/a-HJC [5] HAFC ref w/drn- HJC [6] DP [8] PASSED/H (59-7) [11] SJC-SJC API.",
+            "sponsors" : ["HLANE","HHOCH","HMARJ","HLENT","HCHAS","HARMG","HBORR","HCHAN","HCHNI","HDIXO","HGADO","HGARR","HGOAN","HHERS","HJOHD","HLUND","HSEEL","HSISA","SSTEF","STOBI"],
+            "title" : "CRIME OF THREATENING A JUDGE"
+         }
+      },
+      "CR" : {
+         "1" : {
+            "actions" : "[7] nt prntd-nt ref com-tbld- w/drn - PASSED/H (64-0) [11] SRC-SRC API.",
+            "sponsors" : ["HMCQU","HSCOT"],
+            "title" : "AVAILABILITY OF COMM. ANALYSIS & AMENDMENTS"
+         }
+      },
+      "JM" : {
+         "1" : {
+            "actions" : "[2] HAAWC-HAAWC [6] DP [7] PASSED/H (70-0) [11] SCONC-SCONC [14] DP [19] PASSED/S (35-0) SGND.",
+            "sponsors" : ["HZAMO","HREHM"],
+            "title" : "CONSIDER DROUGHT IN FEDERAL AG POLICY"
+         },
+         "2" : {
+            "actions" : "[4] HEC-HEC API.",
+            "sponsors" : ["HTOWJ","HMONR"],
+            "title" : "LOCAL CONTROL OF PUBLIC EDUCATION"
+         },
+         "3" : {
+            "actions" : "[5] HGEIC-HGEIC API.",
+            "sponsors" : ["HTOWJ","HMONR"],
+            "title" : "INTERIM MEETINGS AS OPEN MEETINGS"
+         },
+         "4" : {
+            "actions" : "[8] HJC-HJC API.",
+            "sponsors" : ["HCHAN"],
+            "title" : "DR. OPPENHEIMER SECURITY CLEARANCE"
+         }
+      },
+      "JR" : {
+         "1" : {
+            "actions" : "HPREF [2] HTPWC/HJC-HTPWC [5] DP/a-HJC [6] DP [7] PASSED/H (43-23) [11] SJC/SRC-SJC- DP-SRC [14] DP [16] PASSED/S (25-14) SGND (C.A. 2).",
+            "sponsors" : ["HALLI","HCHAN","HSWEE","HSERR","HLUTA","SSTEI"],
+            "title" : "PUBLIC ASSISTANCE FOR HOUSEHOLD SVCS., CA"
+         },
+         "10" : {
+            "actions" : "[2] HCPAC/HGEIC-HCPAC API.",
+            "sponsors" : ["HRUBI","HMARJ","HELYD"],
+            "title" : "PUBLIC OFFICER SALARY COMMISSION, CA"
+         },
+         "11" : {
+            "actions" : "[2] HEC/HJC-HEC API.",
+            "sponsors" : ["HTOWJ","HLANE","HSCOT","HMONR","HLORD"],
+            "title" : "EXPANDING OPTIONS FOR EDUCATIONAL CHOICE , CA"
+         },
+         "12" : {
+            "actions" : "[2] HGEIC/HJC-HGEIC [5] DP-HJC API.",
+            "sponsors" : ["HLORD","HPETT","HSCOT","HTOWJ"],
+            "title" : "RECALL OF ELECTED OFFICIALS, CA"
+         },
+         "13" : {
+            "actions" : "[4] HEC/HGEIC-HEC API.",
+            "sponsors" : ["HTOWJ","HMONR","HBLAC"],
+            "title" : "NM EDUCATION AGENCY & BOARD, CA"
+         },
+         "14" : {
+            "actions" : "[5] HGEIC/HJC-HGEIC [7] DP-HJC API.",
+            "sponsors" : ["HHEPA","HBOUN"],
+            "title" : "RUNOFF ELECTIONS, CA"
+         },
+         "15" : {
+            "actions" : "[6] HEC/HGEIC-HEC API.",
+            "sponsors" : ["HTOWJ","HMONR","HPETT","HLORD","HSCOT"],
+            "title" : "EXPANDING OPTIONS FOR EDUCATIONAL CHOICE, CA"
+         },
+         "2" : {
+            "actions" : "HPREF [2] HENRC/HJC-HENRC [6] DNP-CS/DP-HJC API.",
+            "sponsors" : ["HFERJ","HLUTA","SSEDI","HCHAS","SPOPE","HCHNI","HLORD","HREEB","STOBI"],
+            "title" : "ENVIRONMENTAL RIGHTS, CA"
+         },
+         "3" : {
+            "actions" : "HPREF [2] HGEIC/HJC-HGEIC API.",
+            "sponsors" : ["HNIBE","HELYD","HPETT","HDOWR"],
+            "title" : "TERMINATION OF STATES OF EMERGENCY, CA"
+         },
+         "4" : {
+            "actions" : "HPREF [2] HGEIC/HJC-HGEIC API.",
+            "sponsors" : ["HREHM","HDOWR","HLORD","HPETT"],
+            "title" : "DENIAL OF BAIL, CA"
+         },
+         "5" : {
+            "actions" : "HPREF [2] HGEIC/HJC-HGEIC [4] DP-HJC API.",
+            "sponsors" : ["HDIXO","HFAJA","HLANE","HGARR"],
+            "title" : "PRIMARY ELECTION VOTING ELIGIBILITY, CA"
+         },
+         "6" : {
+            "actions" : "[2] HLVMC/HTRC-HLVMC [3] DP-HTRC API.",
+            "sponsors" : ["HALCO","HPETT","HBLAC","HROYB"],
+            "title" : "VETERAN PROPERTY TAX EXEMPTION, CA"
+         },
+         "7" : {
+            "actions" : "[2] HLVMC/HTRC-HLVMC [3] DP-HTRC API.",
+            "sponsors" : ["HALCO","HPETT","HBLAC","HROYB"],
+            "title" : "ARMED FORCES & WIDOW PROPERTY TAXES, CA"
+         },
+         "8" : {
+            "actions" : "[2] HCPAC/HGEIC-HCPAC [4] DP-HGEIC API.",
+            "sponsors" : ["HELYD"],
+            "title" : "CREATE OFFICE OF CONSUMER AFFAIRS, CA"
+         },
+         "9" : {
+            "actions" : "[2] HGEIC/HJC-HGEIC [7] DNP-CS/DP-HJC API.",
+            "sponsors" : ["HFIGU","HELYD"],
+            "title" : "INDEPENDENT REDISTRICTING COMMISSION, CA"
+         }
+      },
+      "M" : {
+         "1" : {
+            "actions" : "HPREF [2] nt prntd-nt ref com-tbld [8] w/drn - PASSED/H (70-0) SGND.",
+            "sponsors" : ["HSARI"],
+            "title" : "NM NATIONAL BOARD CERTIFIED TEACHERS DAY"
+         },
+         "10" : {
+            "actions" : "[2] nt prntd-nt ref com-tbld [7] w/drn - PASSED/H (70-0)- SGND.",
+            "sponsors" : ["HORTE","HDIXO"],
+            "title" : "CERTIFIED ANESTHESIOLOGIST ASSISTANTS WEEK"
+         },
+         "11" : {
+            "actions" : "[2] HGEIC-HGEIC [3] DP/a [8] PASSED/H (65-0) SGND.",
+            "sponsors" : ["HCADA","HLANE"],
+            "title" : "STUDY UNIFIED JAIL & PRISON SYSTEM"
+         },
+         "12" : {
+            "actions" : "[2] HEC-HEC API.",
+            "sponsors" : ["HLENT","HRUBI"],
+            "title" : "YAZZIE LAWSUIT PLAN & REPORTING"
+         },
+         "13" : {
+            "actions" : "[2] nt prntd-nt ref com-tbld [8] w/drn - PASSED/H (70-0) SGND.",
+            "sponsors" : ["HLUND"],
+            "title" : "ELAINE ANAYA, IN RECOGNITION"
+         },
+         "14" : {
+            "actions" : "[2] nt prntd-nt ref com-tbld [3] w/drn - PASSED/H (70-0) [6] SGND.",
+            "sponsors" : ["HLUND"],
+            "title" : "\"GALLUP/ MCKINLEY COUNTY DAY\""
+         },
+         "15" : {
+            "actions" : "[2] HHHC-HHHC [4] DP API.",
+            "sponsors" : ["HMATT","HSARI","HTRCH"],
+            "title" : "HEALTHY CHILDREN'S MEALS BEVERAGE OPTIONS"
+         },
+         "16" : {
+            "actions" : "[2] nt prntd-nt ref com-tbld [3] w/drn - PASSED/H (70-0) [6] SGND.",
+            "sponsors" : ["HCAST","HANDP","HEZZE","HNIBE","HMAES"],
+            "title" : "NMMI BRONCOS FOOTBALL, CONGRATS"
+         },
+         "17" : {
+            "actions" : "[2] nt prntd-nt ref com-tbld [8] w/drn - PASSED/H (70-0) SGND.",
+            "sponsors" : ["HCAST"],
+            "title" : "\"NM HIGHLANDS DAY\""
+         },
+         "18" : {
+            "actions" : "[2] HHHC-HHHC [4] DP API.",
+            "sponsors" : ["HTHOE"],
+            "title" : "SUPPLEMENTAL SECURITY INCOME LEGAL DATA"
+         },
+         "19" : {
+            "actions" : "[2] nt prntd-nt ref com-tbld [4] w/drn - PASSED/H (69-0) [6] SGND.",
+            "sponsors" : ["HRUBI","HLARA","HMADR","HTRCH","HGADO","HHOCH"],
+            "title" : "LORYNN M. GUERRERO, 2022 TEACHER OF THE YEAR"
+         },
+         "2" : {
+            "actions" : "HPREF [2] HJC-HJC API.",
+            "sponsors" : ["HMATT"],
+            "title" : "AGRITOURISM INSURANCE COVERAGE"
+         },
+         "20" : {
+            "actions" : "[2] HLVMC/HJC-HLVMC API.",
+            "sponsors" : ["HROAN","HRUBI"],
+            "title" : "STUDY STATE-LEVEL PUBLIC UTILITY MODEL"
+         },
+         "21" : {
+            "actions" : "[2] HEC-HEC [3] DP/a API.",
+            "sponsors" : ["HGARR","HBACB","HLARA"],
+            "title" : "DEVELOP PLAN FOR SCHOOL LEADERS"
+         },
+         "22" : {
+            "actions" : "[2] HHHC-HHHC [4] DP API.",
+            "sponsors" : ["HROYB"],
+            "title" : "STUDY LOW-INCOME BASIC INCOME"
+         },
+         "23" : {
+            "actions" : "[2] nt prntd-nt ref com-tbld- w/drn - PASSED/H (70-0) [6] SGND.",
+            "sponsors" : ["HCHAN"],
+            "title" : "\"EL RANCHO DE LAS GOLONDRINAS DAY\""
+         },
+         "24" : {
+            "actions" : "[2] HCPAC-HCPAC [5] DP [8] PASSED/H (65-0) SGND.",
+            "sponsors" : ["HALCO"],
+            "title" : "DEVELOP PLAN TO SAVE ADOPTABLE DOGS & CATS"
+         },
+         "25" : {
+            "actions" : "[2] HEC-HEC API.",
+            "sponsors" : ["HLENT"],
+            "title" : "AGRICULTURE & FOOD IN K-12 CURRICULUM"
+         },
+         "26" : {
+            "actions" : "[2] HGEIC-HGEIC [4] DP API.",
+            "sponsors" : ["HRUBI","HGARR","HSARI","HHERS","HORTE"],
+            "title" : "STUDY LEGISLATIVE SESSIONS & SALARIES"
+         },
+         "27" : {
+            "actions" : "[2] nt prntd-nt ref com-tbld- w/drn - PASSED/H (70-0) [6] SGND.",
+            "sponsors" : ["HDOWR","HTERR"],
+            "title" : "DIANNE MILLER HAMILTON, IN HONOR"
+         },
+         "28" : {
+            "actions" : "[2] nt prntd-nt ref com-tbld [6] w/drn - PASSED/H (70-0)- SGND.",
+            "sponsors" : ["HFAJA","HDOWR","HREHM"],
+            "title" : "VICTIMS OF VIOLENT CRIME, IN RECOGNITION"
+         },
+         "29" : {
+            "actions" : "[3] nt prntd-nt ref com-tbld- w/drn - PASSED/H (70-0) [6] SGND.",
+            "sponsors" : ["HTOWJ","HARMG","HSWEE","HEZZE","HZAMO"],
+            "title" : "\"FFA DAY\""
+         },
+         "3" : {
+            "actions" : "HPREF [2] HLVMC-HLVMC [5] DP API.",
+            "sponsors" : ["HSERR","HCHAN","HROYB"],
+            "title" : "PAID FAMILY AND MEDICAL LEAVE TASK FORCE"
+         },
+         "30" : {
+            "actions" : "[3] nt prntd-nt ref com-tbld- w/drn - PASSED/H (70-0) [6] SGND.",
+            "sponsors" : ["HDOWR","HSWEE","HEZZE","HZAMO","HARMG"],
+            "title" : "\"4-H DAY\""
+         },
+         "31" : {
+            "actions" : "[4] nt prntd-nt ref com-tbld [8] w/drn - PASSED/H (70-0) SGND.",
+            "sponsors" : ["HGADO","HRUBI","HLARA","HFERJ"],
+            "title" : "ROBERTO V. ESTRADA, IN HONOR"
+         },
+         "32" : {
+            "actions" : "[4] HEC-HEC API.",
+            "sponsors" : ["HHEPA","HTRCH"],
+            "title" : "TEACHING OF MULTICULTURAL HISTORICAL EVENTS"
+         },
+         "33" : {
+            "actions" : "[4] HEC-HEC [7] DP [8] PASSED/H (65-0) SGND.",
+            "sponsors" : ["HTRCH"],
+            "title" : "GIFTED EDUCATION PROGRAM RECOMMENDATIONS"
+         },
+         "34" : {
+            "actions" : "[4] nt prntd-nt ref com-tbld [8] w/drn - PASSED/H (70-0) SGND.",
+            "sponsors" : ["HFIGU"],
+            "title" : "ALISA COOPER DE URIBE, NM TEACHER OF THE YEAR"
+         },
+         "35" : {
+            "actions" : "[4] HGEIC-HGEIC [7] DP/a [8] PASSED/H (65-0) SGND.",
+            "sponsors" : ["HHEPA","HROYB"],
+            "title" : "LAW ENFORCEMENT RECOMMENDATION TASK FORCE"
+         },
+         "36" : {
+            "actions" : "[4] HHHC-HHHC [5] DP [8] PASSED/H (65-0) SGND.",
+            "sponsors" : ["HMORO"],
+            "title" : "HOSPITAL CHARGES FOR UNINSURED"
+         },
+         "37" : {
+            "actions" : "[4] nt prntd-nt ref com-tbld [8] w/drn - PASSED/H (70-0) SGND.",
+            "sponsors" : ["HSERR","HMARJ"],
+            "title" : "MEXICAN 201ST SQUADRON"
+         },
+         "38" : {
+            "actions" : "[4] HCPAC-HCPAC [7] DP API.",
+            "sponsors" : ["HROAN"],
+            "title" : "LAW ENFORCEMENT TRAINING STUDY"
+         },
+         "39" : {
+            "actions" : "[5] nt prntd-nt ref com-tbld [8] w/drn - PASSED/H (70-0) SGND.",
+            "sponsors" : ["HREHM","HPOWD","HDOWR","HLANE","HBLAC"],
+            "title" : "\"LAW ENFORCEMENT APPRECIATION DAY\""
+         },
+         "4" : {
+            "actions" : "HPREF [2] HHHC-HHHC [4] DP/a [8] PASSED/H (65-0) SGND.",
+            "sponsors" : ["HORTE","HFAJA"],
+            "title" : "\"FOURTH TRIMESTER CARE DAY\""
+         },
+         "40" : {
+            "actions" : "[5] nt prntd-nt ref com-tbld [8] w/drn - PASSED/H (70-0) SGND.",
+            "sponsors" : ["HROYB","HANDP"],
+            "title" : "AUGUST 1 AS \"PERA DAY\""
+         },
+         "41" : {
+            "actions" : "[5] nt prntd-nt ref com-tbld [8] w/drn - PASSED/H (70-0)- SGND.",
+            "sponsors" : ["HEZZE","HBROW","HBLAC","HLANE","HDOWR"],
+            "title" : "\"NM STATE FIREFIGHTERS ASSOCIATION DAY\""
+         },
+         "42" : {
+            "actions" : "[5] nt prntd-nt ref com-tbld [7] w/drn - PASSED/H (70-0)- SGND.",
+            "sponsors" : ["HMADR"],
+            "title" : "DAVID LEE UBINGER, IN RECOGNITION"
+         },
+         "43" : {
+            "actions" : "[5] HEC-HEC [7] DP [8] PASSED/H (65-0) SGND `.",
+            "sponsors" : ["HHEPA","HTRCH"],
+            "title" : "SCHOOL MENTAL WELLNESS SPACES"
+         },
+         "44" : {
+            "actions" : "[5] HAAWC-HAAWC [7] DNP-CS/DP API.",
+            "sponsors" : ["HTERR","HDOWR"],
+            "title" : "FERAL & UNBRANDED CATTLE"
+         },
+         "45" : {
+            "actions" : "[5] HCEDC-HCEDC [8] DP API.",
+            "sponsors" : ["HLOUI"],
+            "title" : "STRENGTHEN RELATIONS WITH TAIWAN"
+         },
+         "46" : {
+            "actions" : "[5] nt prntd-nt ref com-tbld [6] w/drn - fl/a- PASSED/H (70-0) [7] SGND.",
+            "sponsors" : ["HFERJ","HLARA","HFAJA","HROAN","HROMA"],
+            "title" : "\"NM FOOD & FARMS DAY\""
+         },
+         "47" : {
+            "actions" : "[5] HTPWC-HTPWC API.",
+            "sponsors" : ["HGARR"],
+            "title" : "NATIONAL INFRASTRUCTURE BANK"
+         },
+         "48" : {
+            "actions" : "[6] HEC-HEC [7] DP [8] PASSED/H (65-0) SGND.",
+            "sponsors" : ["HLUTA"],
+            "title" : "STEM CAREER PIPELINE STUDY"
+         },
+         "49" : {
+            "actions" : "[6] HENRC-HENRC API.",
+            "sponsors" : ["HDOWR","HARMG"],
+            "title" : "LIVESTOCK PROTECTION FROM WOLVES"
+         },
+         "5" : {
+            "actions" : "HPREF [2] HRDLC-HRDLC [3] DP API.",
+            "sponsors" : ["HROYB"],
+            "title" : "DOLORES HUERTA BIRTHPLACE RECOMMENDATIONS"
+         },
+         "50" : {
+            "actions" : "[6] nt prntd-nt ref com-tbld [8] w/drn - PASSED/H (70-0) SGND.",
+            "sponsors" : ["HCAST"],
+            "title" : "REYNALDO MIGUEL FLORES, IN RECOGNITION"
+         },
+         "51" : {
+            "actions" : "[7] nt prntd-nt ref com-tbld [8] w/drn - PASSED/H (70-0) SGND.",
+            "sponsors" : ["HLARA","HMADR","HTERR","HGADO","HSMAL"],
+            "title" : "\"COLONIAS DAY\""
+         },
+         "52" : {
+            "actions" : "[7] HEC-HEC API.",
+            "sponsors" : ["HDELA"],
+            "title" : "STUDY LOW-COST GRAD SCHOOL STUDENT LOANS"
+         },
+         "53" : {
+            "actions" : "[7] HTRC-HTRC API.",
+            "sponsors" : ["HDELA"],
+            "title" : "IMPACT OF CAPPING CERTAIN PROPERTY TAXES"
+         },
+         "54" : {
+            "actions" : "[7] nt prntd-nt ref com-tbld- w/drn - PASSED/H (70-0) [8] SGND.",
+            "sponsors" : ["HHEPA"],
+            "title" : "\"AFRICAN-AMERICAN DAY\""
+         },
+         "55" : {
+            "actions" : "[8] HCEDC-HCEDC API.",
+            "sponsors" : ["HANDP","HGAHA"],
+            "title" : "STUDY MILITARY RETIREMENT TAX EXEMPTION"
+         },
+         "56" : {
+            "actions" : "[8] HENRC-HENRC API.",
+            "sponsors" : ["HBROW"],
+            "title" : "STUDY CAPPING ABANDONED WATER WELLS"
+         },
+         "57" : {
+            "actions" : "[8] nt prntd-nt ref com-tbld- w/drn - PASSED/H (70-0) SGND.",
+            "sponsors" : ["HGARR","HMARJ","HEGOL","HCHAS","HHERS"],
+            "title" : "REP. KAREN C. BASH, IN RECOGNITION"
+         },
+         "58" : {
+            "actions" : "[8] nt prntd-nt ref com-tbld- w/drn - PASSED/H (70-0) SGND.",
+            "sponsors" : ["HTHOE","HMARJ","HEGOL","HCHAS","HGADO"],
+            "title" : "REP. DEBORAH A. ARMSTRONG, IN RECOGNITION"
+         },
+         "59" : {
+            "actions" : "[8] nt prntd-nt ref com-tbld- w/drn - PASSED/H (70-0) SGND.",
+            "sponsors" : ["HROAN","HMARJ","HCHAN","HEGOL","HCHAS"],
+            "title" : "REP. DAYMON ELY, IN RECOGNITION"
+         },
+         "6" : {
+            "actions" : "HPREF [2] nt prntd-nt ref com-tbld [4] w/drn - PASSED/H (69-0) [6] SGND.",
+            "sponsors" : ["HHERN"],
+            "title" : "INNOVATION IN RIO RANCHO DAY"
+         },
+         "60" : {
+            "actions" : "[8] nt prntd-nt ref com-tbld- w/drn - PASSED/H (70-0) SGND.",
+            "sponsors" : ["HFAJA","HBACB","HTOWJ","HMONR","HLORD"],
+            "title" : "REP. ALONZO BALDONADO, IN RECOGNITION"
+         },
+         "61" : {
+            "actions" : "[8] nt prntd-nt ref com-tbld- w/drn - PASSED/H (70-0) SGND.",
+            "sponsors" : ["HARMG","HFAJA","HLANE","HSWEE","HTERR"],
+            "title" : "REP. REBECCA DOW, IN RECOGNITION"
+         },
+         "62" : {
+            "actions" : "[8] nt prntd-nt ref com-tbld- w/drn - PASSED/H (70-0) SGND.",
+            "sponsors" : ["HORTE","HGADO","HJOHD","HTHOE","HARMG"],
+            "title" : "REP. BRITTNEY BARRERAS, IN RECOGNITION"
+         },
+         "7" : {
+            "actions" : "HPREF [2] nt prntd-nt ref com-tbld [8] w/drn - PASSED/H (70-0) SGND.",
+            "sponsors" : ["HHERN"],
+            "title" : "BOW TIE DAY"
+         },
+         "8" : {
+            "actions" : "HPREF [2] nt prntd-nt ref com-tbld [6] w/drn - PASSED/H (70-0)- SGND.",
+            "sponsors" : ["HGARR","HHOCH"],
+            "title" : "\"CONGENITAL HEART DISEASE AWARENESS WEEK\""
+         },
+         "9" : {
+            "actions" : "HPREF [2] HCEDC-HCEDC API.",
+            "sponsors" : ["HDIXO","HCROW","HARMG","HCAST","HROAN","HGURR","HLARA","HMARJ","SNACI","HRUBI"],
+            "title" : "HOUSING & ECONOMIC DEVELOPMENT TASK FORCE"
+         }
+      },
+      "R" : {
+         "1" : {
+            "actions" : "[1] nt prntd-nt ref com-tbld- w/drn - PASSED/H (60-1) [6] SGND.",
+            "sponsors" : ["HROAN"],
+            "title" : "HOUSE RULE CHANGES"
+         },
+         "2" : {
+            "actions" : "[4] HRC-HRC API.",
+            "sponsors" : ["HTOWJ","HMONR"],
+            "title" : "ADVANCE NOTICE OF HEARINGS"
+         },
+         "3" : {
+            "actions" : "[4] HRC-HRC API.",
+            "sponsors" : ["HTOWJ","HMONR"],
+            "title" : "VOTE REQUIRED ON CONCURRENCE"
+         },
+         "4" : {
+            "actions" : "[4] HRC-HRC API.",
+            "sponsors" : ["HTOWJ","HMONR"],
+            "title" : "OATHS FOR EXPERT WITNESSES"
+         }
+      }
+   },
+   "S" : {
+      "B" : {
+         "1" : {
+            "actions" : "[1] SCC/SEC/SFC-SCC [2]germane-SEC [4] DP-SFC [7] DP [8] PASSED/S (35-0) [6] HEC/HAFC-HEC [7] DP-HAFC [8] DP - PASSED/H (68-0) SGND BY GOV (Mar. 1) Ch. 28.",
+            "sponsors" : ["SSTEW","SHEMP","HSARI"],
+            "title" : "INCREASING SALARY FOR LICENSED TEACHERS"
+         },
+         "100" : {
+            "actions" : "[1] SCC/STBTC/SJC-SCC [4]germane-STBTC [7] DNP-CS/DP-SJC [12] DP/a [14] fl/a- PASSED/S (28-11) [8] HJC-HJC API.",
+            "sponsors" : ["SLOPE","HROAN"],
+            "title" : "CANNABIS REGULATION"
+         },
+         "101" : {
+            "actions" : "[1] SCC/SEC/SFC-SCC [4]germane-SEC [6] DP-SFC API.",
+            "sponsors" : ["SPOPE"],
+            "title" : "SCHOOL GROUP INSURANCE CONTRIBUTIONS"
+         },
+         "102" : {
+            "actions" : "[1] SCC/SRC/SJC-SCC API.",
+            "sponsors" : ["STALL"],
+            "title" : "PERA BOARD MEMBER CHANGES"
+         },
+         "103" : {
+            "actions" : "[4] SCC/SHPAC/SJC-SCC-germane-SHPAC [7] DP/a-SJC [9] DNP-CS/DP - PASSED/S (38-0) [7] HJC-HJC [8] DP - PASSED/H (62-0) SGND BY GOV (Feb. 28) Ch. 13.",
+            "sponsors" : ["SPADI"],
+            "title" : "WORKFORCE SOLUTIONS STAFF BACKGROUND CHECKS"
+         },
+         "104" : {
+            "actions" : "[4] SCC/SEC/SHPAC-SCC API.",
+            "sponsors" : ["SGONZ","SHEMP"],
+            "title" : "TEACHER LICENSURE ALTERNATE PATHWAYS"
+         },
+         "105" : {
+            "actions" : "[4] SCC/SEC/SFC-SCC API.",
+            "sponsors" : ["SSOUL"],
+            "title" : "SCHOOL FINANCE REPORTING DATES"
+         },
+         "106" : {
+            "actions" : "[4] SCC/STBTC/SFC-SCC-germane-STBTC API.",
+            "sponsors" : ["SDIAM","SHEMP"],
+            "title" : "SHORT LINE RAILROAD MODERNIZATION TAX CREDIT"
+         },
+         "107" : {
+            "actions" : "[4] SCC/STBTC/SJC-SCC API.",
+            "sponsors" : ["SSOUL","SDUHI"],
+            "title" : "INSTALLMENT LOAN PERCENTAGE RATES"
+         },
+         "108" : {
+            "actions" : "[4] SCC/STBTC/SFC-SCC-germane-STBTC [11] (Succeeding entries: S 5).",
+            "sponsors" : ["SPADI","HBROW","SGADM"],
+            "title" : "EXEMPT SOCIAL SECURITY FROM INCOME TAX"
+         },
+         "109" : {
+            "actions" : "[4] SCC/SCONC/SJC-SCC API.",
+            "sponsors" : ["SMCKE"],
+            "title" : "ENVIRONMENTAL VIOLATION CIVIL PENALTIES"
+         },
+         "11" : {
+            "actions" : "[1] SCC/SCONC/SFC-SCC API.",
+            "sponsors" : ["SWOOD","HSARI"],
+            "title" : "NEW MEXICO REFORESTATION CENTER ACT"
+         },
+         "110" : {
+            "actions" : "[4] SCC/SEC/SFC-SCC-germane-SEC [6] DP-SFC API.",
+            "sponsors" : ["SPIRT"],
+            "title" : "SCHOOL BUS DRIVER COMPENSATION"
+         },
+         "111" : {
+            "actions" : "[4] SCC/STBTC/SFC-SCC [2]germane-STBTC [7] DP-SFC API.",
+            "sponsors" : ["SPIRT"],
+            "title" : "US HIGHWAY 380 PROJECTS"
+         },
+         "112" : {
+            "actions" : "[4] SCC/SHPAC/SFC-SCC-germane-SHPAC API.",
+            "sponsors" : ["SGONZ"],
+            "title" : "RETIREE HEALTH CARE FUND CONTRIBUTIONS"
+         },
+         "113" : {
+            "actions" : "[4] SCC/STBTC/SJC-SCC API.",
+            "sponsors" : ["SMUNO"],
+            "title" : "ELECTRONIC PROOF OF CAR INSURANCE"
+         },
+         "114" : {
+            "actions" : "[4] SCC/STBTC/SJC-SCC API.",
+            "sponsors" : ["STALL"],
+            "title" : "PROCUREMENT CODE CHANGES"
+         },
+         "115" : {
+            "actions" : "[4] SCC/STBTC/SFC-SCC-germane-STBTC API.",
+            "sponsors" : ["STALL"],
+            "title" : "EXPAND RURAL HEALTH CARE TAX CREDIT"
+         },
+         "116" : {
+            "actions" : "[4] SCC/SHPAC/SFC-SCC-germane-SHPAC [6] DP-SFC API.",
+            "sponsors" : ["SRODR","SGRIG"],
+            "title" : "COUNTY COURTHOUSE FUND & PROJECTS"
+         },
+         "117" : {
+            "actions" : "[4] SCC/SHPAC/SJC-SCC API.",
+            "sponsors" : ["SDUHI"],
+            "title" : "STATUTE OF LIMITATIONS FOR CERTAIN SEX CRIMES"
+         },
+         "118" : {
+            "actions" : "[4] SCC/SHPAC/SFC-SCC-germane-SHPAC API.",
+            "sponsors" : ["SGONZ","HGADO","HSWEE"],
+            "title" : "EARLY CHILDHOOD CARE FUND USES"
+         },
+         "119" : {
+            "actions" : "[4] SCC/SHPAC/SFC-SCC-germane-SHPAC [6] DP/a-SFC API.",
+            "sponsors" : ["SORTI","SMUNO","SHICK","SCERV"],
+            "title" : "UNM HEALTH SCIENCES CENTER"
+         },
+         "12" : {
+            "actions" : "[1] SCC/SJC/SFC-SCC [4]germane-SJC [9] DNP-CS/DP-SFC [11] DP/a [12] PASSED/S (34-0) [8] HAFC-HAFC- w/drn - PASSED/H (68-0) SGND BY GOV (Feb. 24) Ch. 2.",
+            "emergency" : "*",
+            "sponsors" : ["SPINS","SLOPE","HHEPA"],
+            "title" : "AG OFFICE FOR MISSING INDIGENOUS PERSONS"
+         },
+         "120" : {
+            "actions" : "[4] SCC/SJC/SFC-SCC-germane-SJC API.",
+            "sponsors" : ["SHICK"],
+            "title" : "BRANDISHING A FIREARM SENTENCES"
+         },
+         "121" : {
+            "actions" : "[4] SCC/STBTC/SFC-SCC-germane-STBTC API.",
+            "sponsors" : ["SGADM","SMOOR"],
+            "title" : "EXEMPT SOCIAL SECURITY FROM INCOME TAX"
+         },
+         "122" : {
+            "actions" : "[4] SCC/STBTC/SFC-SCC API.",
+            "sponsors" : ["SMUNO"],
+            "title" : "EC DIVERSIFICATION & CLIMATE RESILIENCE FUND"
+         },
+         "123" : {
+            "actions" : "[4] SCC/SHPAC/SFC-SCC [5]germane-SHPAC [7] DP-SFC- DP [8] PASSED/S (28-7) [6] HGEIC-HGEIC [8] DP - PASSED/H (65-1) SGND BY GOV (Mar. 1) Ch. 31.",
+            "sponsors" : ["SMUNO"],
+            "title" : "STATE RACING COMMISSION SUNSET DATE"
+         },
+         "124" : {
+            "actions" : "[4] SCC/SEC/SFC-SCC API.",
+            "sponsors" : ["SMUNO","SSTEW"],
+            "title" : "LOTTERY SCHOLARSHIP ELIGIBILITY & DEFINITIONS"
+         },
+         "125" : {
+            "actions" : "[4] SCC/SHPAC/SFC-SCC-germane-SHPAC [6] DP-SFC [9] DP/a API.",
+            "sponsors" : ["SMUNO","SPADI"],
+            "title" : "STATE EMPLOYEE MINIMUM WAGE"
+         },
+         "126" : {
+            "actions" : "[4] SCC/SHPAC/SFC-SCC API.",
+            "sponsors" : ["SGADM"],
+            "title" : "PUBLIC SAFETY TELECOMMUNICATOR RETIREMENT"
+         },
+         "127" : {
+            "actions" : "[4] SCC/SJC/SFC-SCC API.",
+            "sponsors" : ["SPIRT"],
+            "title" : "NM MOUNTED PATROL DEFINITIONS & INSURANCE"
+         },
+         "128" : {
+            "actions" : "[4] SCC/STBTC/SFC-SCC-germane-STBTC API.",
+            "sponsors" : ["SBURT","SMOOR","SGADM"],
+            "title" : "UNIFORMED SVC. RETIREE INCOME TAX DEDUCTION"
+         },
+         "129" : {
+            "actions" : "[4] SCC/STBTC/SJC-SCC API.",
+            "sponsors" : ["SSCHM"],
+            "title" : "INSTALLMENT LOAN PERCENTAGE RATES"
+         },
+         "13" : {
+            "actions" : "[1] SCC/SHPAC/SJC-SCC [2]germane-SHPAC [4] DP/a-SJC [5] DP [6] PASSED/S (34-0) [4] HGEIC-HGEIC [5] DP [8] PASSED/H (63-0) SGND BY GOV (Feb. 24) Ch. 3.",
+            "emergency" : "*",
+            "sponsors" : ["SLOPE","HROAN","SPINS"],
+            "title" : "\"MISSING IN NEW MEXICO EVENT\""
+         },
+         "130" : {
+            "actions" : "[4] SCC/SHPAC/SJC-SCC API.",
+            "emergency" : "*",
+            "sponsors" : ["SJARA","HHERS"],
+            "title" : "EMERGENCY FILLING OF LP GAS CONTAINERS"
+         },
+         "131" : {
+            "actions" : "[4] SCC/SEC/SFC-SCC API.",
+            "sponsors" : ["SPIRT"],
+            "title" : "CAREER TECH EDUCATION LOAN FOR SERVICE ACT"
+         },
+         "132" : {
+            "actions" : "[4] SCC/SEC/SFC-SCC-germane-SEC [6] DP-SFC API.",
+            "sponsors" : ["SSTEW","SHEMP"],
+            "title" : "EDUCATIONAL ASSISTANT MINIMUM SALARY"
+         },
+         "133" : {
+            "actions" : "[4] SCC/STBTC/SFC-SCC API.",
+            "sponsors" : ["SGADM"],
+            "title" : "MAKE-A-WISH NM LICENSE PLATES"
+         },
+         "134" : {
+            "actions" : "[4] SCC/SHPAC/SFC-SCC-germane-SHPAC [6] DP-SFC [7] DP [8] PASSED/S (37-3) [6] HTRC-HTRC [8] DP - PASSED/H (51-15) SGND BY GOV (Mar. 3) Ch. 38.",
+            "sponsors" : ["SRODR","HSMAL"],
+            "title" : "NM HOUSING TRUST FUND"
+         },
+         "135" : {
+            "actions" : "[4] SCC/STBTC/SFC-SCC-germane-STBTC [7] w/o rec-SFC [9] DP [11] PASSED/S (24-15) [7] HAFC-HAFC API.",
+            "sponsors" : ["SHEMP","SSTEW"],
+            "title" : "LIMIT CERTAIN STATE FUND TRANSFERS"
+         },
+         "136" : {
+            "actions" : "[4] SCC/STBTC/SFC-SCC-germane-STBTC API.",
+            "emergency" : "*",
+            "sponsors" : ["SKERN","SINGL"],
+            "title" : "EXCLUDE OIL & GAS SERVICES FROM DBS RULES"
+         },
+         "137" : {
+            "actions" : "[4] SCC/STBTC/SFC-SCC-germane-STBTC [7] DNP-CS/DP-SFC [11] DP/a [14] PASSED/S (37-0) [8] HTRC-HTRC- DP/a API.",
+            "sponsors" : ["SKERN","SGONZ"],
+            "title" : "DISTRIBUTE PART OF GRT ON SVCS TO MUNIS"
+         },
+         "138" : {
+            "actions" : "[4] SCC/STBTC/SFC-SCC-germane-STBTC [6] DP-SFC [7] DP [8] PASSED/S (36-0) [6] HHHC/HTRC-HHHC [7] DP-HTRC [8] DP - PASSED/H (59-0) SGND BY GOV (Mar. 8) Ch. 43.",
+            "sponsors" : ["SKERN"],
+            "title" : "MEDICAL & HEALTH CARE GROSS RECEIPTS"
+         },
+         "139" : {
+            "actions" : "[4] SCC/SCONC/SFC-SCC-germane-SCONC [6] DP-SFC API.",
+            "sponsors" : ["SSTEF"],
+            "title" : "NMSU STATEWIDE AGRICULTURAL PROGRAMS"
+         },
+         "14" : {
+            "actions" : "[1] SCC/STBTC/SFC-SCC [2]germane-STBTC [5] DNP-CS/DP-SFC [6] DNP-CS/DP/a [7] PASSED/S (25-16) [5] HGEIC-HGEIC [8] DP/a - FAILED/H (33-33).",
+            "sponsors" : ["SSTEW"],
+            "title" : "ENACTING THE CLEAN FUEL STANDARD ACT"
+         },
+         "140" : {
+            "actions" : "[4] SCC/SEC/SFC-SCC-germane-SEC [6] DP-SFC [11] DNP-CS/DP [12] fl/aa- PASSED/S (30-6) [8] HEC-HEC- DP - PASSED/H (51-17) SGND BY GOV (Mar. 4) Ch. 42.",
+            "sponsors" : ["SSTEF","HGARR"],
+            "title" : "OPPORTUNITY SCHOLARSHIP ACT"
+         },
+         "141" : {
+            "actions" : "[4] SCC/SIRC/STBTC-SCC-germane-SIRC [6] DP-STBTC [7] DP [8] PASSED/S (32-5) [6] HRDLC/HGEIC-HRDLC [7] DP-HGEIC [8] w/drn - PASSED/H (62-1) SGND BY GOV (Mar. 2) Ch. 34.",
+            "emergency" : "*",
+            "sponsors" : ["SJARA","HHERS"],
+            "title" : "EMERGENCY FILLING OF LP GAS CONTAINERS"
+         },
+         "142" : {
+            "actions" : "[4] SCC/STBTC/SFC-SCC API.",
+            "sponsors" : ["SPIRT"],
+            "title" : "TAX DEFINITION OF FINE CIGAR"
+         },
+         "143" : {
+            "actions" : "[4] SCC/STBTC/SJC/SFC-SCC API.",
+            "sponsors" : ["SPIRT"],
+            "title" : "SMALL BUSINESS PANDEMIC TAKINGS REPARATIONS"
+         },
+         "144" : {
+            "actions" : "[4] SCC/SJC/SFC-SCC [5]germane-SJC [7] DP/a-SFC- DP [8] PASSED/S (38-0) [6] HJC-HJC [8] DP/a - fl/a- PASSED/H (39-30) API.",
+            "sponsors" : ["SDUHI","HELYD"],
+            "title" : "INTIMIDATION OF ELECTION WORKERS"
+         },
+         "145" : {
+            "actions" : "[4] SCC/SCONC/SFC-SCC API.",
+            "sponsors" : ["SCAMP"],
+            "title" : "NM REFORESTATION CENTER"
+         },
+         "146" : {
+            "actions" : "[4] SCC/SHPAC/SJC-SCC API.",
+            "sponsors" : ["SCAMP"],
+            "title" : "COOPERATIVE PROCUREMENT AGREEMENTS"
+         },
+         "147" : {
+            "actions" : "[4] SCC/SHPAC/SFC-SCC API.",
+            "sponsors" : ["SCAMP"],
+            "title" : "AMBULANCE SERVICES FUND"
+         },
+         "148" : {
+            "actions" : "[4] SCC/SHPAC/SFC-SCC-germane-SHPAC API.",
+            "sponsors" : ["SRODR"],
+            "title" : "IMPROVE PERINATAL HEALTH"
+         },
+         "149" : {
+            "actions" : "[4] SCC/SIRC/SFC-SCC-germane-SIRC [6] DP-SFC API.",
+            "sponsors" : ["SORTI"],
+            "title" : "RURAL LIBRARIES ENDOWMENT FUND"
+         },
+         "15" : {
+            "actions" : "[1] SCC/SHPAC/SFC-SCC [2]germane-SHPAC [4] DP-SFC API.",
+            "emergency" : "*",
+            "sponsors" : ["SSTEI"],
+            "title" : "KN95 MASKS AND EDUCATION"
+         },
+         "150" : {
+            "actions" : "[4] SCC/STBTC/SJC-SCC-germane-STBTC [7] DP-SJC [12] DP [14] PASSED/S (38-0) [8] HJC-HJC- w/drn - PASSED/H (67-0) SGND BY GOV (Mar. 2) Ch. 35.",
+            "emergency" : "*",
+            "sponsors" : ["SSTEF","SMOOR","HHOCH"],
+            "title" : "CREDIT FOR REINSURANCE ACT"
+         },
+         "151" : {
+            "actions" : "[4] SCC/SHPAC/SFC-SCC-germane-SHPAC [6] DP-SFC API.",
+            "sponsors" : ["SSTEF","SPADI"],
+            "title" : "AT-RISK YOUTH TRAINING & CASE MANAGEMENT"
+         },
+         "152" : {
+            "actions" : "[4] SCC/SHPAC/SJC-SCC-germane-SHPAC [6] DP-SJC [12] DNP-CS/DP API.",
+            "sponsors" : ["SHAMB","SSTEF","SJARA","SHEMP"],
+            "title" : "EXTEND SCOPE OF HUMAN RIGHTS ACT"
+         },
+         "153" : {
+            "actions" : "[4] SCC/SHPAC/SJC-SCC API.",
+            "sponsors" : ["SHAMB"],
+            "title" : "COLLECTION OF CERTAIN DEMOGRAPHIC DATA"
+         },
+         "154" : {
+            "actions" : "[4] SCC/SFC-SCC-germane-SFC API.",
+            "sponsors" : ["SMUNO"],
+            "title" : "GENERAL APPROPRIATION ACT OF 2022"
+         },
+         "155" : {
+            "actions" : "[4] SCC/STBTC/SFC-SCC-germane-STBTC [7] DP-SFC API.",
+            "sponsors" : ["SMUNO"],
+            "title" : "EC DIVERSIFICATION & CLIMATE RESILIENCE FUND"
+         },
+         "156" : {
+            "actions" : "[4] SCC/SHPAC/SJC-SCC-germane-SHPAC [7] DNP-CS/w/o rec-SJC API.",
+            "sponsors" : ["SSCHM"],
+            "title" : "STANDARD FOR PRETRIAL RELEASE"
+         },
+         "157" : {
+            "actions" : "[4] SCC/SCONC/SFC-SCC-germane-SCONC [6] DNP-CS/DP-SFC API.",
+            "sponsors" : ["SSTEI"],
+            "title" : "CONTINUE CHILE LABOR INCENTIVE PROGRAM"
+         },
+         "158" : {
+            "actions" : "[4] SCC/SJC/STBTC-SCC [6]germane-SJC [8] DP/a-STBTC- w/drn - fl/a- PASSED/S (35-0) [7] HJC-HJC [8] DP API.",
+            "emergency" : "*",
+            "sponsors" : ["SBRAN"],
+            "title" : "ANATOMICAL GIFT DISCRIMINATION"
+         },
+         "159" : {
+            "actions" : "[4] SCC/SHPAC/SFC-SCC-germane-SHPAC [6] DP-SFC [8] DP [9] PASSED/S (34-0) [7] HJC-HJC [8] DP/a - PASSED/H (61-5) [14] s/cncrd SGND BY GOV (Feb. 28) Ch. 16.",
+            "sponsors" : ["SINGL","SWIRT"],
+            "title" : "LEGISLATIVE RETIREMENT CHANGES"
+         },
+         "16" : {
+            "actions" : "[1] SCC/SHPAC/SFC-SCC [2]germane-SHPAC [4] DP/a-SFC API.",
+            "sponsors" : ["SSTEI"],
+            "title" : "DISTRIBUTION OF AT-HOME COVID19 TESTING KITS"
+         },
+         "160" : {
+            "actions" : "[4] SCC/STBTC/SFC-SCC-germane-STBTC [7] DP-SFC API.",
+            "sponsors" : ["SPOPE","HGARR"],
+            "title" : "WIDEN PASEO DEL NORTE"
+         },
+         "161" : {
+            "actions" : "[4] SCC/SEC/SFC-SCC-germane-SEC [6] DP-SFC API.",
+            "sponsors" : ["SHICK"],
+            "title" : "SPACE VALLEY CENTER"
+         },
+         "162" : {
+            "actions" : "[4] SCC/SCONC/SFC-SCC-germane-SCONC [7] DP-SFC API.",
+            "sponsors" : ["SSTEF","SCAMP"],
+            "title" : "STRATEGIC WATER RESERVE"
+         },
+         "163" : {
+            "actions" : "[4] SCC/SJC/SFC-SCC-germane-SJC API.",
+            "sponsors" : ["SLOPE","SPINS","SPOPE","SSEDI","SGONZ"],
+            "title" : "STATE PERSONNEL DIVERSITY ACT"
+         },
+         "164" : {
+            "actions" : "[4] SCC/SJC/SFC-SCC-germane-SJC [6] DNP-CS/DP-SFC API.",
+            "sponsors" : ["SSOUL"],
+            "title" : "INCREASE JUROR COMPENSATION"
+         },
+         "165" : {
+            "actions" : "[4] SCC/SEC/SFC-SCC-germane-SEC [6] DP-SFC API.",
+            "sponsors" : ["SPADI"],
+            "title" : "ENHANCE CERTAIN SUMMER & OUT-OF-SCHOOL PGMS."
+         },
+         "166" : {
+            "actions" : "[4] SCC/SHPAC/SFC-SCC-germane-SHPAC [7] DP-SFC API.",
+            "sponsors" : ["SHAMB"],
+            "title" : "TRANSITIONAL HOUSING FROM INCARCERATION"
+         },
+         "167" : {
+            "actions" : "[4] SCC/SHPAC/SJC-SCC-germane-SHPAC API.",
+            "sponsors" : ["SBACA"],
+            "title" : "YOUTHFUL OFFENDER & STAYED ADULT SENTENCE"
+         },
+         "168" : {
+            "actions" : "[4] SCC/SJC/SFC-SCC API.",
+            "emergency" : "*",
+            "sponsors" : ["SGADM","SJARA"],
+            "title" : "SURRENDER OF INFANTS"
+         },
+         "169" : {
+            "actions" : "[4] SCC/STBTC/SFC-SCC API.",
+            "sponsors" : ["SLOPE"],
+            "title" : "EVALUATE SANTOLINA DEVELOPMENT"
+         },
+         "17" : {
+            "actions" : "[1] SCC/SCONC/SFC-SCC [2]germane-SCONC [4] DP-SFC [6] DP - PASSED/S (31-0) [4] HAFC-HAFC [8] DP - PASSED/H (67-0) SGND BY GOV (Feb. 28) Ch. 14.",
+            "emergency" : "*",
+            "sponsors" : ["SINGL"],
+            "title" : "AUTHORIZATION FOR CERTAIN WATER PROJECTS"
+         },
+         "170" : {
+            "actions" : "[4] SCC/STBTC/SFC-SCC [5]germane-STBTC API.",
+            "sponsors" : ["SLOPE"],
+            "title" : "ABQ WEST CENTRAL AVE. ECON DEVELOPMENT"
+         },
+         "171" : {
+            "actions" : "[4] SCC/SHPAC/SFC-SCC [5]germane-SHPAC [7] DP-SFC API.",
+            "sponsors" : ["SORTI","SHICK"],
+            "title" : "MED STUDENTS IN UNDERSERVED COMMUNITIES"
+         },
+         "172" : {
+            "actions" : "[4] SCC/SEC/SFC-SCC [5]germane-SEC [6] DP-SFC [7] DP API.",
+            "sponsors" : ["SMUNO","HGARR"],
+            "title" : "RETIREES RETURNING TO WORK"
+         },
+         "173" : {
+            "actions" : "[4] SCC/STBTC/SFC-SCC [5]germane-STBTC API.",
+            "sponsors" : ["SORTI","SHICK"],
+            "title" : "HEALTH CARE PRECEPTOR TAX CREDIT"
+         },
+         "174" : {
+            "actions" : "[4] SCC/STBTC/SJC-SCC [6]germane-STBTC [7] DP-SJC [8] DP [9] fl/a- PASSED/S (33-5) [7] HTPWC-HTPWC [8] DP - PASSED/H (52-14) POCKET VETO.",
+            "sponsors" : ["SMUNO"],
+            "title" : "FREIGHT TRAILERS IN RIGHT HAND HWY LANE"
+         },
+         "175" : {
+            "actions" : "[4] SCC/SHPAC/SFC-SCC [5]germane-SHPAC [7] DP-SFC API.",
+            "sponsors" : ["SLOPE"],
+            "title" : "UNM PROJECT ECHO PROGRAM"
+         },
+         "176" : {
+            "actions" : "[4] SCC/SRC/SFC-SCC [5]germane-SRC [6] DP-SFC API.",
+            "sponsors" : ["SHICK","SORTI"],
+            "title" : "LEG. STAFF REPORT FOR BETTER HEALTH OUTCOMES"
+         },
+         "177" : {
+            "actions" : "[4] SCC/SEC/SFC-SCC API.",
+            "sponsors" : ["SPINS","SKERN"],
+            "title" : "PERSONAL FINANCE CLASS FOR GRADUATION"
+         },
+         "178" : {
+            "actions" : "[5] SCC/SRC/SJC-SCC [6]germane-SRC [8] DP/a-SJC API.",
+            "emergency" : "*",
+            "sponsors" : ["SIVEY","SPADI"],
+            "title" : "SPECIAL DISTRICT ELECTIONS & TAXES"
+         },
+         "179" : {
+            "actions" : "[5] SCC/SHPAC/SJC-SCC API.",
+            "sponsors" : ["SCAMP"],
+            "title" : "PROBATE DOCUMENT SIGNING OUTSIDE COUNTY SEAT"
+         },
+         "18" : {
+            "actions" : "[1] SCC/SCONC/SFC-SCC [2]germane-SCONC [4] DP-SFC API.",
+            "sponsors" : ["SSTEF"],
+            "title" : "APPROPRIATION TO THE WATER TRUST FUND"
+         },
+         "180" : {
+            "actions" : "[6] SCC/SEC/SFC-SCC API.",
+            "sponsors" : ["SPOPE"],
+            "title" : "GRADUATE SCHOLARSHIP ACT CHANGES"
+         },
+         "181" : {
+            "actions" : "[6] SCC/SEC/SFC-SCC API.",
+            "sponsors" : ["SGADM","HBROW"],
+            "title" : "PERSONAL FINANCE AS SCHOOL ELECTIVE"
+         },
+         "182" : {
+            "actions" : "[6] SCC/SHPAC/STBTC-SCC API.",
+            "sponsors" : ["SHICK","HHERN"],
+            "title" : "INSURANCE APPROVED PROVIDER INFO"
+         },
+         "183" : {
+            "actions" : "[6] SCC/STBTC/SFC-SCC-germane-STBTC [11] DP-SFC [14] DP API.",
+            "sponsors" : ["SGONZ","SCAMP"],
+            "title" : "COUNTY HOSPITAL & PUBLIC SAFETY GRT"
+         },
+         "184" : {
+            "actions" : "[6] SCC/STBTC/SFC-SCC-germane-STBTC API.",
+            "sponsors" : ["SMOOR"],
+            "title" : "EXEMPT POLICE OFFICERS FROM INCOME TAX"
+         },
+         "185" : {
+            "actions" : "[5] SCC/SHPAC/SFC-SCC [6]germane-SHPAC [8] DNP-CS/DP-SFC API.",
+            "sponsors" : ["SORTI","SHICK"],
+            "title" : "1-TIME UNM MEDICAL RESIDENT SALARY INCREASE"
+         },
+         "186" : {
+            "actions" : "[6] SCC/STBTC/SFC-SCC-germane-STBTC [11] DP-SFC [14] DP/a API.",
+            "sponsors" : ["SWOOD"],
+            "title" : "PAYMENT IN LIEU OF TAXES FOR REAL PROPERTY"
+         },
+         "187" : {
+            "actions" : "[6] SCC/STBTC/SFC-SCC API.",
+            "sponsors" : ["STALL"],
+            "title" : "RETIREMENT SAVINGS FACILITATION TAX CREDIT"
+         },
+         "188" : {
+            "actions" : "[6] SCC/SHPAC/STBTC-SCC API.",
+            "sponsors" : ["SPIRT"],
+            "title" : "HUNTER SAFETY TRAINING FOR FILM EMPLOYEES"
+         },
+         "189" : {
+            "actions" : "[6] SCC/SHPAC/SJC-SCC-germane-SHPAC API.",
+            "emergency" : "*",
+            "sponsors" : ["SLOPE","SMOOR"],
+            "title" : "PRETRIAL RELEASE REBUTTABLE PRESUMPTION"
+         },
+         "19" : {
+            "actions" : "[1] SCC/SHPAC/SFC-SCC [2]germane-SHPAC [4] DP-SFC API.",
+            "sponsors" : ["SRODR"],
+            "title" : "NEW MEXICO HOUSING TRUST FUND"
+         },
+         "190" : {
+            "actions" : "[6] SCC/SIRC/SFC-SCC-germane-SIRC [7] DP/a-SFC API.",
+            "sponsors" : ["SSTEF","HHERS"],
+            "title" : "RURAL HOSPITAL SERVICES FUND"
+         },
+         "191" : {
+            "actions" : "[6] SCC/SIRC/SFC-SCC-germane-SIRC [7] DP-SFC API.",
+            "sponsors" : ["SGONZ","SDIAM"],
+            "title" : "HOSPITALITY WORKFORCE PROGRAMS"
+         },
+         "192" : {
+            "actions" : "[6] SCC/SEC/SFC-SCC-germane-SEC [7] DP-SFC API.",
+            "sponsors" : ["SDIAM"],
+            "title" : "UNIVERSITY ATHLETIC PROGRAMS"
+         },
+         "193" : {
+            "actions" : "[6] SCC/STBTC/SFC-SCC-germane-STBTC API.",
+            "sponsors" : ["SMUNO"],
+            "title" : "TREASURER APPROVAL FOR CERTAIN PAYMENTS"
+         },
+         "194" : {
+            "actions" : "[6] SCC/SCONC/STBTC-SCC-germane-SCONC API.",
+            "sponsors" : ["SMUNO"],
+            "title" : "ADDITIONAL ENERGY ACTS DEFINITIONS"
+         },
+         "195" : {
+            "actions" : "[6] SCC/SEC/SFC-SCC-germane-SEC [7] DP-SFC API.",
+            "sponsors" : ["SGONZ"],
+            "title" : "STATEWIDE MEDIA LITERACY SCHOOL PROGRAM"
+         },
+         "196" : {
+            "actions" : "[6] SCC/SHPAC/SJC-SCC API.",
+            "emergency" : "*",
+            "sponsors" : ["SBACA","SBRAN","SDIAM"],
+            "title" : "TERMINATION OF EMERGENCY ORDERS"
+         },
+         "197" : {
+            "actions" : "[6] SCC/SHPAC/SFC-SCC-germane-SHPAC [8] DP-SFC API.",
+            "sponsors" : ["SHEMP","SSEDI"],
+            "title" : "SEXUAL ASSAULT SERVICES PROGRAMS"
+         },
+         "198" : {
+            "actions" : "[6] SCC/STBTC/SFC-SCC [7]germane-STBTC [11] DP/a-SFC [12] w/drn - PASSED/S (27-11) [8] HGEIC-HGEIC- DP API.",
+            "sponsors" : ["SNEVI","SWIRT"],
+            "title" : "TRANSFER TRANSPORTATION REGULATION FROM PRC"
+         },
+         "199" : {
+            "actions" : "[6] SCC/SCONC/SFC-SCC-germane-SCONC [9] DP-SFC API.",
+            "sponsors" : ["SDIAM"],
+            "title" : "NM WINERY WINE PRODUCTION"
+         },
+         "2" : {
+            "actions" : "[1] SCC/SJC/SFC-SCC [2]germane-SJC [4] DP-SFC [8] DP/a [9] PASSED/S (36-4) [7] HJC-HJC [8] DP - PASSED/H (58-6) POCKET VETO.",
+            "sponsors" : ["SCERV","SWIRT","SMUNO","SSTEW"],
+            "title" : "JUDICIAL RETIREMENT CHANGES"
+         },
+         "20" : {
+            "actions" : "[1] SCC/STBTC/SFC-SCC API.",
+            "sponsors" : ["SPADI","HSARI"],
+            "title" : "TECHNOLOGY RESEARCH COLLABORATIVE FUND"
+         },
+         "200" : {
+            "actions" : "[6] SCC/SRC/SFC-SCC-germane-SRC API.",
+            "sponsors" : ["SMCKE"],
+            "title" : "COUNTY REDISTRICTING TASK FORCE"
+         },
+         "201" : {
+            "actions" : "[6] SCC/SEC/SFC-SCC API.",
+            "sponsors" : ["SDIAM"],
+            "title" : "SCHOOL REPORTING ON USE OF FEDERAL FUNDS"
+         },
+         "202" : {
+            "actions" : "[6] SCC/SHPAC/SFC-SCC-germane-SHPAC [11] DP-SFC- DP API.",
+            "sponsors" : ["SCAMP"],
+            "title" : "COMPENSATION FOR CERTAIN PUBLIC OFFICIALS"
+         },
+         "203" : {
+            "actions" : "[6] SCC/STBTC/SFC-SCC-germane-STBTC [11] DP-SFC API.",
+            "sponsors" : ["SSOUL"],
+            "title" : "STUDY HIGH-SPEED TRAIN"
+         },
+         "204" : {
+            "actions" : "[6] SCC/STBTC/SFC-SCC-germane-STBTC API.",
+            "sponsors" : ["SSOUL"],
+            "title" : "CONSTRUCT HIGH-SPEED RAILROAD"
+         },
+         "205" : {
+            "actions" : "[6] SCC/SHPAC/SJC-SCC API.",
+            "sponsors" : ["SGRIG"],
+            "title" : "CIVIL RIGHTS ACT EXEMPTIONS"
+         },
+         "206" : {
+            "actions" : "[6] SCC/SJC/SFC-SCC API.",
+            "sponsors" : ["SMUNO"],
+            "title" : "TRIBAL GAMING COMPACT REVENUE-SHARING"
+         },
+         "207" : {
+            "actions" : "[6] SCC/STBTC/SFC-SCC-germane-STBTC [9] DP/a-SFC API.",
+            "sponsors" : ["SORTI"],
+            "title" : "LIQUOR TAX DISTRIBUTION TO COUNTIES"
+         },
+         "208" : {
+            "actions" : "[6] SCC/SHPAC/SJC-SCC API.",
+            "sponsors" : ["SCERV"],
+            "title" : "CONVERSION OF IPRA RECORD FORMATS"
+         },
+         "209" : {
+            "actions" : "[6] SCC/SEC/SFC-SCC-germane-SEC [8] DP-SFC API.",
+            "sponsors" : ["SGONZ"],
+            "title" : "NORTHERN NM YOUTH MEDIA PROGRAMS"
+         },
+         "21" : {
+            "actions" : "[1] SCC/STBTC/SFC-SCC [2]germane-STBTC [11] DNP-CS/DP-SFC [14] DP/a API.",
+            "sponsors" : ["STALL"],
+            "title" : "ELECTRIC VEHICLE INCOME TAX CREDIT"
+         },
+         "210" : {
+            "actions" : "[7] SCC/SEC/SJC-SCC API.",
+            "sponsors" : ["SBRAN","HDOWR"],
+            "title" : "EDUCATION FREEDOM ACCOUNT ACT"
+         },
+         "211" : {
+            "actions" : "[7] SCC/SHPAC/SFC-SCC-germane-SHPAC [8] DP-SFC API.",
+            "sponsors" : ["SSOUL"],
+            "title" : "DONA ANA 1-STOP FAMILY CENTER"
+         },
+         "212" : {
+            "actions" : "[7] SCC/SFC-SCC-germane-SFC [14] DNP-CS/DP [16] PASSED/S (38-0) [8] HTRC-HTRC- DP - PASSED/H (64-0) SGND BY GOV (Mar. 9) Ch. 53 (partial veto).",
+            "emergency" : "*",
+            "sponsors" : ["SRODR"],
+            "title" : "CAPITAL OUTLAY PROJECTS"
+         },
+         "213" : {
+            "actions" : "[7] SCC/SFC-SCC-germane-SFC [14] DNP-CS/DP [16] PASSED/S (31-9) [8] HTRC-HTRC- DP - PASSED/H (65-0) SGND BY GOV (Mar. 9) Ch. 52 (partial veto).",
+            "emergency" : "*",
+            "sponsors" : ["SRODR"],
+            "title" : "CAPITAL PROJECT REAUTHORIZATIONS"
+         },
+         "214" : {
+            "actions" : "[7] SCC/SEC/SFC-SCC API.",
+            "sponsors" : ["SONEI","SLOPE"],
+            "title" : "K-5 PLUS INSTRUCTIONAL LEARNING CALCULATION"
+         },
+         "215" : {
+            "actions" : "[7] SCC/STBTC/SFC-SCC-germane-STBTC API.",
+            "sponsors" : ["SSHAR"],
+            "title" : "2022 NONREFUNDABLE TAX CREDIT"
+         },
+         "216" : {
+            "actions" : "[7] not prntd-SCONC API.",
+            "sponsors" : ["SSTEF"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "217" : {
+            "actions" : "[7] not prntd-SCONC API.",
+            "sponsors" : ["SSTEF"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "218" : {
+            "actions" : "[7] not prntd-SCONC API.",
+            "sponsors" : ["SSTEF"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "219" : {
+            "actions" : "[7] not prntd-SEC API.",
+            "sponsors" : ["SSOUL"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "22" : {
+            "actions" : "[1] SCC/SHPAC/SFC-SCC API.",
+            "sponsors" : ["SSEDI"],
+            "title" : "LANGUAGE ACCESS IN STATE AGENCIES"
+         },
+         "220" : {
+            "actions" : "[7] not prntd-SEC API.",
+            "sponsors" : ["SSOUL"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "221" : {
+            "actions" : "[7] not prntd-SEC API.",
+            "sponsors" : ["SSOUL"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "222" : {
+            "actions" : "[7] not prntd-SFC API.",
+            "sponsors" : ["SMUNO"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "223" : {
+            "actions" : "[7] not prntd-SFC API.",
+            "sponsors" : ["SMUNO"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "224" : {
+            "actions" : "[7] not prntd-SFC API.",
+            "sponsors" : ["SMUNO"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "225" : {
+            "actions" : "[7] not prntd-SHPAC [11] DNP-CS/w/o rec - ref SCC/SJC-SCC-germane-SJC API.",
+            "emergency" : "*",
+            "sponsors" : ["SORTI"],
+            "title" : "GPS DATA FOR PRETRIAL RELEASE"
+         },
+         "226" : {
+            "actions" : "[7] not prntd-SHPAC API.",
+            "sponsors" : ["SORTI"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "227" : {
+            "actions" : "[7] not prntd-SHPAC API.",
+            "sponsors" : ["SORTI"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "228" : {
+            "actions" : "[7] not prntd-SIRC API.",
+            "sponsors" : ["SPINS"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "229" : {
+            "actions" : "[7] not prntd-SIRC API.",
+            "sponsors" : ["SPINS"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "23" : {
+            "actions" : "[1] SCC/SIRC/SFC-SCC API.",
+            "sponsors" : ["SORTI"],
+            "title" : "RURAL PRIMARY CARE CLINICIAN LOAN REPAYMENT"
+         },
+         "230" : {
+            "actions" : "[7] not prntd-SIRC API.",
+            "sponsors" : ["SPINS"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "231" : {
+            "actions" : "[7] not prntd-SJC [11] DNP-CS/w/o rec - ref SCC/SJC/SFC-SCC-germane-SJC [16] DNP-CS/DP-SFC API.",
+            "sponsors" : ["SCERV","HDIXO","HFIGU"],
+            "title" : "LAW ENFORCEMENT, CRIME & JUDGE CHANGES"
+         },
+         "232" : {
+            "actions" : "[7] not prntd-SJC API.",
+            "sponsors" : ["SCERV"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "233" : {
+            "actions" : "[7] not prntd-SJC API.",
+            "sponsors" : ["SCERV"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "234" : {
+            "actions" : "[7] not prntd-SRC API.",
+            "sponsors" : ["SIVEY"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "235" : {
+            "actions" : "[7] not prntd-SRC API.",
+            "sponsors" : ["SIVEY"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "236" : {
+            "actions" : "[7] not prntd-SRC API.",
+            "sponsors" : ["SIVEY"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "237" : {
+            "actions" : "[7] not prntd-STBTC API.",
+            "sponsors" : ["SSHEN"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "238" : {
+            "actions" : "[7] not prntd-STBTC API.",
+            "sponsors" : ["SSHEN"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "239" : {
+            "actions" : "[7] not prntd-STBTC API.",
+            "sponsors" : ["SSHEN"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "24" : {
+            "actions" : "[1] SCC/SEC/SFC-SCC API.",
+            "sponsors" : ["SNEVI"],
+            "title" : "RECESS REQUIRED FOR K-3"
+         },
+         "240" : {
+            "actions" : "[7] not prntd-SEC API.",
+            "sponsors" : ["SSTEW"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "241" : {
+            "actions" : "[7] not prntd-SFC API.",
+            "sponsors" : ["SSTEW"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "242" : {
+            "actions" : "[7] not prntd-SJC [11] DNP-CS/w/o rec - ref SCC/SJC-SCC-germane-SJC API.",
+            "sponsors" : ["SDUHI"],
+            "title" : "PRETRIAL RELEASE STANDARDS"
+         },
+         "243" : {
+            "actions" : "[7] SCC/SEC/SFC-SCC [8]germane-SEC [9] DP-SFC [11] DP [12] PASSED/S (36-0) [8] HEC-HEC- DP API.",
+            "sponsors" : ["SSTEW"],
+            "title" : "FAMILY INCOME INDEX DISTRIBUTION USES"
+         },
+         "244" : {
+            "actions" : "[7] not prntd-SJC API.",
+            "sponsors" : ["SWIRT"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "245" : {
+            "actions" : "[7] not prntd-SFC API.",
+            "sponsors" : ["SWIRT"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "246" : {
+            "actions" : "[7] not prntd-SCONC API.",
+            "sponsors" : ["SWIRT"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "247" : {
+            "actions" : "[7] not prntd-SRC API.",
+            "sponsors" : ["SLOPE"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "248" : {
+            "actions" : "[7] not prntd-SEC API.",
+            "sponsors" : ["SLOPE"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "249" : {
+            "actions" : "[7] not prntd-SJC API.",
+            "sponsors" : ["SLOPE"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "25" : {
+            "actions" : "[1] SCC/SEC/SFC-SCC API.",
+            "sponsors" : ["SSOUL"],
+            "title" : "RESEARCH GRANTS CLOSING FUND"
+         },
+         "250" : {
+            "actions" : "[7] not prntd-SRC API.",
+            "sponsors" : ["SBACA"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "251" : {
+            "actions" : "[7] not prntd-SRC API.",
+            "sponsors" : ["SBACA"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "252" : {
+            "actions" : "[7] not prntd-SEC- DNP-CS/w/o rec - ref SCC/SCONC/SFC-SCC [8]germane-SCONC API.",
+            "sponsors" : ["SWOOD"],
+            "title" : "DAIRY FACILITY FUNDING"
+         },
+         "253" : {
+            "actions" : "[7] not prntd-SEC API.",
+            "sponsors" : ["SBRAN"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "254" : {
+            "actions" : "[7] not prntd-STBTC API.",
+            "sponsors" : ["SBRAN"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "255" : {
+            "actions" : "[7] not prntd-SRC API.",
+            "sponsors" : ["SBACA"],
+            "title" : "PUBLIC PEACE, HEALTH, SAFETY & WELFARE"
+         },
+         "26" : {
+            "actions" : "[1] SCC/STBTC/SFC-SCC [2]germane-STBTC [6] DP-SFC API.",
+            "sponsors" : ["SSHEN","HJOHD"],
+            "title" : "HOLD HARMLESS DISTRIBUTIONS"
+         },
+         "27" : {
+            "actions" : "[1] SCC/STBTC/SFC-SCC [2]germane-STBTC [6] DP-SFC API.",
+            "sponsors" : ["SGRIG"],
+            "title" : "LOCAL GOVERNMENTS HOLD HARMLESS DEDUCTIONS"
+         },
+         "28" : {
+            "actions" : "[1] SCC/STBTC/SJC-SCC [4]germane-STBTC API.",
+            "sponsors" : ["SPOPE"],
+            "title" : "HIRING PREFERENCE FOR VETERANS"
+         },
+         "29" : {
+            "actions" : "[1] SCC/SHPAC/SJC-SCC API.",
+            "sponsors" : ["SONEI"],
+            "title" : "MEDICAL AND GERIATRIC PAROLE PROCEDURES"
+         },
+         "3" : {
+            "actions" : "[1] SCC/SHPAC/SFC-SCC-germane-SHPAC [4] DP/a-SFC API.",
+            "sponsors" : ["SMUNO"],
+            "title" : "ENHANCING DEATH BENEFITS FOR LAW ENFORCEMENT"
+         },
+         "30" : {
+            "actions" : "[1] SCC/STBTC/SFC-SCC-germane-STBTC [4] DP-SFC API.",
+            "sponsors" : ["SJARA"],
+            "title" : "REGIONAL TRANSIT GRT DISTRIBUTIONS"
+         },
+         "31" : {
+            "actions" : "[1] SCC/SJC/SFC-SCC [6]germane-SJC [8] DNP-CS/DP-SFC API.",
+            "sponsors" : ["SLOPE"],
+            "title" : "FAMILY REPRESENTATION AND ADVOCACY ACT"
+         },
+         "32" : {
+            "actions" : "[1] SCC/SEC/SFC-SCC-germane-SEC [4] DP-SFC API.",
+            "sponsors" : ["SHEMP"],
+            "title" : "OUTDOOR LEARNING PROGRAM FUNDING"
+         },
+         "33" : {
+            "actions" : "[1] SCC/SHPAC/SFC-SCC-germane-SHPAC [4] DP-SFC API.",
+            "emergency" : "*",
+            "sponsors" : ["SHICK"],
+            "title" : "BEHAVIORAL HEALTH PARITY LEGISLATION IMPACT"
+         },
+         "34" : {
+            "actions" : "[1] SCC/SJC/SFC-SCC [4]germane-SJC [6] DP/a-SFC [8] DP [11] fl/aaaaaa- PASSED/S (34-5) [8] HJC-HJC- DP/a API.",
+            "sponsors" : ["SBRAN"],
+            "title" : "THREAT OF SHOOTING"
+         },
+         "35" : {
+            "actions" : "[1] SCC/SHPAC/SJC-SCC [4]germane-SHPAC [6] DP/a-SJC [8] DNP-CS/DP [9] PASSED/S (36-0) [7] HJC-HJC [8] DP - PASSED/H (67-0) SGND BY GOV (Mar. 2) Ch. 36.",
+            "sponsors" : ["SDUHI","HFERJ","HELYD","SLOPE"],
+            "title" : "APPOINTMENT OF TEMPORARY GUARDIANS"
+         },
+         "36" : {
+            "actions" : "[1] SCC/SEC/SFC-SCC-germane-SEC [4] DP-SFC [8] DP [9] PASSED/S (35-0) [7] HEC/HAFC-HEC [8] DP-HAFC- DP - PASSED/H (52-12) SGND BY GOV (Mar. 1) Ch. 29.",
+            "sponsors" : ["SSTEW","HFIGU"],
+            "title" : "CONTRIBUTIONS TO EDUCATIONAL RETIREMENT FUND"
+         },
+         "37" : {
+            "actions" : "[1] SCC/SCONC/SFC-SCC-germane-SCONC [4] DP-SFC [6] DP - PASSED/S (33-0) [4] HAFC-HAFC [8] DP - PASSED/H (67-0) SGND BY GOV (Feb. 28) Ch. 15.",
+            "sponsors" : ["SRODR"],
+            "title" : "PUBLIC PROJECT REVOLVING FUND APPROPRIATIONS"
+         },
+         "38" : {
+            "actions" : "[1] SCC/SEC/SJC-SCC [2]germane-SEC [4] DP-SJC [8] DP/a - PASSED/S (29-0) [7] HHHC/HGEIC-HHHC- DP-HGEIC [8] DP - PASSED/H (69-0) SGND BY GOV (Mar. 1) Ch. 30.",
+            "sponsors" : ["SGONZ","SHEMP"],
+            "title" : "EARLY CHILDHOOD EDUCATION DEPT AUTHORIZATIONS"
+         },
+         "39" : {
+            "actions" : "[1] SCC/SIRC/STBTC-SCC [4]germane-SIRC [5] DP-STBTC [7] DP/a [8] fl/sub adptd- PASSED/S (34-0) [7] HLVMC/HCEDC-HLVMC- DP-HCEDC [8] DP - PASSED/H (67-0) SGND BY GOV (Feb. 28) Ch. 6.",
+            "sponsors" : ["SSHEN","HGAHA","SPOPE"],
+            "title" : "PROCUREMENT PREFERENCES CHANGES"
+         },
+         "4" : {
+            "actions" : "[1] SCC/SHPAC/SJC-SCC [2]germane-SHPAC [4] DP-SJC [6] DP/a [7] PASSED/S (35-4) [5] HJC-HJC [8] DP - PASSED/H (44-25) SGND BY GOV (Feb. 28) Ch. 5.",
+            "sponsors" : ["SDUHI","HCHAN"],
+            "title" : "PREVAILING WAGE AND FRINGE BENEFIT RATES"
+         },
+         "40" : {
+            "actions" : "[1] SCC/SHPAC/SFC-SCC [2]germane-SHPAC [4] SHPAC- DP-SFC [7] DP [8] PASSED/S (35-0) [6] HHHC/HTRC-HHHC [7] DP-HTRC [8] DP - PASSED/H (69-0) SGND BY GOV (Mar. 2) Ch. 37.",
+            "sponsors" : ["SORTI"],
+            "title" : "HEALTH CARE QUALITY SURCHARGE ACT CHANGES"
+         },
+         "41" : {
+            "actions" : "[1] SCC/SHPAC/SJC-SCC [2]germane-SHPAC [4] DP-SJC [6] DP/a [8] fl/a- PASSED/S (24-10) [6] HLVMC/HJC-HLVMC [7] DP-HJC [8] DP - PASSED/H (36-32) SGND BY GOV (Mar. 8) Ch. 44.",
+            "sponsors" : ["SSTEW","HCHAN"],
+            "title" : "COLLEGE RESEARCH PARK & ECON DEV ACT CHANGES"
+         },
+         "42" : {
+            "actions" : "[1] SCC/STBTC/SJC-SCC [6]germane-STBTC [7] DNP-CS/DP-SJC API.",
+            "sponsors" : ["SPADI"],
+            "title" : "UTILITY EASEMENTS FOR BROADBAND ACT"
+         },
+         "43" : {
+            "actions" : "[1] SCC/SHPAC/SJC-SCC [4]germane-SHPAC [6] DP-SJC [8] DP - PASSED/S (23-15) [7] HCPAC/HJC-HCPAC- DP-HJC API.",
+            "sponsors" : ["SSEDI","HCHAS","HHOCH"],
+            "title" : "PROHIBITING LIFE WITHOUT PAROLE FOR A CHILD"
+         },
+         "44" : {
+            "actions" : "[1] SCC/STBTC/SFC-SCC-germane-STBTC [11] (Succeeding entries: S 5).",
+            "sponsors" : ["SSOUL"],
+            "title" : "NEW SOLAR MRKT DEV INCOME TAX CREDIT CHANGES"
+         },
+         "45" : {
+            "actions" : "[1] SCC/SHPAC/STBTC-SCC [4]germane-SHPAC [6] DP-STBTC API.",
+            "sponsors" : ["SPOPE"],
+            "title" : "VETERAN BUSINESS & CONTRACTOR PROCUREMENT"
+         },
+         "46" : {
+            "actions" : "[1] SCC/SCONC/SFC-SCC-germane-SCONC [4] DP-SFC API.",
+            "sponsors" : ["SGONZ"],
+            "title" : "ACEQUIA AND COMMUNITY DITCH FUND ACT FUNDING"
+         },
+         "47" : {
+            "actions" : "[1] SCC/SHPAC/SFC-SCC API.",
+            "sponsors" : ["SSTEI"],
+            "title" : "SUBSTANCE USE DISORDER TREATMENT FUND"
+         },
+         "48" : {
+            "actions" : "[1] SCC/SFC-SCC-germane-SFC [8] DNP-CS/DP [11] PASSED/S (40-0) [7] HAFC-HAFC [8] DP/a - PASSED/H (67-0) [14] s/cncrd VETO.",
+            "sponsors" : ["SMUNO"],
+            "title" : "GEN APPROPRIATIONS AND AUTH EXPENDITURES"
+         },
+         "49" : {
+            "actions" : "[1] SCC/STBTC/SFC-SCC-germane-STBTC [11] (Succeeding entries: S 5).",
+            "sponsors" : ["STALL","SHICK"],
+            "title" : "EXEMPT SOCIAL SECURITY FROM INCOME TAX"
+         },
+         "5" : {
+            "actions" : "[1] SCC/STBTC/SFC-SCC [2]germane-STBTC [11] DNP-CS/DP-SFC API.",
+            "sponsors" : ["SGONZ","SPADI"],
+            "title" : "REDUCING RATES OF GROSS RECEIPTS TAX"
+         },
+         "50" : {
+            "actions" : "[1] SCC/SEC/SFC-SCC-germane-SEC [4] DP-SFC API.",
+            "sponsors" : ["SSTEF"],
+            "title" : "EXPAND NURSING PROGRAMS AT COLLEGES"
+         },
+         "51" : {
+            "actions" : "[1] SCC/SRC/SFC-SCC API.",
+            "sponsors" : ["STALL"],
+            "title" : "CREATE PUBLIC WORKS COMMISSION"
+         },
+         "52" : {
+            "actions" : "[1] SCC/SHPAC/SFC-SCC API.",
+            "sponsors" : ["STALL"],
+            "title" : "PAYROLL DEDUCTION FOR LOAN REPAYMENT"
+         },
+         "53" : {
+            "actions" : "[1] SCC/SCONC/SFC-SCC [4]germane-SCONC [5] DP-SFC API.",
+            "sponsors" : ["SWOOD"],
+            "title" : "AG EXPERIMENT STATION SCIENCE CENTERS"
+         },
+         "54" : {
+            "actions" : "[1] SCC/SCONC/SJC-SCC [4]germane-SCONC [6] w/o rec-SJC API.",
+            "emergency" : "*",
+            "sponsors" : ["SSTEI"],
+            "title" : "STORAGE OF CERTAIN RADIOACTIVE WASTE"
+         },
+         "55" : {
+            "actions" : "[1] SCC/SHPAC/STBTC-SCC API.",
+            "sponsors" : ["SONEI"],
+            "title" : "AUDIT REQUIREMENTS FOR TAX EXEMPTS"
+         },
+         "56" : {
+            "actions" : "[1] SCC/SEC/SFC-SCC [4]germane-SEC [6] DP-SFC API.",
+            "sponsors" : ["SSTEF"],
+            "title" : "NURSING STUDENT LOAN REPAYMENT"
+         },
+         "57" : {
+            "actions" : "[1] SCC/SCONC/SFC-SCC [4]germane-SCONC [5] DP-SFC API.",
+            "sponsors" : ["SSTEF"],
+            "title" : "SENIOR FARMERS' MARKET NUTRITION PROGRAM"
+         },
+         "58" : {
+            "actions" : "[1] SCC/SEC/SFC-SCC [4]germane-SEC [6] DP/a-SFC API.",
+            "sponsors" : ["SSTEF"],
+            "title" : "INCREASE SCHOOL NURSES"
+         },
+         "59" : {
+            "actions" : "[1] SCC/SCONC/SFC-SCC [4]germane-SCONC [5] DP-SFC API.",
+            "sponsors" : ["SSTEF"],
+            "title" : "NM-GROWN PRODUCE FOR SENIOR CENTER MEALS"
+         },
+         "6" : {
+            "actions" : "[4] SCC/SRC/SFC-SCC-germane-SRC [5] DP/a-SFC [6] DNP-CS/DP [7] fl/a- PASSED/S (39-0) [5] HGEIC/HJC-HGEIC [7] DP-HJC API.",
+            "emergency" : "*",
+            "sponsors" : ["SIVEY","HLOUI","SDIAM","HNIBE","HLANE","SBERG","SCAMP","SCERV","SCHAR","SDUHI","SFIGU","SGONZ","SJARA","SLOPE","SMUNO","SNACI","SOMAL","SSEDI","SSOUL","SSTEF","SWIRT"],
+            "title" : "ELECTION SECURITY & ADMINISTRATION"
+         },
+         "60" : {
+            "actions" : "[1] SCC/STBTC/SFC-SCC [4]germane-STBTC API.",
+            "sponsors" : ["SPADI"],
+            "title" : "FILM COMPANY SECURITY GROSS RECEIPTS"
+         },
+         "61" : {
+            "actions" : "[1] SCC/SRC/SHPAC-SCC API.",
+            "sponsors" : ["SSTEI"],
+            "title" : "LOBBYIST REPORT CHANGES"
+         },
+         "62" : {
+            "actions" : "[1] SCC/SHPAC/SFC-SCC [4]germane-SHPAC [6] DP/a-SFC API.",
+            "sponsors" : ["SSTEF"],
+            "title" : "SENIOR SNAP COST-OF-LIVING INCREASES"
+         },
+         "63" : {
+            "actions" : "[1] SCC/SHPAC/SFC-SCC [4]germane-SHPAC [6] DP-SFC API.",
+            "sponsors" : ["SSTEF"],
+            "title" : "HOMELESS SHELTER SUPPORT SERVICES"
+         },
+         "64" : {
+            "actions" : "[1] SCC/SHPAC/SFC-SCC [4]germane-SHPAC [6] DP-SFC API.",
+            "sponsors" : ["SSTEF"],
+            "title" : "DOMESTIC VIOLENCE SUPPORT SERVICES"
+         },
+         "65" : {
+            "actions" : "[1] SCC/SHPAC/SFC-SCC [4]germane-SHPAC [6] DP/a-SFC API.",
+            "sponsors" : ["SSTEF"],
+            "title" : "STATE FOOD BANKS"
+         },
+         "66" : {
+            "actions" : "[1] SCC/SHPAC/SFC-SCC [4]germane-SHPAC [6] DP-SFC API.",
+            "sponsors" : ["SSTEF"],
+            "title" : "SNAP TRANSITIONAL SUPPORT"
+         },
+         "67" : {
+            "actions" : "[1] SCC/SHPAC/SFC-SCC [4]germane-SHPAC [6] DP-SFC API.",
+            "sponsors" : ["SSTEF"],
+            "title" : "EXPAND SCHOOL-BASED HEALTH CLINICS"
+         },
+         "68" : {
+            "actions" : "[1] SCC/STBTC/SFC-SCC [4]germane-STBTC API.",
+            "sponsors" : ["SSOUL"],
+            "title" : "GEOTHERMAL HEAT PUMP TAX CREDITS"
+         },
+         "69" : {
+            "actions" : "[1] SCC/STBTC/SFC-SCC [6]germane-STBTC [9] DP-SFC [11] DP/a [12] PASSED/S (36-0) [8] HCEDC-HCEDC API.",
+            "sponsors" : ["STALL"],
+            "title" : "JOB CREATION REPORTING REQUIREMENTS"
+         },
+         "7" : {
+            "actions" : "[1] SCC/SHPAC/SFC-SCC [4]germane-SHPAC [6] DNP-CS/DP-SFC [9] DNP-CS/DP [11] PASSED/S (26-11) [8] HLVMC-HLVMC- DP/a API.",
+            "sponsors" : ["SSEDI","SWIRT","SLOPE"],
+            "title" : "STATE EMPLOYEE MINIMUM WAGE"
+         },
+         "70" : {
+            "actions" : "[1] SCC/SHPAC/SFC-SCC [4]germane-SHPAC [6] DP-SFC API.",
+            "sponsors" : ["SLOPE"],
+            "title" : "RESILIENCY THROUGH YOUTH PROGRAMMING"
+         },
+         "71" : {
+            "actions" : "[1] SCC/STBTC/SJC-SCC API.",
+            "sponsors" : ["SPADI"],
+            "title" : "LOCAL TELECOMM CARRIER CHANGES"
+         },
+         "72" : {
+            "actions" : "[1] SCC/SCONC/SFC-SCC [4]germane-SCONC [5] DP-SFC API.",
+            "sponsors" : ["SSOUL"],
+            "title" : "NMSU CENTER FOR DRYLAND RESILIENCE"
+         },
+         "73" : {
+            "actions" : "[1] SCC/SEC/SFC-SCC [4]germane-SEC [6] DP-SFC API.",
+            "sponsors" : ["SSOUL"],
+            "title" : "UNM QUANTUM MATERIALS TECHNOLOGIES"
+         },
+         "74" : {
+            "actions" : "[1] SCC/SRC/SJC-SCC API.",
+            "sponsors" : ["SSTEI"],
+            "title" : "LOBBYIST DEFINITIONS"
+         },
+         "75" : {
+            "actions" : "[1] SCC/SEC/SFC-SCC [4]germane-SEC API.",
+            "sponsors" : ["SGONZ","STALL","SPINS"],
+            "title" : "LIMIT SCHOOL ADMIN EXPENDITURES"
+         },
+         "76" : {
+            "actions" : "[1] SCC/STBTC/SFC-SCC API.",
+            "sponsors" : ["SGONZ"],
+            "title" : "RURAL AIR SERVICE CHANGES"
+         },
+         "77" : {
+            "actions" : "[1] SCC/SHPAC/SJC-SCC API.",
+            "sponsors" : ["SSEDI"],
+            "title" : "DISCLOSURE OF CERTAIN INFO BY STATE"
+         },
+         "78" : {
+            "actions" : "[1] SCC/SEC/SFC-SCC API.",
+            "sponsors" : ["SORTI"],
+            "title" : "CHARTER SCHOOL CHANGES"
+         },
+         "79" : {
+            "actions" : "[1] SCC/SHPAC/SFC-SCC [4]germane-SHPAC [6] DP-SFC API.",
+            "sponsors" : ["SORTI"],
+            "title" : "CHILD BEHAVIORAL HEALTH SVCS. SUPPORT"
+         },
+         "8" : {
+            "actions" : "[4] SCC/SRC/SFC-SCC [5]germane-SRC [8] DNP-CS/DP-SFC- ref SJC/SFC-SJC [9] DNP-CS/DP-SFC [11] DP API.",
+            "sponsors" : ["SWIRT","HMARJ","SDUHI","SPOPE","SHAMB","SBERG","SCAMP","SCHAR","SFIGU","SGONZ","SHICK","SJARA","SLOPE","SMUNO","SNACI","SPADI","SSEDI","SSOUL","SSTEF"],
+            "title" : "VOTERS' RIGHTS PROVISIONS"
+         },
+         "80" : {
+            "actions" : "[1] SCC/SHPAC/SFC-SCC [4]germane-SHPAC [6] DP-SFC API.",
+            "sponsors" : ["SORTI","SPOPE"],
+            "title" : "HEALTH SECURITY ACT ADOPTION STUDY"
+         },
+         "81" : {
+            "actions" : "[1] SCC/SHPAC/STBTC-SCC API.",
+            "sponsors" : ["SORTI"],
+            "title" : "STATEWIDE ORGAN DONOR REGISTRY"
+         },
+         "82" : {
+            "actions" : "[1] SCC/SEC/SFC-SCC [4]germane-SEC API.",
+            "sponsors" : ["SHEMP"],
+            "title" : "WNMU INDIGENOUS STUDENT PROGRAM"
+         },
+         "83" : {
+            "actions" : "[1] SCC/SHPAC/SJC-SCC API.",
+            "sponsors" : ["SPADI"],
+            "title" : "NURSES & TAKE-HOME METHADONE PROGRAMS"
+         },
+         "84" : {
+            "actions" : "[1] SCC/STBTC/SJC-SCC [4]germane-STBTC [5] DP-SJC [9] DNP-CS/DP [11] PASSED/S (38-0) [8] HTPWC-HTPWC- DP - PASSED/H (66-0) SGND BY GOV (Feb. 28) Ch. 12.",
+            "sponsors" : ["SSHEN","SIVEY"],
+            "title" : "CONSTRUCTION MANAGER GENERAL CONTRACTOR ACT"
+         },
+         "85" : {
+            "actions" : "[1] SCC/STBTC/SFC-SCC [4]germane-STBTC API.",
+            "sponsors" : ["SPOPE","SHEMP"],
+            "title" : "TAX EXEMPTION FOR MILITARY RETIREMENT PAY"
+         },
+         "86" : {
+            "actions" : "[1] SCC/SHPAC/SJC-SCC API.",
+            "sponsors" : ["SPOPE"],
+            "title" : "HOMEOWNER ASSOCIATION REQUIREMENTS"
+         },
+         "87" : {
+            "actions" : "[1] SCC/SCONC/SFC-SCC [4]germane-SCONC [5] DP-SFC API.",
+            "sponsors" : ["SSTEF"],
+            "title" : "LAND GRANT-MERCED YOUTH PROGRAMS"
+         },
+         "88" : {
+            "actions" : "[1] SCC/SCONC/SFC-SCC [4]germane-SCONC [5] DP-SFC API.",
+            "sponsors" : ["SSTEF"],
+            "title" : "VOLUNTEER FIRE DEPT. TRAINING"
+         },
+         "89" : {
+            "actions" : "[1] SCC/SCONC/SFC-SCC API.",
+            "sponsors" : ["SSTEI","SPINS","HSARI","HJOHD"],
+            "title" : "URANIUM MINE CLEANUP & RECLAMATION"
+         },
+         "90" : {
+            "actions" : "[1] SCC/SEC/SFC-SCC [4]germane-SEC [6] DP-SFC API.",
+            "sponsors" : ["STALL"],
+            "title" : "CNM VENTURE STUDIO"
+         },
+         "91" : {
+            "actions" : "[1] SCC/SEC/SFC-SCC [4]germane-SEC [6] w/o rec-SFC API.",
+            "sponsors" : ["STALL"],
+            "title" : "UNEMPLOYED BOOT CAMP TRAINING PROGRAMS"
+         },
+         "92" : {
+            "actions" : "[1] SCC/SHPAC/SFC-SCC [4]germane-SHPAC [6] DP-SFC API.",
+            "sponsors" : ["SLOPE"],
+            "title" : "SPECIAL OLYMPICS FUNDING"
+         },
+         "93" : {
+            "actions" : "[1] SCC/SEC/SJC-SCC API.",
+            "sponsors" : ["SGRIG"],
+            "title" : "COMMUNITY EDUCATORS ACT"
+         },
+         "94" : {
+            "actions" : "[1] SCC/STBTC/SFC-SCC API.",
+            "sponsors" : ["STALL"],
+            "title" : "RETIREMENT SAVINGS FACILITATION TAX CREDIT"
+         },
+         "95" : {
+            "actions" : "[1] SCC/SHPAC/SFC-SCC [4]germane-SHPAC [6] DP-SFC API.",
+            "sponsors" : ["SRODR"],
+            "title" : "SANTA FE HOMEBOUND PERSON MEALS"
+         },
+         "96" : {
+            "actions" : "[1] SCC/SHPAC/SFC-SCC [4]germane-SHPAC [6] DP/a-SFC API.",
+            "sponsors" : ["SRODR"],
+            "title" : "SANTA FE HOMELESS SHELTER"
+         },
+         "97" : {
+            "actions" : "[1] SCC/SIRC/SFC-SCC [4]germane-SIRC [5] DP-SFC API.",
+            "sponsors" : ["SPINS"],
+            "title" : "INDIGENOUS WISDOM CURRICULUM PROJECT"
+         },
+         "98" : {
+            "actions" : "[1] SCC/SRC/SFC-SCC API.",
+            "emergency" : "*",
+            "sponsors" : ["SPADI","HROAN"],
+            "title" : "CYBERSECURITY ACT"
+         },
+         "99" : {
+            "actions" : "[1] SCC/STBTC/SFC-SCC API.",
+            "sponsors" : ["SJARA","HRUBI"],
+            "title" : "STATE TRANSIT FUND"
+         }
+      },
+      "JM" : {
+         "1" : {
+            "actions" : "[1] SRC/STBTC-SRC API.",
+            "sponsors" : ["STALL","HGARR"],
+            "title" : "NATIONAL INFRASTRUCTURE BANK"
+         },
+         "2" : {
+            "actions" : "[1] SRC/SCONC-SRC [5] DP-SCONC [7] DP API.",
+            "sponsors" : ["SSTEW"],
+            "title" : "NATIONAL BIODIVERSITY STRATEGY"
+         },
+         "3" : {
+            "actions" : "[7] SRC/SFC-SRC API.",
+            "sponsors" : ["SLOPE"],
+            "title" : "EVALUATE SANTOLINA DEVELOPMENT"
+         }
+      },
+      "JR" : {
+         "1" : {
+            "actions" : "[1] SRC/SJC-SRC API.",
+            "sponsors" : ["STALL"],
+            "title" : "NONPARTISAN OPEN PRIMARY ELECTIONS, CA"
+         },
+         "10" : {
+            "actions" : "[4] SRC/SJC-SRC [5] DP-SJC [8] DP [9] PASSED/S (31-8) [7] HGEIC-HGEIC [8] DP - PASSED/H (66-1) SGND.",
+            "sponsors" : ["SSTEW"],
+            "title" : "EXTEND DOWNS AT ABQ LEASE"
+         },
+         "11" : {
+            "actions" : "[4] SRC/SJC-SRC API.",
+            "sponsors" : ["SPIRT"],
+            "title" : "LIMIT CERTAIN APPROPRIATIONS, CA"
+         },
+         "12" : {
+            "actions" : "[4] SRC/SJC-SRC API.",
+            "sponsors" : ["SMOOR"],
+            "title" : "STATE REDISTRICTING COMMISSION, CA"
+         },
+         "13" : {
+            "actions" : "[4] SRC/SJC-SRC API.",
+            "sponsors" : ["SPIRT"],
+            "title" : "VOTE FOR CONSTITUTIONAL AMENDMENTS, CA"
+         },
+         "14" : {
+            "actions" : "[7] SRC/SJC-SRC API.",
+            "sponsors" : ["SBRAN"],
+            "title" : "USE OF SCHOOL FUNDS, CA"
+         },
+         "15" : {
+            "actions" : "[9] SRC/SJC-SRC API.",
+            "sponsors" : ["SPIRT"],
+            "title" : "CONSTITUTIONAL CONVENTION"
+         },
+         "16" : {
+            "actions" : "[11] SRC-SRC API.",
+            "sponsors" : ["SPIRT"],
+            "title" : "OFFICE HOLDERS MUST BE 18 OR OLDER, CA"
+         },
+         "2" : {
+            "actions" : "[1] SRC/SJC/SFC-SRC API.",
+            "sponsors" : ["SSEDI","HFERJ","SSTEI","SSOUL","SPOPE","SBOON","SBRAN"],
+            "title" : "ENVIRONMENTAL RIGHTS, CA"
+         },
+         "3" : {
+            "actions" : "[1] SRC/SJC-SRC [5] DP-SJC [7] DP [8] fl/a- PASSED/S (33-1) [6] HJC-HJC [8] DP - PASSED/H (58-0) SGND (C.A. 3).",
+            "sponsors" : ["SCERV"],
+            "title" : "APPOINTED APPELLATE JUDGE REQUIREMENTS, CA"
+         },
+         "4" : {
+            "actions" : "[1] SRC/SJC-SRC API.",
+            "sponsors" : ["STALL"],
+            "title" : "PRIMARY ELECTION CHANGES, CA"
+         },
+         "5" : {
+            "actions" : "[1] SRC/SJC-SRC API.",
+            "sponsors" : ["SPOPE"],
+            "title" : "RUNOFF ELECTIONS, CA"
+         },
+         "6" : {
+            "actions" : "[1] SRC/SJC-SRC [6] DP/a-SJC API.",
+            "sponsors" : ["SBRAN","SMOOR"],
+            "title" : "ELECTIONS FOR CERTAIN JUDGES, CA"
+         },
+         "7" : {
+            "actions" : "[4] SRC/SJC-SRC [9] DP-SJC [12] DP/a API.",
+            "sponsors" : ["SORTI"],
+            "title" : "USE OF STATE FUNDS FOR HOUSEHOLD SVCS., CA"
+         },
+         "8" : {
+            "actions" : "[4] SRC/SJC-SRC- DP-SJC API.",
+            "sponsors" : ["SIVEY","SGONZ","SDUHI","SMCKE"],
+            "title" : "SALARIES FOR PUBLIC OFFICIALS, CA"
+         },
+         "9" : {
+            "actions" : "[4] SRC/SJC-SRC API.",
+            "sponsors" : ["SPIRT"],
+            "title" : "COUNTIES LEAVING NM OR AS NEW STATE, CA"
+         }
+      },
+      "M" : {
+         "1" : {
+            "actions" : "[1] SRC/SHPAC-SRC [6] DP-SHPAC [8] DP [11] fl/aaa- PASSED/S (25-14) [12] SGND.",
+            "sponsors" : ["SSTEW","SHEMP"],
+            "title" : "PAID FAMILY AND MEDICAL LEAVE TASK FORCE"
+         },
+         "10" : {
+            "actions" : "[4] SRC/STBTC-SRC API.",
+            "sponsors" : ["SHAMB","SSTEF"],
+            "title" : "STUDY STATE-LEVEL PUBLIC UTILITY MODEL"
+         },
+         "11" : {
+            "actions" : "[4] SRC/STBTC-SRC API.",
+            "sponsors" : ["SSCHM"],
+            "title" : "RESTORATION OF ROUTE 66 MUSICAL HWY"
+         },
+         "12" : {
+            "actions" : "[4] SRC/SEC-SRC API.",
+            "sponsors" : ["SLOPE","SPOPE","SSEDI"],
+            "title" : "YAZZIE LAWSUIT PLAN & REPORTING"
+         },
+         "13" : {
+            "actions" : "[6] SRC/SHPAC-SRC API.",
+            "sponsors" : ["SJARA"],
+            "title" : "LAW ENFORCEMENT TRAINING STUDY"
+         },
+         "14" : {
+            "actions" : "[6] SRC/SCONC-SRC API.",
+            "sponsors" : ["SMCKE"],
+            "title" : "STUDY USE OF PESTICIDES IN SCHOOLS"
+         },
+         "15" : {
+            "actions" : "[6] SRC/SJC-SRC API.",
+            "sponsors" : ["SMCKE"],
+            "title" : "STUDY REDISTRICTING PROCESS"
+         },
+         "16" : {
+            "actions" : "[6] SRC/SJC-SRC API.",
+            "sponsors" : ["SSOUL"],
+            "title" : "STRENGTHEN RELATIONS WITH TAIWAN"
+         },
+         "17" : {
+            "actions" : "[6] nt prntd-nt ref com-tbld API.",
+            "sponsors" : ["SSTEI","SSOUL","SDIAM"],
+            "title" : "ROBERTO V. ESTRADA, IN HONOR"
+         },
+         "18" : {
+            "actions" : "[7] SRC/SIRC-SRC- w/drn-tbld- w/drn [8] PASSED/S (43-0) [12] SGND.",
+            "sponsors" : ["SPINS"],
+            "title" : "MISSING & MURDERED INDIGENOUS WOMEN"
+         },
+         "19" : {
+            "actions" : "[7] nt prntd-nt ref com-tbld API.",
+            "sponsors" : ["SGRIG","SPADI"],
+            "title" : "\"NM STATE FIREFIGHTERS ASSOCIATION DAY\""
+         },
+         "2" : {
+            "actions" : "[1] SRC/STBTC-SRC API.",
+            "sponsors" : ["SDIAM"],
+            "title" : "INSURANCE COVERAGE FOR AGRITOURISM"
+         },
+         "20" : {
+            "actions" : "[7] SRC/SJC-SRC API.",
+            "sponsors" : ["SLOPE","SSEDI"],
+            "title" : "CHILDREN'S CODE REFORM TASK FORCE"
+         },
+         "21" : {
+            "actions" : "[5] tbld/S API.",
+            "sponsors" : ["SGONZ"],
+            "title" : "HECHO & PUBLIC LANDS CONSERVATION COUNCIL"
+         },
+         "22" : {
+            "actions" : "[7] nt prntd-nt ref com-tbld API.",
+            "sponsors" : ["SHEMP"],
+            "title" : "\"FOURTH TRIMESTER CARE DAY\""
+         },
+         "23" : {
+            "actions" : "[8] nt prntd-nt ref com-tbld API.",
+            "sponsors" : ["SGONZ"],
+            "title" : "\"MISSING & UNIDENTIFIED PERSONS DAY\""
+         },
+         "24" : {
+            "actions" : "[8] nt prntd-nt ref com-tbld API.",
+            "sponsors" : ["SCAMP","SSTEF","SLOPE"],
+            "title" : "\"NM FOOD & FARMS DAY\""
+         },
+         "25" : {
+            "actions" : "[8] SRC/SIRC-SRC API.",
+            "sponsors" : ["SBRAN","SGRIG"],
+            "title" : "EXAMINE STATE OF GAMING IN NM"
+         },
+         "26" : {
+            "actions" : "[8] SRC/STBTC-SRC [14] DP-STBTC API.",
+            "sponsors" : ["SKERN"],
+            "title" : "STUDY LONG-TERM CARE INSURANCE"
+         },
+         "27" : {
+            "actions" : "[9] SRC/SCONC-SRC API.",
+            "sponsors" : ["SSHEN","SPINS","SSEDI"],
+            "title" : "NM COMMITMENT TO CHACO CANYON LANDSCAPE"
+         },
+         "28" : {
+            "actions" : "[11] nt prntd-nt ref com-tbld API.",
+            "sponsors" : ["SMUNO"],
+            "title" : "\"PERA DAY\""
+         },
+         "29" : {
+            "actions" : "[11] nt prntd-nt ref com-tbld [12] PASSED/S (43-0)- SGND.",
+            "sponsors" : ["SJARA"],
+            "title" : "LANL CONTRIBUTION DURING PANDEMIC"
+         },
+         "3" : {
+            "actions" : "[1] nt prntd-nt ref com-tbld [4] w/drn - ref SRC/SEC-SRC API.",
+            "sponsors" : ["SSHEN"],
+            "title" : "\"AGRICULTURAL EDUCATION DAY\""
+         },
+         "30" : {
+            "actions" : "[11] SFC-SFC [14] DP [19] PASSED/S (36-0).",
+            "sponsors" : ["SGONZ","STALL","SPOPE"],
+            "title" : "RESEARCH SCHOOL ADMIN EXPENDITURES"
+         },
+         "31" : {
+            "actions" : "[11] SEC-SEC [12] DP [19] PASSED/S (37-0) SGND.",
+            "sponsors" : ["SGONZ"],
+            "title" : "STUDY FLAT SCHOOL BOARD PER DIEM"
+         },
+         "32" : {
+            "actions" : "[16] nt prntd-nt ref com-tbld API.",
+            "sponsors" : ["SJARA"],
+            "title" : "JACOB TORRES, IN RECOGNITION"
+         },
+         "33" : {
+            "actions" : "[16] nt prntd-nt ref com-tbld- w/drn [17] PASSED/S (43-0) SGND.",
+            "sponsors" : ["SWIRT","SBACA"],
+            "title" : "LENORE M. NARANJO, IN RECOGNITION"
+         },
+         "4" : {
+            "actions" : "[1] nt prntd-nt ref com-tbld API.",
+            "sponsors" : ["SJARA"],
+            "title" : "NM NATIONAL BOARD CERTIFIED TEACHER DAY"
+         },
+         "5" : {
+            "actions" : "[1] nt prntd-nt ref com-tbld API.",
+            "sponsors" : ["SHEMP"],
+            "title" : "\"FOURTH TRIMESTER CARE DAY\""
+         },
+         "6" : {
+            "actions" : "[1] SRC/SJC-SRC [6] DP-SJC [7] DP [8] PASSED/S (34-0) [12] SGND.",
+            "sponsors" : ["SNEVI","SORTI"],
+            "title" : "STUDY UNIFIED JAIL & PRISON SYSTEM"
+         },
+         "7" : {
+            "actions" : "[1] SRC/SHPAC-SRC [8] DP/a-SHPAC [11] DP/a - PASSED/S (36-0) [12] SGND.",
+            "sponsors" : ["SGONZ"],
+            "title" : "MILITARY SPOUSE LICENSE RECIPROCITY"
+         },
+         "8" : {
+            "actions" : "[1] nt prntd-nt ref com-tbld API.",
+            "sponsors" : ["SHICK"],
+            "title" : "CERTIFIED ANESTHESIOLOGIST ASSISTANTS WEEK"
+         },
+         "9" : {
+            "actions" : "[4] SRC/SHPAC-SRC API.",
+            "sponsors" : ["SSCHM"],
+            "title" : "CENTER FOR SPECIAL HEALTH CARE NEEDS"
+         }
+      },
+      "R" : {
+         "1" : {
+            "actions" : "[1] SRC-SRC- DNP-CS/DP [2] fl/aa- PASSED/S (32-7)- SGND.",
+            "sponsors" : ["SIVEY"],
+            "title" : "SENATE RULE CHANGES"
+         }
+      }
+   }
+}

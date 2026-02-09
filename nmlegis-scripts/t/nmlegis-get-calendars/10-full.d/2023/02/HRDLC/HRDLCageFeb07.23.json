@@ -1,0 +1,17 @@
+{
+   "2023-02-07" : {
+      "09:00:00" : {
+         "HRDLC" : {
+            "bills" : ["HB33","HB274","HM19"],
+            "date" : "2023-02-07",
+            "datetime" : "2023-02-07T09:00:00",
+            "mtime" : "2023-02-06T11:54:09",
+            "name" : "HRDLC",
+            "room" : "309",
+            "time" : "9:00 AM",
+            "url" : "2023/02/HRDLC/HRDLCageFeb07.23.pdf",
+            "zoom" : "https://us02web.zoom.us/j/89292510566"
+         }
+      }
+   }
+}

@@ -1,0 +1,16 @@
+{
+   "2023-02-20" : {
+      "11:00:00" : {
+         "Senate" : {
+            "bills" : ["SB94","SB3","SB73","SB144","SB72","SB145","SB351","SB307","SB188","SJM3","SJM6","SJM13","SM3","SM9","SM21","SM32","SM35","SM41","SM45","SM46","SM48","SM51","SM53"],
+            "date" : "2023-02-20",
+            "datetime" : "2023-02-20T11:00:00",
+            "mtime" : "2023-02-17T19:54:01",
+            "name" : "Senate",
+            "room" : "Senate Floor",
+            "time" : "11:00 AM",
+            "url" : "2023/02/sFloor/sFloor021823.pdf"
+         }
+      }
+   }
+}

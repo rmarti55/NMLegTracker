@@ -1,0 +1,92 @@
+{
+   "2021-03-03" : {
+      "00:00:00" : {
+         "SHPAC" : {
+            "bills" : ["SB315","HB34","HB113","HB185","SB309","SB333","SB356","SB294","SB295","SB303","SB304"],
+            "date" : "2021-03-03",
+            "datetime" : "2021-03-03T00:00:00",
+            "mtime" : "2021-03-02T16:44:35",
+            "name" : "SHPAC",
+            "time" : "1/2 hour after floor session - Virtual Zoom Meeting",
+            "url" : "2021/03/sSched/sSched030321.pdf"
+         }
+      },
+      "08:30:00" : {
+         "SEC" : {
+            "bills" : ["SB406","SB401","SB289","SB319"],
+            "date" : "2021-03-03",
+            "datetime" : "2021-03-03T08:30:00",
+            "mtime" : "2021-03-02T16:44:35",
+            "name" : "SEC",
+            "time" : "8:30 AM",
+            "url" : "2021/03/sSched/sSched030321.pdf"
+         }
+      },
+      "09:00:00" : {
+         "SRC" : {
+            "bills" : ["SB409","SB354","SM7"],
+            "date" : "2021-03-03",
+            "datetime" : "2021-03-03T09:00:00",
+            "mtime" : "2021-03-02T16:44:35",
+            "name" : "SRC",
+            "time" : "9:00 AM",
+            "url" : "2021/03/sSched/sSched030321.pdf"
+         }
+      },
+      "13:00:00" : {
+         "SFC" : {
+            "bills" : ["SB50","SB73","SB90","SB186","SB196","SB375"],
+            "date" : "2021-03-03",
+            "datetime" : "2021-03-03T13:00:00",
+            "mtime" : "2021-03-02T16:44:35",
+            "name" : "SFC",
+            "time" : "1:00 PM or 1/2 hour after floor session or",
+            "url" : "2021/03/sSched/sSched030321.pdf"
+         }
+      },
+      "13:30:00" : {
+         "SJC" : {
+            "bills" : ["SB291","HB255","SB12","SB152","SB222"],
+            "date" : "2021-03-03",
+            "datetime" : "2021-03-03T13:30:00",
+            "mtime" : "2021-03-02T16:44:35",
+            "name" : "SJC",
+            "time" : "1:30 PM or 1/2 hour after floor session",
+            "url" : "2021/03/sSched/sSched030321.pdf"
+         }
+      }
+   },
+   "2021-03-04" : {
+      "09:00:00" : {
+         "SCONC" : {
+            "bills" : ["HB41","HB245","HB260"],
+            "date" : "2021-03-04",
+            "datetime" : "2021-03-04T09:00:00",
+            "mtime" : "2021-03-02T16:44:35",
+            "name" : "SCONC",
+            "time" : "9:00 AM",
+            "url" : "2021/03/sSched/sSched030321.pdf"
+         },
+         "SIRC" : {
+            "bills" : ["SB431","HB52"],
+            "date" : "2021-03-04",
+            "datetime" : "2021-03-04T09:00:00",
+            "mtime" : "2021-03-02T16:44:35",
+            "name" : "SIRC",
+            "time" : "9:00 AM",
+            "url" : "2021/03/sSched/sSched030321.pdf"
+         }
+      },
+      "13:30:00" : {
+         "STBTC" : {
+            "bills" : ["HB5","SB103","HB75","SB23","SB349","SB83","SB378","SB380","SB410","SB372","SB306","SJR13"],
+            "date" : "2021-03-04",
+            "datetime" : "2021-03-04T13:30:00",
+            "mtime" : "2021-03-02T16:44:35",
+            "name" : "STBTC",
+            "time" : "1:30 PM or 15 minutes after floor session",
+            "url" : "2021/03/sSched/sSched030321.pdf"
+         }
+      }
+   }
+}

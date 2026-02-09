@@ -1,0 +1,15 @@
+{
+   "2021-03-04" : {
+      "13:30:00" : {
+         "STBTC" : {
+            "bills" : ["SB293","SB413","HB5","SB103","HB75","SB23","SB349","SB83","SB378","SB380","SB410","SB372","SB306","SJR13"],
+            "date" : "2021-03-04",
+            "datetime" : "2021-03-04T13:30:00",
+            "mtime" : "2021-03-03T08:57:12",
+            "name" : "STBTC",
+            "time" : "1:30 PM or 15 min. after floor session",
+            "url" : "2021/03/STBTC/STBTCageMar04.21.pdf"
+         }
+      }
+   }
+}

@@ -1,0 +1,16 @@
+{
+   "2023-01-23" : {
+      "11:00:00" : {
+         "Senate" : {
+            "bills" : ["SJM3"],
+            "date" : "2023-01-23",
+            "datetime" : "2023-01-23T11:00:00",
+            "mtime" : "2023-01-19T18:56:00",
+            "name" : "Senate",
+            "room" : "Senate Floor",
+            "time" : "11:00 AM",
+            "url" : "2023/01/sFloor/sFloor012323.pdf"
+         }
+      }
+   }
+}

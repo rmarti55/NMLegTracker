@@ -1,0 +1,74 @@
+% layout 'default';
+% title  $t->name . ' Tracker';
+
+<h1>EDIT: <%= $t->description %> Bill Tracker</h1>
+
+<p>Please be sure to press the SUBMIT CHANGES button at bottom.</p>
+<noscript>
+  <p>Some of the category-editing features may require Javascript.
+    I haven't really tested. Anyhow, if category editing doesn't
+    work for you, and you want to avoid Javascript, just ask Ed
+    to add the categories for you.</p>
+</noscript>
+
+%= form_for '/trackers/edit' => (method => 'POST') => begin
+% my $label;
+% if ($t->is_public) {
+<h2>Your tracker is PUBLIC</h2>
+<p>
+  Anyone can view it. You must have made it public at some point,
+  because the default is private.
+</p>
+% $label = "Uncheck this box to make your tracker private again";
+% } else {
+<h2>Your tracker is PRIVATE</h2>
+<p>
+  Only you can view it. Even if someone else has the URL, they can't
+  view it. This is the default.
+</p>
+% $label = "Check this box to make your tracker public";
+% }
+<p>
+  % my @checked;
+  % @checked = (checked => 'checked') if $t->is_public;
+  %= check_box "is_public" => 1, @checked
+  %= label_for "is_public" => $label
+</p>
+<p>
+  %= label_for 'name' => "Tracker name:"
+  %= text_field 'name' => $t->name, size => 8
+  --  Especially important if you want to make your tracker public.
+  Don't change it willy-nilly: anyone with the old name will
+  suddenly get 404s. Case doesn't matter ("Foo", "FOO", and "foo"
+  are all treated the same) but if it's a name, capital first
+  letter is nice; for acronyms, ALL CAPS is better.
+</p>
+<p>
+  %= label_for 'description' => "Tracker description:"
+  %= text_field 'description' => $t->description, size => 20
+  -- a longer description that you (and, if public, viewers)
+  will see as a heading.
+</p>
+<p>
+  %= label_for 'website' => "Web site:"
+  %= text_field 'website' => $t->website, size => 30
+  -- only really useful for public trackers. Your web site, for
+  people to find out more about your organization.
+</p>
+
+% $self->stash(categories => [ map { $_->[0] } @$bills ]);
+  <input type="hidden" name="tracker" value="<%= $t->name %>" />
+% for my $row (@$bills) {
+%     my $category = shift(@$row);
+%     $self->stash(category => $category);
+<h3><%= $category %></h3>
+<table>
+%     for my $b (@$row) {
+%=        include 'bills/_billrow', b => $b, columns => [ 'tracker_form', 'id', 'title', 'sponsors' ]
+%     }
+</table>
+% }
+<br/>
+<hr/>
+<input type="submit" value="Submit Changes" />
+% end

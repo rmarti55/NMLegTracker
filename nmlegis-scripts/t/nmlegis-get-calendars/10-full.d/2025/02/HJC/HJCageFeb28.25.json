@@ -1,0 +1,17 @@
+{
+   "2025-02-28" : {
+      "13:30:00" : {
+         "HJC" : {
+            "bills" : ["HB72","HB308","HB171","HB9","HB256","HB258","HB284"],
+            "date" : "2025-02-28",
+            "datetime" : "2025-02-28T13:30:00",
+            "mtime" : "2025-02-27T13:47:20",
+            "name" : "HJC",
+            "room" : "309",
+            "time" : "1:30 PM OR 15 minutes after floor ends",
+            "url" : "2025/02/HJC/HJCageFeb28.25.pdf",
+            "zoom" : "https://us02web.zoom.us/j/85681041953"
+         }
+      }
+   }
+}

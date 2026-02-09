@@ -1,0 +1,16 @@
+{
+   "2025-01-23" : {
+      "10:00:00" : {
+         "Senate" : {
+            "bills" : [],
+            "date" : "2025-01-23",
+            "datetime" : "2025-01-23T10:00:00",
+            "mtime" : "2025-01-22T16:16:07",
+            "name" : "Senate",
+            "room" : "Senate Floor",
+            "time" : "10:00 AM",
+            "url" : "2025/01/sFloor/sFloor012325.pdf"
+         }
+      }
+   }
+}

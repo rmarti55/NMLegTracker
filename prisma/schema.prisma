@@ -1,0 +1,212 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DATABASE_URL_UNPOOLED")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model User {
+  id               String                @id @default(cuid())
+  name             String?
+  email            String?               @unique
+  emailVerified    DateTime?
+  image            String?
+  createdAt        DateTime              @default(now())
+  updatedAt        DateTime              @updatedAt
+  
+  accounts         Account[]
+  sessions         Session[]
+  billChatMessages LegiBillChatMessage[]
+  billSearches     BillSearchHistory[]
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model LegiSession {
+  id          String     @id @default(cuid())
+  sessionId   Int        @unique
+  stateId     Int
+  state       String
+  yearStart   Int
+  yearEnd     Int
+  sessionName String
+  datasetHash String?
+  datasetDate DateTime?
+  bills       LegiBill[]
+  createdAt   DateTime   @default(now())
+
+  @@index([state])
+}
+
+model LegiBill {
+  id            String                @id @default(cuid())
+  billId        Int                   @unique
+  billNumber    String
+  billType      String
+  body          String
+  title         String
+  description   String?
+  status        Int
+  statusDate    DateTime?
+  url           String?
+  stateLink     String?
+  changeHash    String?
+  sessionId     String
+  session       LegiSession           @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  sponsors      LegiBillSponsor[]
+  votes         LegiRollCall[]
+  chatMessages  LegiBillChatMessage[]
+  history       Json?
+  texts         Json?
+  supplements   Json?
+  calendar      Json?
+  fullText      String?
+  fullTextUrl   String?
+  textFetchedAt DateTime?
+  createdAt     DateTime              @default(now())
+  updatedAt     DateTime              @updatedAt
+
+  @@index([sessionId])
+  @@index([billNumber])
+  @@index([status])
+  @@index([body])
+}
+
+model LegiPerson {
+  id           String            @id @default(cuid())
+  peopleId     Int               @unique
+  personHash   String?
+  name         String
+  firstName    String
+  lastName     String
+  party        String
+  role         String
+  district     String
+  county       String?
+  email        String?
+  imageUrl     String?
+  bio          Json?
+  sponsorships LegiBillSponsor[]
+  voteRecords  LegiVoteRecord[]
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+
+  @@index([party])
+  @@index([role])
+}
+
+model LegiBillSponsor {
+  id           String     @id @default(cuid())
+  billId       String
+  bill         LegiBill   @relation(fields: [billId], references: [id], onDelete: Cascade)
+  personId     String
+  person       LegiPerson @relation(fields: [personId], references: [id], onDelete: Cascade)
+  sponsorType  Int
+  sponsorOrder Int
+
+  @@unique([billId, personId])
+  @@index([billId])
+  @@index([personId])
+}
+
+model LegiRollCall {
+  id          String           @id @default(cuid())
+  rollCallId  Int              @unique
+  billId      String
+  bill        LegiBill         @relation(fields: [billId], references: [id], onDelete: Cascade)
+  date        DateTime
+  description String
+  chamber     String
+  yea         Int
+  nay         Int
+  nv          Int
+  absent      Int
+  total       Int
+  passed      Boolean
+  url         String?
+  stateLink   String?
+  votes       LegiVoteRecord[]
+  createdAt   DateTime         @default(now())
+
+  @@index([billId])
+  @@index([chamber])
+}
+
+model LegiVoteRecord {
+  id         String       @id @default(cuid())
+  rollCallId String
+  rollCall   LegiRollCall @relation(fields: [rollCallId], references: [id], onDelete: Cascade)
+  personId   String
+  person     LegiPerson   @relation(fields: [personId], references: [id], onDelete: Cascade)
+  voteId     Int
+  voteText   String
+
+  @@unique([rollCallId, personId])
+  @@index([rollCallId])
+  @@index([personId])
+}
+
+model LegiBillChatMessage {
+  id        String   @id @default(cuid())
+  billId    String
+  bill      LegiBill @relation(fields: [billId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role      String
+  content   String
+  createdAt DateTime @default(now())
+
+  @@index([billId])
+  @@index([userId])
+  @@index([userId, billId])
+}
+
+model BillSearchHistory {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  query     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@unique([userId, query])
+}

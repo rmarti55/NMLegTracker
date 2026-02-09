@@ -1,0 +1,17 @@
+{
+   "2024-02-01" : {
+      "09:30:00" : {
+         "HTPWC" : {
+            "bills" : ["HB232"],
+            "date" : "2024-02-01",
+            "datetime" : "2024-02-01T09:30:00",
+            "mtime" : "2024-02-01T08:49:36",
+            "name" : "HTPWC",
+            "room" : "305",
+            "time" : "9:30 AM",
+            "url" : "2024/02/HTPWC/HTPWCageFeb01.24.pdf",
+            "zoom" : "https://us02web.zoom.us/j/85034821535"
+         }
+      }
+   }
+}

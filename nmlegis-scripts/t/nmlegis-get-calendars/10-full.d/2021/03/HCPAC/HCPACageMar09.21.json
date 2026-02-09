@@ -1,0 +1,16 @@
+{
+   "2021-03-09" : {
+      "11:30:00" : {
+         "HCPAC" : {
+            "bills" : ["SB99"],
+            "date" : "2021-03-09",
+            "datetime" : "2021-03-09T11:30:00",
+            "mtime" : "2021-03-08T11:43:35",
+            "name" : "HCPAC",
+            "time" : "11:30 AM",
+            "url" : "2021/03/HCPAC/HCPACageMar09.21.pdf",
+            "zoom" : "https://us02web.zoom.us/j/89243737297"
+         }
+      }
+   }
+}

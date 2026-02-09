@@ -1,0 +1,14 @@
+{
+   "2023-03-17" : {
+      "00:00:00" : {
+         "Senate" : {
+            "bills" : ["SM29","SM37","HB182","SB367","HB446"],
+            "date" : "2023-03-17",
+            "mtime" : "2023-03-16T11:07:17",
+            "name" : "Senate",
+            "room" : "Senate Floor",
+            "url" : "2023/03/sFloor/sFloor031723_Supplemental1.pdf"
+         }
+      }
+   }
+}

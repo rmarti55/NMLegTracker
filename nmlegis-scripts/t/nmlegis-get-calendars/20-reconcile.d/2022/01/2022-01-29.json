@@ -1,0 +1,17 @@
+{
+   "2022-01-29" : {
+      "09:00:00" : {
+         "HAFC" : {
+            "bills" : [],
+            "date" : "2022-01-29",
+            "datetime" : "2022-01-29T09:00:00",
+            "mtime" : "2022-01-29T09:45:54",
+            "name" : "HAFC",
+            "room" : "307",
+            "time" : "9:00 AM",
+            "url" : "/home/esm/.cache/nmlegis/get-calendars/2022/01/HAFC/HAFCageJan29.22.pdf",
+            "zoom" : "https://us02web.zoom.us/j/83618149838"
+         }
+      }
+   }
+}

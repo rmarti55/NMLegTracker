@@ -1,0 +1,24 @@
+%#  params: $b = bill object, $t => tracker, $w = hashref { TRACKER => -1 (oppose), 0, 1 }
+%#
+% my @css;
+% my $icon = '1F989';       # owl
+% my $t_name = $t->name;
+% if ($w->{$t_name}) {
+%     push @css, 'watch_on';
+%     if ($w->{$t_name} < 0) {
+%         push @css, 'oppose';
+%         $icon   = '26D4';
+%     }
+%     delete $w->{$t_name};
+% }
+<button class="watchstatus solo owned <%= join(' ', @css) %>" id="watch-<%= $t->id %>-<%= $b->id %>">&#x<%= $icon %>;</button>
+% # FIXME FIXME! Now we have to check for SUBSCRIPTIONS
+% unless ($self->stash("only_mine")) {
+%     if (keys %$w) {
+%         for my $other (sort keys %$w) {
+%             my $oppose = '';
+%             $oppose = ' oppose' if $w->{$other} < 0;
+<br/><button class="watchstatus multi watch_on"><%= $other %></button>
+%         }
+%     }
+% }

@@ -1,0 +1,30 @@
+{
+   "2023-03-17" : {
+      "09:30:00" : {
+         "SEC" : {
+            "bills" : ["HB381","SM68"],
+            "date" : "2023-03-17",
+            "datetime" : "2023-03-17T09:30:00",
+            "mtime" : "2023-03-17T08:08:44",
+            "name" : "SEC",
+            "room" : "311",
+            "time" : "9:30 AM",
+            "url" : "2023/03/sSched/sSched031723.pdf",
+            "zoom" : "https://us02web.zoom.us/j/89615593412"
+         }
+      },
+      "10:00:00" : {
+         "SJC" : {
+            "bills" : ["HB15","HB93","HB205","HB349","HB43"],
+            "date" : "2023-03-17",
+            "datetime" : "2023-03-17T10:00:00",
+            "mtime" : "2023-03-17T08:08:44",
+            "name" : "SJC",
+            "room" : "321",
+            "time" : "10:00 AM",
+            "url" : "2023/03/sSched/sSched031723.pdf",
+            "zoom" : "https://us02web.zoom.us/j/81502543362"
+         }
+      }
+   }
+}

@@ -1,0 +1,293 @@
+#!/usr/bin/perl
+#
+# nmlegis-extract-lwv - extract LWV priorities from spreadsheet
+#
+package ESM::NMLegisExtractLWV;
+
+use v5.14;
+use strict;
+use warnings;
+use utf8;
+use open qw( :encoding(UTF-8) :std );
+
+(our $ME = $0) =~ s|.*/||;
+(our $VERSION = '$Revision: 1.30 $ ') =~ tr/[0-9].//cd;
+
+use NMLegis                     qw(:all);
+use NMLegis::Bills;
+use NMLegis::Committees;
+use NMLegis::Legislators;
+
+use File::Temp                  qw(tempdir);
+use FindBin                     qw($Bin);
+use MIME::Parser;
+
+###############################################################################
+# BEGIN user-customizable section
+
+$ENV{PATH} = '/home/esm/src/nmlegis/bin:/home/esm/bin/scripts:/usr/bin';
+
+our $Destdir  = '/var/www/nmlegis/lwv';
+our $Destfile = 'bills.txt';
+
+# END   user-customizable section
+###############################################################################
+
+###############################################################################
+# BEGIN boilerplate args checking, usage messages
+
+sub usage {
+    print  <<"END_USAGE";
+Usage: $ME [OPTIONS] PATH
+
+blah blah blah
+
+OPTIONS:
+
+  -v, --verbose  show verbose progress indicators
+  -n, --dry-run  make no actual changes
+
+  --help         display this message
+  --man          display program man page
+  --version      display program name and version
+END_USAGE
+
+    exit;
+}
+
+# Command-line options.  Note that this operates directly on @ARGV !
+our $debug   = 0;
+our $force   = 0;
+our $verbose = 0;
+our $NOT     = '';              # print "blahing the blah$NOT\n" if $debug
+sub handle_opts {
+    use Getopt::Long;
+    GetOptions(
+        'debug!'     => \$debug,
+        'dry-run|n!' => sub { $NOT = ' [NOT]' },
+        'force'      => \$force,
+        'verbose|v'  => \$verbose,
+
+        help         => \&usage,
+        version      => sub { print "$ME version $VERSION\n"; exit 0 },
+    ) or die "Try `$ME --help' for help\n";
+}
+
+# END   boilerplate args checking, usage messages
+###############################################################################
+
+############################## CODE BEGINS HERE ###############################
+
+# The term is "modulino".
+__PACKAGE__->main()                                     unless caller();
+
+# Main code.
+sub main {
+    # Note that we operate directly on @ARGV, not on function parameters.
+    # This is deliberate: it's because Getopt::Long only operates on @ARGV
+    # and there's no clean way to make it use @_.
+    handle_opts();                      # will set package globals
+
+    my $infile = shift(@ARGV)
+        or die "$ME: Missing INFILE arg; see $ME --help\n";
+    if ($infile eq '-') {
+        if (-t *STDIN) {
+            die "$ME: Cannot read from '-', it is a tty\n";
+        }
+    }
+    else {
+        -e $infile
+            or die "$ME: INFILE does not exist: $infile\n";
+    }
+
+    my $tmpdir = tempdir("$ME.XXXXXXX", TMPDIR => 1, CLEANUP => !$debug);
+
+
+    if ($infile =~ m!esm/Mail/.*/\d+$! || $infile eq '-') {
+        $infile = extract_docx($infile, $tmpdir);
+    }
+
+    # Now it's a docx file
+    my $bills = extract_bills($infile, $tmpdir);
+    # FIXME: write bills file
+    my $outfile = "$Destdir/$Destfile";
+    my $tmpfile = "$outfile.tmp.$$";
+    open my $fh, '>', $tmpfile
+        or die "$ME: cannot create $tmpfile: $!\n";
+    print { $fh } $bills;
+    close $fh
+        or die "$ME: Error writing $tmpfile: $!\n";
+    chmod 0444 => $tmpfile;
+
+    if (-e $outfile) {
+        if (system('diff', '-u', $outfile, $tmpfile) == 0) {
+            print "[no change]\n" if -t *STDIN;
+            unlink $tmpfile;
+            exit 0;
+        }
+    }
+
+    rename $tmpfile => $outfile
+        or die "$ME: Could not rename $tmpfile: $!\n";
+
+    # Push to l and regenerate the page
+    ssh_reauth();
+    system('rsync', '-av', $outfile, "l:$outfile");
+    system('ssh', 'l', '/home/esm/src/nmlegis/bin/nmlegis-show-misc', $Destdir);
+    system('ssh', 'l', 'hg', '--cwd' => $Destdir, 'commit', "-mNew-tracking-sheet", $Destfile);
+}
+
+###############################################################################
+# BEGIN extract xls from email message
+
+sub extract_docx {
+    my $path   = shift;
+    my $tmpdir = shift;
+
+    my $p = MIME::Parser->new;
+    $p->output_under($tmpdir);
+
+    my $entity = $p->parse_open($path)
+        or die "$ME: parse failed\n";
+
+    for my $part ($entity->parts) {
+        my $type = $part->head->mime_type;
+        if ($type =~ m!vnd.*officedocument!) {
+            my $attachment_path = $part->bodyhandle->path;
+            $attachment_path =~ /\.docx$/
+                or warn "$ME: WARNING: Attachment is not docx!\n";
+            $attachment_path =~ /LWV/
+                or warn "$ME: WARNING: Attachment does not have LWV in its name\n";
+            return $attachment_path;
+        }
+    }
+
+    die "$ME: Did not find a vnd.*officedocument attachment\n";
+}
+
+# END   extract xls from email message
+###############################################################################
+# BEGIN extract bills.txt from xls
+
+sub extract_bills {
+    my $path   = shift;                 # in: path to spreadsheet
+    my $tmpdir = shift;                 # in: tmpdir
+
+    $path =~ m!^(.*/)?(.*)\.docx$!
+        or die "$ME: infile is not a .docx file: $path\n";
+    my $basename = $2;
+
+    my @cmd = ('libreoffice', '--invisible', '--convert-to' => 'pdf', '--outdir' => $tmpdir, $path);
+    system(@cmd) == 0
+        or die "$ME: command failed: @cmd\n";
+
+    my $pdf = "$tmpdir/$basename.pdf";
+    -e $pdf
+        or die "$ME: libreoffice did not create $pdf\n";
+
+    # Now pdf to text
+    @cmd = ('pdftotext', '-q', '-layout', '-nopgbrk', $pdf);
+    system(@cmd) == 0
+        or die "$ME: command failed: @cmd\n";
+
+    # Now read txt
+    my $txt = "$tmpdir/$basename.txt";
+    open my $fh, '<', $txt
+        or die "$ME: Cannot read $txt: $!\n";
+
+    my $bills;
+    while (my $line = <$fh>) {
+        chomp $line;
+
+        # ARGH! This is not a NOP. Replace Unicode hyphen with ASCII one.
+        $line =~ s/–/-/g;
+
+        # Ignore everything until we see a Priorities line
+        if ($line =~ /Priorit(y|ies)/) {
+            $bills //= '';
+            # FIXME 2025-01-12 esm, title is now on same line as Priority,
+            # maybe this didn't use to be the case before?
+            #next;
+        }
+        next unless defined $bills;
+
+        # 15-30 means centered; more than 40 is probably an overflow line
+        if ($line =~ /^\s{20,60}(\S.*\S)/) {
+            my $possible_title = $1;
+            my %is_known_title = map { $_ => 1 } (
+                'Education',
+                'Budgets & Taxes',
+                'Immigration',
+                'Other Topics',
+            );
+            if ($possible_title =~ /\s-\s+Priority/ || $is_known_title{$possible_title}) {
+                # New section
+                $bills .= "\n$possible_title\n\n";
+            }
+        }
+        elsif ($line =~ s/^\s{,2}((H|S)J?(B|M|R))\s*(\d+)(a|A|CS)?\s+//) {
+            my $b = "$1$4";
+            if ($line =~ /oppose/i) {
+                $b .= "-";
+            }
+            $line =~ s/\s{6}.*$//;
+            $bills .= sprintf("%-8s %s\n", $b, $line);
+        }
+    }
+    close $fh;
+
+    die "$ME: too short a list\n"       if len($bills) < 500;
+    return $bills;
+}
+
+# END   extract bills.txt from xls
+###############################################################################
+# BEGIN ssh_reauth
+
+sub ssh_reauth {
+    print STDERR "*** ssh_reauth: \$< = $<\n"                   if $debug;
+    # if $SSH_AUTH_SOCK is defined and is an existing socket, all is good
+    if (my $s = $ENV{SSH_AUTH_SOCK}) {
+        if (-S $s) {
+            print STDERR "*** ssh_reauth: good SSH_AUTH_SOCK=$s\n" if $debug;
+            return;
+        }
+	print STDERR "*** ssh_reauth: BAD SSH_AUTH_SOCK: $s\n"  if $debug;
+    }
+
+    # Find the most recent socket
+    my @socks;
+    for my $d (qw(/tmp /t)) {
+        for my $s (glob("$d/ssh-*/agent*")) {
+	    print STDERR ">>> ssh_reauth: testing $s\n"         if $debug;
+            if (-S $s && -o $s) {
+                # File is a socket owned by me.
+                push @socks, $s;
+		print STDERR "   --- good\n"                    if $debug;
+            }
+        }
+    }
+
+    my @socks_sorted = sort _by_mtime_descending @socks
+        or do {
+            warn "$ME: WARNING: ssh_reauth: no sockets found\n";
+            return;
+        };
+
+    print STDERR "*** ssh_reauth: setting SSH_AUTH_SOCK=$socks_sorted[0]\n";
+
+    $ENV{SSH_AUTH_SOCK} = $socks_sorted[0];
+}
+
+
+sub _by_mtime_descending {
+    my $st_a = stat($a)   || return  1;
+    my $st_b = stat($b)   || return -1;
+
+    $st_b->mtime <=> $st_a->mtime;
+}
+
+# END   ssh_reauth
+###############################################################################
+
+1;

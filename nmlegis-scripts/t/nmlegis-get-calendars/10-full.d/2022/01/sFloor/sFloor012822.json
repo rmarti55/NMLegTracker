@@ -1,0 +1,16 @@
+{
+   "2022-01-28" : {
+      "12:00:00" : {
+         "Senate" : {
+            "bills" : ["SB13","SM4","SM5","SM8"],
+            "date" : "2022-01-28",
+            "datetime" : "2022-01-28T12:00:00",
+            "mtime" : "2022-01-27T15:19:02",
+            "name" : "Senate",
+            "room" : "Senate Floor",
+            "time" : "12:00",
+            "url" : "2022/01/sFloor/sFloor012822.pdf"
+         }
+      }
+   }
+}

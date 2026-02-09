@@ -1,0 +1,63 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Bill text styling for nmlegis.gov HTML content */
+.bill-text-content {
+  font-family: "Courier New", Courier, monospace;
+  font-size: 14px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.bill-text-content p {
+  margin-bottom: 1em;
+}
+
+/* New material (underlined in original) - show in green */
+.bill-text-content u,
+.bill-text-content .new-material {
+  color: #059669;
+  text-decoration: underline;
+  font-weight: 500;
+}
+
+/* Deleted material (strikethrough in original) - show in red */
+.bill-text-content s,
+.bill-text-content strike,
+.bill-text-content del,
+.bill-text-content .deleted-material {
+  color: #dc2626;
+  text-decoration: line-through;
+}
+
+/* Section headers */
+.bill-text-content .section-header {
+  font-weight: bold;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+}
+
+/* Line numbers if present */
+.bill-text-content .line-number {
+  color: #9ca3af;
+  user-select: none;
+  margin-right: 1em;
+}

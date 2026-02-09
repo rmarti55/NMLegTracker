@@ -1,0 +1,16 @@
+{
+   "2022-02-05" : {
+      "09:00:00" : {
+         "SFC" : {
+            "bills" : ["SB34","SB123","SB134","SB144"],
+            "date" : "2022-02-05",
+            "datetime" : "2022-02-05T09:00:00",
+            "mtime" : "2022-02-11T18:15:31",
+            "name" : "SFC",
+            "room" : "322",
+            "time" : "9:00 AM or at the Call of Chair",
+            "url" : "2022/02/SFC/SFCageFeb05.22.pdf"
+         }
+      }
+   }
+}

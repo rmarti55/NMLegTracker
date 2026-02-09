@@ -1,0 +1,125 @@
+{
+   "2021-02-26" : {
+      "00:00:00" : {
+         "HAFC" : {
+            "bills" : ["HB48","HB86","HB100","HB132","HB165","HB94","HB116","HB121","HB175","HB188","HB208","HB238"],
+            "date" : "2021-02-26",
+            "datetime" : "2021-02-26T00:00:00",
+            "mtime" : "2021-02-26T09:08:12",
+            "name" : "HAFC",
+            "url" : "2021/02/hSched/hSched022621.pdf",
+            "zoom" : "https://us02web.zoom.us/j/83547506838"
+         },
+         "HCEDC" : {
+            "bills" : ["HB270","HB302","HB134"],
+            "date" : "2021-02-26",
+            "datetime" : "2021-02-26T00:00:00",
+            "mtime" : "2021-02-26T09:08:12",
+            "name" : "HCEDC",
+            "url" : "2021/02/hSched/hSched022621.pdf",
+            "zoom" : "https://us02web.zoom.us/j/83846715600"
+         },
+         "HJC" : {
+            "bills" : ["HB190","HB30","HB137"],
+            "date" : "2021-02-26",
+            "datetime" : "2021-02-26T00:00:00",
+            "mtime" : "2021-02-26T09:08:12",
+            "name" : "HJC",
+            "url" : "2021/02/hSched/hSched022621.pdf",
+            "zoom" : "https://us02web.zoom.us/j/89543370073"
+         }
+      },
+      "08:00:00" : {
+         "HEC" : {
+            "bills" : ["HB227","HB257","HB287","HB289"],
+            "date" : "2021-02-26",
+            "datetime" : "2021-02-26T08:00:00",
+            "mtime" : "2021-02-26T09:08:12",
+            "name" : "HEC",
+            "time" : "8:00 AM",
+            "url" : "2021/02/hSched/hSched022621.pdf",
+            "zoom" : "https://us02web.zoom.us/j/84672132667"
+         },
+         "HGEIC" : {
+            "bills" : ["HB16","HB194","HB192","HB268","HB217","HB230"],
+            "date" : "2021-02-26",
+            "datetime" : "2021-02-26T08:00:00",
+            "mtime" : "2021-02-26T09:08:12",
+            "name" : "HGEIC",
+            "time" : "8:00 AM",
+            "url" : "2021/02/hSched/hSched022621.pdf",
+            "zoom" : "https://us02web.zoom.us/j/89283197941"
+         }
+      },
+      "08:30:00" : {
+         "HHHC" : {
+            "bills" : ["HB209","HB250","HB269","HB272"],
+            "date" : "2021-02-26",
+            "datetime" : "2021-02-26T08:30:00",
+            "mtime" : "2021-02-26T09:08:12",
+            "name" : "HHHC",
+            "time" : "8:30 AM",
+            "url" : "2021/02/hSched/hSched022621.pdf",
+            "zoom" : "https://us02web.zoom.us/j/89853256841"
+         },
+         "HTRC" : {
+            "bills" : ["HB241","HB174","HB271","HB291","HB262"],
+            "date" : "2021-02-26",
+            "datetime" : "2021-02-26T08:30:00",
+            "mtime" : "2021-02-26T09:08:12",
+            "name" : "HTRC",
+            "time" : "8:30 AM",
+            "url" : "2021/02/hSched/hSched022621.pdf",
+            "zoom" : "https://us02web.zoom.us/j/84898317503"
+         }
+      }
+   },
+   "2021-03-01" : {
+      "00:00:00" : {
+         "HCEDC" : {
+            "bills" : ["HB205","HB350"],
+            "date" : "2021-03-01",
+            "datetime" : "2021-03-01T00:00:00",
+            "mtime" : "2021-02-26T09:08:12",
+            "name" : "HCEDC",
+            "time" : "15 minutes after the Floor Session ends",
+            "url" : "2021/02/hSched/hSched022621.pdf",
+            "zoom" : "https://us02web.zoom.us/j/83846715600"
+         }
+      },
+      "08:00:00" : {
+         "HEC" : {
+            "bills" : ["HB87","HB282","SB51","HB150"],
+            "date" : "2021-03-01",
+            "datetime" : "2021-03-01T08:00:00",
+            "mtime" : "2021-02-26T09:08:12",
+            "name" : "HEC",
+            "time" : "8:00 AM",
+            "url" : "2021/02/hSched/hSched022621.pdf",
+            "zoom" : "https://us02web.zoom.us/j/84672132667"
+         },
+         "HGEIC" : {
+            "bills" : ["HB261","HB198","HB265","HB301","HB210","HB221","HB300","HB277"],
+            "date" : "2021-03-01",
+            "datetime" : "2021-03-01T08:00:00",
+            "mtime" : "2021-02-26T09:08:12",
+            "name" : "HGEIC",
+            "time" : "8:00 AM",
+            "url" : "2021/02/hSched/hSched022621.pdf",
+            "zoom" : "https://us02web.zoom.us/j/89283197941"
+         }
+      },
+      "08:30:00" : {
+         "HHHC" : {
+            "bills" : ["HB151","HB284","HB305","SB27","SB96"],
+            "date" : "2021-03-01",
+            "datetime" : "2021-03-01T08:30:00",
+            "mtime" : "2021-02-26T09:08:12",
+            "name" : "HHHC",
+            "time" : "8:30 AM",
+            "url" : "2021/02/hSched/hSched022621.pdf",
+            "zoom" : "https://us02web.zoom.us/j/89853256841"
+         }
+      }
+   }
+}

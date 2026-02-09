@@ -1,0 +1,16 @@
+{
+   "2021-02-25" : {
+      "00:00:00" : {
+         "HAFC" : {
+            "bills" : ["HB6","HB43","HB46","HB53","HB102","HB14","HB72","HB77","HB85","HB238"],
+            "date" : "2021-02-25",
+            "datetime" : "2021-02-25T00:00:00",
+            "mtime" : "2021-02-24T14:51:46",
+            "name" : "HAFC",
+            "time" : "15 minutes after the floor session adjorns",
+            "url" : "2021/02/HAFC/HAFCageFeb25.21.pdf",
+            "zoom" : "https://us02web.zoom.us/j/89195400245"
+         }
+      }
+   }
+}

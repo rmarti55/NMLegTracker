@@ -1,0 +1,51 @@
+% layout 'default';
+% title  'User Settings';
+
+<h1>User Settings</h1>
+% if ($changelog && @$changelog) {
+<ul>
+  % for my $log (@$changelog) {
+  <li><%= $log %></li>
+  % }
+</ul>
+% }
+
+%= form_for '/settings' => (method => 'POST') => begin
+  <table class="auth">
+    <tr>
+      <td><%= label_for email => 'Email' %></td>
+      <td colspan="2"><i>If you need to change your email, please ask Ed. Sorry. This is a low-budget operation.</i></td>
+    </tr>
+    <tr>
+      <td><%= label_for password => 'Change Password' %></td>
+      <td><%= password_field 'password', size => 20 %></td>
+      <td><i>Leave blank unless you want to change it</i></td>
+    </tr>
+    <tr>
+      <td><%= label_for firstname => 'First Name' %></td>
+      <td><%= text_field 'firstname' => $self->user->firstname, size => 20, required => 1 %></td>
+      <td><%= $self->stash("firstname_errors"); %></td>
+    </tr>
+    <tr>
+      <td><%= label_for lastname => 'Last Name' %></td>
+      <td><%= text_field 'lastname' => $self->user->lastname, size => 20, required => 1 %></td>
+      <td><%= $self->stash("lastname_errors"); %></td>
+    </tr>
+    <tr>
+      <td><%= label_for hdistrict => 'House District' %></td>
+      <td>
+        %= include 'settings/_pick_legislator', chamber => 'H'
+      </td>
+    </tr>
+    <tr>
+      <td><%= label_for sdistrict => 'Senate District' %></td>
+      <td>
+        %= include 'settings/_pick_legislator', chamber => 'S'
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2"><button type="submit">Update Settings</button></td>
+    </tr>
+  </table>
+% end
+% $self->stash('skip_legend' => 1);

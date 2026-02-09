@@ -1,0 +1,64 @@
+% my $committee = $self->db->committee($mtg->{name});
+% my $bref = $mtg->{billh} || $mtg->{bills};
+% my @bills = @{ $bref };
+%
+% my $time = $mtg->{time} || '[COULD NOT DETERMINE TIME]';
+% my $pdf = $mtg->{url};
+% my $room = $mtg->{room} || '[room unknown]';
+% my $usual_room = $mtg->{committee_info}{room};
+% my $z = $mtg->{zoom};
+% if (! $z && $committee->name =~ /^(House|Senate)/) {
+%     # No sane way to scrape this
+%     $z = 'https://sg001-harmony.sliq.net/00293/harmony';
+% }
+%# if $time is more than 3 hours ago, css it as "over"
+% my $closediv = '';
+% if ($lt->epoch < CORE::time - 3 * 3600) {
+% $closediv = '</div>';
+<div class="meeting-past">
+% }
+% my $anchor_id = sprintf("hearing-%s-%s", $mtg->{datetime}, $committee->code);
+<table id="<%= $anchor_id %>">
+  <tr>
+    % if ($self->user) {
+    <td class="watchstatus"></td>
+    % }
+    <th class="time" colspan="2"><%= $time %>
+      % if ($pdf) {
+      &nbsp;<a href="<%= $pdf %>" title="PDF calendar source" target=\"_blank\">&#x1F5D3;</a>
+      % }
+    </th>
+    <th class="room">
+      Room <%= $room %>
+% if ($usual_room && $room ne $usual_room) {
+      <i>[NOTE CHANGE FROM USUAL ROOM <%= $usual_room %>]</i>
+% }
+% if ($z) {
+      &nbsp;<a href="<%= $z %>" target=\"_blank\"><button><big>&#x1f4f9;</big></button></a>
+% }
+    </th>
+  </tr>
+  % unless (stash('omit_committee_title')) {
+  <tr>
+    % if ($self->user) {
+    <td class="watchstatus"></td>
+    % }
+    <th class="committeename" colspan="3"><%= link_to $committee->name => $committee->url . '#' . $anchor_id %></th>
+  </tr>
+  %# Are any of our legislators in this committee?
+  % if (my $mylegislator = $self->user->is_my_legislator_on_committee($committee)) {
+  <tr>
+    % if ($self->user) {
+    <td class="watchstatus"></td>
+    % }
+    <td class="mylegislator" colspan="3"><small>Your <%= $mylegislator->title %>:</small> <%= $mylegislator->name %>, <%= $mylegislator->role %></td>
+  </tr>
+  % }
+  % }
+  % for my $b (@bills) {
+  %= include 'bills/_billrow', b => $self->db->bill($b), columns => [ 'watch_button', 'id', 'title', 'sponsors' ]
+  % }
+
+</table>
+<%== $closediv %>
+<br/>

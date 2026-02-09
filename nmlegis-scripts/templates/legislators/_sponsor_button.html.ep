@@ -1,0 +1,55 @@
+% my $showname  = $l->get($name || 'name');
+% my $party = $l->party;
+
+% if ($bill) {
+%     my $billno = $bill->code;
+%     my @cosponsors = $bill->sponsors;
+%     # Assume that we are the first sponsor
+%     if ($cosponsors[0]->code eq $l->code) {
+%         shift @cosponsors;                  # usual case
+%     } else {
+%         warn "WEIRD: $bill: $l->{code} != first sponsor";
+%     }
+%     my $bipartisan = '';
+%     if (@cosponsors) {
+%         if (grep { $_->party ne $l->party } @cosponsors) {
+%             $bipartisan = 'Bipartisan ';
+%             $party = 'multi';
+%         }
+%      }
+<div class="popup-container">
+  <label class="popup-button popup--<%= $party %>" for="spon-<%= $billno %>"><%= $showname %>
+%     if (@cosponsors) {
+<sup>+<%= scalar(@cosponsors) %></sup>
+%     }
+  </label>
+<input type="checkbox" id="spon-<%= $billno %>">
+<div class="popup">
+<label for="spon-<%= $billno %>" class="transparent-label"></label>
+	<div class="popup-inner">
+        <div class="popup-title">
+          <b>Sponsors: <%= $billno %></b>
+	<label for="spon-<%= $billno %>" class="popup-close-btn">X</label>
+         </div>
+	<div class="popup-content">
+<p>
+<a href="<%= $l->url %>" target=\"_blank\"><%= sprintf("%3.3s. %s", $l->title, $l->name) %></a> (<%= $l->party %>)
+<br />
+&nbsp;district <%= $l->district %>
+%      if (my $county = $l->county) {
+, <%= $county %>
+%      }
+%      for my $s (@cosponsors) {
+<br/>+ <a href="<%= $s->url %>"><%= sprintf("%3.3s. %s", $s->title, $s->name) %></a>
+%          if ($bipartisan) {
+ (<%= $s->party %>)
+%          }
+%      }
+</p>
+	</div>
+	</div>
+	</div>
+</div>
+% } else {
+<label class="btn"><%= $showname %></label>
+% }

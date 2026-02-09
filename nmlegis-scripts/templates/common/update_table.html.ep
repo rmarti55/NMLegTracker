@@ -1,0 +1,66 @@
+<table>
+%     # reorganize into hash by date, so we can use table rowspan
+%     my %by_ymd;
+%     my %friendly_ymd;
+%     for my $tuple (@$updates) {
+%         my ($t, $event) = ($tuple->[0], Mojo::Util::xml_escape $tuple->[1]);
+%         my $lt = Time::Piece::localtime($t);
+%         my $ymd = $lt->ymd;
+%
+%         # optimization to handle hearing changes
+%         if ($event =~ /^scheduled for (\S+) /) {
+%             my $where = $1;
+%             if ($by_ymd{$ymd} && $by_ymd{$ymd}[-1] =~ /^removed from $where /) {
+%                 $event = "re$event";
+%                 pop @{$by_ymd{$ymd}};
+%             }
+%         }
+%         push @{$by_ymd{ $ymd }}, $event;
+%         $friendly_ymd{ $ymd } = $lt->strftime("%b %e");
+%     }
+%
+%    for my $ymd (sort keys %by_ymd) {
+%        my @events = @{$by_ymd{$ymd}};
+%        my $rowspan = '';
+%        my $tr = '';
+%        $rowspan = sprintf(" rowspan=\"%d\"", scalar(@events)) if @events > 1;
+<tr><td<%== $rowspan %>><%= $friendly_ymd{$ymd} %></td>
+%        for my $event (@events) {
+%
+%#            Rewrite timestamps in friendly fashion FIXME: do this in Bill.pm?
+%             $event =~ s{(\d+-\d+-\d+\s+\d+:\d+:\d+)}{
+%                         Time::Piece::localtime(Date::Parse::str2time($1))->strftime("%a %b %e, %H:%M")
+%                        }gex;
+%
+%             # rewrite legislator and committee names
+%             $event =~ s{(sponsor:\s+)([HS][A-Z]+)}{
+%                         my ($label, $code) = ($1, $2);
+%                         if (my $l = $self->db->legislator($code)) {
+%                             $label . link_to $l->name => $l->url;
+%                         } else { "$label$code" }}gex;
+%             $event =~ s{(role:\s+)([HS][A-Z]+)}{
+%                         my ($label, $code) = ($1, $2);
+%                         if (my $c = $self->db->committee($2)) {
+%                             $label . link_to $c->name => $c->url;
+%                         } else { "$label$code" }}gex;
+%
+%             # user reports - FIXME, horrible database kludge
+%             $event =~ s{^user\s+report:(\d+):(.*)$}{
+%                         my ($userid, $action) = ($1, $2);
+%                         my ($u) = $self->{app}->db->{_dbix}->query('SELECT firstname FROM users WHERE id=?', $userid)->flat;
+%                         sprintf("%s [unofficial report from %s]", $action, $u || 'unknown source');
+%                        }ex;
+%
+%             # friendly-ize bills
+%             $event =~ s{\b((H|S)[A-Z0-9]{1,3}\d{1,3})\b}{
+%                         my $billname = $1;
+%                         if (my $b = $self->db->bill($billname)) {
+%                             (link_to $b->code => $b->url) . " " . $b->title;
+%                         } else {
+%                             $billname;
+%                         }}gex;
+  <%== $tr %><td><%== $event %></td></tr>
+%             $tr = '<tr>';
+%         }
+%     }
+</table>

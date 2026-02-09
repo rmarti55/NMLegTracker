@@ -1,0 +1,110 @@
+{
+   "2021-03-14" : {
+      "09:00:00" : {
+         "HENRC" : {
+            "bills" : ["SB32"],
+            "date" : "2021-03-14",
+            "datetime" : "2021-03-14T09:00:00",
+            "mtime" : "2021-03-13T13:31:54",
+            "name" : "HENRC",
+            "time" : "9:00 AM",
+            "url" : "2021/03/hSched/hSched031421.pdf",
+            "zoom" : "https://us02web.zoom.us/j/88692377623"
+         },
+         "HGEIC" : {
+            "bills" : ["SB84","SB112","SB160"],
+            "date" : "2021-03-14",
+            "datetime" : "2021-03-14T09:00:00",
+            "mtime" : "2021-03-13T13:31:54",
+            "name" : "HGEIC",
+            "time" : "9:00 AM",
+            "url" : "2021/03/hSched/hSched031421.pdf",
+            "zoom" : "https://us02web.zoom.us/j/89283197941"
+         }
+      }
+   },
+   "2021-03-15" : {
+      "08:00:00" : {
+         "HEC" : {
+            "bills" : ["HM26","SB43","SB80","SB148"],
+            "date" : "2021-03-15",
+            "datetime" : "2021-03-15T08:00:00",
+            "mtime" : "2021-03-13T13:31:54",
+            "name" : "HEC",
+            "time" : "8:00 AM",
+            "url" : "2021/03/hSched/hSched031421.pdf",
+            "zoom" : "https://us02web.zoom.us/j/84672132667"
+         }
+      },
+      "11:30:00" : {
+         "HAFC" : {
+            "bills" : ["HB326","SB111","SB204","SB42"],
+            "date" : "2021-03-15",
+            "datetime" : "2021-03-15T11:30:00",
+            "mtime" : "2021-03-13T13:31:54",
+            "name" : "HAFC",
+            "time" : "11:30 AM",
+            "url" : "2021/03/hSched/hSched031421.pdf",
+            "zoom" : "https://us02web.zoom.us/j/84531301309"
+         },
+         "HCEDC" : {
+            "bills" : ["SB102","SB98","SB202","SB365","SB281"],
+            "date" : "2021-03-15",
+            "datetime" : "2021-03-15T11:30:00",
+            "mtime" : "2021-03-13T13:31:54",
+            "name" : "HCEDC",
+            "time" : "11:30 AM",
+            "url" : "2021/03/hSched/hSched031421.pdf",
+            "zoom" : "https://us02web.zoom.us/j/83846715600"
+         },
+         "HJC" : {
+            "bills" : ["SB127","SB247","SB7","SB66","SB129"],
+            "date" : "2021-03-15",
+            "datetime" : "2021-03-15T11:30:00",
+            "mtime" : "2021-03-13T13:31:54",
+            "name" : "HJC",
+            "time" : "11:30 AM",
+            "url" : "2021/03/hSched/hSched031421.pdf",
+            "zoom" : "https://us02web.zoom.us/j/89543370073"
+         }
+      }
+   },
+   "2021-03-16" : {
+      "08:00:00" : {
+         "HENRC" : {
+            "bills" : ["SB11","SB82"],
+            "date" : "2021-03-16",
+            "datetime" : "2021-03-16T08:00:00",
+            "mtime" : "2021-03-13T13:31:54",
+            "name" : "HENRC",
+            "time" : "8:00 AM",
+            "url" : "2021/03/hSched/hSched031421.pdf",
+            "zoom" : "https://us02web.zoom.us/j/88692377623"
+         }
+      },
+      "09:00:00" : {
+         "HRDLC" : {
+            "bills" : ["SB276"],
+            "date" : "2021-03-16",
+            "datetime" : "2021-03-16T09:00:00",
+            "mtime" : "2021-03-13T13:31:54",
+            "name" : "HRDLC",
+            "time" : "9:00 AM",
+            "url" : "2021/03/hSched/hSched031421.pdf",
+            "zoom" : "https://us02web.zoom.us/j/89983253499"
+         }
+      },
+      "11:30:00" : {
+         "HLVMC" : {
+            "bills" : ["HM27"],
+            "date" : "2021-03-16",
+            "datetime" : "2021-03-16T11:30:00",
+            "mtime" : "2021-03-13T13:31:54",
+            "name" : "HLVMC",
+            "time" : "11:30 AM",
+            "url" : "2021/03/hSched/hSched031421.pdf",
+            "zoom" : "https://us02web.zoom.us/j/84249828480"
+         }
+      }
+   }
+}

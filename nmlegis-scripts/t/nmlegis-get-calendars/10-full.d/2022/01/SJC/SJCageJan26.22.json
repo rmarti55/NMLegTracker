@@ -1,0 +1,17 @@
+{
+   "2022-01-26" : {
+      "13:30:00" : {
+         "SJC" : {
+            "bills" : ["SB13","SB41"],
+            "date" : "2022-01-26",
+            "datetime" : "2022-01-26T13:30:00",
+            "mtime" : "2022-01-25T16:07:22",
+            "name" : "SJC",
+            "room" : "321",
+            "time" : "1:30 PM or ½ hour after floor session",
+            "url" : "2022/01/SJC/SJCageJan26.22.pdf",
+            "zoom" : "https://us02web.zoom.us/j/83347538157"
+         }
+      }
+   }
+}

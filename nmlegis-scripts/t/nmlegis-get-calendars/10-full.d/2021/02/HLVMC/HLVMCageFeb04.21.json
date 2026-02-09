@@ -1,0 +1,16 @@
+{
+   "2021-02-04" : {
+      "14:00:00" : {
+         "HLVMC" : {
+            "bills" : ["HB20"],
+            "date" : "2021-02-04",
+            "datetime" : "2021-02-04T14:00:00",
+            "mtime" : "2021-02-03T08:37:24",
+            "name" : "HLVMC",
+            "time" : "2:00 PM",
+            "url" : "2021/02/HLVMC/HLVMCageFeb04.21.pdf",
+            "zoom" : "https://us02web.zoom.us/j/84249828480"
+         }
+      }
+   }
+}

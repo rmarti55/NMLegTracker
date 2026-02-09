@@ -1,0 +1,17 @@
+{
+   "2024-02-03" : {
+      "11:00:00" : {
+         "HCPAC" : {
+            "bills" : ["HB226"],
+            "date" : "2024-02-03",
+            "datetime" : "2024-02-03T11:00:00",
+            "mtime" : "2024-02-02T13:49:17",
+            "name" : "HCPAC",
+            "room" : "315",
+            "time" : "11:00 AM",
+            "url" : "2024/02/HCPAC/HCPACageFeb03.24.pdf",
+            "zoom" : "https://us02web.zoom.us/j/82775218212"
+         }
+      }
+   }
+}

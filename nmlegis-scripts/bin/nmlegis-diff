@@ -1,0 +1,341 @@
+#!/usr/bin/perl
+#
+# nmlegis-diff - temporary wrapper for diffing two json files
+#
+# $Id$
+#
+package ESM::NMLegisDiff;
+
+use v5.14;
+use utf8;
+use open qw( :encoding(UTF-8) :std );
+
+use strict;
+use warnings;
+
+(our $ME = $0) =~ s|.*/||;
+(our $VERSION = '$Revision: 0.0 $ ') =~ tr/[0-9].//cd;
+
+# For debugging, show data structures using DumpTree($var)
+#use Data::TreeDumper; $Data::TreeDumper::Displayaddress = 0;
+
+###############################################################################
+# BEGIN user-customizable section
+
+# END   user-customizable section
+###############################################################################
+
+use NMLegis             qw(:all);
+
+use File::Slurp         qw(read_file);
+use File::Temp          qw(tempdir);
+use FindBin;
+use JSON::XS;
+use Time::Piece;
+
+###############################################################################
+# BEGIN boilerplate args checking, usage messages
+
+sub usage {
+    print  <<"END_USAGE";
+Usage: $ME [OPTIONS] ARGS [...]
+
+blah blah blah
+
+OPTIONS:
+
+  -v, --verbose  show verbose progress indicators
+  -n, --dry-run  make no actual changes
+
+  --help         display this message
+  --man          display program man page
+  --version      display program name and version
+END_USAGE
+
+    exit;
+}
+
+sub man {
+    # Read the POD contents.  If it hasn't been filled in yet, abort.
+    my $pod = do { local $/; <DATA>; };
+    if ($pod =~ /=head1 \s+ NAME \s+ FIXME/xm) {
+        warn "$ME: No man page available.  Please try $ME --help\n";
+        exit;
+    }
+
+    # Use Pod::Man to convert our __DATA__ section to *roff
+    eval { require Pod::Man }
+        or die "$ME: Cannot generate man page; Pod::Man unavailable: $@\n";
+    my $parser = Pod::Man->new(name => $ME, release => $VERSION, section => 1);
+
+    # If called without output redirection, man-ify.
+    my $out_fh;
+    if (-t *STDOUT) {
+        my $pager = $ENV{MANPAGER} || $ENV{PAGER} || 'less';
+        open $out_fh, "| nroff -man | $pager";
+    }
+    else {
+        open $out_fh, '>&STDOUT';
+    }
+
+    # Read the POD contents, and have Pod::Man read from fake filehandle.
+    # This requires 5.8.0.
+    open my $pod_handle, '<', \$pod;
+    $parser->parse_from_filehandle($pod_handle, $out_fh);
+    exit;
+}
+
+
+# Command-line options.  Note that this operates directly on @ARGV !
+our $debug   = 0;
+our $force   = 0;
+our $verbose = 0;
+our $NOT     = '';              # print "blahing the blah$NOT\n" if $debug
+sub handle_opts {
+    use Getopt::Long;
+    GetOptions(
+        'debug!'     => \$debug,
+        'dry-run|n!' => sub { $NOT = ' [NOT]' },
+        'force'      => \$force,
+        'verbose|v'  => \$verbose,
+
+        help         => \&usage,
+        man          => \&man,
+        version      => sub { print "$ME version $VERSION\n"; exit 0 },
+    ) or die "Try `$ME --help' for help\n";
+}
+
+# END   boilerplate args checking, usage messages
+###############################################################################
+
+############################## CODE BEGINS HERE ###############################
+
+# The term is "modulino".
+__PACKAGE__->main()                                     unless caller();
+
+# Main code.
+sub main {
+    # Note that we operate directly on @ARGV, not on function parameters.
+    # This is deliberate: it's because Getopt::Long only operates on @ARGV
+    # and there's no clean way to make it use @_.
+    handle_opts();                      # will set package globals
+
+    if (@ARGV == 1) {
+        populate_history(@ARGV);
+    }
+    elsif (@ARGV == 2) {
+        diff_two_files(@ARGV);
+    }
+    else {
+        die "Invalid usage; see $ME --help\n";
+    }
+}
+
+sub populate_history {
+    my $path = shift;
+    my $handler = determine_handler($path);
+
+    (my $basename = $path) =~ s|^.*/||;
+    (my $sourcedir = $path) =~ s|/[^/]+$||;
+    chdir $sourcedir
+        or die "$ME: Cannot cd $sourcedir: $!\n";
+
+    my @revs = hg_log($basename);
+
+    my $tmpdir = tempdir("$ME.XXXXXXX", TMPDIR => 1);
+
+    # Pass 1: check out all revisions of the file
+    my @jsons;
+    for (my $i=0; $i < @revs; $i++) {
+        my $rev = $revs[$i][0];
+        my @hg = ('hg', 'cat', "-r$rev", $basename);
+        open my $fh, '-|', @hg
+            or die "$ME: Cannot fork: $!\n";
+        my $filecontent = do { local $/ = undef; <$fh>; };
+        close $fh
+            or die "$ME: Error running @hg\n";
+
+        my $outfile = sprintf("%s/%s.%04d", $tmpdir, $basename, $rev);
+        push @jsons, $outfile;
+        open $fh, '>', $outfile
+            or die "$ME: Cannot create $outfile: $!\n";
+        print { $fh } $filecontent;
+        close $fh
+            or die "$ME: Error writing $outfile: $!\n";
+    }
+
+    # Pass 2: compare them all
+    mkdir "$tmpdir/logs", 0755;
+    for (my $i=1; $i < @revs; $i++) {
+        my $old = decode_json(read_file($jsons[$i-1]));
+        my $new = decode_json(read_file($jsons[$i]));
+
+        my $diffs = $handler->($old, $new);
+
+        # Only interested in bill history, not agendas
+        my $billhistory = $diffs->{by_bill};
+        next unless @$billhistory;
+
+        # Write
+        # FIXME: write as hash? With schema? Datetime?
+        my $output = { _schema   => '20230201',
+                       _datetime => $revs[$i][1]->datetime,
+                       history   => $billhistory, };
+        my $diff_dir  = sprintf("%s/history/%s", $Data_Dir, $revs[$i][1]->ymd);
+        my $diff_file = sprintf("%s/%s.json",    $diff_dir, $revs[$i][1]->hms);
+        mkdir $diff_dir, 02755 if ! -d $diff_dir;
+        die "$ME: diff-file already exists: $diff_file\n"
+            if -e $diff_file;
+        open my $fh, '>', $diff_file
+            or die "$ME: Cannot create $diff_file: $!\n";
+
+        # Counterintuitively, utf8(0) is what generates correct output.
+        my $coder = JSON::XS->new->utf8(0)->pretty->canonical;
+        print { $fh } $coder->encode($output);
+        close $fh
+            or die "$ME: Error writing $diff_file: $!\n";
+    }
+}
+
+####################
+#  diff_two_files  #  Interactive, compare two files
+####################
+sub diff_two_files {
+    my $oldfile = shift;
+    my $newfile = shift;
+
+    my $old = decode_json(read_file($oldfile));
+    my $new = decode_json(read_file($newfile));
+
+    my $handler = determine_handler($oldfile);
+
+    use Data::Dump; dd $handler->($old, $new);
+}
+
+###############################################################################
+# BEGIN helpers
+
+sub determine_handler {
+    my $path = shift;
+    my $handler;
+
+    if ($path =~ m!/bills-\d!) {
+        require "$FindBin::Bin/nmlegis-get-bills";
+        $handler = ESM::NMLegisBills->can("compute_changelog")
+            or die "No diff func in Bills";
+    }
+    elsif ($path =~ m!/schedule!) {
+        require "$FindBin::Bin/nmlegis-get-calendars";
+        $handler = ESM::NMLegisCalendars->can("compute_changelog")
+            or die "No diff func in Calendars";
+    }
+    else {
+        die "Cannot determine file type for $path\n";
+    }
+
+    return $handler;
+}
+
+sub hg_log {
+    my $file = shift;
+    my @log;
+
+    my @hg = ('hg', 'log', '--template', '{rev} {date}\n', $file);
+    open my $fh, '-|', @hg
+        or die "$ME: Cannot fork: $!\n";
+    while (my $line = <$fh>) {
+        chomp $line;
+        my ($rev, $epoch) = split ' ', $line;
+        # schema change for schedule.json = 226
+        next if ($file =~ /schedule/ && $rev < 226);
+        # prior to this we didn't have "actions"
+        next if ($file =~ /bills/ && $rev < 154);
+        unshift @log, [ $rev, scalar(localtime($epoch)) ];
+    }
+    close $fh
+        or die "$ME: Error running @hg\n";
+
+    return @log;
+}
+
+
+1;
+
+__DATA__
+
+###############################################################################
+#
+# Documentation
+#
+
+=head1	NAME
+
+FIXME - description of what this script does
+
+=head1	SYNOPSIS
+
+FIXME [B<--foo>]  [B<--bar>]  [B<--verbose>] ARG1 [ARG2...] FIXME
+
+FIXME  B<--help>  |  B<--version> | B<--man>
+
+=head1	DESCRIPTION
+
+B<FIXME> grobbles the frobniz on alternate Tuesdays, except where
+prohibited by law.
+
+=head1	OPTIONS
+
+=over 4
+
+=item B<--foo>
+
+FIXME
+
+=item B<--verbose>
+
+Show progress messages.
+
+=item B<--help>
+
+Emit usage hints.
+
+=item B<--version>
+
+Display program version.
+
+=item B<--man>
+
+Display this man page.
+
+=back
+
+
+=head1	DIAGNOSTICS
+
+FIXME
+
+=head1	ENVIRONMENT
+
+FIXME
+
+=head1	FILES
+
+FIXME
+
+=head1	RESTRICTIONS
+
+FIXME
+
+=head1	SEE ALSO
+
+FIXME
+
+e.g. L<Foo::Bar|Foo::Bar>
+
+=head1	AUTHOR
+
+Your Name <ed@edsantiago.com>
+
+Please report bugs or suggestions to <ed@edsantiago.com>
+
+=cut

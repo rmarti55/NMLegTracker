@@ -1,0 +1,17 @@
+{
+   "2025-02-08" : {
+      "10:00:00" : {
+         "HGEIC" : {
+            "bills" : ["HJR5","HB120","HB123","HB143","HB6"],
+            "date" : "2025-02-08",
+            "datetime" : "2025-02-08T10:00:00",
+            "mtime" : "2025-02-07T14:24:31",
+            "name" : "HGEIC",
+            "room" : "318",
+            "time" : "10:00 AM",
+            "url" : "2025/02/HGEIC/HGEICageFeb08.25.pdf",
+            "zoom" : "https://us02web.zoom.us/j/89282948977"
+         }
+      }
+   }
+}

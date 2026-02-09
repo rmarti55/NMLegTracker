@@ -1,0 +1,16 @@
+{
+   "2025-02-14" : {
+      "11:00:00" : {
+         "Senate" : {
+            "bills" : ["SB1","SB17","SB135","SM4","SM5"],
+            "date" : "2025-02-14",
+            "datetime" : "2025-02-14T11:00:00",
+            "mtime" : "2025-02-13T18:19:58",
+            "name" : "Senate",
+            "room" : "Senate Floor",
+            "time" : "11:00 AM",
+            "url" : "2025/02/sFloor/sFloor021425.pdf"
+         }
+      }
+   }
+}

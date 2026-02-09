@@ -1,0 +1,130 @@
+#!/usr/bin/perl
+#
+# kill spammers
+#
+package ESM::NMLegis::KillUser;
+
+use v5.36;
+use utf8;
+use open qw( :encoding(UTF-8) :std );
+
+use strict;
+use warnings;
+
+(our $ME = $0) =~ s|.*/||;
+(our $VERSION = '$Revision: 0.0 $ ') =~ tr/[0-9].//cd;
+
+# For debugging, show data structures using DumpTree($var)
+#use Data::TreeDumper; $Data::TreeDumper::Displayaddress = 0;
+
+use NMLegis                     qw(:all);
+
+use DBIx::Simple;
+use FindBin                     qw($Bin);
+
+###############################################################################
+# BEGIN user-customizable section
+
+$| = 1;
+
+# END   user-customizable section
+###############################################################################
+
+###############################################################################
+# BEGIN boilerplate args checking, usage messages
+
+sub usage {
+    print  <<"END_USAGE";
+Usage: $ME [OPTIONS] USERID
+
+Kill USERID
+
+OPTIONS:
+
+  -v, --verbose  show verbose progress indicators
+  -n, --dry-run  make no actual changes
+
+  --help         display this message
+  --version      display program name and version
+END_USAGE
+
+    exit;
+}
+
+# Command-line options.  Note that this operates directly on @ARGV !
+our $Historical;                # Populating DB with historical data
+our $debug   = 0;
+our $force   = 0;
+our $verbose = 0;
+our $NOT     = '';              # print "blahing the blah$NOT\n" if $debug
+sub handle_opts {
+    use Getopt::Long;
+    GetOptions(
+        'historical' => \$Historical,
+        'debug!'     => \$debug,
+        'dry-run|n!' => sub { $NOT = ' [NOT]' },
+        'force'      => \$force,
+        'verbose|v'  => \$verbose,
+
+        help         => \&usage,
+        version      => sub { print "$ME version $VERSION\n"; exit 0 },
+    ) or die "Try `$ME --help' for help\n";
+}
+
+# END   boilerplate args checking, usage messages
+###############################################################################
+
+############################## CODE BEGINS HERE ###############################
+
+# The term is "modulino".
+__PACKAGE__->main()                                     unless caller();
+
+# Main code.
+sub main {
+    # Note that we operate directly on @ARGV, not on function parameters.
+    # This is deliberate: it's because Getopt::Long only operates on @ARGV
+    # and there's no clean way to make it use @_.
+    handle_opts();                      # will set package globals
+
+    my $userid = shift(@ARGV)
+        or die "$ME: Missing USERID; try $ME --help\n";
+    die "$ME: Too many arguments; try $ME --help\n"                 if @ARGV;
+
+    # cd to the right place
+    chdir "$Bin/../db"
+        or die "$ME: Cannot cd $Bin/../db: $!";
+    doit($userid);
+}
+
+
+sub doit ($userid) {
+    my $db = "nmlegis.sqlite";
+
+    my $dbix = DBIx::Simple->connect(
+        "dbi:SQLite:dbname=$db",
+        undef, undef,
+        {
+            sqlite_unicode => 1,
+            foreign_keys   => 1,
+        });
+
+    $dbix->query('PRAGMA journal_mode = WAL');
+    $dbix->query('PRAGMA synchronous = NORMAL');
+
+    my $u = $dbix->query('SELECT * FROM users WHERE id=?', $userid)->hash;
+    #use Data::Dump; dd $u;
+    exit 1 if !$u;
+
+    printf "  %s, %s", $u->{lastname}, $u->{firstname};
+    printf "      %s\n", $u->{email};
+
+    unless ($u->{email} =~ /\@(bonjour|bonsoir|bientot|testform|formtest|form-check|email.tst)/) {
+        print "\n";
+        print "Type all-caps yes to kill: ";
+        chomp (my $ans = <STDIN>);
+        exit 1 if $ans ne 'YES';
+    }
+
+    $dbix->query('DELETE FROM trackers WHERE owner=?', $userid);
+    $dbix->query('DELETE FROM users WHERE id=?', $userid);
+}

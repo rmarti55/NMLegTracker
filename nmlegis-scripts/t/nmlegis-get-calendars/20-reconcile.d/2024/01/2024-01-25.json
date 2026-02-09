@@ -1,0 +1,223 @@
+{
+   "2024-01-25" : {
+      "07:30:00" : {
+         "HRDLC" : {
+            "bills" : ["HB188","HM15"],
+            "date" : "2024-01-25",
+            "datetime" : "2024-01-25T07:30:00",
+            "mtime" : "2024-01-25T08:48:53",
+            "name" : "HRDLC",
+            "room" : "309",
+            "time" : "7:30 AM",
+            "url" : "/home/esm/.cache/nmlegis/get-calendars/2024/01/hSched/hSched012524.pdf",
+            "zoom" : "https://us02web.zoom.us/j/81823001400"
+         }
+      },
+      "08:30:00" : {
+         "HENRC" : {
+            "bills" : ["HB133"],
+            "date" : "2024-01-25",
+            "datetime" : "2024-01-25T08:30:00",
+            "mtime" : "2024-01-25T08:51:10",
+            "name" : "HENRC",
+            "room" : "317",
+            "time" : "8:30 AM",
+            "url" : "/home/esm/.cache/nmlegis/get-calendars/2024/01/HENRC/HENRCageJan25.24.pdf",
+            "zoom" : "https://us02web.zoom.us/j/82358523878"
+         }
+      },
+      "09:00:00" : {
+         "HAAWC" : {
+            "bills" : ["HB201","HB211"],
+            "date" : "2024-01-25",
+            "datetime" : "2024-01-25T09:00:00",
+            "mtime" : "2024-01-25T08:48:53",
+            "name" : "HAAWC",
+            "room" : "315",
+            "time" : "9:00 AM",
+            "url" : "/home/esm/.cache/nmlegis/get-calendars/2024/01/hSched/hSched012524.pdf",
+            "zoom" : "https://us02web.zoom.us/j/85835620223"
+         },
+         "HTPWC" : {
+            "bills" : ["HB146","HB153","HB28"],
+            "date" : "2024-01-25",
+            "datetime" : "2024-01-25T09:00:00",
+            "mtime" : "2024-01-25T08:48:53",
+            "name" : "HTPWC",
+            "room" : "305",
+            "time" : "9:00 AM",
+            "url" : "/home/esm/.cache/nmlegis/get-calendars/2024/01/hSched/hSched012524.pdf",
+            "zoom" : "https://us02web.zoom.us/j/85034821535"
+         },
+         "SCONC" : {
+            "bills" : ["SB79","SB84","SB111","SB160"],
+            "date" : "2024-01-25",
+            "datetime" : "2024-01-25T09:00:00",
+            "mtime" : "2024-01-24T19:13:00",
+            "name" : "SCONC",
+            "room" : "311",
+            "time" : "9:00 AM",
+            "url" : "/home/esm/.cache/nmlegis/get-calendars/2024/01/sSched/sSched012524.pdf",
+            "zoom" : "https://us02web.zoom.us/j/82404382748"
+         },
+         "SFC" : {
+            "bills" : [],
+            "date" : "2024-01-25",
+            "datetime" : "2024-01-25T09:00:00",
+            "mtime" : "2024-01-24T19:13:00",
+            "name" : "SFC",
+            "room" : "322",
+            "time" : "9:00 AM",
+            "url" : "/home/esm/.cache/nmlegis/get-calendars/2024/01/sSched/sSched012524.pdf",
+            "zoom" : "https://us02web.zoom.us/j/81696207177"
+         }
+      },
+      "10:00:00" : {
+         "SIRC" : {
+            "bills" : ["SB52"],
+            "date" : "2024-01-25",
+            "datetime" : "2024-01-25T10:00:00",
+            "mtime" : "2024-01-24T19:13:00",
+            "name" : "SIRC",
+            "room" : "303",
+            "time" : "10:00 AM",
+            "url" : "/home/esm/.cache/nmlegis/get-calendars/2024/01/sSched/sSched012524.pdf",
+            "zoom" : "https://us02web.zoom.us/j/83279870726"
+         }
+      },
+      "11:00:00" : {
+         "Senate" : {
+            "bills" : [],
+            "date" : "2024-01-25",
+            "datetime" : "2024-01-25T11:00:00",
+            "mtime" : "2024-01-24T17:14:16",
+            "name" : "Senate",
+            "room" : "Senate Floor",
+            "time" : "11:00 AM",
+            "url" : "/home/esm/.cache/nmlegis/get-calendars/2024/01/sFloor/sFloor012524.pdf"
+         }
+      },
+      "11:30:00" : {
+         "House" : {
+            "bills" : ["HM2","HM13","HM21","HJM1","HM1"],
+            "date" : "2024-01-25",
+            "datetime" : "2024-01-25T11:30:00",
+            "mtime" : "2024-01-24T17:51:08",
+            "name" : "House",
+            "room" : "House Floor",
+            "time" : "11:30 AM",
+            "url" : "/home/esm/.cache/nmlegis/get-calendars/2024/01/hFloor/hFloor012524.pdf"
+         }
+      },
+      "13:30:00" : {
+         "HAFC" : {
+            "bills" : [],
+            "date" : "2024-01-25",
+            "datetime" : "2024-01-25T13:30:00",
+            "mtime" : "2024-01-25T08:48:53",
+            "name" : "HAFC",
+            "room" : "307",
+            "time" : "1:30 PM or at the call of the Chair",
+            "url" : "/home/esm/.cache/nmlegis/get-calendars/2024/01/hSched/hSched012524.pdf",
+            "zoom" : "https://us02web.zoom.us/j/84052541475"
+         },
+         "HCPAC" : {
+            "bills" : ["HB72","HB52","HB127","HB129","HB137"],
+            "date" : "2024-01-25",
+            "datetime" : "2024-01-25T13:30:00",
+            "mtime" : "2024-01-25T08:48:53",
+            "name" : "HCPAC",
+            "room" : "317",
+            "time" : "1:30 PM",
+            "url" : "/home/esm/.cache/nmlegis/get-calendars/2024/01/hSched/hSched012524.pdf",
+            "zoom" : "https://us02web.zoom.us/j/82775218212"
+         },
+         "STBTC" : {
+            "bills" : ["SB3"],
+            "date" : "2024-01-25",
+            "datetime" : "2024-01-25T13:30:00",
+            "mtime" : "2024-01-24T19:13:00",
+            "name" : "STBTC",
+            "room" : "321",
+            "time" : "1:30 PM or 30 min. after floor session.",
+            "url" : "/home/esm/.cache/nmlegis/get-calendars/2024/01/sSched/sSched012524.pdf",
+            "zoom" : "https://us02web.zoom.us/j/85614440294"
+         }
+      }
+   },
+   "2024-01-26" : {
+      "08:30:00" : {
+         "HEC" : {
+            "bills" : ["HB134","HB135","HB199"],
+            "date" : "2024-01-26",
+            "datetime" : "2024-01-26T08:30:00",
+            "mtime" : "2024-01-25T08:48:53",
+            "name" : "HEC",
+            "room" : "309",
+            "time" : "8:30 AM",
+            "url" : "/home/esm/.cache/nmlegis/get-calendars/2024/01/hSched/hSched012524.pdf",
+            "zoom" : "https://us02web.zoom.us/j/87512084108"
+         },
+         "HGEIC" : {
+            "bills" : ["HJR7","HJR5","HJR1","HJR2"],
+            "date" : "2024-01-26",
+            "datetime" : "2024-01-26T08:30:00",
+            "mtime" : "2024-01-25T08:48:53",
+            "name" : "HGEIC",
+            "room" : "305",
+            "time" : "8:30 AM",
+            "url" : "/home/esm/.cache/nmlegis/get-calendars/2024/01/hSched/hSched012524.pdf",
+            "zoom" : "https://us02web.zoom.us/j/84200839142"
+         },
+         "HHHC" : {
+            "bills" : ["HB11","HB50","HB93","HB98","HB104","HB97"],
+            "date" : "2024-01-26",
+            "datetime" : "2024-01-26T08:30:00",
+            "mtime" : "2024-01-25T08:48:53",
+            "name" : "HHHC",
+            "room" : "307",
+            "time" : "8:30 AM",
+            "url" : "/home/esm/.cache/nmlegis/get-calendars/2024/01/hSched/hSched012524.pdf",
+            "zoom" : "https://us02web.zoom.us/j/89525670464"
+         },
+         "SEC" : {
+            "bills" : ["SB74","SB103","SB153"],
+            "date" : "2024-01-26",
+            "datetime" : "2024-01-26T08:30:00",
+            "mtime" : "2024-01-24T19:13:00",
+            "name" : "SEC",
+            "room" : "311",
+            "time" : "8:30 AM",
+            "url" : "/home/esm/.cache/nmlegis/get-calendars/2024/01/sSched/sSched012524.pdf",
+            "zoom" : "https://us02web.zoom.us/j/89615593412"
+         }
+      },
+      "13:30:00" : {
+         "HCEDC" : {
+            "bills" : ["HB83","HB117","HB48","HB25"],
+            "date" : "2024-01-26",
+            "datetime" : "2024-01-26T13:30:00",
+            "mtime" : "2024-01-25T08:48:53",
+            "name" : "HCEDC",
+            "room" : "317",
+            "time" : "1:30 PM",
+            "url" : "/home/esm/.cache/nmlegis/get-calendars/2024/01/hSched/hSched012524.pdf",
+            "zoom" : "https://us02web.zoom.us/j/85993976266"
+         }
+      }
+   },
+   "2024-01-27" : {
+      "13:30:00" : {
+         "HCPAC" : {
+            "bills" : ["HB38","HB116","HB128","HB191","HB198"],
+            "date" : "2024-01-27",
+            "datetime" : "2024-01-27T13:30:00",
+            "mtime" : "2024-01-25T08:48:53",
+            "name" : "HCPAC",
+            "room" : "315",
+            "time" : "1:30 PM",
+            "url" : "/home/esm/.cache/nmlegis/get-calendars/2024/01/hSched/hSched012524.pdf"
+         }
+      }
+   }
+}

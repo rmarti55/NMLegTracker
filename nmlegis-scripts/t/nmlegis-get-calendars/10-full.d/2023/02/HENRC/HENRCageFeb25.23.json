@@ -1,0 +1,17 @@
+{
+   "2023-02-25" : {
+      "09:00:00" : {
+         "HENRC" : {
+            "bills" : ["HB436","HB439","HB350"],
+            "date" : "2023-02-25",
+            "datetime" : "2023-02-25T09:00:00",
+            "mtime" : "2023-02-24T17:42:32",
+            "name" : "HENRC",
+            "room" : "317",
+            "time" : "9:00 AM",
+            "url" : "2023/02/HENRC/HENRCageFeb25.23.pdf",
+            "zoom" : "https://us02web.zoom.us/j/88559537781"
+         }
+      }
+   }
+}

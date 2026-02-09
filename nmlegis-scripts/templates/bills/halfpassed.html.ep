@@ -1,0 +1,22 @@
+% layout 'default';
+% title  'Half-Passed Bills';
+
+% my %opposite = ('House' => 'Senate', 'Senate' => 'House');
+% for my $chamber (sort keys %opposite) {
+%     if (my $list = $bills->{$chamber}) {
+<br/>
+<div class="wrap-collapsible">
+  <input id="collapsible-halfpassed-<%= $chamber %>" class="toggle" type="checkbox">
+  <label for="collapsible-halfpassed-<%= $chamber %>" class="lbl-toggle">Passed <u><%= $chamber %></u> (<%= scalar @$list %>)</label>
+  <div class="collapsible-content">
+    <div class="content-inner">
+<h3>Bills that have passed the <u><%= $chamber %></u> but not the <%= $opposite{$chamber} %></h3>
+<table class="bills">
+%         for my $b (@$list) {
+%= include 'bills/_billrow', b => $b, columns => [ 'watch_button', 'id', 'title', 'sponsors', 'status' ]
+%         }
+%     }
+</table>
+    </div>
+    </div>
+% }

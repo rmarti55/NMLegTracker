@@ -1,0 +1,17 @@
+{
+   "2023-01-31" : {
+      "08:30:00" : {
+         "HTPWC" : {
+            "bills" : ["HB68","HB70","HB78","HB141"],
+            "date" : "2023-01-31",
+            "datetime" : "2023-01-31T08:30:00",
+            "mtime" : "2023-01-30T08:45:34",
+            "name" : "HTPWC",
+            "room" : "305",
+            "time" : "8:30 AM",
+            "url" : "2023/01/HTPWC/HTPWCageJan31.23.pdf",
+            "zoom" : "https://us02web.zoom.us/j/83429763870"
+         }
+      }
+   }
+}

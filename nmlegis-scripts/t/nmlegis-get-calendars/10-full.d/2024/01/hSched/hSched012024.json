@@ -1,0 +1,149 @@
+{
+   "2024-01-20" : {
+      "09:00:00" : {
+         "HENRC" : {
+            "bills" : ["HB41","HB48"],
+            "date" : "2024-01-20",
+            "datetime" : "2024-01-20T09:00:00",
+            "mtime" : "2024-01-19T15:46:45",
+            "name" : "HENRC",
+            "room" : "317",
+            "time" : "9:00 AM",
+            "url" : "2024/01/hSched/hSched012024.pdf",
+            "zoom" : "https://us02web.zoom.us/j/83853162109"
+         }
+      }
+   },
+   "2024-01-22" : {
+      "08:30:00" : {
+         "HEC" : {
+            "bills" : [],
+            "date" : "2024-01-22",
+            "datetime" : "2024-01-22T08:30:00",
+            "mtime" : "2024-01-19T15:46:45",
+            "name" : "HEC",
+            "room" : "309",
+            "time" : "8:30 AM",
+            "url" : "2024/01/hSched/hSched012024.pdf",
+            "zoom" : "https://us02web.zoom.us/j/87512084108"
+         },
+         "HGEIC" : {
+            "bills" : ["HB29","HB67","HB68","HB88","HB8","HB111"],
+            "date" : "2024-01-22",
+            "datetime" : "2024-01-22T08:30:00",
+            "mtime" : "2024-01-19T15:46:45",
+            "name" : "HGEIC",
+            "room" : "305",
+            "time" : "8:30 AM",
+            "url" : "2024/01/hSched/hSched012024.pdf",
+            "zoom" : "https://us02web.zoom.us/j/84200839142"
+         },
+         "HHHC" : {
+            "bills" : ["HB7","HB26","HB33","HB34","HB35","HB95"],
+            "date" : "2024-01-22",
+            "datetime" : "2024-01-22T08:30:00",
+            "mtime" : "2024-01-19T15:46:45",
+            "name" : "HHHC",
+            "room" : "307",
+            "time" : "8:30 AM",
+            "url" : "2024/01/hSched/hSched012024.pdf",
+            "zoom" : "https://us02web.zoom.us/j/89525670464"
+         },
+         "HTRC" : {
+            "bills" : [],
+            "date" : "2024-01-22",
+            "datetime" : "2024-01-22T08:30:00",
+            "mtime" : "2024-01-19T15:46:45",
+            "name" : "HTRC",
+            "room" : "317",
+            "time" : "8:30 AM",
+            "url" : "2024/01/hSched/hSched012024.pdf",
+            "zoom" : "https://us02web.zoom.us/j/86372062936"
+         }
+      },
+      "13:30:00" : {
+         "HAFC" : {
+            "bills" : [],
+            "date" : "2024-01-22",
+            "datetime" : "2024-01-22T13:30:00",
+            "mtime" : "2024-01-19T15:46:45",
+            "name" : "HAFC",
+            "room" : "307",
+            "time" : "1:30 PM or at the call of the Chair",
+            "url" : "2024/01/hSched/hSched012024.pdf",
+            "zoom" : "https://us02web.zoom.us/j/87413890065"
+         },
+         "HCEDC" : {
+            "bills" : [],
+            "date" : "2024-01-22",
+            "datetime" : "2024-01-22T13:30:00",
+            "mtime" : "2024-01-19T15:46:45",
+            "name" : "HCEDC",
+            "room" : "317",
+            "time" : "1:30 PM",
+            "url" : "2024/01/hSched/hSched012024.pdf"
+         },
+         "HJC" : {
+            "bills" : ["HB141","HB43","HB86","HB106"],
+            "date" : "2024-01-22",
+            "datetime" : "2024-01-22T13:30:00",
+            "mtime" : "2024-01-19T15:46:45",
+            "name" : "HJC",
+            "room" : "309",
+            "time" : "1:30 PM",
+            "url" : "2024/01/hSched/hSched012024.pdf",
+            "zoom" : "https://us02web.zoom.us/j/82777125960"
+         }
+      }
+   },
+   "2024-01-23" : {
+      "09:00:00" : {
+         "HAAWC" : {
+            "bills" : ["HB148","HB164","HB173","HB130"],
+            "date" : "2024-01-23",
+            "datetime" : "2024-01-23T09:00:00",
+            "mtime" : "2024-01-19T15:46:45",
+            "name" : "HAAWC",
+            "room" : "315",
+            "time" : "9:00 AM",
+            "url" : "2024/01/hSched/hSched012024.pdf",
+            "zoom" : "https://us02web.zoom.us/j/85835620223"
+         },
+         "HTRC" : {
+            "bills" : ["HB3","HB90"],
+            "date" : "2024-01-23",
+            "datetime" : "2024-01-23T09:00:00",
+            "mtime" : "2024-01-19T15:46:45",
+            "name" : "HTRC",
+            "room" : "305",
+            "time" : "9:00 AM",
+            "url" : "2024/01/hSched/hSched012024.pdf",
+            "zoom" : "https://us02web.zoom.us/j/85034821535"
+         }
+      },
+      "13:30:00" : {
+         "HCPAC" : {
+            "bills" : ["HB27","HB52","HB72","HB114","HB120"],
+            "date" : "2024-01-23",
+            "datetime" : "2024-01-23T13:30:00",
+            "mtime" : "2024-01-19T15:46:45",
+            "name" : "HCPAC",
+            "room" : "317",
+            "time" : "1:30 PM",
+            "url" : "2024/01/hSched/hSched012024.pdf",
+            "zoom" : "https://us02web.zoom.us/j/82775218212"
+         },
+         "HLVMC" : {
+            "bills" : ["HB119","HB172","HM1"],
+            "date" : "2024-01-23",
+            "datetime" : "2024-01-23T13:30:00",
+            "mtime" : "2024-01-19T15:46:45",
+            "name" : "HLVMC",
+            "room" : "315",
+            "time" : "1:30 PM",
+            "url" : "2024/01/hSched/hSched012024.pdf",
+            "zoom" : "https://us02web.zoom.us/j/83510818919"
+         }
+      }
+   }
+}

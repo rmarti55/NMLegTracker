@@ -1,0 +1,246 @@
+#!/usr/bin/perl
+#
+# nmlegis-parse-bills - parse bill files, save blurb in DB
+#
+
+package ESM::NMLegis::ParseBills;
+
+use v5.14;
+use strict;
+use warnings;
+
+use utf8;
+use open qw( :encoding(UTF-8) :std );
+
+(our $ME = $0) =~ s|.*/||;
+(our $VERSION = '$Revision: 1.30 $ ') =~ tr/[0-9].//cd;
+
+use NMLegis                     qw(:all);
+
+use DBIx::Simple;
+use File::stat;
+use FindBin                     qw($Bin);
+use HTML::Entities;
+use HTML::Parser;
+
+###############################################################################
+# BEGIN user-customizable section
+
+our $ONLY_WANT;
+
+# END   user-customizable section
+###############################################################################
+
+###############################################################################
+# BEGIN boilerplate args checking, usage messages
+
+sub usage {
+    print  <<"END_USAGE";
+Usage: $ME [OPTIONS] [DEST PATH]
+
+$ME parses committee reports from HTML files,
+obtaining individual votes and writing them to tab-separated files.
+
+OPTIONS:
+
+  -v, --verbose  show verbose progress indicators
+  -n, --dry-run  make no actual changes
+
+  --help         display this message
+  --version      display program name and version
+END_USAGE
+
+    exit;
+}
+
+# Command-line options.  Note that this operates directly on @ARGV !
+our $debug   = 0;
+our $force   = 0;
+our $verbose = 0;
+our $NOT     = '';              # print "blahing the blah$NOT\n" if $debug
+sub handle_opts {
+    use Getopt::Long;
+    GetOptions(
+        'debug!'     => \$debug,
+        'dry-run|n!' => sub { $NOT = ' [NOT]' },
+        'force'      => \$force,
+        'verbose|v'  => \$verbose,
+
+        help         => \&usage,
+        version      => sub { print "$ME version $VERSION\n"; exit 0 },
+    ) or die "Try `$ME --help' for help\n";
+}
+
+# END   boilerplate args checking, usage messages
+###############################################################################
+
+############################## CODE BEGINS HERE ###############################
+
+# The term is "modulino".
+__PACKAGE__->main()                                     unless caller();
+
+# Main code.
+sub main {
+    # Note that we operate directly on @ARGV, not on function parameters.
+    # This is deliberate: it's because Getopt::Long only operates on @ARGV
+    # and there's no clean way to make it use @_.
+    handle_opts();                      # will set package globals
+
+    # Called with HB123? Parse only that one
+    if (@ARGV && $ARGV[0] =~ /^(H|S)[A-Z]{1,3}\d{1,4}$/) {
+        $ONLY_WANT = shift(@ARGV);
+    }
+
+    # Fetch command-line arguments.  Barf if too many.
+    die "$ME: Too many arguments; try $ME --help\n"                 if @ARGV;
+
+    chdir "$Bin/../db"
+        or die "$ME: Cannot cd $Bin/../db: $!";
+
+    my $db = "nmlegis.sqlite";
+
+    my $dbix = DBIx::Simple->connect(
+        "dbi:SQLite:dbname=$db",
+        undef, undef,
+        {
+            sqlite_unicode => 1,
+            foreign_keys   => 1,
+        });
+
+    $dbix->query('PRAGMA journal_mode = WAL');
+    $dbix->query('PRAGMA synchronous = NORMAL');
+
+    find_and_parse_bills($dbix);
+}
+
+##########################
+#  find_and_parse_bills  #  Main loop: find all bill HTML files
+##########################
+sub find_and_parse_bills {
+    my $dbix = shift;
+
+    # FIXME: refactor this
+    my $mirror_dir = "$ENV{HOME}/.cache/nmlegis/mirror-bills/$YYYY";
+
+    opendir my $dir_fh, $mirror_dir
+        or die "$ME: Cannot opendir $mirror_dir: $!";
+  BILL:
+    for my $ent (sort readdir $dir_fh) {
+        #         12   23      3  4   41
+        $ent =~ /^((H|S)([A-Z]+)0*(\d+))\.HTML$/
+            or next;
+        my ($billbase, $bill) = ($1, "$2$3$4");
+
+        # For debugging: if envariable is set, only process this file
+        if ($ONLY_WANT) {
+            next unless "$bill" eq $ONLY_WANT;
+        }
+
+        # Used later, to match file mtimes
+        my $st_orig = stat("$mirror_dir/$ent")
+            or die "$ME: IMPOSSIBLE! Could not stat $mirror_dir/$ent";
+        # This script is expensive. Avoid recomputing.
+        #
+        # Also, although you'd think recomputing would be safe, consider
+        # the reports that show "Yes: 9", then consider the possibility
+        # that the committee composition changed between the date
+        # of the report and today. The solution to that is to have
+        # a time-adjusted list of legislators... some day.
+        my $outfile = "$mirror_dir/$billbase.txt";
+        if (my $st_txt = stat($outfile)) {
+            if ($st_txt->mtime == $st_orig->mtime) {
+                if ($force) {
+                    warn "$ME: recomputing $ent due to --force\n";
+                }
+                else {
+                    next BILL;
+                }
+            }
+            else {
+                warn "$ME: recomputing $ent because mtimes differ\n";
+            }
+        }
+
+        if (my $blurb = get_blurb("$mirror_dir/$ent")) {
+            # update db first; otherwise, we could be fooled by file mtime
+            $dbix->query('SELECT id,blurb FROM bills WHERE session=? AND code=?', $YYYY, $bill)->into(my ($billid, $oldblurb));
+            if ($billid) {
+                if ($blurb ne ($oldblurb||'')) {
+                    print "$ME: $bill: updating blurb\n";
+                    $dbix->query('UPDATE bills SET blurb=? WHERE id=?',
+                                 $blurb, $billid);
+                    # Only add a history entry if blurb was updated
+                    $dbix->query('INSERT INTO bill_updates VALUES(??)',
+                                 time, $billid, 'blurb updated') if $oldblurb;
+                }
+            }
+
+            my $tmp_out = "$outfile.tmp.$$";
+            open my $fh, '>', $tmp_out
+                or die "$ME: Cannot create $tmp_out: $!";
+            print { $fh } $blurb;
+            close $fh
+                or die "$ME: error writing $tmp_out: $!";
+            chmod 0444 => $tmp_out;
+            rename $tmp_out => $outfile
+                or die "$ME: could not rename $tmp_out: $!";
+            utime $st_orig->mtime, $st_orig->mtime, $outfile;
+        }
+        else {
+            warn "$ME: $mirror_dir/$ent: could not parse, skipping\n";
+        }
+    }
+}
+
+###############
+#  get_blurb  #  Parse one bill file
+###############
+sub get_blurb {
+    my $path      = shift;
+
+    #    print "$ME - $path\n";  # FIXME: for debugging
+    #    FIXME: check file type, skip if PDF? (2026-01-20)
+    open my $fh, '<', $path
+        or die "$ME: Cannot read $path: $!";
+    my $html = do { local $/ = undef; <$fh>; };
+    close $fh;
+
+    my $p = HTML::Parser->new(
+        api_version => 3,
+        handlers => {
+            text  => [ \&block_text,  'self, text' ],
+        },
+    );
+
+    $p->{_context} = { path => $path };
+    $p->parse($html);
+
+    if ($p->{_context}{blurb} =~ /\b((AN\s+ACT|A\s+((CONCURRENT|JOINT)\s+)?(RESOLUTION|MEMORIAL)).*?)(BE\s+IT\s+(ENACTED|RESOLVED)|WHEREAS,)/) {
+        return $1;
+    }
+
+    warn "$ME: $path: Did not find magic text, skipping";
+    return;
+}
+
+###############################################################################
+# BEGIN HTML::Parser callbacks
+
+sub block_text {
+    my ($self, $text) = @_;
+
+    $text =~ s/[\r\n]+/ /g;                  # Collapse newlines
+    $text =~ s/\&#160;//g;              # Remove these, whatever they are
+
+    $text = decode_entities($text);
+    $text =~ s/^\s+|\s+$//g;            # Remove leading/trailing whitespace
+
+    return if !$text;
+
+    $self->{_context}{blurb} .= " " . $text;
+}
+
+# END   HTML::Parser callbacks
+###############################################################################
+
+1;

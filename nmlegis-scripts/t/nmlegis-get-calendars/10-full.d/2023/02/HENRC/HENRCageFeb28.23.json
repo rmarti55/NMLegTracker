@@ -1,0 +1,17 @@
+{
+   "2023-02-28" : {
+      "08:00:00" : {
+         "HENRC" : {
+            "bills" : ["SB26","SB9"],
+            "date" : "2023-02-28",
+            "datetime" : "2023-02-28T08:00:00",
+            "mtime" : "2023-02-27T09:09:09",
+            "name" : "HENRC",
+            "room" : "317",
+            "time" : "8:00 AM",
+            "url" : "2023/02/HENRC/HENRCageFeb28.23.pdf",
+            "zoom" : "https://us02web.zoom.us/j/82140964843"
+         }
+      }
+   }
+}

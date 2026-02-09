@@ -1,0 +1,37 @@
+% layout 'default';
+% title 'Committees';
+
+<h1>Committees</h1>
+% if (! $self->user) {
+<p class="plug">
+  Your legislators sit on one or more of these committees.<br/>
+  <b><%= link_to 'Log in' => '/login' %></b> or
+  <b><%= link_to 'register' => '/register' %></b>
+  to view a marker next to those committees. You'll also see
+  color highlights when your tracked bills come up for hearing
+  in a committee where your Representative or Senator sits,
+  possibly nudging you to contact them.
+</p>
+% }
+
+% for my $chamber ('House', 'Senate') {
+<table>
+<tr><th align="left" colspan="2"><%= $chamber %></th></tr>
+<ul>
+%    my $initial = substr($chamber, 0, 1);
+%    for my $c (grep { $_->chamber eq $initial } @$committees) {
+<tr>
+%        my $chair = $c->chair;
+  <td class="committeename"><%= $chamber %> <b><a href="/committees/<%= $c->code %>"><%= $c->shortname %></a></b></td>
+  % my $chair_is_my_legislator = $self->user->is_my_legislator($chair);
+  <td<%== ' class="mylegislator"' if $chair_is_my_legislator %>><a href="/legislators/<%= $chair->code %>"><%= $chair->name %></td>
+  % if (! $chair_is_my_legislator) {
+  %     if (my $mylegislator = $self->user->is_my_legislator_on_committee($c)) {
+  <td class="mylegislator"><%= $mylegislator->name %>, <%= $mylegislator->role %><br /><small>(This is your <%= $mylegislator->title %>)</td>
+  %     }
+  % }
+%#       FIXME: show next meeting?
+</tr>
+%    }
+</table>
+% }

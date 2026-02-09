@@ -1,0 +1,19 @@
+<td <%== $rowspan %>>
+  % my $b_id = $b->id;
+  %= check_box "watching-$b_id" => 1, checked => 1;
+  %= label_for "watching-$b_id" => "Watching";
+  <br/>
+  % my @checked;
+  % @checked = (checked => 1)  if $w->{$t->name} < 0;
+  %= check_box "opposed-$b_id" => 1, @checked;
+  %= label_for "opposed-$b_id" => "Opposed";
+</td>
+<td>
+  <select name="category-<%= $b->id %>" class="custom_select">>
+    % my $categories = $self->stash('categories');
+    % for my $c (@$categories) {
+    <option<%= ' selected' if $c eq $self->stash('category') %>><%= $c %></option>
+    % }
+  </select>
+  <input name="category-<%= $b->id %>-override" placeholder="<%= $self->stash('category') || 'Enter category' %>" />
+</td>

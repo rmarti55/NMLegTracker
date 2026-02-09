@@ -1,0 +1,58 @@
+{
+   "2023-03-11" : {
+      "09:00:00" : {
+         "SFC" : {
+            "bills" : ["HB2","SB51","HB106","HB357"],
+            "date" : "2023-03-11",
+            "datetime" : "2023-03-11T09:00:00",
+            "mtime" : "2023-03-11T08:53:17",
+            "name" : "SFC",
+            "room" : "322",
+            "time" : "9:00 AM",
+            "url" : "2023/03/sSched/sSched031123.pdf",
+            "zoom" : "https://us02web.zoom.us/j/81696207177"
+         }
+      },
+      "09:30:00" : {
+         "STBTC" : {
+            "bills" : ["HB360","HB363","HB240","SB405","SB476","HB73","HB228","HB299","HB353","HB309","HB368","HB115","HB118","HB105","HB226","HB269","HB270","HB271","HB286"],
+            "date" : "2023-03-11",
+            "datetime" : "2023-03-11T09:30:00",
+            "mtime" : "2023-03-11T08:53:17",
+            "name" : "STBTC",
+            "room" : "311",
+            "time" : "9:30 AM",
+            "url" : "2023/03/sSched/sSched031123.pdf",
+            "zoom" : "https://us02web.zoom.us/j/85614440294"
+         }
+      },
+      "10:00:00" : {
+         "SHPAC" : {
+            "bills" : ["SB440","SB500","HB232","SJM2","SM30","SM37","SM52","HJM2"],
+            "date" : "2023-03-11",
+            "datetime" : "2023-03-11T10:00:00",
+            "mtime" : "2023-03-11T08:53:17",
+            "name" : "SHPAC",
+            "room" : "326",
+            "time" : "10:00 AM",
+            "url" : "2023/03/sSched/sSched031123.pdf",
+            "zoom" : "https://us02web.zoom.us/j/81287336647"
+         }
+      }
+   },
+   "2023-03-12" : {
+      "10:00:00" : {
+         "SRC" : {
+            "bills" : ["HB233"],
+            "date" : "2023-03-12",
+            "datetime" : "2023-03-12T10:00:00",
+            "mtime" : "2023-03-11T08:53:17",
+            "name" : "SRC",
+            "room" : "321",
+            "time" : "10:00 AM",
+            "url" : "2023/03/sSched/sSched031123.pdf",
+            "zoom" : "https://us02web.zoom.us/j/81944191844"
+         }
+      }
+   }
+}

@@ -1,0 +1,112 @@
+{
+   "2023-02-17" : {
+      "08:30:00" : {
+         "SEC" : {
+            "bills" : ["SB367","SB383","SB397","SJR1","SB365","SB366","SB385","SB386","SB400","SB401"],
+            "date" : "2023-02-17",
+            "datetime" : "2023-02-17T08:30:00",
+            "mtime" : "2023-02-16T21:40:36",
+            "name" : "SEC",
+            "room" : "311",
+            "time" : "8:30 AM",
+            "url" : "2023/02/sSched/sSched021723.pdf",
+            "zoom" : "https://us02web.zoom.us/j/89615593412"
+         }
+      },
+      "09:00:00" : {
+         "SRC" : {
+            "bills" : ["SJR6","SJR8","SJR9","SB351","SB263","SB186","SB290","SB308","SB391","SM30"],
+            "date" : "2023-02-17",
+            "datetime" : "2023-02-17T09:00:00",
+            "mtime" : "2023-02-16T21:40:36",
+            "name" : "SRC",
+            "room" : "321",
+            "time" : "9:00 AM",
+            "url" : "2023/02/sSched/sSched021723.pdf",
+            "zoom" : "https://us02web.zoom.us/j/81944191844"
+         }
+      },
+      "09:30:00" : {
+         "SFC" : {
+            "bills" : ["SB72","SB145","SB153"],
+            "date" : "2023-02-17",
+            "datetime" : "2023-02-17T09:30:00",
+            "mtime" : "2023-02-16T21:40:36",
+            "name" : "SFC",
+            "room" : "322",
+            "time" : "9:30 AM",
+            "url" : "2023/02/sSched/sSched021723.pdf",
+            "zoom" : "https://us02web.zoom.us/j/81696207177"
+         }
+      },
+      "13:30:00" : {
+         "SHPAC" : {
+            "bills" : ["SB191","SB287","SB256","SB215","SB264","SB267","SB278","SB279","SB285","SB288","SB295","SB310"],
+            "date" : "2023-02-17",
+            "datetime" : "2023-02-17T13:30:00",
+            "mtime" : "2023-02-16T21:40:36",
+            "name" : "SHPAC",
+            "room" : "311",
+            "time" : "1:30 PM or 1/2 hr after floor session",
+            "url" : "2023/02/sSched/sSched021723.pdf",
+            "zoom" : "https://us02web.zoom.us/j/81287336647"
+         },
+         "SJC" : {
+            "bills" : ["SB35","SB80","SB64","SB48","SB63","SB107","SB180"],
+            "date" : "2023-02-17",
+            "datetime" : "2023-02-17T13:30:00",
+            "mtime" : "2023-02-16T21:40:36",
+            "name" : "SJC",
+            "room" : "321",
+            "time" : "1:30 PM or 1/2 hour after floor session",
+            "url" : "2023/02/sSched/sSched021723.pdf",
+            "zoom" : "https://us02web.zoom.us/j/81502543362"
+         }
+      }
+   },
+   "2023-02-18" : {
+      "13:00:00" : {
+         "STBTC" : {
+            "bills" : ["SB17","SB159","SB61","SB74","SB77","SB105","SB121","SB122","SB336"],
+            "date" : "2023-02-18",
+            "datetime" : "2023-02-18T13:00:00",
+            "mtime" : "2023-02-16T21:40:36",
+            "name" : "STBTC",
+            "room" : "311",
+            "time" : "1:00 PM",
+            "url" : "2023/02/sSched/sSched021723.pdf",
+            "zoom" : "https://us02web.zoom.us/j/85614440294"
+         }
+      }
+   },
+   "2023-02-20" : {
+      "13:30:00" : {
+         "SHPAC" : {
+            "bills" : ["SB207","SB233","SB198","SB255","SB260","SB13","SB265","SB269","SB298","SB302","SB312"],
+            "date" : "2023-02-20",
+            "datetime" : "2023-02-20T13:30:00",
+            "mtime" : "2023-02-16T21:40:36",
+            "name" : "SHPAC",
+            "room" : "311",
+            "time" : "1:30 PM or 1/2 hr after floor session",
+            "url" : "2023/02/sSched/sSched021723.pdf",
+            "zoom" : "https://us02web.zoom.us/j/81287336647"
+         }
+      }
+   },
+   "2023-02-21" : {
+      "09:00:00" : {
+         "SCONC" : {
+            "bills" : ["SB349","SB361","SB326","SB337","SB372","SB380","SB392"],
+            "date" : "2023-02-21",
+            "datetime" : "2023-02-21T09:00:00",
+            "mtime" : "2023-02-16T21:40:36",
+            "name" : "SCONC",
+            "room" : "311",
+            "time" : "9:00 AM",
+            "url" : "2023/02/sSched/sSched021723.pdf",
+            "zoom" : "https://us02web.zoom.us/j/82404382748"
+         }
+      }
+   }
+}

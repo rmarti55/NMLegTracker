@@ -1,0 +1,10 @@
+% return unless $self->user;
+% return unless $self->user->can_update_bills;
+%
+% my @updates = qw(Passed Tabled Failed Withdrawn);
+% if ($b->user_report) {
+%     unshift @updates, 'Remove unofficial report';
+% }
+<td<%== $self->stash('rcspan') %> class=' update-bill-status'>
+  <%= select_field "user_report" => ['[Update Bill Status]', @updates], class => "userreport", id => "user-report-" . $b->id %>
+</td>

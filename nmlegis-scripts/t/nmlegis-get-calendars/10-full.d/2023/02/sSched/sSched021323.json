@@ -1,0 +1,132 @@
+{
+   "2023-02-13" : {
+      "09:00:00" : {
+         "SEC" : {
+            "bills" : ["SB283","SB289","SB304","SB325","SB151","SB329","SB340","SB344","SB347","HB43"],
+            "date" : "2023-02-13",
+            "datetime" : "2023-02-13T09:00:00",
+            "mtime" : "2023-02-10T20:11:36",
+            "name" : "SEC",
+            "room" : "311",
+            "time" : "9:00 AM",
+            "url" : "2023/02/sSched/sSched021323.pdf",
+            "zoom" : "https://us02web.zoom.us/j/6057087163"
+         },
+         "SRC" : {
+            "bills" : ["SJR1","SB280","SB153","SB324","SB335","SB185"],
+            "date" : "2023-02-13",
+            "datetime" : "2023-02-13T09:00:00",
+            "mtime" : "2023-02-10T20:11:36",
+            "name" : "SRC",
+            "room" : "321",
+            "time" : "9:00 AM",
+            "url" : "2023/02/sSched/sSched021323.pdf",
+            "zoom" : "https://us02web.zoom.us/j/3396422464"
+         }
+      },
+      "13:30:00" : {
+         "SFC" : {
+            "bills" : ["SB43","SB96"],
+            "date" : "2023-02-13",
+            "datetime" : "2023-02-13T13:30:00",
+            "mtime" : "2023-02-10T20:11:36",
+            "name" : "SFC",
+            "room" : "322",
+            "time" : "1:30 PM",
+            "url" : "2023/02/sSched/sSched021323.pdf",
+            "zoom" : "https://us02web.zoom.us/j/8300773742"
+         },
+         "SHPAC" : {
+            "bills" : ["SB123","SB120","SB226","SB232","SB233","SB238","SB240","SB242","SB244","SB250","SB190","SB228","SB261"],
+            "date" : "2023-02-13",
+            "datetime" : "2023-02-13T13:30:00",
+            "mtime" : "2023-02-10T20:11:36",
+            "name" : "SHPAC",
+            "room" : "311",
+            "time" : "1:30 PM or 1/2 hr after floor session",
+            "url" : "2023/02/sSched/sSched021323.pdf",
+            "zoom" : "https://us02web.zoom.us/j/9124526531"
+         }
+      },
+      "14:00:00" : {
+         "SJC" : {
+            "bills" : ["SB35","SB80","SB64","SB180"],
+            "date" : "2023-02-13",
+            "datetime" : "2023-02-13T14:00:00",
+            "mtime" : "2023-02-10T20:11:36",
+            "name" : "SJC",
+            "room" : "321",
+            "time" : "2:00 PM",
+            "url" : "2023/02/sSched/sSched021323.pdf",
+            "zoom" : "https://us02web.zoom.us/j/3616365786"
+         }
+      }
+   },
+   "2023-02-14" : {
+      "00:00:00" : {
+         "STBTC" : {
+            "bills" : ["SB83","SB221","SB97","SB12","SB114","SB152","SB135"],
+            "date" : "2023-02-14",
+            "datetime" : "2023-02-14T00:00:00",
+            "mtime" : "2023-02-10T20:11:36",
+            "name" : "STBTC",
+            "room" : "321",
+            "time" : "After the Floor Session",
+            "url" : "2023/02/sSched/sSched021323.pdf",
+            "zoom" : "https://us02web.zoom.us/j/4011289295"
+         }
+      },
+      "09:00:00" : {
+         "SCONC" : {
+            "bills" : ["SB176","SB195","SB239","SB254","SB206","SB222","SB243","SB257","SB266","SB271"],
+            "date" : "2023-02-14",
+            "datetime" : "2023-02-14T09:00:00",
+            "mtime" : "2023-02-10T20:11:36",
+            "name" : "SCONC",
+            "room" : "311",
+            "time" : "9:00 AM",
+            "url" : "2023/02/sSched/sSched021323.pdf",
+            "zoom" : "https://us02web.zoom.us/j/7739881331"
+         },
+         "SIRC" : {
+            "bills" : ["SB245","SB33","SB27","SB86","SB87"],
+            "date" : "2023-02-14",
+            "datetime" : "2023-02-14T09:00:00",
+            "mtime" : "2023-02-10T20:11:36",
+            "name" : "SIRC",
+            "room" : "303",
+            "time" : "9:00 AM",
+            "url" : "2023/02/sSched/sSched021323.pdf",
+            "zoom" : "https://us02web.zoom.us/j/4330437643"
+         }
+      },
+      "13:30:00" : {
+         "SFC" : {
+            "bills" : [],
+            "date" : "2023-02-14",
+            "datetime" : "2023-02-14T13:30:00",
+            "mtime" : "2023-02-10T20:11:36",
+            "name" : "SFC",
+            "room" : "322",
+            "time" : "1:30 PM",
+            "url" : "2023/02/sSched/sSched021323.pdf",
+            "zoom" : "https://us02web.zoom.us/j/8300773742"
+         }
+      }
+   },
+   "2023-02-15" : {
+      "13:30:00" : {
+         "SFC" : {
+            "bills" : [],
+            "date" : "2023-02-15",
+            "datetime" : "2023-02-15T13:30:00",
+            "mtime" : "2023-02-10T20:11:36",
+            "name" : "SFC",
+            "room" : "322",
+            "time" : "1:30 PM",
+            "url" : "2023/02/sSched/sSched021323.pdf",
+            "zoom" : "https://us02web.zoom.us/j/8300773742"
+         }
+      }
+   }
+}

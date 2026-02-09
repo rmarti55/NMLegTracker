@@ -1,0 +1,234 @@
+body   { background: #f8f8f8; color: black; }
+
+/* BEGIN top navbar */
+nav { background: #FFD600; }
+nav .active { background: #BF0B30; color: #FFE600; }
+nav ul {
+    font-size: 0;
+    margin: 0;
+    padding: 0;
+}
+nav ul li {
+    display: inline-block;
+    position: relative;
+    border-right: 2px solid #CCCCCC;
+}
+nav ul li#search { position: relative; font-size: 13px; float: right; }
+nav ul li a, nav ul li b {
+    color: #bf0b30;
+    display: block;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 13px 12px;
+    transition: 0.3s linear;
+    text-decoration: none;
+}
+nav ul li:hover, nav ul li:active { background: #FFFF00; color: #000000; }
+
+nav .dropdown { display: none; position: absolute; background: #FFD600; color: #bf0b30; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); padding: 2px 2px; z-index: 1; border: 0px; }
+nav ul .dropdown li { border: 0px; white-space: pre; }  /* undo the top navbar dividers */
+
+nav ul li:hover .dropdown { display: block; }
+
+.ticker { color: #666; }
+
+/* END top navbar */
+/* BEGIN Big box at top for displaying form submission errors */
+.error {
+    width: 90%;
+    background: #FC6;
+    color: #C03;
+    padding: 1em;
+    border: 1px solid #000;
+    margin-left: 3em;
+    margin-right: 3em;
+    margin-top: 3ex;
+    margin-bottom: 3ex;
+    font-weight: bold;
+    font-size: 150%;
+}
+/* END  Big box at top for displaying form submission errors */
+
+
+.party-D   { background: #9cf; }
+.party-R   { background: #ff5f5f; }
+.party-DTS { background: #c9f; }
+.party-multi { background: #c9f; }
+
+.legislatortable td              { border: 1px solid black; }
+.legislatortable .party-R        { background: #ffb0b0; }
+.legislatortable .party-D        { background: #adf; }
+.legislatortable .party-DTS      { background: #ebf; }
+.legislatortable .party-multi    { background: #ebf; }
+
+h2     { margin-top: 1.5em; margin-bottom: 3px; }
+table  { border-collapse: collapse; margin-left: 2em; background: white; }
+@media (max-width: 1024px) {
+        table { margin-left: 0; }
+}
+td, th { border: 1px solid black; padding: 8px; }
+
+/* login and register pages */
+table.auth    { margin-left: 6em; font-size: 125%; }
+table.auth td { vertical-align: middle; }
+.auth input   { font-size: 110%; }
+.auth button  { font-size: 125%; }
+
+label.field-with-error { color: #dd7e5e; }
+input.field-with-error { background-color: #fd9e7e; }
+
+/* search only needed on bills */
+#searchbox        { float: right; text-align: right; font-size: 125%; }
+
+/* legislator index page */
+th.district       { text-align: right; vertical-align: top; }
+th.legislatorname { text-align: left; vertical-align: top; font-weight: normal; }
+th.legislatorname a               { font-weight: bold; }
+/* links on dems are OK, but on R they should be red */
+.party-R.legislatorname a         { font-weight: bold; color: #a00; }
+.party-R.legislatorname a:visited { font-weight: bold; color: #b33; }
+
+/* committees */
+th.time { text-align: left; font-size: 125%; border: 0; }
+th.room { text-align: right; font-size: 100%; border: 0; }
+th.committeename { text-align: left; font-size: 110%; }
+
+.watching td    { box-shadow: inset 4px 4px 2px -1px rgba(20,90,90,0.8); }
+.oppose td      { box-shadow: inset 4px 4px 2px -1px rgba(200,90,90,0.8); }
+td.watching     { box-shadow: inset 4px 4px 2px -1px rgba(20,90,90,0.8); }
+td.oppose       { box-shadow: inset 4px 4px 2px -1px rgba(200,90,90,0.8); }
+
+.active   td { background: #fff; font-weight: bold; }
+.inactive td { background: #e0e0e0; }
+
+/* For schedule list - FIXME, why do I need to duplicate? */
+div.meeting               { padding-top: 2ex; padding-bottom: 2ex; }
+div.meeting-past          { background: #ddd; color: #999; }
+.meeting-past       td,th { background: #ddd; color: #999; }
+div.meeting-current       { background: #fff; color: #000; }
+.meeting-current    td,th { background: #fff; color: #000; }
+div.meeting-future        { background: #eee; color: #000; }
+.meeting-future     td,th { background: #eee; color: #000; }
+
+/* For main committee calendar, the weekday one */
+.committee-weekview th.time { font-family: monospace; }
+.committee-weekview th,td { vertical-align: top; line-break: strict; border: 1px solid #ccc; }
+.committee-weekview span.committee-chamber { display: inline-block; font-weight: bold; font-size: 80%; }
+.committee-weekview span.committee-row { display: inline-block; padding-left: 3em; text-indent: -2em; padding-bottom: 1ex; }
+
+td.id  { text-align: right; width: 6em; border-left: 1px solid #bbb; }
+td.mtime { text-align: right; }
+.evil td { color: #F00; }
+td.evil  { color: #F00; }
+.stalled td { background: #999; color: #555; text-decoration: line-through; }
+.stalled  a { color: #55b; }
+.passed  td { background: #cfc; }
+a      { text-decoration: none; }
+.billhistory_dialog { background: #FFF; padding: 5px; }
+
+/* Bill progress */
+.billprogress a { color: #000; font-weight: normal; }
+.billprogress.current a { font-weight: bold; }
+.billprogress.future a { color: #777; }
+
+.tabled td  { background: #888; border: 2px solid #444; }
+td.tabled   { background: #888; text-align: left; border: 2px solid #444; }
+td.passed   { background: #cfc; text-align: left; border: 2px solid #444; }
+td.passed.chamber { background: #9f9; font-weight: bold; font-size: 125%; }
+
+.newbill td { border-top: 4px solid #bbb; }
+.inactive td.current  { background: #e0e0e0; text-align: left; font-weight: bold; border: 3px solid #000; }
+.active   td.current  { background: #fff; text-align: left; font-weight: bold; border: 3px solid #000; }
+td.inactive { background: #e0e0e0; }
+td.heard    { background: #ffa;    border: 3px solid #ee3; }
+td.heard-long-ago { background: #991; border: 3px solid #ee3; }
+td.future   { background: #f0f0f0; color: #999;      text-align: left; border: 2px solid #444; font-size: 80%; }
+td.noneed   { background: #ccc; }
+td.failed   { background: #fcc; color: #000; font-weight: bold; vertical-align: middle; border: 2px solid #eee; }
+td.withdrawn { background: #444; color: #ccc; }
+td.signed   { background: #cfc; font-weight: bold; border: 2px solid #000; }
+td.vetoed   { background: #fcc; color: #f00; text-align: center; vertical-align: middle; font-weight: bold; border: 2px solid #f00; }
+td.speakertable { background: #963; color: #eee; vertical-align: middle; text-align: center; }
+
+/* Left-hand column indicating watch status. We need to hardcode the
+ * background; afaict there's no CSS way to do "reset to default".
+ * This needs to be near the bottom so it overrides other cell styling. */
+td.watchstatus    { background: #f8f8f8; border: 0; box-shadow: none; }
+.popup-container .watchstatus {
+    line-height: 34px;
+    color: #d8d8d8;
+    background: rgba(20,90,90,1);
+    padding: 0 10px;
+    border-radius: 3px;
+    display: block;
+    cursor: pointer;
+    font-size: 150%;
+}
+
+.watchstatus button {
+    opacity: 0.15;
+    font-size: 150%;
+    color: #d8d8d8;
+    background: #e8e8e8;
+    display: inline;
+    border-radius: 3px;
+    cursor: pointer;
+}
+.watchstatus button.solo  { font-size: 150%; }
+.watchstatus button.multi { font-size: 75%; background: #d8d8d8; color: #333; opacity: 0; }
+.watchstatus button.watch_on { background: #ffe8e8; opacity: 1; }
+.watchstatus button.oppose   { background: #ff0000; color: #fff; }
+
+/* .watching .watchstatus button { opacity: 1; } */
+.watchstatus button.owned:hover, .watchstatus button.owned:active { opacity: 1; background: #fff; }
+
+/* FIXME-duplication?!? If we put this near the top, it gets ignored. */
+.party-D td, .party-D th         { background: #9cf; }
+.party-R td, .party-R th         { background: #ff5f5f; }
+.party-DTS td, .party-DTS th     { background: #c9f; }
+.party-multi td, .party-multi th { background: #c9f; }
+
+/* For main committee page: is our legislator on this committee? */
+td.committee-chair     { background: #9f9; font-weight: bold; color: #060; }
+td.committee-vicechair { background: #9f9; font-weight: bold; color: #060; }
+td.committee-member    { background: #9f9; font-weight: normal; color: #333; }
+
+.mylegislator { background: #fc9; font-weight: bold; }
+.mylegislator td, .mylegislator th, td.mylegislator, th.mylegislator {
+    background: #fc9;
+    font-weight: bold;
+    font-size: 125%;
+    box-shadow: inset 4px 4px 2px -1px rgba(190,90,0,0.8);
+}
+
+/* For vote results */
+.vote.yes      { background: #dfd; font-weight: bold; }
+.vote.no       { background: #fdd; font-weight: bold; }
+.vote.excused  { background: #ddd; color: #666; }
+.vote.absent   { background: #ffd; }
+
+
+/* bill text in bill page */
+.billtext {
+    background: #fff;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    margin-left: 4em;
+    margin-right: 4em;
+    padding-left: 2em;
+    padding-right: 2em;
+    font-family: "Prestige12 BT", monospace;
+    font-weight: normal;
+    font-style: normal;
+}
+.billtext .new-material { color: #093; font-weight: bold; }
+
+/* Shown to non-logged-in users */
+p.plug { margin-left: 2em; font-size: 125%; }
+
+/* Editing trackers: coooool select + textinput */
+select.custom_select:hover { cursor: pointer; }
+select.custom_select       { padding: 4px; width: 22px; border-right: 0; }
+
+#bigsearch { margin-top: 4ex; display: flex; justify-content: center; }
+#bigsearch input { font-size: 175%; }

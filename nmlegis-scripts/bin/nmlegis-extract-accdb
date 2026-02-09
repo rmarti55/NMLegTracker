@@ -1,0 +1,221 @@
+#!/usr/bin/perl
+#
+# nmlegis-extract-accdb - extract info from what get-accdb gives us
+#
+package ESM::NMLegisExtractAccdb;
+
+use v5.14;
+use strict;
+use warnings;
+use utf8;
+use open qw( :encoding(UTF-8) :std );
+
+(our $ME = $0) =~ s|.*/||;
+(our $VERSION = '$Revision: 1.30 $ ') =~ tr/[0-9].//cd;
+
+use NMLegis                     qw(:all);
+use NMLegis::Legislators;
+
+use DBI;
+
+###############################################################################
+# BEGIN user-customizable section
+
+# Created by nmlegis-get-accdb
+our $DB = "$ENV{HOME}/.local/share/nmlegis/nmlegis.db";
+
+# END   user-customizable section
+###############################################################################
+
+###############################################################################
+# BEGIN boilerplate args checking, usage messages
+
+sub usage {
+    print  <<"END_USAGE";
+Usage: $ME [OPTIONS]
+
+  -v, --verbose  show verbose progress indicators
+  -n, --dry-run  make no actual changes
+
+  --help         display this message
+  --version      display program name and version
+END_USAGE
+
+    exit;
+}
+
+# Command-line options.  Note that this operates directly on @ARGV !
+our $debug   = 0;
+our $force   = 0;
+our $verbose = 0;
+our $NOT     = '';              # print "blahing the blah$NOT\n" if $debug
+sub handle_opts {
+    use Getopt::Long;
+    GetOptions(
+        'debug!'     => \$debug,
+        'dry-run|n!' => sub { $NOT = ' [NOT]' },
+        'force'      => \$force,
+        'verbose|v'  => \$verbose,
+
+        help         => \&usage,
+        version      => sub { print "$ME version $VERSION\n"; exit 0 },
+    ) or die "Try `$ME --help' for help\n";
+}
+
+# END   boilerplate args checking, usage messages
+###############################################################################
+
+############################## CODE BEGINS HERE ###############################
+
+# The term is "modulino".
+__PACKAGE__->main()                                     unless caller();
+
+# Main code.
+sub main {
+    # Note that we operate directly on @ARGV, not on function parameters.
+    # This is deliberate: it's because Getopt::Long only operates on @ARGV
+    # and there's no clean way to make it use @_.
+    handle_opts();                      # will set package globals
+
+    # Used by lower levels to avoid fetching from nmlegis
+    $ENV{NMLEGIS_USE_CACHE} //= $debug;
+
+    my $dbh = DBI->connect("dbi:SQLite:dbname=$DB")
+        or die "$ME: Cannot DBI->connect to $DB: $@";
+
+    # Legislator DB is useless
+#    do_legislators($dbh);
+
+    #    do_bills($dbh);
+
+    do_committee_votes($dbh);
+
+    # WTF? committees: table seems to be `TblLocations` but:
+    #    1) it has member NAMES, not IDs?
+    #    2) It is way old??? SJC shows RICHARD C. MARTINEZ, CHAIRMAN???
+
+}
+
+
+# FIXME FIXME FIXME: make this part of bills.json
+sub do_committee_votes {
+    my $dbh = shift;
+
+    my %votes;
+
+    my $sth = $dbh->prepare('SELECT * FROM Legislation');
+    $sth->execute();
+    while (my $row = $sth->fetchrow_hashref()) {
+        (my $chamber = $row->{Chamber}) =~ s/\s+//g;
+        (my $type    = $row->{LegType}) =~ s/\s+//g;
+        (my $num     = $row->{LegNo})   =~ s/\s+//g;
+
+        my $v = $row->{CommitteeVotes}
+            or next;
+        $v =~ s/^\s+|\s+$//g;           # stupid whitespace
+        next unless $v;
+
+        #               12   2   1     3   3 4   4
+        while ($v =~ s!^((H|S)\w+)\s+\((\d+)-(\d+)\)\s*!!) {
+            $votes{$chamber}{$type}{$num}{$1} = [ $3, $4 ];
+        }
+
+        warn "$ME: $chamber$type$num: leftovers: $v\n" if $v;
+    }
+
+
+    (my $output_file = $NMLegis::Bills::Bills_File)
+        =~ s![^/]+\.json!committee-votes-$YYYY.json!;
+    write_json_outfile(\%votes, $output_file);
+}
+
+
+
+# 2024-01-24 - gaining confidence that they're the same
+#              FIXME: instead of writing -foo, show diffs
+#
+# 2024-01-17 - pretty much the same as web scraping, with a
+#              whitespace difference in one bill title. Both are missing SB6.
+sub do_bills {
+    my $dbh = shift;
+
+    my %bills;
+
+    my $sth = $dbh->prepare('SELECT * FROM Legislation');
+    $sth->execute();
+    while (my $row = $sth->fetchrow_hashref()) {
+        (my $chamber = $row->{Chamber}) =~ s/\s+//g;
+        (my $type    = $row->{LegType}) =~ s/\s+//g;
+        (my $num     = $row->{LegNo})   =~ s/\s+//g;
+
+        my @sponsors;
+        for my $k (sort grep { /^SponsorCode/ } keys %$row) {
+            if (my $s = $row->{$k}) {
+                $s =~ s/\s+//g;
+                if ($s ne 'NONE') {
+                    push @sponsors, $s;
+                }
+            }
+        }
+
+        (my $action  = $row->{ActionText}) =~ s/^\s+|\s+$//;
+        my $b = +{
+            actions  => $action,
+            sponsors => \@sponsors,
+            title    => $row->{Title},
+        };
+
+        if ($row->{Emergency}) {
+            $b->{emergency} = '*';
+        }
+
+        $bills{$chamber}{$type}{$num} = $b;
+
+    }
+
+    (my $output_file = $NMLegis::Bills::Bills_File)
+        =~ s/\.json/-foo.json/;
+    write_json_outfile(\%bills, $output_file);
+}
+
+# OK, forget this. DB does not have county, office, phone, lots of stuff
+sub do_legislators {
+    my $dbh = shift;
+
+    my %legislators;
+
+    my $sth = $dbh->prepare('SELECT * FROM tblSponsors');
+    $sth->execute();
+    while (my $row = $sth->fetchrow_hashref()) {
+        my $id = $row->{SponsorCode}
+            or die "$ME: No SponsorCode";
+        $id =~ /^(H|S)/
+            or die "$ME: Internal error: unknown sponsorcode '$id'";
+        my $chamber = $1;
+
+        (my $district = $row->{DISTRICT}) =~ s/\s+//g;
+
+        $legislators{$chamber}[$district] = +{
+            address => '',
+            chamber => $chamber,
+            county => '',
+            district => $district,
+            email => '',
+            firstname => $row->{FirstName},
+            id => $id,
+            lastname => $row->{LastName},
+            name => $row->{DisplayName},
+            occupation => '',
+            office => '',
+            party => $row->{Party},
+            phone => '',
+            service => '',
+        };
+    }
+
+    (my $output_file = $NMLegis::Legislators::Legislators_File)
+        =~ s/\.json/-foo.json/;
+    write_json_outfile(\%legislators, $output_file);
+}
+
+1;

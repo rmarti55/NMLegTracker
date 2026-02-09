@@ -1,0 +1,626 @@
+#!/usr/bin/perl
+#
+# nmlegis-show-legislators - write a page for each legislator, and an index
+#
+package ESM::NMLegisShowLegislators;
+
+use v5.24;
+use utf8;
+use strict;
+use warnings;
+use open qw( :encoding(UTF-8) :std );
+
+(our $ME = $0) =~ s|.*/||;
+(our $VERSION = '$Revision: 1.30 $ ') =~ tr/[0-9].//cd;
+
+use NMLegis                     qw(:all);
+use NMLegis::Agendas;
+use NMLegis::Committees;
+use NMLegis::Legislators;
+
+# For debugging, show data structures using DumpTree($var)
+#use Data::TreeDumper; $Data::TreeDumper::Displayaddress = 0;
+
+###############################################################################
+# BEGIN user-customizable section
+
+our $Destdir = '/var/www/nmlegis/legislators';
+
+our $Legislator_URL = "$NMLEGIS/Members/Legislator?SponCode=%s";
+
+# END   user-customizable section
+###############################################################################
+
+use File::Slurp                 qw(read_file);
+use HTML::Entities;
+use JSON::XS;
+use Time::Piece;
+
+###############################################################################
+# BEGIN boilerplate args checking, usage messages
+
+sub usage {
+    print  <<"END_USAGE";
+Usage: $ME [OPTIONS] PATH
+
+$ME writes a page for each legislator, showing their committees
+and schedules
+
+OPTIONS:
+
+  -v, --verbose  show verbose progress indicators
+  -n, --dry-run  make no actual changes
+
+  --help         display this message
+  --man          display program man page
+  --version      display program name and version
+END_USAGE
+
+    exit;
+}
+
+# Command-line options.  Note that this operates directly on @ARGV !
+our $debug   = 0;
+our $force   = 0;
+our $verbose = 0;
+our $NOT     = '';              # print "blahing the blah$NOT\n" if $debug
+sub handle_opts {
+    use Getopt::Long;
+    GetOptions(
+        'debug!'     => \$debug,
+        'dry-run|n!' => sub { $NOT = ' [NOT]' },
+        'force'      => \$force,
+        'verbose|v'  => \$verbose,
+
+        help         => \&usage,
+        version      => sub { print "$ME version $VERSION\n"; exit 0 },
+    ) or die "Try `$ME --help' for help\n";
+}
+
+# END   boilerplate args checking, usage messages
+###############################################################################
+
+############################## CODE BEGINS HERE ###############################
+
+# The term is "modulino".
+__PACKAGE__->main()                                     unless caller();
+
+# Main code.
+sub main {
+    # Note that we operate directly on @ARGV, not on function parameters.
+    # This is deliberate: it's because Getopt::Long only operates on @ARGV
+    # and there's no clean way to make it use @_.
+    handle_opts();                      # will set package globals
+
+    die "$ME: Too many arguments; try $ME --help\n"                 if @ARGV;
+
+    $ENV{NMLEGIS_USE_CACHE} //= $debug;
+
+    my @legislators = NMLegis::Legislators->all;
+    for my $l (@legislators) {
+        write_legislator_html($l);
+    }
+
+    write_legislator_index(@legislators);
+}
+
+###########################
+#  write_legislator_html  #  Write page for ONE LEGISLATOR
+###########################
+sub write_legislator_html {
+    my $legislator = shift;             # in: NMLegis::Legislator object
+
+    my $chamber  = $legislator->chamber;
+    my $district = $legislator->district;
+    my $party    = $legislator->party;
+
+    my $html_out = sprintf("%s/%s/%02d.html",$Destdir,lc($chamber),$district);
+    my $html_tmp = "$html_out.tmp.$$";
+
+    open my $html_fh, '>', $html_tmp
+        or die "$ME: Cannot create $html_tmp: $!\n";
+
+    my $pos = encode_entities($legislator->lead_position);
+    if ($pos) {
+        $pos = " - $pos";
+    }
+    my $code = $legislator->code;
+    printf { $html_fh } <<'END_HTML', (map { $legislator->get($_) } qw(name party name url title name party map_url district)), $pos;
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+ <title>%s</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../../nmlegis.css" />
+<link rel="stylesheet" href="../../popup.css" />
+<body class="party-%s">
+<div id="nav"><a href="/">Home</a>&nbsp;&rarr;&nbsp;<a href="/legislators/">Legislators</a>&nbsp;&rarr;&nbsp;<b>%s</b></div>
+
+<p style="color: #c00; margin-left: 2em; margin-right: 2em;"><i>
+DEPRECATION WARNING: This site (all of nmlegis.edsantiago.com) is
+being deprecated. In February 2025 I (Ed) rewrote the entire web&nbsp;UI,
+and as of February&nbsp;25 it seems to be working fairly well, so I'm
+encouraging everyone to move there instead.
+<br/>
+The new site is
+ <b><a href="https://nmlegiswatch.org/legislators/$code">nmlegiswatch.org</a></b>
+</p>
+
+<h1><a href="%s" target="_blank">%s %s</a> (%s-<a href="%s">%d</a>)%s</h1>
+
+END_HTML
+
+    # "Representative/Senator since YYYY"
+    if (my $service = $legislator->service) {
+        printf { $html_fh } "<h2>%s</h2>\n", $service;
+    }
+
+    # Details
+    print { $html_fh } "<ul style=\"font-size: 125%;\">\n";
+    for my $element (qw(District County Office)) {
+        my $map = '';
+        if ($element eq 'District') {
+            $map = sprintf("&nbsp;[<a href=\"%s\">MAP</a>]", $legislator->map_url);
+        }
+        printf { $html_fh } " <li>%s: <b>%s</b>%s</li>\n",
+            $element, encode_entities($legislator->get(lc $element)), $map;
+    }
+    # Phone and email, with links
+    for my $label ('Phone', 'Office Phone', 'Alt Phone') {
+        if (my $phone = $legislator->get(lc $label)) {
+            (my $phone_ref = $phone) =~ s/\D//g;
+            $phone_ref = "505$phone_ref" if length($phone_ref) < 10;
+            printf { $html_fh } " <li>%s: <b><a href=\"tel:+1%s\">%s</a></b></li>\n",
+                $label, $phone_ref, $phone;
+        }
+    }
+    if (my $email = $legislator->email) {
+        printf { $html_fh } " <li>%s: <b><a href=\"mailto:%s\">%s</a></b></li>\n",
+            'Email', $email, $email;
+    }
+    print { $html_fh } "</ul>\n";
+
+    # 2025. Legislative aides.
+    if (my $aide = $legislator->district_legislative_aide) {
+        printf { $html_fh } "<h2>Legislative Aide: %s", $aide;
+
+        if (my $phone = $legislator->district_legislative_aide_phone) {
+            (my $phone_ref = $phone) =~ s/\D//g;
+            $phone_ref = "505$phone_ref" if length($phone_ref) < 10;
+            printf { $html_fh } " - <a href=\"tel:+1%s\">%s</a>",
+                $phone_ref, $phone;
+        }
+
+        if (my $email = $legislator->district_legislative_aide_email) {
+            printf { $html_fh } " - <a href=\"mailto:%s\">%s</a>", $email, $email;
+        }
+
+        print { $html_fh } "</h2>\n";
+    }
+
+    ######################################################################
+    # Schedule - where to find them
+    print { $html_fh } "<hr/><h2>Daily Schedule</h2>\n";
+    my @committees = $legislator->committees;
+    my @sponsored = $legislator->sponsored_bills;
+
+    my %committee_attendance;
+    for my $c (@committees) {
+        for my $sched ($c->schedules) {
+            my $ymd = $sched->{ymd};
+            my $hms = $sched->{hms};
+            my $bucket = ($hms le "12:00:00" ? 0 : 1);
+
+            push @{$committee_attendance{$bucket}{$ymd}{on_committee}},
+                [ $sched, "Role: " . $c->role ];
+        }
+    }
+
+    # Committees only; exclude House and Senate
+    for my $sched (grep { $_->{cname} =~ /^[HS][A-Z]+$/ } NMLegis::Agendas::all()) {
+        my $ymd = $sched->{ymd};
+        my $hms = $sched->{hms};
+        my $bucket = ($hms le "12:00:00" ? 0 : 1);
+
+        for my $bill (@{$sched->{bills}}) {
+            if (my @mine = grep { $bill eq $_->billno } @sponsored) {
+                my $b = NMLegis::Bills->new($bill);
+                my $text = sprintf("<a href=\"%s\">%s</a> %s",
+                                   $b->local_url, $b->html_name,
+                                   encode_entities($b->readable_title));
+                push @{$committee_attendance{$bucket}{$ymd}{bill_heard}},
+                    [ $sched, $text ];
+            }
+        }
+    }
+
+    print { $html_fh } "<table>\n<tr><th>&nbsp;</th>";
+    for my $d (0, 1, 2) {
+        my $title = localtime(time + $d * 86400)->strftime("%A");
+        $title .= " (Today)"    if $d == 0;
+        $title .= " (Tomorrow)" if $d == 1;
+        print { $html_fh } "<th>$title</th>";
+    }
+    print { $html_fh } "</tr>\n";
+
+    my @buckets = qw(Morning Afternoon);
+    for my $bucket (0, 1) {
+        printf { $html_fh } "<tr><th rowspan=\"2\">%s</th>", $buckets[$bucket];
+
+        # First row: committee seats; second row: bills being heard
+        my %row_title = (on_committee => 'Committee Meetings',
+                         bill_heard   => 'Sponsored Bills Being Heard in Committee');
+
+        for my $row (qw(on_committee bill_heard)) {
+            for my $d (0, 1, 2) {
+                my $ymd = localtime(time + $d * 86400)->ymd;
+
+                print { $html_fh } "<td>";
+                my $busy = $committee_attendance{$bucket}{$ymd}{$row};
+                if ($busy) {
+                    printf { $html_fh } "<b>%s:</b><br/>", $row_title{$row};
+                    for my $event (@$busy) {
+                        my ($s, $text) = @$event;
+                        (my $linkto_id = $s->{datetime}) =~
+                            s/^\d+-(\d\d)-(\d\d)T(\d\d):(\d\d).*/$1$2-$3$4/;
+                        $linkto_id .= "-" . $event->[0]->{cname};
+                        printf { $html_fh } "&nbsp;%s <a href=\"/committee-calendars.html#$linkto_id\">%s</a> - %s<br/>&nbsp;&nbsp;&nbsp;%s<br/>\n",
+                        $s->time, $s->{name},
+                        $s->room, $text;
+                    }
+                }
+                else {
+                    print { $html_fh } "</td>";
+                }
+            }
+            print { $html_fh } "</tr>\n";
+        }
+
+        # Separator
+        print { $html_fh } "<tr><th colspan=\"4\"></th></tr>\n"
+            if $bucket == 0;
+    }
+    print { $html_fh } "</table>\n";
+
+
+    if (@sponsored) {
+        _print_bill_table($html_fh, 1, @sponsored);
+        # FIXME: split into im-watching and not-watching
+#        if (my @watched = grep { $_->_am_tracking } @sponsored) {
+#            _print_bill_table($html_fh, 1, @watched);
+#        }
+#        if (my @unwatched = grep { ! $_->_am_tracking } @sponsored) {
+#            _print_bill_table($html_fh, 0, @unwatched);
+#        }
+    }
+
+    # Committees
+    if (@committees) {
+        print { $html_fh } <<'END_HTML';
+<h2>Standing Committees</h2>
+<table>
+END_HTML
+
+        for my $c (@committees) {
+            my $role = $c->role || 'FIXME-role';
+            my $days = $c->days || '[no standing days]';
+            my $time = $c->time || '[no standing time]';
+            my $room = $c->room || '[no standing room]';
+
+            printf { $html_fh } <<"END_HTML", $c->local_url, $c->name;
+ <tr><th class="committeename"><a href="%s">%s</a></th><td>$role</td><td>$days</td><td>$time</td><td>$room</td></tr>
+END_HTML
+        }
+
+        # FIXME: "interim committees"???
+        print { $html_fh } "</table>\n";
+    }
+
+    # Committee votes
+    if (my @votes = $legislator->committee_votes) {
+        # Reorganize by committee
+        my %by_committee;
+        for my $tuple (@votes) {
+            my ($bill, $committee, $date, $vote) = @$tuple;  # date is unused
+            push @{ $by_committee{$committee} }, [ $bill, $date, $vote ];
+        }
+
+        my $print_table = sub {
+            my $committee = shift;
+            my $votes_this_committee = delete $by_committee{ $committee->abbr }
+                or return;
+
+            printf { $html_fh } <<'END_HTML', $committee->name;
+<table>
+ <tr><th colspan="3">%s</th></tr>
+END_HTML
+            for my $tuple (@$votes_this_committee) {
+                my ($bill_id, undef, $vote) = @$tuple;
+
+                my $bill = NMLegis::Bills->new($bill_id);
+
+                # FIXME: we can't use Bills::html_row() because we don't
+                # want the committee history.
+                printf { $html_fh } <<'END_HTML', join(' ', $bill->css_classes), $bill->local_url, $bill->html_name, encode_entities($bill->readable_title), $vote, ucfirst($vote);
+<tr class="%s">
+  <td class="id"><a href="%s" target="_blank">%s</a></td>
+  <td class="billtitle">%s</td>
+  <td class="vote %s">%s</td>
+</tr>
+END_HTML
+            }
+
+            printf { $html_fh } "</table>\n<br/>\n";
+        };
+
+        print { $html_fh } "<hr/>\n<h2>Committee Votes</h2>\n";
+        for my $committee (@committees) {
+            $print_table->($committee);
+        }
+
+        # Leftover committees. SHOULD NEVER HAPPEN!
+        for my $committee (sort keys %by_committee) {
+            # If it does, we can invoke $print_table->()
+            die "$ME: FIXME! leftover committee $committee";
+        }
+    }
+
+
+    printf { $html_fh } <<'END_HTML', localtime->datetime, $ME;
+<hr/>
+<span class='signature'>Updated: %s by %s</span>
+</body>
+</html>
+END_HTML
+
+    close $html_fh
+        or die "$ME: Error writing $html_tmp: $!\n";
+    chmod 0444 => $html_tmp;
+    rename $html_tmp => $html_out
+        or die "$ME: Could not rename $html_tmp: $!\n";
+
+    # symlink by sponcode
+    (my $html_basename = $html_out) =~ s|^(.*)/||;
+    my $symlink = sprintf("%s/%s.html", $1, $legislator->id);
+
+    symlink $html_basename, $symlink;
+}
+
+#######################
+#  _print_bill_table  #  Table of sponsored bills (in ONE-LEGISLATOR page)
+#######################
+sub _print_bill_table {
+    my $html_fh  = shift;
+    my $tracking = shift;
+
+    printf { $html_fh } <<'END_HTML';
+<h2>Sponsored Legislation</h2>
+<table>
+END_HTML
+    for my $bill (@_) {
+        print  { $html_fh } $bill->html_row();
+    }
+    print { $html_fh } "</table>\n<hr/>\n";
+}
+
+############################
+#  write_legislator_index  #  Write page for ALL LEGISLATORS
+############################
+sub write_legislator_index {
+    my @legislators = @_;
+
+    # Write HTML file
+    my $html_out = "$Destdir/index.html";
+    my $html_tmp = "$html_out.tmp.$$";
+    open my $html_fh, '>', $html_tmp
+        or die "$ME: Cannot create $html_tmp: $!\n";
+    print { $html_fh } <<"END_HTML";
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+ <title>NM Legislator Index</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../nmlegis.css" />
+</head>
+<body>
+<h1>NM Legislator Index</h1>
+<p style="color: #c00; margin-left: 2em; margin-right: 2em; font-size: 125%;"><i>
+DEPRECATION WARNING: This site (all of nmlegis.edsantiago.com) is
+being deprecated. In February 2025 I (Ed) rewrote the entire web&nbsp;UI,
+and as of February&nbsp;25 it seems to be working fairly well, so I'm
+encouraging everyone to move there instead.
+<br/>
+The new site is
+ <b><a href="https://nmlegiswatch.org/legislators">nmlegiswatch.org</a></b>
+</p>
+END_HTML
+
+    for my $chamber (qw(H S)) {
+        my $chamber_name = ($chamber eq 'H' ? 'House' : 'Senate');
+
+        printf { $html_fh } <<'END_HTML', $chamber_name;
+<h2>%s</h2>
+<table>
+END_HTML
+
+        # Legislators, ordered by district
+        for my $l (grep { $_->chamber eq $chamber } @legislators) {
+            my @sponsored = grep { $_->_am_tracking } $l->sponsored_bills;
+            my $rowspan = '';
+            $rowspan = sprintf(" rowspan='%d'", scalar(@sponsored))
+                if @sponsored > 1;
+            my $party_css = "party-" . $l->party;
+
+            my $name = encode_entities($l->name);
+            my $pos  = encode_entities($l->lead_position);
+            if ($pos) {
+                $pos = "<b> - $pos</b>";
+            }
+            my $map_url = $l->map_url;
+            printf { $html_fh } <<"END_HTML", $l->district, lc($chamber), $l->district, $name, $pos, encode_entities($l->county);
+<tr><th class="district $party_css"$rowspan><a href="$map_url">%d</a></th><th class="legislatorname $party_css"$rowspan><a href="%s/%02d.html">%s</a>%s<br/>&nbsp;%s</th>
+END_HTML
+
+            my $tr = '';
+            for my $bill (@sponsored) {
+                my $class = ($bill->{is_evil} ? 'evil' : 'good');
+                printf { $html_fh } "%s<td class=\"$class\"><a href=\"%s\" target=\"_blank\">%s</a></td><td class=\"$class\">%s</td></tr>",
+                    $tr, map { $bill->get($_) } qw(url html_name readable_title);
+                $tr = "<tr>";
+            }
+
+            print { $html_fh } "</tr>\n";
+        }
+        print { $html_fh } "</table>\n<hr/>\n";
+    }
+
+    printf { $html_fh } <<'END_HTML', localtime->datetime, $ME;
+<span class='signature'>Updated: %s by %s</span>
+</body>
+</html>
+END_HTML
+
+    close $html_fh
+        or die "$ME: Error writing $html_tmp: $!\n";
+    rename $html_tmp => $html_out
+        or die "$ME: Error renaming $html_tmp: $!\n";
+}
+
+###############################################################################
+# BEGIN read schedule/committees JSON
+
+sub read_json {
+    my $file = shift;
+
+    my $json = read_file("$Data_Dir/$file");
+    return decode_json($json);
+}
+
+# Read all bills that we care about
+sub read_bills {
+    my @bills;
+
+    my $path = "$ENV{HOME}/.local/share/nmlegis-watch/$YYYY";
+    opendir my $dir_fh, $path
+        or die "$ME: Cannot opendir $path: $!\n";
+    my @billfiles = sort grep { /^[A-Z]+\d+$/ } readdir $dir_fh;
+    closedir $dir_fh;
+
+    for my $bill (@billfiles) {
+        my $status = do "$path/$bill";
+        push @bills, $status;
+    }
+
+    return @bills;
+}
+
+
+# END   read schedule/committees JSON
+###############################################################################
+# BEGIN parse_legislators
+
+sub parse_legislators {
+    my $committees = shift;             # in: parsed committee list
+    my $bills      = shift;             # in: AREF of bills on my list
+    my %legislators;                    # out: key={H,S} -> AREF[by district]
+
+    for my $abbr (sort keys %$committees) {
+        next if $abbr =~ /^_/;                  # _schema
+
+        my $chamber = $committees->{$abbr}{chamber};
+        $abbr =~ /^$chamber/
+            or die "$ME: WEIRD: committee '$abbr' is in chamber '$chamber'";
+
+        # Each committee has an AREF, members, each of which is an HREF
+        my $members = $committees->{$abbr}{members};
+        if (!$members || !(ref $members) || !(@$members)) {
+            warn "$ME: $abbr has no members\n";
+            next;
+        }
+
+        for my $member (@{$members}) {
+            # Basic legislator info (code, district, name, party). Duplicated
+            # for each committee, but should be the same.
+            my $district = $member->{district};
+            $legislators{$chamber}[$district] //= +{
+                chamber => $chamber,
+                map { $_ => $member->{$_} } qw(code district name party title),
+            };
+
+            # IMPROBABLE: check for inconsistencies, because of duplication
+            for my $k (qw(code district name party title)) {
+                $legislators{$chamber}[$district]{$k} eq $member->{$k}
+                    or die "$ME: Internal error: inconsistent $k for $chamber / $district: '$legislators{$chamber}[$district]{$k}' -> '$member->{$k}'";
+            }
+
+            # Link to their page on nmlegis
+            $legislators{$chamber}[$district]{url} = sprintf($Legislator_URL, $member->{code});
+
+            # The non-duplicated parts: membership in committee
+            $legislators{$chamber}[$district]{committees}{$abbr} = +{
+                role => $member->{role},
+                %{$committees->{$abbr}},
+            };
+        }
+    }
+
+    # Crossref against bills, to identify sponsored legislation
+    for my $chamber (sort keys %legislators) {
+        for my $district (1 .. $#{$legislators{$chamber}}) {
+            my $l = $legislators{$chamber}[$district]
+                or next;
+
+            # Sponsored legislation
+            $l->{sponsored} = [];
+            for my $bill (@$bills) {
+                if (grep { $_ eq $l->{code} } @{$bill->{sponsors}}) {
+                    push @{ $l->{sponsored} }, $bill;
+                }
+            }
+        }
+    }
+
+    return \%legislators;
+}
+
+# END   parse_legislators
+###############################################################################
+# BEGIN integrate
+
+sub integrate {
+    my $schedule   = shift;
+    my $committees = shift;
+
+    $committees->{House}{name}  = 'House';
+    $committees->{Senate}{name} = 'Senate';
+
+    # Pass 1: order by meeting time
+    my %by_time;
+    for my $committee ('House', 'Senate', grep { /^[A-Z]+$/ } keys %$schedule) {
+        my $name = $committees->{$committee}{name}
+            or do {
+                # E.g., 2022-02-13 for SFCSJC joint meeting
+                warn "$ME: No name for '$committee'";
+                return $committee;
+            };
+        for my $ym (keys %{$schedule->{$committee}}) {
+            my $mtgs = $schedule->{$committee}{$ym}[0];
+            my $datetime = $mtgs->{datetime} || "${ym}T99:99:99";
+            $mtgs->{committee_code} = $committee;
+            $mtgs->{committee_info} = $committees->{$committee};
+            $by_time{$ym}{$datetime}{$name} = $mtgs;
+        }
+    }
+
+    return \%by_time;
+}
+
+
+# END   integrate
+###############################################################################

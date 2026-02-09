@@ -1,0 +1,84 @@
+- show Chris office, calendar
+
+2023-01-15:
+  - save bills, committees, legislators into actual DB
+
+2023-01-17, via Akkana
+  https://www.nmlegis.gov/Sessions/22%20Regular/Legislator%20Information/
+
+2023-01-23
+  get-schedules reconciliation: include a "conflicts" field?
+  use Mojolicious
+  include legislators when it's just a REFERRAL, not scheduled
+
+  ** scrape HTML, not PDF : HTML, as of this minute, has HGEIC
+     schedule for Friday Jan 27 but there is still no PDF
+
+  show-calendars: week view: boldface committees with published agendas
+
+2023-01-26
+  "no room for HAFC in hSched012623.pdf" -- because HAFC has two
+  meetings, Subcommittee A - room 309 and B, 307. Neither has bills,
+  just parenthesized numbers. Actual HAFC web page, at 0730,
+  does not list any meetings at all.
+
+  color style title tooltip https://stackoverflow.com/questions/2011142/how-to-change-the-style-of-the-title-attribute-inside-an-anchor-tag
+
+  Some sort of AJAX to search for terms on bill page
+
+2023-01-27
+  notification list!
+
+2023-01-30
+  "passed w/o rec" -- show differently than passed?
+  look up official red/blue colors
+
+  add .ics files for committee hearings??
+
+2023-01-31
+  nmlegis-view-agenda --txt STBT 02-02 backtick
+  make camera icon more visible
+
+2023-02-02
+  ugh, remove conflicting meeting times for committee, like hSched0201 HEC
+  use default meeting times
+
+2023-02-03
+   Highlight Chris, Leo
+
+   In committees page, highlight bills of interest
+
+2023-02-05
+  Write a mail tool, that scans delta-json files, cross-checks
+  against bills of interest, and sends email
+
+2023-02-06
+  html/pdf fetches. make consistent %04d
+  one-stop bill page: show dates of committee hearings!
+
+2023-02-08
+  New json field, conflicts/inconsistencies
+  Sigh. In bill display, show CS version?
+  scrape webcast https://sg001-harmony.sliq.net/00293/harmony
+  figure out "Temporary Calendar" in house PDF
+
+2023-02-13
+  don't puke over nonexistent bills (HB393, not in DB yet)
+  bill page: link to PDF
+  all pages: add contact info
+  Handle hFloor021423_Supplemental.pdf
+
+  get-committees: parse calendar, too, and save to compare with PDFs
+
+2023-02-18
+  In By-Schedule tables: include sequence number on agenda for bills?
+
+2023-03-10
+  HB15.html -- eek, code is finding HB153 text!!!
+
+2023-03-12
+  sigh... sFloor031223.pdf has "HOUSE JOINT ... 19TH AMEND"
+
+2025-02-06
+  Add search box! SJR123, Chandler, Rules, etc
+  Add navbars at top

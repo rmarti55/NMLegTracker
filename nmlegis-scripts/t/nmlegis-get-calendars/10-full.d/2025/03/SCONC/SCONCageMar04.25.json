@@ -1,0 +1,17 @@
+{
+   "2025-03-04" : {
+      "09:00:00" : {
+         "SCONC" : {
+            "bills" : ["HB91","SB470","SM14","SM16"],
+            "date" : "2025-03-04",
+            "datetime" : "2025-03-04T09:00:00",
+            "mtime" : "2025-03-01T10:43:24",
+            "name" : "SCONC",
+            "room" : "311",
+            "time" : "9:00 AM",
+            "url" : "2025/03/SCONC/SCONCageMar04.25.pdf",
+            "zoom" : "https://us02web.zoom.us/j/82404382748"
+         }
+      }
+   }
+}

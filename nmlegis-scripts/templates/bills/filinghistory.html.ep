@@ -1,0 +1,37 @@
+% layout 'default';
+% title  'Bill Filing History';
+
+% if (! keys %$by_ymd) {
+<h1>No bills filed in past <%= $n_days %> days</h1>
+%     $self->stash('skip_legend' => 1);
+%     return $_O;
+% }
+<h1>Bill Filing History</h1>
+
+% my $counter = '000';
+% my $checked = '';
+% for my $ymd (reverse sort keys %$by_ymd) {
+%     my $bills = $by_ymd->{$ymd};
+%     my $ymd_friendly = $bills->[0]->{lt}->strftime("%A, %b %e");
+%     if ($ymd eq Time::Piece::localtime->ymd) {
+%         $ymd_friendly = "TODAY ($ymd_friendly)";
+%         $checked = 'checked';
+%     } else {
+%         $ymd_friendly = "on $ymd_friendly";
+%     }
+<div class="wrap-collapsible">
+  <input id="collapsible<%= $counter %>" class="toggle" type="checkbox" <%= $checked %>>
+  <label for="collapsible<%= $counter %>" class="lbl-toggle">Bills introduced <%= $ymd_friendly %> (<%= scalar(@$bills) %>)</label>
+  <div class="collapsible-content">
+    <div class="content-inner">
+    <table class="bills">
+%    for my $b (@$bills) {
+%= include 'bills/_billrow', b => $b, columns => [ 'watch_button', 'id', 'title', 'sponsors', 'status' ]
+%     }
+%     ++$counter;
+%     $checked = '';
+    </table>
+  </div>
+</div>
+<hr/>
+% }

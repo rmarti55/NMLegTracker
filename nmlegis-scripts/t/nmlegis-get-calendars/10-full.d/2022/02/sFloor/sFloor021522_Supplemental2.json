@@ -1,0 +1,14 @@
+{
+   "2022-02-15" : {
+      "00:00:00" : {
+         "Senate" : {
+            "bills" : ["SB212","HB37"],
+            "date" : "2022-02-15",
+            "mtime" : "2022-02-15T20:43:38",
+            "name" : "Senate",
+            "room" : "Senate Floor",
+            "url" : "2022/02/sFloor/sFloor021522_Supplemental2.pdf"
+         }
+      }
+   }
+}

@@ -1,0 +1,10 @@
+% my %title = (H => 'representative', S => 'senator');
+% my $title = $title{$chamber};
+% my $mine = $self->user->get(lc($chamber) . 'district') || -1;
+% my @list = map {
+%     my @selected;
+%     @selected = ('selected' => 'selected') if $_->district == $mine;
+%     [ sprintf("%d : %s", $_->district, $_->name), $_->district, @selected ];
+% } $self->db->legislators($chamber);
+% unshift @list, [ "Please pick your state $title", 0 ];
+%= select_field lc($chamber) . 'district' => \@list;

@@ -1,0 +1,14 @@
+{
+   "2022-02-14" : {
+      "00:00:00" : {
+         "Senate" : {
+            "bills" : ["SB150","SB202","HB8","HB82","HB52"],
+            "date" : "2022-02-14",
+            "mtime" : "2022-02-14T17:39:59",
+            "name" : "Senate",
+            "room" : "Senate Floor",
+            "url" : "2022/02/sFloor/sFloor021422_Supplemental1.pdf"
+         }
+      }
+   }
+}

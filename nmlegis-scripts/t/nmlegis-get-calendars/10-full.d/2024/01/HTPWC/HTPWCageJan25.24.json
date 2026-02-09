@@ -1,0 +1,17 @@
+{
+   "2024-01-25" : {
+      "09:00:00" : {
+         "HTPWC" : {
+            "bills" : ["HB146","HB153","HB28"],
+            "date" : "2024-01-25",
+            "datetime" : "2024-01-25T09:00:00",
+            "mtime" : "2024-01-24T13:41:59",
+            "name" : "HTPWC",
+            "room" : "305",
+            "time" : "9:00 AM",
+            "url" : "2024/01/HTPWC/HTPWCageJan25.24.pdf",
+            "zoom" : "https://us02web.zoom.us/j/85034821535"
+         }
+      }
+   }
+}

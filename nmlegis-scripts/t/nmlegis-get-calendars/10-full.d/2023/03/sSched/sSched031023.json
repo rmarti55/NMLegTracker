@@ -1,0 +1,69 @@
+{
+   "2023-03-10" : {
+      "00:00:00" : {
+         "SJC" : {
+            "bills" : ["SJR14","SJR15","SB426","SB274","SB17","SB428","SB482","SB513","SB315","SB19","HB26","HB31","HB48","HB179","HB195","HB207"],
+            "date" : "2023-03-10",
+            "datetime" : "2023-03-10T00:00:00",
+            "mtime" : "2023-03-09T22:01:38",
+            "name" : "SJC",
+            "room" : "321",
+            "time" : "1/2 hour after floor session",
+            "url" : "2023/03/sSched/sSched031023.pdf",
+            "zoom" : "https://us02web.zoom.us/j/81502543362"
+         }
+      },
+      "08:30:00" : {
+         "SRC" : {
+            "bills" : ["HJR8","HB233"],
+            "date" : "2023-03-10",
+            "datetime" : "2023-03-10T08:30:00",
+            "mtime" : "2023-03-09T22:01:38",
+            "name" : "SRC",
+            "room" : "321",
+            "time" : "8:30 AM",
+            "url" : "2023/03/sSched/sSched031023.pdf",
+            "zoom" : "https://us02web.zoom.us/j/81944191844"
+         }
+      },
+      "09:30:00" : {
+         "SEC" : {
+            "bills" : ["SB357","SB417","HB375"],
+            "date" : "2023-03-10",
+            "datetime" : "2023-03-10T09:30:00",
+            "mtime" : "2023-03-09T22:01:38",
+            "name" : "SEC",
+            "room" : "311",
+            "time" : "9:30 AM",
+            "url" : "2023/03/sSched/sSched031023.pdf",
+            "zoom" : "https://us02web.zoom.us/j/89615593412"
+         }
+      },
+      "10:00:00" : {
+         "SFC" : {
+            "bills" : ["SB385","HB142","HB191"],
+            "date" : "2023-03-10",
+            "datetime" : "2023-03-10T10:00:00",
+            "mtime" : "2023-03-09T22:01:38",
+            "name" : "SFC",
+            "room" : "322",
+            "time" : "10:00 AM",
+            "url" : "2023/03/sSched/sSched031023.pdf",
+            "zoom" : "https://us02web.zoom.us/j/81696207177"
+         }
+      },
+      "13:30:00" : {
+         "SHPAC" : {
+            "bills" : ["HB116","HB134","HB145","HB204","HB314","HB389","HB411","HB512","SB322","SB424","SB440","SB463","SB488","SB497","SB500"],
+            "date" : "2023-03-10",
+            "datetime" : "2023-03-10T13:30:00",
+            "mtime" : "2023-03-09T22:01:38",
+            "name" : "SHPAC",
+            "room" : "311",
+            "time" : "1:30 PM or 1/2 hr after floor session",
+            "url" : "2023/03/sSched/sSched031023.pdf",
+            "zoom" : "https://us02web.zoom.us/j/81287336647"
+         }
+      }
+   }
+}

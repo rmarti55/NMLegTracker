@@ -1,0 +1,17 @@
+{
+   "2022-02-10" : {
+      "00:00:00" : {
+         "HAFC" : {
+            "bills" : ["HB184","HB168","HB43","HB9","HB122","HB173","HB169","HB68","HB151","HB171"],
+            "date" : "2022-02-10",
+            "datetime" : "2022-02-10T00:00:00",
+            "mtime" : "2022-02-11T18:15:31",
+            "name" : "HAFC",
+            "room" : "307",
+            "time" : "At the call of Chair",
+            "url" : "2022/02/HAFC/HAFCageFeb10.22.pdf",
+            "zoom" : "https://us02web.zoom.us/j/89535727091"
+         }
+      }
+   }
+}

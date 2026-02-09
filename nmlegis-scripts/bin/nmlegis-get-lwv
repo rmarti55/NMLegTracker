@@ -1,0 +1,211 @@
+#!/usr/bin/perl
+#
+# nmlegis-get-lwv - get the LWV tracking list
+#
+package ESM::NMLegisGetLWV;
+
+use v5.14;
+use strict;
+use warnings;
+use utf8;
+use open qw( :encoding(UTF-8) :std );
+
+(our $ME = $0) =~ s|.*/||;
+(our $VERSION = '$Revision: 1.30 $ ') =~ tr/[0-9].//cd;
+
+use NMLegis                     qw(:all);
+use NMLegis::Bills;
+use NMLegis::Committees;
+use NMLegis::Legislators;
+
+###############################################################################
+# BEGIN user-customizable section
+
+our $URL = "https://nmbilltracker.com/static/tracking/26/LWVtrack$YYYY.json";
+
+our $Destdir = '/var/www/nmlegis/lwv';
+
+# END   user-customizable section
+###############################################################################
+
+use FindBin                     qw($Bin);
+use File::Slurp                 qw(read_file);
+use JSON::XS;
+use LWP::Simple                 qw(mirror);
+use Time::Piece;
+
+use HTML::Entities;
+use HTML::TreeBuilder;
+
+###############################################################################
+# BEGIN boilerplate args checking, usage messages
+
+sub usage {
+    print  <<"END_USAGE";
+Usage: $ME [OPTIONS] PATH
+
+blah blah blah
+
+OPTIONS:
+
+  -v, --verbose  show verbose progress indicators
+  -n, --dry-run  make no actual changes
+
+  --help         display this message
+  --man          display program man page
+  --version      display program name and version
+END_USAGE
+
+    exit;
+}
+
+# Command-line options.  Note that this operates directly on @ARGV !
+our $debug   = 0;
+our $force   = 0;
+our $verbose = 0;
+our $NOT     = '';              # print "blahing the blah$NOT\n" if $debug
+sub handle_opts {
+    use Getopt::Long;
+    GetOptions(
+        'debug!'     => \$debug,
+        'dry-run|n!' => sub { $NOT = ' [NOT]' },
+        'force'      => \$force,
+        'verbose|v'  => \$verbose,
+
+        help         => \&usage,
+        version      => sub { print "$ME version $VERSION\n"; exit 0 },
+    ) or die "Try `$ME --help' for help\n";
+}
+
+# END   boilerplate args checking, usage messages
+###############################################################################
+
+############################## CODE BEGINS HERE ###############################
+
+# The term is "modulino".
+__PACKAGE__->main()                                     unless caller();
+
+# Main code.
+sub main {
+    # Note that we operate directly on @ARGV, not on function parameters.
+    # This is deliberate: it's because Getopt::Long only operates on @ARGV
+    # and there's no clean way to make it use @_.
+    handle_opts();                      # will set package globals
+
+    my ($updated, $path) = fetch_and_or_cache($URL, $Destdir);
+
+    exit 0 if !$updated && !$force;
+
+    json_to_txt($path, "$Destdir/bills.txt");
+    exec("$Bin/nmlegis-show-misc", $Destdir);
+}
+
+###############################################################################
+# BEGIN utils
+
+# In large part duped from NMLegis::Scrape
+# FIXME: refactor that module so it handles non-nmlegis URLs?
+sub fetch_and_or_cache {
+    my $url     = shift;
+    my $destdir = shift;
+    (my $cache_file = $url) =~ s|^.*/||;
+
+    return (0, "$destdir/$cache_file") if $debug;
+
+    my $code = mirror($url, "$destdir/$cache_file");
+    return (0, "$destdir/$cache_file") if $code == 304;    # unmodified
+
+    die "$ME: $url : $code" if $code >= 400;
+    -e "$destdir/$cache_file"
+        or die "$ME: mirror() did not actually mirror $url - code=$code";
+
+    print "New tracking list!\n";
+    if (-d "$destdir/.hg") {
+        system('hg', '--cwd' => $destdir, 'addremove', $cache_file);
+        system('hg', '--cwd' => $destdir, 'diff');
+        system('hg', '--cwd' => $destdir, 'commit', "-mcommit from $ME", $cache_file);
+    }
+
+    return (1, "$destdir/$cache_file");
+}
+
+sub json_to_txt {
+    my $json_in = shift;
+    my $txt_out = shift;
+
+    my $txt_tmp = "$txt_out.tmp.$$";
+    open my $fh_out, '>', $txt_tmp
+        or die "$ME: Cannot create $txt_tmp: $!\n";
+
+    my $bills = decode_json(read_file($json_in));
+    for my $block (@{$bills->{tracking}}) {
+        my $topic = $block->{topic} || do {
+            warn "$ME: Missing 'topic' in block in json\n";
+            '[No Topic]';
+        };
+
+        print { $fh_out } "\n", $topic, "\n\n";
+
+        # Hand-maintained lists can go wrong
+        my %dup;
+
+      BILL:
+        for my $entry (@{$block->{bills}}) {
+            my $title   = $entry->{title}   || '[No title]';
+            my $sponsor = $entry->{sponsor} || '[No sponsor]';
+            my $oppose  = ($entry->{oppose} ? '-' : '');
+
+            my $billno = $entry->{billno} || do {
+                warn "$ME: $topic > Empty billno: $title / $sponsor\n"
+                    unless localtime->yday < 21;
+                next BILL;
+            };
+
+            # "SB 34"
+            $billno =~ s/\s+//g;
+
+            # Skip dups
+            if ($dup{$billno}++) {
+                warn "$ME: $topic : Dup entry for $billno\n";
+                next BILL;
+            }
+
+            # Skip Senate prefiles with no number
+            if ($billno !~ /\d$/) {
+                warn "$ME: $topic > Invalid billno '$billno' ($title / $sponsor)\n"
+                    unless localtime->yday < 21;
+                next BILL;
+            }
+
+            # Skip nonexistent bills (HJR5 on 2024-01-18)
+            my $b = NMLegis::Bills->new($billno);
+            if (! $b->title) {
+                warn "$ME: $topic > Nonexistent bill '$billno' ($title / $sponsor)\n";
+                next BILL;
+            }
+
+            printf { $fh_out } "%-8s %s\n", $billno . $oppose, $entry->{title} || '???';
+        }
+    }
+
+    close $fh_out
+        or die "$ME: Error writing $txt_tmp: $!\n";
+    rename $txt_tmp => $txt_out
+        or die "$ME: Error renaming $txt_tmp: $!\n";
+
+    (my $destdir = $txt_out)  =~ s|/[^/]+$||;
+    (my $txt_base = $txt_out) =~ s|^.*/||;
+    if (-d "$destdir/.hg") {
+        system('hg', '--cwd' => $destdir, 'addremove', $txt_base);
+        system('hg', '--cwd' => $destdir, 'diff');
+        system('hg', '--cwd' => $destdir, 'commit', "-mcommit from $ME", $txt_base);
+    }
+
+
+}
+
+
+# END   utils
+###############################################################################
+
+1;

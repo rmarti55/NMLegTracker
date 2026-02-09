@@ -1,0 +1,17 @@
+{
+   "2025-02-04" : {
+      "09:00:00" : {
+         "HRDLC" : {
+            "bills" : ["HB172"],
+            "date" : "2025-02-04",
+            "datetime" : "2025-02-04T09:00:00",
+            "mtime" : "2025-01-31T08:41:28",
+            "name" : "HRDLC",
+            "room" : "305",
+            "time" : "9:00 AM",
+            "url" : "2025/02/HRDLC/HRDLCageFeb04.25.pdf",
+            "zoom" : "https://us02web.zoom.us/j/83538472931"
+         }
+      }
+   }
+}

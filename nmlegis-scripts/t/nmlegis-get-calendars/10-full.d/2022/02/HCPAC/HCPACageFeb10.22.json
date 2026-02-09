@@ -1,0 +1,17 @@
+{
+   "2022-02-10" : {
+      "13:30:00" : {
+         "HCPAC" : {
+            "bills" : ["SB43"],
+            "date" : "2022-02-10",
+            "datetime" : "2022-02-10T13:30:00",
+            "mtime" : "2022-02-11T18:15:31",
+            "name" : "HCPAC",
+            "room" : "317",
+            "time" : "1:30 PM (or 15 minutes following the floor session)",
+            "url" : "2022/02/HCPAC/HCPACageFeb10.22.pdf",
+            "zoom" : "https://us02web.zoom.us/j/82353539692"
+         }
+      }
+   }
+}

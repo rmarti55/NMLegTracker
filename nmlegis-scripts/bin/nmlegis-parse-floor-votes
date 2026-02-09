@@ -1,0 +1,418 @@
+#!/usr/bin/perl
+#
+# nmlegis-parse-floor-votes - parse floor vote PDFs
+#
+package ESM::NMLegis::ParseFloorVotes;
+
+use v5.14;
+use strict;
+use warnings;
+
+use utf8;
+use open qw( :encoding(UTF-8) :std );
+
+(our $ME = $0) =~ s|.*/||;
+(our $VERSION = '$Revision: 1.30 $ ') =~ tr/[0-9].//cd;
+
+use NMLegis                     qw(:all);
+use NMLegis::Legislators;
+
+use Date::Parse;
+use File::stat;
+use File::Path                  qw(make_path);
+use File::Slurp;
+use HTML::Entities;
+use HTML::Parser;
+use JSON::XS;
+use Time::Piece;
+
+###############################################################################
+# BEGIN user-customizable section
+
+# For debugging
+our $ONLY_WANT;
+
+our $Schema = '20250222';
+
+# Individual files by bill and chamber
+our $Subdir = "floor-votes/$YYYY";
+our $Multi_File_Dir = "$Data_Dir/$Subdir";
+our $Single_File    = "$Data_Dir/floor-votes-$YYYY.json";
+
+# END   user-customizable section
+###############################################################################
+
+###############################################################################
+# BEGIN boilerplate args checking, usage messages
+
+sub usage {
+    print  <<"END_USAGE";
+Usage: $ME [OPTIONS] [DEST PATH]
+
+$ME parses committee reports from HTML files,
+obtaining individual votes and writing them to tab-separated files.
+
+OPTIONS:
+
+  -v, --verbose  show verbose progress indicators
+  -n, --dry-run  make no actual changes
+
+  --help         display this message
+  --version      display program name and version
+END_USAGE
+
+    exit;
+}
+
+# Command-line options.  Note that this operates directly on @ARGV !
+our $debug   = 0;
+our $force   = 0;
+our $verbose = 0;
+our $NOT     = '';              # print "blahing the blah$NOT\n" if $debug
+sub handle_opts {
+    use Getopt::Long;
+    GetOptions(
+        'debug!'     => \$debug,
+        'dry-run|n!' => sub { $NOT = ' [NOT]' },
+        'force'      => \$force,
+        'verbose|v'  => \$verbose,
+
+        help         => \&usage,
+        version      => sub { print "$ME version $VERSION\n"; exit 0 },
+    ) or die "Try `$ME --help' for help\n";
+}
+
+# END   boilerplate args checking, usage messages
+###############################################################################
+
+############################## CODE BEGINS HERE ###############################
+
+# The term is "modulino".
+__PACKAGE__->main()                                     unless caller();
+
+# Main code.
+sub main {
+    # Note that we operate directly on @ARGV, not on function parameters.
+    # This is deliberate: it's because Getopt::Long only operates on @ARGV
+    # and there's no clean way to make it use @_.
+    handle_opts();                      # will set package globals
+
+    # Fetch command-line arguments.  Barf if too many.
+    my $copy_to = shift(@ARGV);
+    die "$ME: Too many arguments; try $ME --help\n"                 if @ARGV;
+
+    # Called with HB123? Parse only that one
+    if (($copy_to||'') =~ /^(H|S)[A-Z]{1,3}\d{1,4}$/) {
+        $ONLY_WANT = $copy_to;
+        undef $copy_to;
+        $NOT = " [NOT]";
+    }
+
+    # FIXME: do code here
+    my $reports = find_and_parse();
+#    use Data::Dump; dd $reports;
+
+    unless ($NOT) {
+        NMLegis::write_json_outfile($reports, $Single_File);
+        if ($copy_to) {
+            system('rsync', '-a', $Single_File => $copy_to);
+        }
+    }
+
+
+}
+
+####################
+#  find_and_parse  #  Main loop: find all floor reports and parse them
+####################
+sub find_and_parse {
+    my %reports = (schema => $Schema, session => $YYYY % 100);
+
+    # FIXME: refactor this
+    my $mirror_dir = "$ENV{HOME}/.cache/nmlegis/mirror-bills/$YYYY/votes";
+
+    opendir my $dir_fh, $mirror_dir
+        or die "$ME: Cannot opendir $mirror_dir: $!";
+  PDF:
+    for my $ent (readdir $dir_fh) {
+        next unless $ent =~ /^[A-Z]/;
+        $ent =~ /^(H|S)([A-Z]+)0*(\d+)(H|S)VOTE\.PDF$/
+            or do {
+                warn "$ME: weird file: $mirror_dir/$ent - ignoring\n";
+                next;
+            };
+        my ($chamber, $type, $billno, $floor) = ($1, $2, $3, $4);
+
+        # Used later, to match file mtimes
+        my $st_pdf = stat("$mirror_dir/$ent")
+            or die "$ME: IMPOSSIBLE! Could not stat $mirror_dir/$ent";
+
+        # Sigh... 2025 HMO19HVOTE is letter O, not number zero
+        $type =~ s/O+$//;
+
+        my $billcode = "$chamber$type$billno";
+
+        # For debugging: if envariable is set, only process this file
+        if ($ONLY_WANT) {
+            next unless $billcode eq $ONLY_WANT;
+        }
+
+        # This script is expensive. Avoid recomputing.
+        my $outfile = "$Multi_File_Dir/$billcode-$floor.json";
+        if (my $st_json = stat($outfile)) {
+            if ($st_json->mtime == $st_pdf->mtime) {
+                if ($force) {
+                    warn "$ME: recomputing $ent due to --force\n";
+                }
+                else {
+                    $reports{votes}{$billcode}{$floor} = decode_json(read_file($outfile));
+                    next PDF;
+                }
+            }
+            else {
+                warn "$ME: recomputing $billcode-$floor because mtimes differ\n";
+            }
+        }
+
+        if (my $parsed = parse_vote($floor, $billcode, "$mirror_dir/$ent")) {
+            # FIXME - can this happen?
+            # Answer: yes it can, 2025 HM004H and HM0004
+            if (exists $reports{votes}{$billcode}{$floor}) {
+                warn "$ME: DUPLICATE VOTE! $mirror_dir/$ent"
+                    unless $billcode eq 'HM4' || $billcode eq 'HM19';
+            }
+            $reports{votes}{$billcode}{$floor} = $parsed;
+
+            # FIXME!!!
+            no warnings 'once';
+            (my $vote_base = $NMLegis::Bills::Bill_Source_URL) =~ s|(Sessions).*|$1/25%20Regular/votes|;
+            $parsed->{rollcall} = "$vote_base/$ent";
+
+            unless ($NOT) {
+                NMLegis::write_json_outfile($parsed, $outfile);
+                utime $st_pdf->mtime, $st_pdf->mtime, $outfile;
+            }
+        }
+        else {
+            warn "$ME: $mirror_dir/$ent: unable to parse, skipping\n"
+                unless $ent =~ /SB0236SVOTE/;
+        }
+    }
+
+    return \%reports;
+}
+
+################
+#  parse_vote  #  Parse one vote file
+################
+sub parse_vote {
+    my $chamber = shift;
+    my $bill    = shift;
+    my $path    = shift;
+    my %info;
+    my %my_count;
+
+    print $path if $debug;
+
+    my @columns;
+#    my @cmd = ('pdftohtml', '-s', '-i', '-stdout', $path);
+    my @cmd = ('pdftotext', '-q', '-layout', '-nopgbrk', $path, '-');
+    open my $fh, '-|', @cmd
+        or die "$ME: Cannot fork @cmd: $!";
+    while (my $line = <$fh>) {
+        chomp $line;
+
+        # Both House and Senate
+        if ($line =~ m!^\s*LEGISLATIVE\s+DAY.*\sDATE:\s*(\d+)/(\d+)/(\d+)!) {
+            my ($m, $d, $y) = ($1, $2, $3);
+            $y += 2000 if $y < 100;
+            # Directory can contain spurious crap from prior years: SB0236SVOTE
+            return if $y != $YYYY;
+            $info{date} = sprintf("%d-%02d-%02d", $y, $m, $d);
+        }
+        # House only
+        elsif ($line =~ /X\*.*Virtual\s+Voting/ || $line =~ /CERTIFIED/) {
+            last;
+        }
+        # House only: heading at top with bill name
+        elsif ($line =~ /^\s{10,}((H|S)[A-Z]+)\s*(\d+)\s*$/) {
+            $bill eq "$1$3"
+                or warn "$ME: WEIRD! bad bill '$1$3' in $path\n";
+        }
+        # Senate spells it out
+        elsif ($line =~ /^\s{10,}(.* SUBSTITUTE FOR\s+)((H|S)[A-Z]+)\s+([A-Z\s]+)\s(\d+)/) {
+            my ($ch, $tp_long, $n) = ($3, $4, $5);
+            my $tp = join('', map { substr($_, 0, 1) } split ' ', $tp_long);
+            $bill eq "$ch$tp$n"
+                or warn "$ME: WEIRD! bad bill '$ch$tp$n' in $path\n";
+        }
+
+        # House only
+        elsif ($line =~ /^\s{0,2}YEAS:\s*(\d+)\s+NAYS:\s*(\d+)\s+PNV:\s*(\d+)\s+EXCUSED:\s+(\d+)\s+ABSENT:\s*(\d+)/) {
+            $info{yea}     = $1;
+            $info{nay}     = $2;
+            $info{pnv}     = $3;
+            $info{exc} = $4;
+            $info{absent}  = $5;
+        }
+
+        # House only
+        elsif ($line =~ /^\s*REPRESENTATIVE\s+YEA.*\sREPRESENTATIVE/) {
+            if (@columns) {
+                die "$ME: multiple REPRESENTATIVE lines in $path";
+            }
+            my $column = 0;
+            while ($line =~ s/^(\S+)(\s+)//) {
+                my $len = length("$1$2");
+                push @columns, [ $1, $column, $len ];
+                $column += $len;
+            }
+            if ($line =~ s/^(\S+)$//) {
+                push @columns, [ $1, $column, length($1) ];
+            }
+        }
+
+        # Senate only. Annoying, because there's no SENATOR title
+        elsif ($line =~ /^\s{10,}YES\s/) {
+            if (@columns) {
+                die "$ME: multiple COLUMN HEADING lines in $path";
+            }
+            $line =~ s/^(\s+)//;
+            @columns = ([ 'SENATOR', 0, length($1) ]);
+            my $column = length($1);
+            while ($line =~ s/^(\S+)(\s+)//) {
+                my $len = length("$1$2");
+                if ($len > 20) {
+                    my $name_length = $columns[0][2];
+                    push @columns, [ 'SENATOR', $column, $name_length ];
+                    $column += $name_length;
+                    $len -= $name_length;
+                }
+                push @columns, [ $1, $column, $len ];
+                $column += $len;
+            }
+            if ($line =~ s/^(\S+)$//) {
+                push @columns, [ $1, $column, length($1) ];
+            }
+            #use Data::Dump; dd \@columns; exit 0;
+        }
+
+        # Senate only
+        elsif ($line =~ /^\s*(PASSED|FAILED\s+TO\s+PASS):\s+(\d+)-(\d+)/) {
+            # FIXME
+        }
+
+        elsif (@columns) {
+            #use Data::Dump; dd \@columns; exit 0;
+
+            my $lcode;
+            for my $c (@columns) {
+                my ($heading, $c0, $len) = @$c;
+                if ($c0 < length($line)) {
+                    my $value = substr($line, $c0, $len);
+                    $value =~ s/^\s+|\s+$//g;
+                    if ($heading =~ /^(REP|SEN)/) {
+                        my $lastname = $value;
+                        my $initial;
+                        if ($lastname =~ s/[,\s]+([A-Z.\s]+)$//) {
+                            my $what = $1;
+                            if ($what =~ /^I+$/) {
+                                # so-and-so the II
+                                $lastname .= " $what";
+                            }
+                            else {
+                                $initial = join('.*\s', grep { /[A-Z]/ } split('',$what));
+                            }
+
+                        }
+
+                        # FIXME: senate only. The last row is just TOTAL
+                        if ($lastname) {
+                            if ($lastname =~ /^TOTAL\s*=/) {
+                                $lcode = 'TOTAL';
+                            }
+                            else {
+                                # Real legislator
+                                my $l = NMLegis::Legislators->by_name($chamber, $lastname, $initial)
+                                    or do {
+                                        warn "$ME: could not find '$lastname $initial' in $chamber from $path";
+                                        undef $lcode;
+                                        next;
+                                    };
+                                $lcode = $l->code
+                                    or die "Found legislator '$chamber $lastname' but no code";
+                            }
+                        }
+                    }
+                    elsif ($value) {
+                        if (! $lcode) {
+                            warn "$ME: WEIRD: found $heading '$value' for noone in $path";
+                            next;
+                        }
+                        if ($lcode eq 'TOTAL') {
+                            $info{lc $heading} = $value;
+                        }
+                        else {
+                            # FIXME! hash destroys order. Do we care?
+                            if (exists $info{vote}{$lcode}) {
+                                die "$ME: $path: multiple votes for $lcode";
+                            }
+                            $info{vote}{$lcode} = lc($heading);
+                            ++$my_count{lc($heading)};
+                        }
+                    }
+                }
+            }
+        }
+        else {
+            #print $line," \n";
+        }
+    }
+    close $fh
+        or die "$ME: Error running @cmd";
+
+    for my $k (keys %my_count) {
+        $my_count{$k} == $info{$k}
+            or warn "$ME: $k: I got $my_count{$k}, doc says $info{$k}, in $path\n";
+    }
+
+
+    # Reorganize
+    exists $info{date}
+        or die "$ME: no date in $path";
+    exists $info{vote}
+        or die "$ME: no votes found in $path";
+    my %retval = (date => $info{date});
+
+    my %translate = (
+        yea => 'yes',
+        nay => 'no',
+        exc => 'excused',
+        abs => 'absent',
+    );
+
+    for my $lcode (sort keys %{$info{vote}}) {
+        my $vote = $translate{$info{vote}{$lcode}} || $info{vote}{$lcode};
+        push @{$retval{$vote}}, $lcode;
+    }
+
+    #use Data::Dump; dd \%retval;
+    return \%retval;
+}
+
+
+sub _by_bill_number {
+    if ($a =~ /^([A-Z]+)([0-9]+)$/) {
+        my ($a_type, $a_number) = ($1, $2);
+
+        if ($b =~ /^([A-Z]+)([0-9]+)$/) {
+            my ($b_type, $b_number) = ($1, $2);
+
+            return $a_type cmp $b_type || $a_number <=> $b_number;
+        }
+        die "foo1 '$a' '$b'";
+    }
+    die "foo2 $a $b";
+}
+
+1;

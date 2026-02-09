@@ -1,0 +1,227 @@
+{
+   "2022-02-09" : {
+      "00:00:00" : {
+         "SFC" : {
+            "bills" : ["SB7","SB125"],
+            "date" : "2022-02-09",
+            "datetime" : "2022-02-09T00:00:00",
+            "mtime" : "2022-02-11T18:15:31",
+            "name" : "SFC",
+            "room" : "322",
+            "time" : "Call of Chair",
+            "url" : "/home/esm/.cache/nmlegis/get-calendars/2022/02/SFC/SFCageFeb09.22.pdf"
+         }
+      },
+      "08:00:00" : {
+         "HEC" : {
+            "bills" : ["HB184","HB193","HB159","HM33"],
+            "date" : "2022-02-09",
+            "datetime" : "2022-02-09T08:00:00",
+            "mtime" : "2022-02-11T18:15:31",
+            "name" : "HEC",
+            "room" : "309",
+            "time" : "8:00 AM",
+            "url" : "/home/esm/.cache/nmlegis/get-calendars/2022/02/HEC/HECageFeb09.22.pdf",
+            "zoom" : "https://us02web.zoom.us/j/82380513568"
+         },
+         "HGEIC" : {
+            "bills" : ["HB6","HB191","SB6"],
+            "date" : "2022-02-09",
+            "datetime" : "2022-02-09T08:00:00",
+            "mtime" : "2022-02-11T18:15:31",
+            "name" : "HGEIC",
+            "room" : "305",
+            "time" : "8:00 AM",
+            "url" : "/home/esm/.cache/nmlegis/get-calendars/2022/02/hSched/hSched020922.pdf",
+            "zoom" : "https://us02web.zoom.us/j/88201222358"
+         }
+      },
+      "08:30:00" : {
+         "HHHC" : {
+            "bills" : [],
+            "date" : "2022-02-09",
+            "datetime" : "2022-02-09T08:30:00",
+            "mtime" : "2022-02-11T18:15:31",
+            "name" : "HHHC",
+            "room" : "315",
+            "time" : "8:30 AM",
+            "url" : "/home/esm/.cache/nmlegis/get-calendars/2022/02/hSched/hSched020922.pdf"
+         },
+         "HTRC" : {
+            "bills" : ["HB207","HB48","HB49","HB129"],
+            "date" : "2022-02-09",
+            "datetime" : "2022-02-09T08:30:00",
+            "mtime" : "2022-02-11T18:15:31",
+            "name" : "HTRC",
+            "room" : "317",
+            "time" : "8:30 AM",
+            "url" : "/home/esm/.cache/nmlegis/get-calendars/2022/02/hSched/hSched020922.pdf",
+            "zoom" : "https://us02web.zoom.us/j/84861630345"
+         }
+      },
+      "09:00:00" : {
+         "SEC" : {
+            "bills" : ["SB243"],
+            "date" : "2022-02-09",
+            "datetime" : "2022-02-09T09:00:00",
+            "mtime" : "2022-02-11T18:15:31",
+            "name" : "SEC",
+            "room" : "311",
+            "time" : "9:00 AM",
+            "url" : "/home/esm/.cache/nmlegis/get-calendars/2022/02/sSched/sSched020922.pdf",
+            "zoom" : "https://us02web.zoom.us/j/83582297843"
+         },
+         "SRC" : {
+            "bills" : ["SJR7"],
+            "date" : "2022-02-09",
+            "datetime" : "2022-02-09T09:00:00",
+            "mtime" : "2022-02-11T18:15:31",
+            "name" : "SRC",
+            "room" : "321",
+            "time" : "9:00 AM",
+            "url" : "/home/esm/.cache/nmlegis/get-calendars/2022/02/sSched/sSched020922.pdf",
+            "zoom" : "https://us02web.zoom.us/j/86412647187"
+         }
+      },
+      "11:00:00" : {
+         "House" : {
+            "bills" : ["HB71","HB82","HB69","HB13","HB22","HB46","HB62","HB84","HB86","HB95","HB99","HB102","HB167","HJR1","HM5","HM21","HM11","HM26","HM4","HM15","HM18","HM22","HM3","HM24","HM36","HM1","HM7","HM10","HM13","HM17","HM31","HM34","HM37","HM39","HM40","HM41","HM42","HM50","HM51","HB227","HB57","HB92","HB96","HB101","HB104","HB116","HB119","HB124","HB126","HB144","HJM1"],
+            "date" : "2022-02-09",
+            "datetime" : "2022-02-09T11:00:00",
+            "mtime" : "2022-02-11T18:15:31",
+            "name" : "House",
+            "room" : "House Floor",
+            "time" : "11:00 AM",
+            "url" : "/home/esm/.cache/nmlegis/get-calendars/2022/02/hFloor/hFloor020922.pdf"
+         },
+         "Senate" : {
+            "bills" : ["SB2","SB174","SB36","SB172","SB34","SJR10","SJM2","SM1","SM4","SM5","SM8","SM17","SM19","SM21","SM22","SM23","SM24"],
+            "date" : "2022-02-09",
+            "datetime" : "2022-02-09T11:00:00",
+            "mtime" : "2022-02-11T18:15:31",
+            "name" : "Senate",
+            "room" : "Senate Floor",
+            "time" : "11:00 AM",
+            "url" : "/home/esm/.cache/nmlegis/get-calendars/2022/02/sFloor/sFloor020922.pdf"
+         }
+      },
+      "13:30:00" : {
+         "HAFC" : {
+            "bills" : ["HB165","HB166","HB79","HB121","HB122","HB131","HB143","HB175","HB108","HB7","HB151","HB164"],
+            "date" : "2022-02-09",
+            "datetime" : "2022-02-09T13:30:00",
+            "mtime" : "2022-02-11T18:15:31",
+            "name" : "HAFC",
+            "room" : "307",
+            "time" : "1:30 PM or at the call of the Chair",
+            "url" : "/home/esm/.cache/nmlegis/get-calendars/2022/02/hSched/hSched020922.pdf",
+            "zoom" : "https://us02web.zoom.us/j/87397354067"
+         },
+         "HCEDC" : {
+            "bills" : ["HB228"],
+            "date" : "2022-02-09",
+            "datetime" : "2022-02-09T13:30:00",
+            "mtime" : "2022-02-11T18:15:31",
+            "name" : "HCEDC",
+            "room" : "317",
+            "time" : "1:30 PM",
+            "url" : "/home/esm/.cache/nmlegis/get-calendars/2022/02/hSched/hSched020922.pdf",
+            "zoom" : "https://us02web.zoom.us/j/88683384400"
+         },
+         "HJC" : {
+            "bills" : ["HB196","HB145","HJR2"],
+            "date" : "2022-02-09",
+            "datetime" : "2022-02-09T13:30:00",
+            "mtime" : "2022-02-11T18:15:31",
+            "name" : "HJC",
+            "room" : "309",
+            "time" : "1:30 PM",
+            "url" : "/home/esm/.cache/nmlegis/get-calendars/2022/02/hSched/hSched020922.pdf",
+            "zoom" : "https://us02web.zoom.us/j/85381395136"
+         },
+         "SHPAC" : {
+            "bills" : ["SB167","SB202","SM7","HB52","HB65","HB132"],
+            "date" : "2022-02-09",
+            "datetime" : "2022-02-09T13:30:00",
+            "mtime" : "2022-02-11T18:15:31",
+            "name" : "SHPAC",
+            "room" : "311",
+            "time" : "1:30 PM or 1/2 hr after session",
+            "url" : "/home/esm/.cache/nmlegis/get-calendars/2022/02/sSched/sSched020922.pdf",
+            "zoom" : "https://us02web.zoom.us/j/87967039414"
+         },
+         "SJC" : {
+            "bills" : ["SB8","SJR6","SB84","SB54","SB12"],
+            "date" : "2022-02-09",
+            "datetime" : "2022-02-09T13:30:00",
+            "mtime" : "2022-02-11T18:15:31",
+            "name" : "SJC",
+            "room" : "321",
+            "time" : "1:30 PM or 1/2 hr after session",
+            "url" : "/home/esm/.cache/nmlegis/get-calendars/2022/02/sSched/sSched020922.pdf",
+            "zoom" : "https://us02web.zoom.us/j/83347538157"
+         }
+      }
+   },
+   "2022-02-10" : {
+      "08:00:00" : {
+         "HAAWC" : {
+            "bills" : ["HB24","HB83","HB186","HB177","HM44"],
+            "date" : "2022-02-10",
+            "datetime" : "2022-02-10T08:00:00",
+            "mtime" : "2022-02-11T18:15:31",
+            "name" : "HAAWC",
+            "room" : "315",
+            "time" : "8:00 AM",
+            "url" : "/home/esm/.cache/nmlegis/get-calendars/2022/02/hSched/hSched020922.pdf",
+            "zoom" : "https://us02web.zoom.us/j/86337399512"
+         }
+      },
+      "09:00:00" : {
+         "HENRC" : {
+            "bills" : [],
+            "date" : "2022-02-10",
+            "datetime" : "2022-02-10T09:00:00",
+            "mtime" : "2022-02-11T18:15:31",
+            "name" : "HENRC",
+            "room" : "317",
+            "time" : "9:00 AM",
+            "url" : "/home/esm/.cache/nmlegis/get-calendars/2022/02/hSched/hSched020922.pdf"
+         },
+         "SCONC" : {
+            "bills" : ["SB252","HB37"],
+            "date" : "2022-02-10",
+            "datetime" : "2022-02-10T09:00:00",
+            "mtime" : "2022-02-11T18:15:31",
+            "name" : "SCONC",
+            "room" : "311",
+            "time" : "9:00 AM",
+            "url" : "/home/esm/.cache/nmlegis/get-calendars/2022/02/sSched/sSched020922.pdf",
+            "zoom" : "https://us02web.zoom.us/j/86543845863"
+         }
+      },
+      "13:30:00" : {
+         "HCPAC" : {
+            "bills" : [],
+            "date" : "2022-02-10",
+            "datetime" : "2022-02-10T13:30:00",
+            "mtime" : "2022-02-11T18:15:31",
+            "name" : "HCPAC",
+            "room" : "317",
+            "time" : "1:30 PM (or 15 minutes following the floor session)",
+            "url" : "/home/esm/.cache/nmlegis/get-calendars/2022/02/hSched/hSched020922.pdf"
+         },
+         "HLVMC" : {
+            "bills" : ["HB195"],
+            "date" : "2022-02-10",
+            "datetime" : "2022-02-10T13:30:00",
+            "mtime" : "2022-02-11T18:15:31",
+            "name" : "HLVMC",
+            "room" : "315",
+            "time" : "1:30 PM or 15 minutes after floor session",
+            "url" : "/home/esm/.cache/nmlegis/get-calendars/2022/02/hSched/hSched020922.pdf",
+            "zoom" : "https://us02web.zoom.us/j/89015442467"
+         }
+      }
+   }
+}

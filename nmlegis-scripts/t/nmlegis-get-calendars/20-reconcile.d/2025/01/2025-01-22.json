@@ -1,0 +1,86 @@
+{
+   "2025-01-22" : {
+      "00:00:00" : {
+         "SFC" : {
+            "bills" : ["HB1"],
+            "date" : "2025-01-22",
+            "datetime" : "2025-01-22T00:00:00",
+            "mtime" : "2025-01-22T11:39:15",
+            "name" : "SFC",
+            "room" : "322",
+            "time" : "At the call of the Chair",
+            "url" : "/home/esm/.cache/nmlegis/get-calendars/2025/01/SFC/SFCageJan22.25.pdf",
+            "zoom" : "https://us02web.zoom.us/j/81696207177"
+         }
+      },
+      "09:00:00" : {
+         "House" : {
+            "bills" : [],
+            "date" : "2025-01-22",
+            "datetime" : "2025-01-22T09:00:00",
+            "mtime" : "2025-01-21T18:19:32",
+            "name" : "House",
+            "room" : "House Floor",
+            "time" : "9:00 AM",
+            "url" : "/home/esm/.cache/nmlegis/get-calendars/2025/01/hFloor/hFloor012225.pdf"
+         }
+      },
+      "10:00:00" : {
+         "HGEIC" : {
+            "bills" : [],
+            "date" : "2025-01-22",
+            "datetime" : "2025-01-22T10:00:00",
+            "mtime" : "2025-01-21T18:17:47",
+            "name" : "HGEIC",
+            "room" : "305",
+            "time" : "10:00 AM",
+            "url" : "/home/esm/.cache/nmlegis/get-calendars/2025/01/hSched/hSched012225.pdf"
+         },
+         "HHHC" : {
+            "bills" : [],
+            "date" : "2025-01-22",
+            "datetime" : "2025-01-22T10:00:00",
+            "mtime" : "2025-01-21T18:17:47",
+            "name" : "HHHC",
+            "room" : "307",
+            "time" : "10:00 AM",
+            "url" : "/home/esm/.cache/nmlegis/get-calendars/2025/01/hSched/hSched012225.pdf"
+         },
+         "SRC" : {
+            "bills" : [],
+            "date" : "2025-01-22",
+            "datetime" : "2025-01-22T10:00:00",
+            "mtime" : "2025-01-21T18:30:12",
+            "name" : "SRC",
+            "room" : "321",
+            "time" : "10:00 AM",
+            "url" : "/home/esm/.cache/nmlegis/get-calendars/2025/01/sSched/sSched012225.pdf",
+            "zoom" : "https://us02web.zoom.us/j/81944191844"
+         }
+      },
+      "11:00:00" : {
+         "Senate" : {
+            "bills" : [],
+            "date" : "2025-01-22",
+            "datetime" : "2025-01-22T11:00:00",
+            "mtime" : "2025-01-21T18:30:18",
+            "name" : "Senate",
+            "room" : "Senate Floor",
+            "time" : "11:00 AM",
+            "url" : "/home/esm/.cache/nmlegis/get-calendars/2025/01/sFloor/sFloor012225.pdf"
+         }
+      },
+      "13:30:00" : {
+         "HJC" : {
+            "bills" : [],
+            "date" : "2025-01-22",
+            "datetime" : "2025-01-22T13:30:00",
+            "mtime" : "2025-01-21T18:17:47",
+            "name" : "HJC",
+            "room" : "309",
+            "time" : "1:30 PM",
+            "url" : "/home/esm/.cache/nmlegis/get-calendars/2025/01/hSched/hSched012225.pdf"
+         }
+      }
+   }
+}

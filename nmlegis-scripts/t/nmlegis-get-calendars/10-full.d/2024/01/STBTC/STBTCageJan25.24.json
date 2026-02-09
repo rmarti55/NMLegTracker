@@ -1,0 +1,17 @@
+{
+   "2024-01-25" : {
+      "13:30:00" : {
+         "STBTC" : {
+            "bills" : ["SB3"],
+            "date" : "2024-01-25",
+            "datetime" : "2024-01-25T13:30:00",
+            "mtime" : "2024-01-24T12:41:31",
+            "name" : "STBTC",
+            "room" : "321",
+            "time" : "1:30 PM or 30 min. after",
+            "url" : "2024/01/STBTC/STBTCageJan25.24.pdf",
+            "zoom" : "https://us02web.zoom.us/j/85614440294"
+         }
+      }
+   }
+}

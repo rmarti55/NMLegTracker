@@ -1,0 +1,17 @@
+{
+   "2023-03-15" : {
+      "00:00:00" : {
+         "SJC" : {
+            "bills" : ["HB205","HB165","HB44","HB349","HB93","HB255","HB462","HB15","SB452"],
+            "date" : "2023-03-15",
+            "datetime" : "2023-03-15T00:00:00",
+            "mtime" : "2023-03-15T14:23:31",
+            "name" : "SJC",
+            "room" : "321",
+            "time" : "AT THE CALL OF THE CHAIR",
+            "url" : "2023/03/SJC/SJCageMar15.23.pdf",
+            "zoom" : "https://us02web.zoom.us/j/81502543362"
+         }
+      }
+   }
+}

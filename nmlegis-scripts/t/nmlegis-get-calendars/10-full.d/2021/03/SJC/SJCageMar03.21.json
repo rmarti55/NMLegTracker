@@ -1,0 +1,15 @@
+{
+   "2021-03-03" : {
+      "13:30:00" : {
+         "SJC" : {
+            "bills" : ["SB291","HB255","SB12","SB152","SB222"],
+            "date" : "2021-03-03",
+            "datetime" : "2021-03-03T13:30:00",
+            "mtime" : "2021-03-02T14:47:05",
+            "name" : "SJC",
+            "time" : "1:30 PM or 1/2 hr. after floor session",
+            "url" : "2021/03/SJC/SJCageMar03.21.pdf"
+         }
+      }
+   }
+}

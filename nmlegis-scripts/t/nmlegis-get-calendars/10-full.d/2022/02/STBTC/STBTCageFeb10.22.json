@@ -1,0 +1,17 @@
+{
+   "2022-02-10" : {
+      "00:00:00" : {
+         "STBTC" : {
+            "bills" : ["SB5","SB44","SB49","SB108","SB21","SB186","SB183","SB203","HB39","HB67"],
+            "date" : "2022-02-10",
+            "datetime" : "2022-02-10T00:00:00",
+            "mtime" : "2022-02-11T18:15:31",
+            "name" : "STBTC",
+            "room" : "321",
+            "time" : "1/2 hour after the floor session",
+            "url" : "2022/02/STBTC/STBTCageFeb10.22.pdf",
+            "zoom" : "https://us02web.zoom.us/j/84895112616"
+         }
+      }
+   }
+}

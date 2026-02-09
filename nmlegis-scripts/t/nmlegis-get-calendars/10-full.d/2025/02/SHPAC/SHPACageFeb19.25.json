@@ -1,0 +1,17 @@
+{
+   "2025-02-19" : {
+      "13:30:00" : {
+         "SHPAC" : {
+            "bills" : ["SB46","SB53","SB77","SB88","SB66","SB80","SB63"],
+            "date" : "2025-02-19",
+            "datetime" : "2025-02-19T13:30:00",
+            "mtime" : "2025-02-18T12:41:03",
+            "name" : "SHPAC",
+            "room" : "311",
+            "time" : "1:30 PM",
+            "url" : "2025/02/SHPAC/SHPACageFeb19.25.pdf",
+            "zoom" : "https://us02web.zoom.us/j/81287336647"
+         }
+      }
+   }
+}

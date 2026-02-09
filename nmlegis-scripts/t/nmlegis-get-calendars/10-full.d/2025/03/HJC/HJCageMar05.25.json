@@ -1,0 +1,17 @@
+{
+   "2025-03-05" : {
+      "13:30:00" : {
+         "HJC" : {
+            "bills" : ["HB255","HB352","HB413","HB120","HB311","HB132","HB61"],
+            "date" : "2025-03-05",
+            "datetime" : "2025-03-05T13:30:00",
+            "mtime" : "2025-03-04T08:41:25",
+            "name" : "HJC",
+            "room" : "309",
+            "time" : "1:30 PM OR 15 minutes after floor ends",
+            "url" : "2025/03/HJC/HJCageMar05.25.pdf",
+            "zoom" : "https://us02web.zoom.us/j/85681041953"
+         }
+      }
+   }
+}

@@ -1,0 +1,17 @@
+% for my $ymd (sort keys %$schedule) {
+%     my $t = Date::Parse::str2time($ymd) or die;
+%     my $lt = Time::Piece::localtime($t);
+<hr/>
+<h2><%= $lt->strftime("%A, %B %e") %></h2>
+%     for my $hms (sort keys %{$schedule->{$ymd}}) {
+%         $lt = Time::Piece::localtime(Date::Parse::str2time("${ymd}T${hms}")); # Override $lt
+%         for my $abbr (sort keys %{$schedule->{$ymd}{$hms}}) {
+%             my $mtg = $schedule->{$ymd}{$hms}{$abbr};
+%             if ($self->stash('skip_chambers') && $abbr =~ /house|senate/i) {
+<h2>[ See <%= link_to $abbr => "/$abbr" %> page for floor agenda ]</h2><br/>
+%             } else {
+%=                include 'committees/_schedule_table', mtg => $mtg, lt => $lt
+%             }
+%         }
+%     }
+% }

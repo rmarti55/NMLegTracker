@@ -1,0 +1,17 @@
+{
+   "2022-01-27" : {
+      "13:30:00" : {
+         "HCPAC" : {
+            "bills" : ["HB71","HB79","HB81","HB96","HB9"],
+            "date" : "2022-01-27",
+            "datetime" : "2022-01-27T13:30:00",
+            "mtime" : "2022-01-26T13:19:40",
+            "name" : "HCPAC",
+            "room" : "317",
+            "time" : "1:30 PM (Or 15 minutes following Floor Session)",
+            "url" : "2022/01/HCPAC/HCPACageJan27.22.pdf",
+            "zoom" : "https://us02web.zoom.us/j/82353539692"
+         }
+      }
+   }
+}

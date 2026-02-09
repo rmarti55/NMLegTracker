@@ -1,0 +1,15 @@
+{
+   "2021-03-16" : {
+      "10:00:00" : {
+         "SFC" : {
+            "bills" : ["HB2","HJR1","SB413","SB419"],
+            "date" : "2021-03-16",
+            "datetime" : "2021-03-16T10:00:00",
+            "mtime" : "2021-03-15T17:47:47",
+            "name" : "SFC",
+            "time" : "10:00 AM or at       Virtual Zoom Meeting",
+            "url" : "2021/03/SFC/SFCageMar16.21.pdf"
+         }
+      }
+   }
+}

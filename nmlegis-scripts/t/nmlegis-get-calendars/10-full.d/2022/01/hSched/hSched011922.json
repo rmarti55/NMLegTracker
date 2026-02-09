@@ -1,0 +1,29 @@
+{
+   "2022-01-19" : {
+      "09:15:00" : {
+         "HGEIC" : {
+            "bills" : [],
+            "date" : "2022-01-19",
+            "datetime" : "2022-01-19T09:15:00",
+            "mtime" : "2022-01-18T18:56:04",
+            "name" : "HGEIC",
+            "room" : "305",
+            "time" : "9:15 AM",
+            "url" : "2022/01/hSched/hSched011922.pdf",
+            "zoom" : "https://us02web.zoom.us/j/83525453075"
+         }
+      },
+      "13:30:00" : {
+         "HAFC" : {
+            "bills" : [],
+            "date" : "2022-01-19",
+            "datetime" : "2022-01-19T13:30:00",
+            "mtime" : "2022-01-18T18:56:04",
+            "name" : "HAFC",
+            "time" : "1:30 PM",
+            "url" : "2022/01/hSched/hSched011922.pdf",
+            "zoom" : "https://us02web.zoom.us/j/84373415468"
+         }
+      }
+   }
+}

@@ -1,0 +1,72 @@
+% layout 'default';
+% title 'NM Legis Watch';
+ <h1>NM Legis <%= $NMLegis::YYYY %></h1>
+  % if ($self->user) {
+  <h3>Quick Links</h3>
+  <ul style="font-size: 125%;">
+    % if (my @owned = $self->user->trackers_owned) {
+    <li>Your <a href="<%== $owned[0]->url %>"><b>tracker</b></a></li>
+    % }
+    % if (my @watching = $self->user->trackers_subscribed_to) {
+    <li>Other trackers:<ul>
+      % for my $t (@watching) {
+        <li><%= link_to $t->description => $t->url %></li>
+        % }
+    </ul>
+    % }
+    <li>Current <a href="/committees/schedules"><b>committee schedules</b></a></li>
+  </ul>
+  % } else {
+  <h3>Personalization</h3>
+  <p>
+  <%= link_to 'Registering' => '/register' %> an account makes this
+  site much more valuable by reducing information overload. Through
+  trackers (your own, or subscribing to others) you see a smaller
+  list of bills and actions -- only the ones you care about. If you
+  enter your legislative districts, you see highlights on all
+  actions where your representative or senator are involved:
+  committee hearings, bills they sponsor, and more.
+  </p>
+<p>
+  This image highlights some of the features available to logged-in users:<br/>
+  <%= image '/images/why-register.png', alt => 'Image with hand-drawn highlights showing features available to logged-in users' %><br/>
+  The tracking icons show that you're tracking this bill, and any other
+  trackers you're subscribed to.<br/>
+  The orange <b>HJC</b> highlights a committee in which one of your
+  legislators sits. I find this useful: I can contact my legislator
+  in advance, <i>Hey, this bill is going to your committee, I would
+  like your support (or opposition) and here's why.</i><br/>
+  Experimental feature, available to some users, is live updates.
+  You know how slow nmlegis can be. If you have fresh news, you
+  can report on a bill's status.
+</p>
+
+  % }
+
+  <hr/>
+  <h2>What is this?</h2>
+  <p>
+  These pages are intended to serve multiple purposes:
+  </p>
+  <ul>
+    <li>At <b>HOME</b><ul>
+        <li>Quick at-a-glance view of bill statuses</li>
+        <li>What's coming up in committee soon?</li>
+        <li>What can I zoom-watch right now?</li>
+        <li>At leisure, look at other bills</li>
+    </ul></li>
+    <li>At the <b>ROUNDHOUSE</b><ul>
+        <li>What is being heard <i>right now</i>, and <i>where?</i></li>
+        <li>What other legislators are attached to bills I care about?</li>
+    </ul></li>
+  </ul>
+  <hr/>
+  <h2>See Also</h2>
+  <p>
+    <a href="https://nmbilltracker.com"><b>nmbilltracker.com</b></a>
+    is a personalized, customizable tracker where you can log in,
+    mark your individual list of bills of interest, tag them with
+    nice keywords, and get email updates.
+  </p>
+
+% $self->stash('skip_legend' => 1);

@@ -1,0 +1,17 @@
+{
+   "2024-02-03" : {
+      "09:00:00" : {
+         "HCEDC" : {
+            "bills" : ["HB290","HB209","HB275","HB117","HB9"],
+            "date" : "2024-02-03",
+            "datetime" : "2024-02-03T09:00:00",
+            "mtime" : "2024-02-02T09:22:09",
+            "name" : "HCEDC",
+            "room" : "317",
+            "time" : "9:00 AM",
+            "url" : "2024/02/HCEDC/HCEDCageFeb03.24.pdf",
+            "zoom" : "https://us02web.zoom.us/j/85993976266"
+         }
+      }
+   }
+}

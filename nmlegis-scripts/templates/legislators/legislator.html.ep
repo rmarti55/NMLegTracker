@@ -1,0 +1,157 @@
+% layout 'default';
+% title  $l->name;
+
+<div class="party-<%= $l->party %>">
+  <h1><%= $l->title %> <%= $l->name %> (<%= $l->party %>-<%= $l->district %>)
+<small>[view on <%= link_to 'nmlegis.gov' => $l->nmlegis_url, target => '_blank' %>]</small></h1>
+
+  <h2>
+  %# Speaker, Whip, etc
+  % if (my $lead = $l->lead_position) {
+  <u><%= $lead %></u> -
+  % }
+
+  %# "Representative/Senator since YYYY"
+  % if (my $service = $l->service) {
+  <%= $service %>
+  % }
+  </h2>
+
+  %# Details
+  <ul style="font-size: 125%;">
+    % for my $element (qw(District County Office)) {
+    <li><%= $element %>: <b><%= $l->get(lc $element) %></b><% if ($element eq 'District') { %>&nbsp;<%= link_to '[map]' => $l->map_url  } %></li>
+    % }
+    %# Phone and email, with links
+    % for my $label ('Phone', 'Office Phone', 'Alt Phone') {
+    %     if (my $phone = $l->get(lc $label)) {
+    %         (my $phone_ref = $phone) =~ s/\D//g;
+    %         $phone_ref = "505$phone_ref" if length($phone_ref) < 10;
+    <li><%= $label %>: <b><a href="tel:+1<%= $phone_ref %>"><%= $phone %></a></b></li>
+    %     }
+    % }
+    % if (my $email = $l->email) {
+      <li>Email: <b><a href="mailto:<%= $email %>"><%= $email %></a></b></li>
+    % }
+  </ul>
+
+  %# 2025. Legislative aides.
+  % if (my $aide = $l->district_legislative_aide) {
+  <h2>Legislative Aide: <%= $aide %>
+    % if (my $phone = $l->district_legislative_aide_phone) {
+    %     (my $phone_ref = $phone) =~ s/\D//g;
+    %     $phone_ref = "505$phone_ref" if length($phone_ref) < 10;
+    - <a href="tel:+1<%= $phone_ref %>"><%= $phone %></a>
+    % }
+    % if (my $email = $l->district_legislative_aide_email) {
+      - <a href="mailto:<%= $email %>"><%= $email %></a>
+    % }
+  </h2>
+  % }
+</div>
+
+% # Committees and daily schedule
+% my @committees = $l->committees;
+% my @introduced = $l->bills_introduced;
+
+% if (@committees) {
+<h2>Standing Committees</h2>
+<table>
+  % for my $c (@committees) {
+  <tr>
+    <th class="committeename"><%= link_to $c->name, $c->url %></th>
+    <td><%= $c->role %></td>
+    <td><%= $c->days %></td>
+    <td><%= $c->time %></td>
+    <td><%= $c->room %></td>
+</td>
+  % }
+</table>
+% }
+
+%= include 'legislators/_daily_schedule', l => $l, committees => \@committees, introduced => \@introduced
+
+% if (@introduced) {
+<hr/>
+<h2>Bills Introduced</h2>
+<table>
+%     for my $b (@introduced) {
+%= include 'bills/_billrow', b => $b, columns => [ 'watch_button', 'id', 'title', 'sponsors', 'status' ]
+%     }
+</table>
+% }
+
+% if (my @cosponsored = $l->bills_cosponsored) {
+<hr/>
+<h2>Bills Cosponsored</h2>
+<table>
+%     for my $b (@cosponsored) {
+%= include 'bills/_billrow', b => $b, columns => [ 'watch_button', 'id', 'title', 'sponsors', 'status' ]
+%     }
+</table>
+% }
+
+%# FIXME: use billrow, so we can get the watch column!
+% if (my @votes = $l->committee_vote_history) {
+%     # Reorganize by committee and by ymd
+%     my %by_committee;
+%     for my $v (@votes) {
+%         push @{ $by_committee{$v->{committee}{code}}{$v->{date} }}, [ $v->{bill}, $v->{vote} ];
+%     }
+%     my $print_committee_table = begin
+%         my $committee = shift;
+%         my $votes_this_committee = delete $by_committee{ $committee->code }
+%            or return;
+<table>
+  <tr><th colspan="6" style="text-align: left;"><%= link_to $committee->name => $committee->url %></th></tr>
+%         for my $ymd (sort keys %$votes_this_committee) {
+%             my @bills = @{$votes_this_committee->{$ymd}};
+%             my $rowspan = '';
+%             $rowspan = sprintf(' rowspan="%d"', scalar(@bills)) if @bills > 1;
+ <tr style="vertical-align: top;">
+   <th<%== $rowspan %>><a name="vote-<%= $committee->code %>-<%= $ymd %>"><%= $ymd %></a></th>
+%             my $tr = '';
+
+%             for my $tuple (@{$votes_this_committee->{$ymd}}) {
+%                 my ($b, $vote) = @$tuple;
+%                 # FIXME: we can't use Bills::html_row() because we don't
+%                 # want the committee history.
+<%== $tr %>
+% if ($self->user) {
+%= include 'bills/_watch_button', b => $b, rowspan => '', w => $self->user->is_watching($b)
+% }
+%= include 'bills/_bill_cell', b => $b, rowspan => ''
+    <td class="billtitle"><%= $b->title %></td>
+%= include 'bills/_sponsors_cell', b => $b, rowspan => ''
+    <td class="vote <%= $vote %>"><%= ucfirst($vote) %></td>
+  </tr>
+%                $tr = "<tr>";
+%             }
+%
+%         }
+</table>
+<br/>
+%     end
+
+<hr/>
+<h2>Vote Record</h2>
+%     for my $committee (@committees) {
+%=        $print_committee_table->($committee);
+%     }
+% }
+% if (my @updates = $l->updates) {
+<br/>
+<div class="wrap-collapsible">
+  <input id="collapsible-update-history" class="toggle" type="checkbox">
+  <label for="collapsible-update-history" class="lbl-toggle">Action History</label>
+  <div class="collapsible-content">
+    <div class="content-inner">
+      <p>
+        This table shows a chronological list of updates for this legislator:
+        office/phone/email updates, bills sponsored, committee role changes.
+        It is probably way more than you want to know.
+      </p>
+%= include 'common/update_table', updates => \@updates
+    </div>
+  </div>
+% }

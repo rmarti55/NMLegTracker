@@ -1,0 +1,17 @@
+{
+   "2025-02-11" : {
+      "09:00:00" : {
+         "HAAWC" : {
+            "bills" : ["HB137","HB206","HB229"],
+            "date" : "2025-02-11",
+            "datetime" : "2025-02-11T09:00:00",
+            "mtime" : "2025-02-10T14:11:31",
+            "name" : "HAAWC",
+            "room" : "315",
+            "time" : "9:00 AM",
+            "url" : "2025/02/HAAWC/HAAWCageFeb11.25.pdf",
+            "zoom" : "https://us02web.zoom.us/j/87536227091"
+         }
+      }
+   }
+}

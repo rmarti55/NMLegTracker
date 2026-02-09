@@ -1,0 +1,17 @@
+{
+   "2023-03-10" : {
+      "13:30:00" : {
+         "SHPAC" : {
+            "bills" : ["HB116","HB134","HB145","HB204","HB314","HB389","HB411","HB512","SB322","SB424","SB440","SB463","SB488","SB497","SB500"],
+            "date" : "2023-03-10",
+            "datetime" : "2023-03-10T13:30:00",
+            "mtime" : "2023-03-09T12:27:51",
+            "name" : "SHPAC",
+            "room" : "311",
+            "time" : "1:30 PM OR 1/2 HR AFTER FLOOR SESSION",
+            "url" : "2023/03/SHPAC/SHPACageMar10.23.pdf",
+            "zoom" : "https://us02web.zoom.us/j/81287336647"
+         }
+      }
+   }
+}

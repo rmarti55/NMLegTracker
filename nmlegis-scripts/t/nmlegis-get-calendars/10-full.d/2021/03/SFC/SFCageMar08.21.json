@@ -1,0 +1,15 @@
+{
+   "2021-03-08" : {
+      "13:00:00" : {
+         "SFC" : {
+            "bills" : ["SB127","SB17","SB379","SB404","SB299","SB11","SB328","SB289","SB291","SB295","SB315"],
+            "date" : "2021-03-08",
+            "datetime" : "2021-03-08T13:00:00",
+            "mtime" : "2021-03-05T17:37:08",
+            "name" : "SFC",
+            "time" : "1:00 PM or 1/2 hour     Virtual Zoom Meeting",
+            "url" : "2021/03/SFC/SFCageMar08.21.pdf"
+         }
+      }
+   }
+}

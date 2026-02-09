@@ -1,0 +1,65 @@
+{
+   "2022-02-15" : {
+      "00:00:00" : {
+         "SFC" : {
+            "bills" : ["HB153","SB212","SB213","SM30","HB15","HB37","HB124","SB164","SB155"],
+            "date" : "2022-02-15",
+            "datetime" : "2022-02-15T00:00:00",
+            "mtime" : "2022-02-14T19:46:15",
+            "name" : "SFC",
+            "room" : "322",
+            "time" : "1/2 hr after session",
+            "url" : "2022/02/sSched/sSched021522.pdf",
+            "zoom" : "https://us02web.zoom.us/j/81679647964"
+         },
+         "STBTC" : {
+            "bills" : ["HB71","HB102","HB104","HB144","HB148","HB171"],
+            "date" : "2022-02-15",
+            "datetime" : "2022-02-15T00:00:00",
+            "mtime" : "2022-02-14T19:46:15",
+            "name" : "STBTC",
+            "room" : "321",
+            "time" : "1/2 hr after session",
+            "url" : "2022/02/sSched/sSched021522.pdf",
+            "zoom" : "https://us02web.zoom.us/j/84895112616"
+         }
+      },
+      "09:00:00" : {
+         "SCONC" : {
+            "bills" : ["HB42","HB164","HJM1"],
+            "date" : "2022-02-15",
+            "datetime" : "2022-02-15T09:00:00",
+            "mtime" : "2022-02-14T19:46:15",
+            "name" : "SCONC",
+            "room" : "311",
+            "time" : "9:00 AM",
+            "url" : "2022/02/sSched/sSched021522.pdf",
+            "zoom" : "https://us02web.zoom.us/j/86543845863"
+         },
+         "SRC" : {
+            "bills" : ["HJR1","SM20","SM26"],
+            "date" : "2022-02-15",
+            "datetime" : "2022-02-15T09:00:00",
+            "mtime" : "2022-02-14T19:46:15",
+            "name" : "SRC",
+            "room" : "321",
+            "time" : "9:00 AM",
+            "url" : "2022/02/sSched/sSched021522.pdf",
+            "zoom" : "https://us02web.zoom.us/j/86412647187"
+         }
+      },
+      "10:00:00" : {
+         "SIRC" : {
+            "bills" : ["HB134"],
+            "date" : "2022-02-15",
+            "datetime" : "2022-02-15T10:00:00",
+            "mtime" : "2022-02-14T19:46:15",
+            "name" : "SIRC",
+            "room" : "303",
+            "time" : "10:00 AM or 1 hr before session",
+            "url" : "2022/02/sSched/sSched021522.pdf",
+            "zoom" : "https://us02web.zoom.us/j/87300724547"
+         }
+      }
+   }
+}

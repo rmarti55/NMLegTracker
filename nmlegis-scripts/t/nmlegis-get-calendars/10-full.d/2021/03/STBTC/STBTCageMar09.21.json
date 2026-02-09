@@ -1,0 +1,15 @@
+{
+   "2021-03-09" : {
+      "13:30:00" : {
+         "STBTC" : {
+            "bills" : ["HB12","SB288","HB105","SB83","SB116","SB397","SB277","SB300","HB21","HB60","HB89"],
+            "date" : "2021-03-09",
+            "datetime" : "2021-03-09T13:30:00",
+            "mtime" : "2021-03-08T11:02:35",
+            "name" : "STBTC",
+            "time" : "1:30 PM or 15 min. after floor session",
+            "url" : "2021/03/STBTC/STBTCageMar09.21.pdf"
+         }
+      }
+   }
+}

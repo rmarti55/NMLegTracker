@@ -1,0 +1,17 @@
+{
+   "2023-02-23" : {
+      "00:00:00" : {
+         "STBTC" : {
+            "bills" : ["SB336","SB155","SB319","SB273","SB173","SB194","SB220","SB249","SB358","SB378","SB299"],
+            "date" : "2023-02-23",
+            "datetime" : "2023-02-23T00:00:00",
+            "mtime" : "2023-02-23T11:10:20",
+            "name" : "STBTC",
+            "room" : "321",
+            "time" : "After Floor Session",
+            "url" : "2023/02/STBTC/STBTCageFeb23.23.pdf",
+            "zoom" : "https://us02web.zoom.us/j/85614440294"
+         }
+      }
+   }
+}

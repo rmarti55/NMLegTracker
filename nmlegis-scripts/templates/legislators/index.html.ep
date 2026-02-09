@@ -1,0 +1,71 @@
+% layout 'default';
+% title 'Legislators';
+
+<h1>Legislators</h1>
+<p>
+  <b>Name</b> and <b>Committee</b> links take you to more detailed
+  pages on each.<br/>
+  The <b>District</b> link (number on the left) take you to an awesome
+  state map with that district highlighted.
+</p>
+
+% my %n_districts = (House => 70, Senate => 42);  # FIXME!
+% for my $chamber ('House', 'Senate') {
+%     my $initial = substr($chamber, 0, 1);
+%     my $nmlegis_url = "https://nmlegis.gov/Members/Legislator_List?T=";
+%     $nmlegis_url .= ($chamber eq 'House' ? 'R' : 'S');
+<h2><%= $chamber %>
+  <small>[view on <%= link_to 'nmlegis.gov' => $nmlegis_url, target => '_blank' %>]</small></h2>
+<table class="legislatortable">
+  %   for my $district (1 .. $n_districts{$chamber}) {
+  %     if (my ($l) = grep { substr($_->chamber, 0, 1) eq $initial && $_->district == $district } @$legislators) {
+  %       my $party = $l->party;
+  %       my $mine  = '';
+  %       $mine = ' mylegislator' if $self->user->is_my_legislator($l);
+  <tr class="party-<%= $party %><%= $mine%>">
+    <th class="district"><%= link_to $l->district => $l->map_url %></th>
+    <th class="legislatorname">
+      <%= link_to $l->name => "/legislators/" . $l->code %>
+        % if ($l->lead_position) {
+        - <b><%= $l->lead_position %></b>
+        % }
+      <br/>
+      &nbsp;<%= $l->county %>
+    </th>
+
+    <!-- committees -->
+    <td>
+      % for my $c ($l->committees) {
+      &rarr;&nbsp;<b><%= link_to $c->shortname => $c->url %></b>
+      %     if (my $role = $c->role) {
+      %         if ($role ne 'Member') {
+      - <i><%= $role %></i>
+      %         }
+      <br/>
+      %     }
+      % }
+    </td>
+
+    % if ($mine) {
+    <td>&larr; This is your <%= $l->title %></td>
+    % } else {
+    <td style="background: #f8f8f8; border: none;"></td>
+    % }
+
+    <!-- this takes O(2s) on my desktop. Not worth doing until we DBize. -->
+    % if (0) {
+    <td>
+      % if (my @sponsored = $l->sponsored_bills) {
+      <%= scalar(@sponsored) %>
+      % } else {
+      -
+      % }
+    </td>
+    % }
+  </tr>
+  %   } else {
+  <tr><th class="district"><%= $district %></th><td colspan="2"><i>Position Vacant</td></tr>
+%     }
+%   }
+</table>
+% }

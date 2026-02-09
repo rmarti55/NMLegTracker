@@ -1,0 +1,435 @@
+#!/usr/bin/perl
+#
+# nmlegis-parse-committee-reports - parse committee report HTML files
+#
+
+package ESM::NMLegis::ParseCommitteeReports;
+
+use v5.14;
+use strict;
+use warnings;
+
+use utf8;
+use open qw( :encoding(UTF-8) :std );
+
+(our $ME = $0) =~ s|.*/||;
+(our $VERSION = '$Revision: 1.30 $ ') =~ tr/[0-9].//cd;
+
+use NMLegis                     qw(:all);
+use NMLegis::Bills;
+use NMLegis::Committees         qw(committee_code_from_name);
+use NMLegis::Legislators;
+
+use Date::Parse;
+use File::stat;
+use File::Path                  qw(make_path);
+use File::Slurp;
+use HTML::Entities;
+use HTML::Parser;
+use JSON::XS;
+use Time::Piece;
+
+###############################################################################
+# BEGIN user-customizable section
+
+our $Schema = '20250222';
+
+# Individual files by bill and chamber
+our $Subdir = "committee-reports/$YYYY";
+our $Multi_File_Dir = "$Data_Dir/$Subdir";
+our $Single_File    = "$Data_Dir/committee-reports-$YYYY.json";
+
+# Used in debugging
+our $ONLY_WANT;
+
+# END   user-customizable section
+###############################################################################
+
+###############################################################################
+# BEGIN boilerplate args checking, usage messages
+
+sub usage {
+    print  <<"END_USAGE";
+Usage: $ME [OPTIONS] [DEST PATH]
+
+$ME parses committee reports from HTML files,
+obtaining individual votes and writing them to tab-separated files.
+
+OPTIONS:
+
+  -v, --verbose  show verbose progress indicators
+  -n, --dry-run  make no actual changes
+
+  --help         display this message
+  --version      display program name and version
+END_USAGE
+
+    exit;
+}
+
+# Command-line options.  Note that this operates directly on @ARGV !
+our $debug   = 0;
+our $force   = 0;
+our $verbose = 0;
+our $NOT     = '';              # print "blahing the blah$NOT\n" if $debug
+sub handle_opts {
+    use Getopt::Long;
+    GetOptions(
+        'debug!'     => \$debug,
+        'dry-run|n!' => sub { $NOT = ' [NOT]' },
+        'force'      => \$force,
+        'verbose|v'  => \$verbose,
+
+        help         => \&usage,
+        version      => sub { print "$ME version $VERSION\n"; exit 0 },
+    ) or die "Try `$ME --help' for help\n";
+}
+
+# END   boilerplate args checking, usage messages
+###############################################################################
+
+############################## CODE BEGINS HERE ###############################
+
+# The term is "modulino".
+__PACKAGE__->main()                                     unless caller();
+
+# Main code.
+sub main {
+    # Note that we operate directly on @ARGV, not on function parameters.
+    # This is deliberate: it's because Getopt::Long only operates on @ARGV
+    # and there's no clean way to make it use @_.
+    handle_opts();                      # will set package globals
+
+    # Fetch command-line arguments.  Barf if too many.
+    my $copy_to = shift(@ARGV);
+    die "$ME: Too many arguments; try $ME --help\n"                 if @ARGV;
+
+    # Called with HB123? Parse only that one
+    if (($copy_to||'') =~ /^(H|S)[A-Z]{1,3}\d{1,4}$/) {
+        $ONLY_WANT = $copy_to;
+        undef $copy_to;
+    }
+
+    # FIXME: do code here
+    my $reports = find_and_parse();
+
+    unless ($NOT || $ONLY_WANT) {
+        NMLegis::write_json_outfile($reports, $Single_File);
+        if ($copy_to) {
+            system('rsync', '-a', $Single_File => $copy_to);
+        }
+    }
+}
+
+####################
+#  find_and_parse  #  Main loop: find all committee reports and parse them
+####################
+sub find_and_parse {
+    my %reports = (schema => $Schema, session => "$YY");
+
+    # FIXME: refactor this
+    my $mirror_dir = "$ENV{HOME}/.cache/nmlegis/mirror-bills/$YYYY";
+
+    opendir my $dir_fh, $mirror_dir
+        or die "$ME: Cannot opendir $mirror_dir: $!";
+  REPORT:
+    for my $ent (sort readdir $dir_fh) {
+        #         12   23      3  4   4156          67      75
+        $ent =~ /^((H|S)([A-Z]+)0*(\d+))(([A-Z][A-Z])([0-9]+))\.HTML$/
+            or next;
+        my ($billbase, $bill, $shortcode, $n) = ($1, "$2$3$4", $6, $7);
+        next REPORT if $shortcode eq 'FS';         # Senate Floor Amendment
+        next REPORT if $shortcode eq 'FH';         # House   " "   "   "
+        next REPORT if $shortcode eq 'ES';         # Enrolled/Engrossed ???
+        next REPORT if $shortcode eq 'CC';         # Conference Committee FIXME
+
+        # For debugging: if envariable is set, only process this file
+        if ($ONLY_WANT) {
+            next unless "$bill" eq $ONLY_WANT;
+        }
+
+        my $committee = NMLegis::Committees->new($shortcode)
+            or do {
+                warn "$ME: $ent: could not figure out code '$shortcode' in $ent; skipping";
+                next REPORT;
+            };
+        my $committeecode = $committee->code;
+
+        # Used later, to match file mtimes
+        my $st_orig = stat("$mirror_dir/$ent")
+            or die "$ME: IMPOSSIBLE! Could not stat $mirror_dir/$ent";
+        # This script is expensive. Avoid recomputing.
+        #
+        # Also, although you'd think recomputing would be safe, consider
+        # the reports that show "Yes: 9", then consider the possibility
+        # that the committee composition changed between the date
+        # of the report and today. The solution to that is to have
+        # a time-adjusted list of legislators... some day.
+        my $outfile = "$Multi_File_Dir/$bill-$committeecode-$n.json";
+        if (my $st_json = stat($outfile)) {
+            if ($st_json->mtime == $st_orig->mtime) {
+                $reports{reports}{$bill}{$committeecode}[$n]
+                    = decode_json(read_file($outfile));
+                if ($force) {
+                    warn "$ME: recomputing $ent due to --force\n";
+                }
+                else {
+                    next REPORT;
+                }
+            }
+            else {
+                warn "$ME: recomputing $ent because mtimes differ\n";
+            }
+        }
+
+        if (my $parsed = parse_report($committee, "$mirror_dir/$ent")) {
+            my $date = $parsed->{date}
+                or do {
+                    warn "$ME: $ent: no date, skipping";
+                    next REPORT;
+                };
+
+            my $bill_obj = NMLegis::Bills->new($bill);
+
+            $parsed->{report} = $bill_obj->source_url($ent);
+
+            # Look for a committee sub file. Our parser flags these if it
+            # finds "DO NOT PASS ... SUBSTITUTE ... (DO PASS or WITHOUT REC)
+            # FIXME: is it possible to have a numbered CS?
+            my $subnumber = '';
+            my $cs = sprintf("%s%sS%s.HTML", $billbase, $shortcode, $subnumber);
+            if ($parsed->{cs}) {
+                if (-e "$mirror_dir/$cs") {
+                    $parsed->{cs} = $bill_obj->source_url($cs);
+                }
+                else {
+                    warn "$ME: $ent: found CS text in report, but no CS file\n";
+                    $parsed->{cs} = 'MISSING';
+                }
+            }
+            elsif (-e "$mirror_dir/$cs") {
+                warn "$ME: $ent: found CS file $cs, but report does not mention CS\n";
+            }
+
+            $reports{reports}{$bill}{$committee->code}[$n] = $parsed;
+            unless ($NOT) {
+                NMLegis::write_json_outfile($parsed, $outfile);
+                utime $st_orig->mtime, $st_orig->mtime, $outfile;
+            }
+        }
+        else {
+            warn "$ME: $mirror_dir/$ent: no committee report, skipping\n";
+        }
+    }
+
+    return \%reports;
+}
+
+##################
+#  parse_report  #  Parse one report file
+##################
+sub parse_report {
+    my $committee = shift;
+    my $path      = shift;
+    my %info;
+
+    open my $fh, '<', $path
+        or die "$ME: Cannot read $path: $!";
+    my $html = do { local $/ = undef; <$fh>; };
+    close $fh;
+
+    my $p = HTML::Parser->new(
+        api_version => 3,
+        handlers => {
+            start => [ \&block_start, 'self, tagname, attr' ],
+            text  => [ \&block_text,  'self, text' ],
+            end   => [ \&block_end,   'self, tagname' ],
+        },
+    );
+
+    $p->{_context} = { committee => $committee, path => $path };
+    $p->parse($html);
+
+    if ($p->{_context}{full_text} =~ /\sDO\s+NOT\s+PASS\s*,\s*but.*\s+SUBSTITUTE\s+FOR.*\s(DO\s+PASS\s*[,.]|WITHOUT\s+RECOMMENDATION)/ms) {
+        $p->{_context}{cs} = 1;
+    }
+
+    delete $p->{_context}{$_} for qw(committee committeecode path full_text previous_text tags);
+
+    # If any count is a number instead of an aref, fill in with members
+    my @num = grep { !ref($p->{_context}{votes}{$_}) } qw(yes no excused absent);
+    if (@num) {
+        if (@num > 1) {
+            use Data::Dump; dd $path; dd $p->{_context};
+            die "FIXME";
+        }
+
+        my $which = $num[0];
+        my $expected_count = $p->{_context}{votes}{$which};
+
+        # FIXME
+        my %accounted_for;
+        for my $vote (qw(yes no excused absent)) {
+            unless ($vote eq $which) {
+                $accounted_for{$_} = 1  for @{ $p->{_context}{votes}{$vote} };
+            }
+        }
+
+        # All members not accounted for
+        my @voted;
+        for my $legislator ($committee->members) {
+            my $id = $legislator->id;
+            if (! $accounted_for{$id}) {
+                push @voted, $id;
+            }
+        }
+
+        if (@voted != $expected_count) {
+            my $actual_count = @voted;
+            warn "$ME: $path $which: expected $expected_count, got $actual_count\n";
+        }
+        $p->{_context}{votes}{$which} = \@voted;
+    }
+
+    return $p->{_context};
+}
+
+###############################################################################
+# BEGIN HTML::Parser callbacks
+
+sub block_start {
+    my ($self, $tag, $attr) = @_;
+    $tag = lc $tag;
+
+
+    push @{ $self->{_context}{tags} }, $tag;
+}
+
+sub block_text {
+    my ($self, $text) = @_;
+
+    $text =~ s/[\r\n]+/ /g;                  # Collapse newlines
+    $text =~ s/\&#160;//g;              # Remove these, whatever they are
+
+    $text = decode_entities($text);
+    $text =~ s/^\s+|\s+$//g;            # Remove leading/trailing whitespace
+
+    return if !$text;
+
+    if (exists $self->{_context}{tags}) {
+#        printf "%s %s\n", join(" ", @{$self->{_context}{tags}}), $text;
+
+        # AUGH! When a bill passes one chamber and goes to committees in
+        # the other chamber, like SB3 going to HHHC, the filename does
+        # not indicate the committee. The only thing we have to go on
+        # is the salutation.
+        if ($text =~ /M[rs.]+\s+(Speaker|President)/) {
+            my $who = $1;
+            my $newchamber = ($who =~ /speak/i ? 'H' : 'S');
+            $newchamber eq $self->{_context}{committee}->chamber
+                or warn "$ME: WARNING! $self->{_context}{path}: unexpected salutation '$text'";
+        }
+        elsif ($text =~ s/\s+COMMITTEE(,)?$//) {
+            my $code = committee_code_from_name($self->{_context}{committee}->chamber, $text);
+
+            if ($self->{_context}{previous_text} eq 'Your') {
+                my $expected_code = $self->{_context}{committee}->code;
+                $code eq $expected_code
+                    or die "$ME: Internal error! $self->{_context}{path}: expected committee $expected_code, but text is $code";
+                $self->{_context}{committeecode} = $code;
+            }
+            elsif ($self->{_context}{previous_text} =~ /thence referr/) {
+                ;
+            }
+            elsif (exists $self->{_context}{committeecode}) {
+                # This is OK, e.g. HB0060JC1, approving the "JUDIC SUBS"
+                #die "$ME: multiple committees seen in $self->{_context}{path}, $code";
+            }
+        }
+
+        if ($text =~ /^\w+\s+\d+,\s*\d+$/) {
+            $text =~ s/Februry/February/;       # 2025 HB0171JC1.HTML
+            my $t = str2time($text)
+                or do {
+                    warn "$ME: $self->{_context}{path}: cannot grok '$text' as date";
+                    return;
+                };
+            $self->{_context}{date} = localtime($t)->ymd;
+        }
+
+        # Grumble. This is usually on a <span> of its own
+        # but sometimes we see a span like 'Excused:  Name'
+        elsif ($text =~ s/^(Yes|No|Excused|Absent):\s*//) {
+            $self->{_context}{vote} = lc($1);
+            $self->{_context}{votes}{lc $1} = [];
+        }
+
+        # When in a vote context, expect a list of legislator names
+        if ($self->{_context}{vote} && $text) {
+            # Marks end of file.
+            if ($text =~ /\.wpd?/ || $text =~ /^\.?\d{5,}[\d\.]+/) {
+                delete $self->{_context}{vote};
+                return;
+            }
+
+            return if $text =~ /^(none|0)$/i;
+
+            # FIXME! Mistake in the document itself. Missing comma. SB0033FC1
+            # We can't just insert commas in 'Zzzzz Zzzzz' because of
+            # last names with spaces: Sena Cortez, Santiago Muñoz
+            $text =~ s/(Steinborn)\s+(Tobiassen)/$1, $2/;
+
+            my $vote = $self->{_context}{vote};
+
+            while ($text) {
+                if ($text =~ /^(\d+)$/) {
+                    # Just a count. Typically seen on yes votes, as a way
+                    # to avoid enumerating everyone. We can't process this
+                    # now, we have to wait until we've processed every
+                    # type of vote and then look who's missing.
+                    $self->{_context}{votes}{$vote} = $1;
+                    return;
+                }
+                elsif ($text =~ s/^([^,]+)(,\s*|\s*$)//) {
+                    # Assume this is a last name
+                    my $lastname = $1;
+                    my $initial = '';
+
+                    # If followed by comma and "A." or "JN", treat as initials
+                    if ($text =~ s/^([A-Z]{1,2})\.?(,\s*|\s*$)//) {
+                        $initial = join('.*\s', split('', $1));
+                    }
+
+                    print "$self->{_context}{path}  $self->{_context}{vote}  '$lastname'  '$initial'\n" if $debug;
+
+                    my $l = NMLegis::Legislators->by_name($self->{_context}{committee}->chamber, $lastname, $initial)
+                        or do {
+                            warn "$ME: $self->{_context}{path} $self->{_context}{vote}: could not find '$lastname, $initial'";
+                            next;
+                        };
+
+                    push @{ $self->{_context}{votes}{$vote} }, $l->id;
+                }
+            }
+        }
+    }
+
+    $self->{_context}{full_text} .= " " . $text;
+    $self->{_context}{previous_text} = $text;
+}
+
+sub block_end {
+    my ($self, $tag) = @_;
+
+    exists $self->{_context}{tags}
+        or die "$ME: Internal error: </$tag> seen without any open tags";
+    my $last_open = $self->{_context}{tags}[-1];
+    if ($tag ne $last_open) {
+#        warn "$ME: YUK: saw <$last_open> ... </$tag>";
+    }
+
+    pop @{ $self->{_context}{tags} };
+}
+
+# END   HTML::Parser callbacks
+###############################################################################

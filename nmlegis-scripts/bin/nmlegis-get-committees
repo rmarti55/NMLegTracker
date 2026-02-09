@@ -1,0 +1,528 @@
+#!/usr/bin/perl
+#
+# nmlegis-get-committees - get nmlegis committee names and composition
+#
+package ESM::NMLegisCommittees;
+
+use v5.14;
+use strict;
+use warnings;
+use utf8;
+use open qw( :encoding(UTF-8) :std );
+
+(our $ME = $0) =~ s|.*/||;
+(our $VERSION = '$Revision: 1.30 $ ') =~ tr/[0-9].//cd;
+
+use NMLegis                     qw(:all);
+use NMLegis::Committees;
+
+# For debugging, show data structures using DumpTree($var)
+#use Data::TreeDumper; $Data::TreeDumper::Displayaddress = 0;
+
+###############################################################################
+# BEGIN user-customizable section
+
+# Current schema version. Should be updated only on breaking changes.
+# It is defined here, in this script, not in the module, because this
+# script is the one that defines how we save data. (The module reads it,
+# though, so maybe I need to rethink that)
+our $JSON_Schema = '20230212';
+
+# END   user-customizable section
+###############################################################################
+
+use Date::Parse;
+use Time::Piece;
+use HTML::TableExtract;
+use HTML::TreeBuilder;
+
+###############################################################################
+# BEGIN boilerplate args checking, usage messages
+
+sub usage {
+    print  <<"END_USAGE";
+Usage: $ME [OPTIONS]
+
+$ME fetches and parses Committee
+names, abbreviations, and members from nmlegis.gov .
+
+  * scrapes the top page: $NMLegis::Committees::Committee_List_URL ;
+  * fetches all links matching 'CommitteeCode=XXXXX',
+    preserving them in a local cache directory;
+  * parses each one, getting committee info and member names
+
+OPTIONS:
+
+  --debug        use local HTML cache (to avoid slamming nmlegis)
+
+  -v, --verbose  show verbose progress indicators
+  -n, --dry-run  make no actual changes
+
+  --help         display this message
+  --version      display program name and version
+END_USAGE
+
+    exit;
+}
+
+# Command-line options.  Note that this operates directly on @ARGV !
+our $debug   = 0;
+our $force   = 0;
+our $verbose = 0;
+our $NOT     = '';              # print "blahing the blah$NOT\n" if $debug
+sub handle_opts {
+    use Getopt::Long;
+    GetOptions(
+        'debug!'     => \$debug,
+        'dry-run|n!' => sub { $NOT = ' [NOT]' },
+        'force'      => \$force,
+        'verbose|v'  => \$verbose,
+
+        help         => \&usage,
+        version      => sub { print "$ME version $VERSION\n"; exit 0 },
+    ) or die "Try `$ME --help' for help\n";
+}
+
+# END   boilerplate args checking, usage messages
+###############################################################################
+
+############################## CODE BEGINS HERE ###############################
+
+# The term is "modulino".
+__PACKAGE__->main()                                     unless caller();
+
+# Main code.
+sub main {
+    # Note that we operate directly on @ARGV, not on function parameters.
+    # This is deliberate: it's because Getopt::Long only operates on @ARGV
+    # and there's no clean way to make it use @_.
+    handle_opts();                      # will set package globals
+
+    # Used by lower levels to avoid fetching from nmlegis
+    $ENV{NMLEGIS_USE_CACHE} //= $debug;
+
+    # { key = Committee, val = { chamber, abbr, fullname, [members] } }
+    my %committees = (_schema => $JSON_Schema);
+    my %schedule   = (_schema => $JSON_Schema);
+
+    for my $abbr (get_committee_ids()) {
+        # 2025-02-06 HXPSC, HYEE{A,B} pages are returning error on nmlegis.
+        # Skip those, because having them as {} just makes failures later
+        my $c = get_committee($abbr)
+            or do {
+                warn "$ME: $abbr: no data, omitting.\n"
+                    unless $abbr =~ /^H[XY]/;
+                next;
+            };
+        $committees{$abbr} = $c;
+
+        # 2023-02-17 we now piggyback a meetings array, with parsed
+        # committee meetings and bills. Break that off, and write it
+        # into a separate file (below)
+        my $meetings = delete $committees{$abbr}{_meetings};
+        for my $m (@$meetings) {
+            $m->{name}  = $abbr;
+            $m->{datetime} =~ /^(.*)T(.*)$/
+                or die "Internal error: invalid datetime '$m->{datetime}'";
+            $schedule{$1}{$2}{$abbr} = $m;
+        }
+    }
+
+    # 2023-02-02 "disaster on nmlegis", 11 committee pages are 404
+    if (grep { ! defined $_ } values(%committees)) {
+        die "$ME: cannot continue\n";
+    }
+
+    unless ($NOT) {
+        my $output_file = $NMLegis::Committees::Committees_File;
+        write_json_outfile(\%committees, $output_file);
+
+        # 2023-02-17 EXPERIMENTAL: write meetings
+        write_json_outfile(\%schedule, "/home/esm/.local/share/nmlegis/schedule-from-html.json");
+
+        if (my $web_json = shift(@ARGV)) {
+            system('rsync', '-a', $output_file, $web_json);
+        }
+    }
+}
+
+#######################
+#  get_committee_ids  #  Scrape the main list page, get all committee IDs
+#######################
+sub get_committee_ids {
+    my %found;                          # out: keep track of abbreviations
+
+    my $fetch = NMLegis::Committees::fetch_html();
+    my $te = HTML::TableExtract->new(keep_html => 1);
+    $te->parse($fetch->{html});
+
+    for my $table ($te->tables) {
+        for my $row ($table->rows) {
+            @$row == 1
+                or die "$ME: Internal error: wrong number of columns in table";
+
+            my $content = $row->[0];
+            $content =~ /href=\"[^"]+CommitteeCode=([HS][A-Z0-9]{2,5})"/
+                or die "$ME: Internal error: no CommitteeCode in '$content'";
+            $found{$1}++;
+        }
+    }
+
+    # FIXME! 2024-01-19 SRC disappeared again
+    $found{SRC} = 1;
+
+    return sort(keys(%found));
+}
+
+###################
+#  get_committee  #  Return info (HREF) for one committee
+###################
+sub get_committee {
+    my $id = shift;
+    $id =~ /^(H|S)/
+        or die "$ME: get_committee(): expected 'H' or 'S' in '$id'";
+
+    my %info = (abbr => $id, chamber => $1, members => []);
+
+    # FIXME: need to get URL
+    my $fetch = NMLegis::Committees::fetch_html($id);
+    my $html = $fetch->{html};
+    $info{url} = $fetch->{url};
+
+    # Get committee name...
+    my $tb   = HTML::TreeBuilder->new_from_content($html);
+    my $want = 'MainContent_formViewCommitteeInformation_lblCommitteeName';
+    my $got  = $tb->look_down(_tag => 'span', id   => $want)
+        or do {
+            # 2025-02 I'm sick of seeing HXPSC and HYEEA/B warnings
+            warn "$ME: did not find <span id=$want> in $info{url}"
+                unless $id =~ /^H[XY]/;
+            return;
+        };
+    ($info{name} = $got->as_text) =~ s/^\s+|\s+$//g;
+
+    # ...day, time, room...
+    $want = 'MainContent_formViewCommitteeInformation_lblMeetingDate';
+    $got  = $tb->look_down(_tag => 'span', id   => $want)
+        or die "$ME: did not find <span id=$want> in <$info{url}>";
+
+    # e.g., "Tuesday & Thursday - 1:30 p.m. (Room 321)"
+    my $text = $got->as_text;
+    if ($text =~ s/\s+\(?room\s+(\d+)\)?\s*$//i) {
+        $info{room} = $1;
+    }
+    if ($text =~ s/[\s-]+(\d+):(\d+)\s*(a|p)\.?m\.?\s*//i) {
+        $info{time} = sprintf("%d:%02d %sM", $1, $2, uc($3));
+    }
+
+    # The rest is meeting days
+    $info{days} = $text;
+    $info{days_parsed} = parse_weekdays($text);
+
+    # ...and, finally, members. (These are in a table)
+    my @columns = qw(title name district party role);
+    my $te = HTML::TableExtract->new(headers => \@columns, keep_html => 1);
+    $te->parse($html);
+
+    for my $table ($te->tables) {
+        for my $row ($table->rows) {
+            my %legislator;
+
+            my @cols = map { HTML::TreeBuilder->new_from_content($_) } @$row;
+            for my $i (0..$#columns) {
+                my $txt = $cols[$i]->as_text;
+                $txt =~ s/^\s+|\s+$//g;     # strip leading/trailing whitespace
+
+                $legislator{$columns[$i]} = $txt;
+            }
+
+            # First column must be the legislator name, with link to their page
+            $cols[1]->as_HTML =~ /SponCode=([A-Z]+)/i
+                or die "$ME: Internal error: no SponCode for legislator";
+            $legislator{code} = uc($1);
+            push @{ $info{members} }, \%legislator;
+        }
+    }
+
+    # Now find meetings
+    my @meetings;
+    find_meetings($tb, 0, \@meetings);
+    # ...and postprocess
+    for my $m (@meetings) {
+        my $d = $m->{date};
+
+        # Sometimes the HTML page doesn't fill in room or time (SRC 2023-02-20)
+        $m->{time} ||= $info{time};
+
+        # Grumble. 2025-02-11 HEC has " 830 AM"
+        $m->{time} =~ s/(\s\d)(\d\d)\s*((A|P)M)/$1:$2 $3/;
+
+        # Try to convert to datetime
+        #                      12   23     3 4   5   5       4 1
+        if ($m->{time} =~ /^\s*((\d+)(:\d\d)?(\s*(A|P)\.?M\.?)?)/i) {
+            $d .= " $1";
+            $d .= " PM" if $2 < 7;      # "1:30 or 1/2 hr after ..."
+        }
+        else {
+            $d .= " 00:00";
+        }
+        my $t = str2time($d);
+        if (! defined $t) {
+            # FIXME!
+            warn "$ME: $id: str2time could not grok '$d', using current time";
+            $t = time;
+        }
+        $m->{url}      = $fetch->{url};
+        $m->{datetime} = localtime($t)->datetime;
+        $m->{date}     = localtime($t)->date;
+        $m->{time}     =~ s/^\s+//;
+        $m->{room}     =~ s/^Room\s+//;
+        $m->{room}   ||= $info{room};
+        s/\s+//g        for @{$m->{bills}};
+    }
+#    use Data::Dump; dd \@meetings;
+    $info{_meetings} = \@meetings;
+
+    return \%info;
+}
+
+
+###################
+#  find_meetings  #
+###################
+our %In;
+sub find_meetings {
+    my ($node, $depth, $meetings) = @_;
+
+    # If $node is a reference, then it is an HTML::Element.
+    if (ref $node) {
+        my $tag = lc($node->tag());
+        $In{$tag} = $node;
+
+        # $node->content_list () returns a list of child nodes of
+        # $node, which we store in @children.
+        my @children = $node->content_list ();
+        for my $child_node (@children) {
+            find_meetings ($child_node, $depth + 1, $meetings);
+        }
+
+        undef $In{$tag};
+    }
+    else {
+        if ($In{span}) {
+            my $spanid = $In{span}->attr('id') || return;
+            if ($spanid =~ /lblHearingDate/) {
+                push @$meetings, +{ date => $node };
+            }
+            elsif ($spanid =~ /lblHearingTime/) {
+                $meetings->[-1]{time} = $node;
+            }
+            elsif ($spanid =~ /lblRoomNo/) {
+                $meetings->[-1]{room} = $node;
+            }
+            elsif ($spanid =~ /lblChamber_/) {
+                push @{$meetings->[-1]{bills}}, $node;
+            }
+            elsif ($spanid =~ /lblLeg(Type|No)_/) {
+                $meetings->[-1]{bills}[-1] .= $node;
+            }
+        }
+    }
+}
+
+
+####################
+#  parse_weekdays  #  Handle comma or hyphen range of weekdays; return aref
+####################
+sub parse_weekdays {
+    my $text = shift;
+
+    my @DoW = qw(Sun Mon Tue Wed Thu Fri Sat);
+    my %DoW = map { $DoW[$_] => $_ } (0..$#DoW);
+
+    # Generate a working copy with "day" suffixes stripped
+    (my $copy = $text) =~ s{\b(\w\w\w)\w*day}{
+        exists $DoW{$1} or die "$ME: Unknown weekday in '$text'";
+        $DoW{$1}
+    }ge;
+    my @days = ('') x @DoW;
+
+    # "Monday through Friday"
+    if ($copy =~ /^(\d)\s+(through|-)\s+(\d)$/) {
+        $days[$_] = $DoW[$_] for ($1 .. $3);
+    }
+
+    # Tuesday & Thursday
+    if ($copy =~ /^(\d)\s+(and|&)\s+(\d)$/) {
+        $days[$_] = $DoW[$_] for ($1, $3);
+    }
+
+    # Monday, Wednesday & Friday
+    if ($copy =~ /^(\d),?\s+(\d+),?\s+(and|&)\s+(\d)$/) {
+        $days[$_] = $DoW[$_] for ($1, $2, $4);
+    }
+
+    # Empty?
+    if ("@days" !~ /\S/) {
+        die "$ME: Could not parse committee weekdays in '$text' ($copy)"
+            unless $text =~ /^at\s+call/i;
+    }
+
+    return \@days;
+}
+
+###############################################################################
+# BEGIN compute_changelog
+
+sub compute_changelog {
+    my ($old, $new) = @_;
+
+    # Ignore changes in committees. Only run on schedule changes.
+    return {} if ! grep { /^\d+-\d+-\d+$/ } keys %$old;
+
+    my %by_bill;
+
+    for my $ymd (sort grep { $_ !~ /^_/ } keys %$old) {
+        for my $hms (sort keys %{$old->{$ymd}}) {
+            for my $cname (sort keys %{$old->{$ymd}{$hms}}) {
+                my $mtg = $old->{$ymd}{$hms}{$cname};
+
+                # FIXME: duplication
+                $mtg->{cname} = $cname;
+                $mtg->{ymd}   = $ymd;
+                $mtg->{hms}   = $hms;
+                ($mtg->{md}   = $ymd) =~ s/^\d+-//;
+                ($mtg->{hm}   = $hms) =~ s/:\d+$//;
+
+                printf "%s %s %s\n", $ymd, $hms, $cname         if $debug;
+                my $in_new = find_meeting($new, $ymd, $hms, $cname)
+                    or next;
+
+                if ($in_new->{room} ne $mtg->{room}) {
+                    warn "$ME: $cname $mtg->{md} $mtg->{hm} moved to room $in_new->{room}\n";
+                }
+
+                # diff bills
+                next unless $mtg->{bills} && $in_new->{bills};
+                my @b1 = @{$mtg->{bills}};
+                my @b2 = @{$in_new->{bills}};
+                for my $b1 (@b1) {
+                    if (! grep { $_ eq $b1 } @b2) {
+                        if (exists $by_bill{$b1}{removed_from}) {
+                            warn "FIXMEEEE 1!!! $b1 multiple removes";
+                        }
+                        $by_bill{$b1}{removed_from} = $mtg;
+                    }
+                }
+                for my $b2 (@b2) {
+                    if (! grep { $_ eq $b2 } @b1) {
+                        if (exists $by_bill{$b2}{added_to}) {
+                            warn "FIXMEEEE 2!!! $b2 multiple adds";
+                        }
+                        $by_bill{$b2}{added_to} = $in_new;
+                    }
+                }
+            }
+        }
+    }
+
+    my @diffs;
+
+    for my $bill (sort keys %by_bill) {
+        if (my $r = $by_bill{$bill}{removed_from}) {
+            if (my $a = $by_bill{$bill}{added_to}) {
+                my $moved_to = '';
+                # FIXME: assert that committees match?
+                if ($r->{cname} ne $a->{cname}) {
+                    warn "$ME: FIXMEEE 3! $r->{cname} -> $a->{cname}";
+                    $moved_to = $a->{cname} . ' ';
+                }
+                $moved_to .= "$a->{md} " if $a->{md} ne $r->{md};
+                $moved_to .= "$a->{hm}";
+                push @diffs,
+                    [ $bill, "moved from $r->{cname} $r->{md} $r->{hm} to $moved_to" ];
+            }
+            else {
+                push @diffs, [ $bill, "removed from $r->{cname} $r->{md}" ];
+            }
+        }
+        elsif (my $a = $by_bill{$bill}{added_to}) {
+            push @diffs, [ $bill, "added to $a->{cname} $a->{md} $a->{hm}" ];
+        }
+        else {
+            warn "$ME: $bill: WTF is the difference??";
+        }
+    }
+
+    return { by_bill => \@diffs };
+}
+
+
+sub find_meeting {
+    my ($json, $ymd, $hms, $cname) = @_;
+
+    if (! exists $json->{$ymd}) {
+        warn "$ME: No data for $ymd in new json\n"
+            unless $ymd lt localtime->ymd;
+        return;
+    }
+
+    if (exists $json->{$ymd}{$hms}) {
+        if (exists $json->{$ymd}{$hms}{$cname}) {
+            my $found = $json->{$ymd}{$hms}{$cname};
+
+            # FIXME: duplication
+            $found->{cname} = $cname;
+            $found->{ymd} = $ymd;
+            ($found->{md} = $ymd) =~ s/^\d-//;
+            $found->{hms} = $hms;
+            ($found->{hm} = $hms) =~ s/:\d+$//;
+
+            return $found;
+        }
+    }
+
+    # OK, look for _any_ $cname meetings that day
+    $hms =~ /^(\d+):(\d+):/ or die;
+    my $m1 = $1 * 60 + $2;
+
+    my $found;
+    my $delta_h_min = 9999;
+    for my $hms2 (sort keys %{$json->{$ymd}}) {
+        if (exists $json->{$ymd}{$hms2}{$cname}) {
+            $hms2 =~ /^(\d+):(\d+):/ or die;
+            my $delta_h = abs($1 * 60 + $2 - $m1);
+            if ($delta_h < 4 * 60) {
+                if ($delta_h < $delta_h_min) {
+                    $found = $json->{$ymd}{$hms2}{$cname};
+
+                    # FIXME: duplication
+                    $found->{cname} = $cname;
+                    $found->{ymd} = $ymd;
+                    ($found->{md} = $ymd) =~ s/^\d+-//;
+                    $found->{hms} = $hms2;
+                    ($found->{hm} = $hms2) =~ s/:\d+$//;
+                }
+            }
+        }
+    }
+
+    (my $md = $ymd) =~ s/^\d+-//;
+    (my $hm = $hms) =~ s/:\d+$//;
+    if ($found) {
+        warn "$ME: $cname $md rescheduled from $hm to $found->{hm}\n";
+        return $found;
+    }
+
+    # Sigh.... sometimes we can't figure out a time.
+    # FIXME: look for 00:00:00 in either one
+
+    warn "$ME: $cname $md $hm not found\n";
+    return;
+}
+
+# END   compute_changelog
+###############################################################################
+
+
+1;

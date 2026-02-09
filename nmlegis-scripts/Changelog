@@ -1,0 +1,65 @@
+* 2026-01-26
+  - Bill view page now lists all public trackers which follow this bill
+
+* 2025-09-10
+  - password reset functionality
+
+* 2025-03-22
+  - Vetoed bills page.
+
+* 2025-03-11
+  - Status table: for bills that have passed one chamber, but not yet been referred to the other chamber, add a "[no referrals]" note. This gives a clearer indication that the bill still has a ways to go.
+
+* 2025-03-10
+  - Show all sponsors and cosponsors for bills, not just the first five.
+  - Bug fix: schedule changes were sometimes being lost or delayed.
+
+* 2025-03-08
+  - better handling of re-referrals and committee subs.
+
+* 2025-03-05
+  - add "[view on nmlegis.gov]" links to committees, legislators, other places.
+  - fixed weird bug where some active (scheduled) bills were being shown in gray (inactive).
+  - new Half-Passed page, for showing bills passing only one chamber so far.
+
+* 2025-03-04
+  - committee pages: vote reports: repeat headings every 15 rows; otherwise the table gets too long and requires scrolling up and down to figure out names.
+
+* 2025-03-03
+  - legislator pages: now show daily schedules (committees where they sit, and committee hearings for bills they sponsor and for which they might be called to testify).
+  - search: now indexes bill BLURBS! The "AN ACT TO BLAH BLAH" text that is not actually part of the title
+  - search: now redirects to committee or legislator when given an abbreviation.
+
+* 2025-02-27
+  - fix nasty bug in new-user registration.
+  - new Bills Pending (awaiting Governor's signature)
+  - Legislators navigation element: when logged in, menu now lists shortcuts to your Representative and Senator
+  - Bill pages: display floor votes
+
+* 2025-02-23
+  - tracker pages - collapse hearing schedules. Show only the bills on this tracker, not the entire list. Also show agenda sequence number. Tracker pages are now much more readable.
+  - along those lines, in agenda tables, the committee link now goes to that specific calendar instead of just to the page.
+  - bill pages - highlight party of dissenting votes. In individual bill pages (the ones showing bill text), in the committee vote record lines, highlight the party of nay votes.
+  - committee schedule page - remove House and Senate floor agendas. They're just too unwieldy. Show them in their individual pages instead.
+  - bill/legislator/committee update tables - hide under accordion expander. Most people won't care about this.
+
+* 2025-02-22
+  - this About page
+  - User-editable categories in tracker pages.
+  - new URL field in trackers, useful for public trackers (LWV, AAUW).
+  - added Somos tracker.
+  - legislator pages now list Bills Introduced and Bills Cosponsored.
+
+* 2025-02-21
+  - Much better handling of Committee Substitutions. This is a big one. Bill pages now display the most recent committee sub, with links to prior ones (if any). In bill rows, the expected "CS/" is now there.
+  - Much better handling of Committee Reports. I now link to the original report, and parse it better.
+
+* 2025-02-20
+  - cleanup, getting ready for announcing to friends.
+
+* 2025-02-19
+  - handle two-hearings-in-one-day, such as SFC.
+  - too much other cleanup and fixes to list.
+
+* 2025-02-05
+  - Started this rewrite of the web UI.

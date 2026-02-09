@@ -1,0 +1,110 @@
+{
+   "2023-03-03" : {
+      "08:30:00" : {
+         "SRC" : {
+            "bills" : ["SB438","SJR13","SJR14","SB218","HB184","HB216","HJM2","SM16","SM52","SM38"],
+            "date" : "2023-03-03",
+            "datetime" : "2023-03-03T08:30:00",
+            "mtime" : "2023-03-02T19:36:28",
+            "name" : "SRC",
+            "room" : "321",
+            "time" : "8:30 AM",
+            "url" : "2023/03/sSched/sSched030323.pdf",
+            "zoom" : "https://us02web.zoom.us/j/81944191844"
+         }
+      },
+      "09:30:00" : {
+         "SEC" : {
+            "bills" : ["HB151","HB226","HJM3"],
+            "date" : "2023-03-03",
+            "datetime" : "2023-03-03T09:30:00",
+            "mtime" : "2023-03-02T19:36:28",
+            "name" : "SEC",
+            "room" : "311",
+            "time" : "9:30 AM",
+            "url" : "2023/03/sSched/sSched030323.pdf",
+            "zoom" : "https://us02web.zoom.us/j/89615593412"
+         },
+         "SFC" : {
+            "bills" : ["SB425","SB334","SB430","SB251","SB273"],
+            "date" : "2023-03-03",
+            "datetime" : "2023-03-03T09:30:00",
+            "mtime" : "2023-03-02T19:36:28",
+            "name" : "SFC",
+            "room" : "322",
+            "time" : "9:30 AM",
+            "url" : "2023/03/sSched/sSched030323.pdf",
+            "zoom" : "https://us02web.zoom.us/j/81696207177"
+         }
+      },
+      "13:30:00" : {
+         "SHPAC" : {
+            "bills" : ["SB389","SB421","SB453","SB463","SB484","SB485"],
+            "date" : "2023-03-03",
+            "datetime" : "2023-03-03T13:30:00",
+            "mtime" : "2023-03-02T19:36:28",
+            "name" : "SHPAC",
+            "room" : "311",
+            "time" : "1:30 PM or 1/2 hr after floor sesssion",
+            "url" : "2023/03/sSched/sSched030323.pdf",
+            "zoom" : "https://us02web.zoom.us/j/81287336647"
+         },
+         "SJC" : {
+            "bills" : ["SB117","SB138","SB143","SB146","SB216","SB338","SB373"],
+            "date" : "2023-03-03",
+            "datetime" : "2023-03-03T13:30:00",
+            "mtime" : "2023-03-02T19:36:28",
+            "name" : "SJC",
+            "room" : "321",
+            "time" : "1:30 PM or 1/2 hour after floor session",
+            "url" : "2023/03/sSched/sSched030323.pdf",
+            "zoom" : "https://us02web.zoom.us/j/81502543362"
+         }
+      }
+   },
+   "2023-03-04" : {
+      "09:00:00" : {
+         "STBTC" : {
+            "bills" : ["SB403","SB410","SB514","SB448","SB472","SB51","SB74","SB75","HB8","HB44","HB79"],
+            "date" : "2023-03-04",
+            "datetime" : "2023-03-04T09:00:00",
+            "mtime" : "2023-03-02T19:36:28",
+            "name" : "STBTC",
+            "room" : "311",
+            "time" : "9:00 AM",
+            "url" : "2023/03/sSched/sSched030323.pdf",
+            "zoom" : "https://us02web.zoom.us/j/85614440294"
+         }
+      }
+   },
+   "2023-03-05" : {
+      "13:30:00" : {
+         "SHPAC" : {
+            "bills" : ["SB426","SB427","SB428","HB26","HB31","HB48","HB75","HB95","HB106","HB370"],
+            "date" : "2023-03-05",
+            "datetime" : "2023-03-05T13:30:00",
+            "mtime" : "2023-03-02T19:36:28",
+            "name" : "SHPAC",
+            "room" : "311",
+            "time" : "1:30 PM",
+            "url" : "2023/03/sSched/sSched030323.pdf",
+            "zoom" : "https://us02web.zoom.us/j/81287336647"
+         }
+      }
+   },
+   "2023-03-06" : {
+      "13:30:00" : {
+         "SHPAC" : {
+            "bills" : ["SB285","SB412","SB417","SB363","SB371","SB375","SB424","SB429","SB445","SB449","SB452"],
+            "date" : "2023-03-06",
+            "datetime" : "2023-03-06T13:30:00",
+            "mtime" : "2023-03-02T19:36:28",
+            "name" : "SHPAC",
+            "room" : "311",
+            "time" : "1:30 PM or 1/2 after floor session",
+            "url" : "2023/03/sSched/sSched030323.pdf",
+            "zoom" : "https://us02web.zoom.us/j/81287336647"
+         }
+      }
+   }
+}

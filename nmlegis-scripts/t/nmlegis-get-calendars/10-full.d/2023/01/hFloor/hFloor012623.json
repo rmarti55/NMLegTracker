@@ -1,0 +1,16 @@
+{
+   "2023-01-26" : {
+      "10:30:00" : {
+         "House" : {
+            "bills" : ["HM1","HM2","HM6","HM8"],
+            "date" : "2023-01-26",
+            "datetime" : "2023-01-26T10:30:00",
+            "mtime" : "2023-01-25T17:04:33",
+            "name" : "House",
+            "room" : "House Floor",
+            "time" : "10:30 AM",
+            "url" : "2023/01/hFloor/hFloor012623.pdf"
+         }
+      }
+   }
+}

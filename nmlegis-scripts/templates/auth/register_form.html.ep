@@ -1,0 +1,67 @@
+% layout 'default';
+% title  'Register';
+
+<h1>Register</h1>
+
+% if (flash('message')) {
+    <p><%= flash('message') %></p>
+% }
+
+<p>
+  <b>You do not need to register to use this site.</b>
+  Much of the functionality is open to all.
+</p>
+<p>
+  Registering allows you to:
+</p>
+<ul>
+  <li><b>Track bills</b> and, optionally, create trackers that others can follow;</li>
+  <li><b>Subscribe to other trackers</b>, which doesn't sound like much except it's really kind of nice to look at a schedule page and see oh, huh, LWV and AAUW are both tracking that one, but I'm not, maybe I should take a look;</li>
+  <li><b>Update bill status</b>, like, if you watched it in committee and can report that it passed/failed/tabled. (Still experimental; please ask Ed to enable this for you);</li>
+  <li><b>Personalize your displays</b>: your legislators will be highlighted, and even better, when a bill that you're watching is referred to a committee on which they sit, there'll be a prominent highlight which could encourage you to write them a note.</li>
+</ul>
+
+<p>And yeah, I dislike having so many accounts. I ask for email address because some day I'll need to add a password reset mechanism. I ask for house/senate districts as a convenience for you: otherwise how could I highlight your legislators' bills and committees? And first/last names, just a friendliness thing. You can make up names.</p>
+
+%= form_for '/register' => (method => 'POST') => begin
+  <table class="auth">
+    <tr>
+      <td><%= label_for firstname => 'First Name' %></td>
+      <td><%= text_field 'firstname', size => 20, required => 1 %></td>
+      <td><%= $self->stash("firstname_errors"); %></td>
+    </tr>
+    <tr>
+      <td><%= label_for lastname => 'Last Name' %></td>
+      <td><%= text_field 'lastname', size => 20, required => 1 %></td>
+      <td><%= $self->stash("lastname_errors"); %></td>
+    </tr>
+    <tr>
+      <td><%= label_for email => 'Email' %></td>
+      <td><%= text_field 'email', size => 20, required => 1 %></td>
+      <td><%= $self->stash("email_errors"); %></td>
+    </tr>
+    <tr>
+      <td><%= label_for password => 'Password' %></td>
+      <td><%= password_field 'password', size => 20, required => 1 %></td>
+      <td><%= $self->stash("password_errors"); %></td>
+    </tr>
+    <tr>
+      <td><%= label_for hdistrict => 'House District' %></td>
+      <td>
+        %= include 'settings/_pick_legislator', chamber => 'H'
+      </td>
+      <td>(optional, you can fill it in or change it later)</td>
+    </tr>
+    <tr>
+      <td><%= label_for sdistrict => 'Senate District' %></td>
+      <td>
+        %= include 'settings/_pick_legislator', chamber => 'S'
+      </td>
+      <td>(ditto)</td>
+    </tr>
+    <tr>
+      <td colspan="2"><button type="submit">Register</button></td>
+    </tr>
+  </table>
+% end
+% $self->stash('skip_legend' => 1);

@@ -1,0 +1,15 @@
+{
+   "2021-03-13" : {
+      "13:00:00" : {
+         "SFC" : {
+            "bills" : ["SB135","SB5","HB46","HB120","HB238","SB54","SB130","HB212","SB410","HB165","HB232","HB141","SB345","HJR1","SB317"],
+            "date" : "2021-03-13",
+            "datetime" : "2021-03-13T13:00:00",
+            "mtime" : "2021-03-12T17:08:27",
+            "name" : "SFC",
+            "time" : "1:00 PM or at the      Virtual Zoom Meeting",
+            "url" : "2021/03/SFC/SFCageMar13.21.pdf"
+         }
+      }
+   }
+}

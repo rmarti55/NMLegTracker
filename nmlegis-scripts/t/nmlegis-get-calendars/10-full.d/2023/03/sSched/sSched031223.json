@@ -1,0 +1,71 @@
+{
+   "2023-03-12" : {
+      "11:00:00" : {
+         "SRC" : {
+            "bills" : ["HB233","HB466"],
+            "date" : "2023-03-12",
+            "datetime" : "2023-03-12T11:00:00",
+            "mtime" : "2023-03-12T07:58:05",
+            "name" : "SRC",
+            "room" : "321",
+            "time" : "11:00 AM",
+            "url" : "2023/03/sSched/sSched031223.pdf",
+            "zoom" : "https://us02web.zoom.us/j/81944191844"
+         },
+         "STBTC" : {
+            "bills" : ["SB405","SB476","HB73","HB228","HB299","HB353","HB309","HB368","HB115","HB118","HB105","HB226","HB269","HB270","HB271","HB286"],
+            "date" : "2023-03-12",
+            "datetime" : "2023-03-12T11:00:00",
+            "mtime" : "2023-03-12T07:58:05",
+            "name" : "STBTC",
+            "room" : "311",
+            "time" : "11:00 AM",
+            "url" : "2023/03/sSched/sSched031223.pdf",
+            "zoom" : "https://us02web.zoom.us/j/85614440294"
+         }
+      },
+      "12:00:00" : {
+         "SFC" : {
+            "bills" : ["HB130","HB2","SB146","SB170","SB211","SB261","SB318","SB339","SB358","SB362","SB367","SB404","SB483","HB8","HB113","HB365","HB533","SB267","SB309","SB169","SB19"],
+            "date" : "2023-03-12",
+            "datetime" : "2023-03-12T12:00:00",
+            "mtime" : "2023-03-12T07:58:05",
+            "name" : "SFC",
+            "room" : "322",
+            "time" : "12:00 PM",
+            "url" : "2023/03/sSched/sSched031223.pdf",
+            "zoom" : "https://us02web.zoom.us/j/81696207177"
+         }
+      }
+   },
+   "2023-03-13" : {
+      "13:30:00" : {
+         "SHPAC" : {
+            "bills" : ["HB362","HB384","HB395","HB446"],
+            "date" : "2023-03-13",
+            "datetime" : "2023-03-13T13:30:00",
+            "mtime" : "2023-03-12T07:58:05",
+            "name" : "SHPAC",
+            "room" : "311",
+            "time" : "1:30 PM or 1/2 hr after floor session",
+            "url" : "2023/03/sSched/sSched031223.pdf",
+            "zoom" : "https://us02web.zoom.us/j/81287336647"
+         }
+      }
+   },
+   "2023-03-14" : {
+      "09:00:00" : {
+         "SCONC" : {
+            "bills" : ["HB525"],
+            "date" : "2023-03-14",
+            "datetime" : "2023-03-14T09:00:00",
+            "mtime" : "2023-03-12T07:58:05",
+            "name" : "SCONC",
+            "room" : "311",
+            "time" : "9:00 AM",
+            "url" : "2023/03/sSched/sSched031223.pdf",
+            "zoom" : "https://us02web.zoom.us/j/82404382748"
+         }
+      }
+   }
+}

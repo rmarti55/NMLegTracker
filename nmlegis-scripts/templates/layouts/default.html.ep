@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+ <title><%= title %></title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/popup.css" />
+  <link rel="stylesheet" href="/nmlegis.css" />
+  <link rel="stylesheet" href="/collapsible.css" />
+  %# FIXME! Only load jquery if this is a page that shows bills?
+  <script src="/jquery.js"></script>
+  <script src="/jquery-ui.min.js"></script>
+  <script>
+  $(document).ready(function() {
+    $("button.watchstatus.owned").click(function(e) {
+        e.preventDefault();
+        var button_pressed = $(this);
+
+        $.ajax({
+            type: "PUT",
+            url: "/trackers/update",
+            data: {
+                id: button_pressed.attr('id'),
+                is_watching: button_pressed.hasClass('watch_on'),
+                category: 'FIXME: send this too'
+            },
+            success: function(result) {
+            console.log('ok', result);
+            if (result.action) {
+                var any_on = false;
+                if (result.action == "added") {
+                    button_pressed.addClass('watch_on');
+                    any_on = true;
+                } else {
+                    button_pressed.removeClass('watch_on');
+                }
+
+                // now look through all, and update parent tr watching
+                console.log(button_pressed.parents('tr'))
+                button_pressed.siblings('button').each(function() {
+                    if ($(this).hasClass('watch_on')) {
+                        any_on = true;
+                    }
+                });
+                if (any_on) {
+                    button_pressed.parents('tr').addClass('watching');
+                }
+                else {
+                    button_pressed.parents('tr').removeClass('watching');
+                }
+            }
+            else {
+                console.log("NO action");
+            }
+        },
+        error: function(result) {
+            console.log('error', result);
+            if (result.responseJSON) {
+                if (result.responseJSON.error) {
+                    alert("ERROR: " + result.responseJSON.error);
+                }
+            }
+        }
+    });
+    });
+
+      // bill user reports
+      $("select.userreport").change(function(e) {
+          e.preventDefault();
+          var selector = $(this);
+
+          $.ajax({
+              type: "PUT",
+              url: "/bills/userreport",
+              data: {
+                  id: selector.attr('id'),
+                  report: selector.val()
+              },
+              success: function(result) {
+                  // FIXME: inform user that update will be shown on next load
+                  // FIXME: or, just reload page?
+                  console.log('ok', result);
+                  selector.parents('td').html("Updated! Changes will be visible when you reload page or view the bill elsewhere");
+              },
+              error: function(result) {
+                  console.log('error', result);
+                  if (result.responseJSON) {
+                      if (result.responseJSON.error) {
+                          alert("ERROR: " + result.responseJSON.error);
+                      }
+                  }
+              }
+          });
+      });
+
+      // in trackers > edit, for category
+      $("select.custom_select").change(function(){
+          $(this).next("input").val($(this).children("option:selected").text());
+          $(this).val('default');
+      });
+  });
+  </script>
+</head>
+<body>
+  %= include "layouts/_navbar"
+  <p class="ticker">  <%# FIXME! CLEAN THIS UP! %>
+    <%= Time::Piece::localtime->strftime("%a %b %e %l:%M%p") %>
+    % NMLegis::UI::Model::DB->new->{_dbix}->query('SELECT end FROM sessions WHERE id=2025')->into(my $t_end);
+    % if (time < $t_end) {
+    %    my $delta = $t_end - time;
+    %    if ($delta > 21 * 86400) {
+    - <%= sprintf("%d days left in session", int($delta / 86400)); %>
+    %    } elsif ($delta > 2 * 86400) {
+    - <%= sprintf("%d days, %d hours left in session", int($delta / 86400), int(($delta % 86400) / 3600)); %>
+    %    } elsif ($delta > 3600) {
+    - <%= sprintf("%d hours left in session", int($delta / 3600)); %>
+    %    } else {
+    - <%= sprintf("%d seconds left in session", $delta); %>
+    %    }
+    % }
+  </p>
+  % if (my $err = stash('error') || flash('error')) {
+  <div class="error"><%= $err %></div>
+  % }
+  <%= content %>
+  %= include 'layouts/legend'
+  <hr/>
+  <p>
+    This site pulls data from <a href="https://nmlegis.gov">nmlegis.gov</a> but is in no way associated with that site or the state of New Mexico. It's just a labor of love by Ed.
+  </p>
+  <signature>Powered by
+    <b><%= link_to 'Mojolicious' => 'https://mojolicious.org/' %></b>.
+    <%= link_to 'Tracking software' => 'https://gitlab.com/edsantiago/nmlegis/' %>
+    is fully Open Source. See <b><%= link_to 'About' => '/about' %></b> page for more info, and for a list of recent changes.</signature>
+</body>
+</html>

@@ -1,0 +1,16 @@
+{
+   "2022-01-27" : {
+      "00:00:00" : {
+         "STBTC" : {
+            "bills" : ["SB21","SB5","SB14","SB44","SB68","SB84"],
+            "date" : "2022-01-27",
+            "datetime" : "2022-01-27T00:00:00",
+            "mtime" : "2022-01-25T16:11:01",
+            "name" : "STBTC",
+            "room" : "321",
+            "url" : "2022/01/STBTC/STBTCageJan27.22.pdf",
+            "zoom" : "https://us02web.zoom.us/j/84895112616"
+         }
+      }
+   }
+}

@@ -1,0 +1,307 @@
+#!/usr/bin/perl
+#
+# nmlegis-diff-schedule - compare two schedule files
+#
+package ESM::NMLegisDiffSchedule;
+
+use v5.14;
+use strict;
+use warnings;
+
+use utf8;
+use open qw( :encoding(UTF-8) :std );
+
+(our $ME = $0) =~ s|.*/||;
+(our $VERSION = '$Revision: 1.30 $ ') =~ tr/[0-9].//cd;
+
+use NMLegis                     qw(:all);
+
+use File::Slurp                 qw(read_file);
+use JSON::XS;
+use Time::Piece;
+
+# For debugging, show data structures using DumpTree($var)
+#use Data::TreeDumper; $Data::TreeDumper::Displayaddress = 0;
+
+###############################################################################
+# BEGIN user-customizable section
+
+# END   user-customizable section
+###############################################################################
+
+###############################################################################
+# BEGIN boilerplate args checking, usage messages
+
+sub usage {
+    print  <<"END_USAGE";
+Usage: $ME [OPTIONS]
+
+$ME diffs two schedule files (or revisions thereof)
+
+OPTIONS:
+
+  --debug        use local HTML cache (to avoid slamming nmlegis)
+
+  -v, --verbose  show verbose progress indicators
+  -n, --dry-run  make no actual changes
+
+  --help         display this message
+  --version      display program name and version
+END_USAGE
+
+    exit;
+}
+
+# Command-line options.  Note that this operates directly on @ARGV !
+our $debug   = 0;
+our $force   = 0;
+our $verbose = 0;
+our $NOT     = '';              # print "blahing the blah$NOT\n" if $debug
+sub handle_opts {
+    use Getopt::Long;
+    GetOptions(
+        'debug!'     => \$debug,
+        'dry-run|n!' => sub { $NOT = ' [NOT]' },
+        'force'      => \$force,
+        'verbose|v'  => \$verbose,
+
+        help         => \&usage,
+        version      => sub { print "$ME version $VERSION\n"; exit 0 },
+    ) or die "Try `$ME --help' for help\n";
+}
+
+# END   boilerplate args checking, usage messages
+###############################################################################
+
+############################## CODE BEGINS HERE ###############################
+
+# The term is "modulino".
+__PACKAGE__->main()                                     unless caller();
+
+# Main code.
+sub main {
+    # Note that we operate directly on @ARGV, not on function parameters.
+    # This is deliberate: it's because Getopt::Long only operates on @ARGV
+    # and there's no clean way to make it use @_.
+    handle_opts();                      # will set package globals
+
+    my $file1 = shift(@ARGV)
+        or die "$ME: Missing FILE1 arg; see $ME --help\n";
+    my $file2 = shift(@ARGV)
+        or die "$ME: Missing FILE2 arg; see $ME --help\n";
+    die "$ME: Too many arguments, see $ME --help\n" if @ARGV;
+
+    chdir "/home/esm/.local/share/nmlegis" or die "$ME: cd: $!\n";
+
+    my ($rev1, $rev2);
+
+    if ($file1 =~ s/(:)?(\d+)$//) {
+        $rev1 = $2;
+    }
+
+    $file1 ||= "schedule.json";
+    if (! -e $file1) {
+        if ($file1 =~ /from|html/) {
+            $file1 = "schedule-from-html.json";
+        }
+        else {
+            $file1 = "schedule.json";
+        }
+    }
+    if ($file2 =~ s/(:)?(\d+)$//) {
+        $rev2 = $2;
+    }
+    $file2 ||= $file1;
+    if (! -e $file2) {
+        if ($file2 =~ /from|html/) {
+            $file2 = "schedule-from-html.json";
+        }
+        else {
+            $file2 = "schedule.json";
+        }
+    }
+
+    my $json1 = slurp_json($file1, $rev1);
+    my $json2 = slurp_json($file2, $rev2);
+
+    $json1->{_which} = $file1;
+    $json1->{_which} .= " \@ $rev1" if $rev1;
+    if ($file1 eq $file2) {
+        # rev2 must be defined
+        $json2->{_which} = "$rev2";
+    }
+    else {
+        $json2->{_which} = "$file2";
+        $json2->{_which} .= " @$rev2" if $rev2;
+    }
+
+
+    do_diff($json1, $json2);
+}
+
+sub do_diff {
+    my ($json1, $json2) = @_;
+
+    my %by_bill;
+
+    # ...
+    for my $ymd (sort grep { $_ !~ /^_/ } keys %$json1) {
+        for my $hms (sort keys %{$json1->{$ymd}}) {
+            for my $cname (sort keys %{$json1->{$ymd}{$hms}}) {
+                my $mtg = $json1->{$ymd}{$hms}{$cname};
+
+                printf "%s %s %s\n", $ymd, $hms, $cname         if $debug;
+                my $in_new = find_meeting($json2, $ymd, $hms, $cname)
+                    or next;
+
+                if ($in_new->{room} ne $mtg->{room}) {
+                    warn "$ME: $cname $mtg->{md} $mtg->{hm} moved to room $in_new->{room}\n";
+                }
+
+                # diff bills
+                next unless $mtg->{bills} && $in_new->{bills};
+                my @b1 = @{$mtg->{bills}};
+                my @b2 = @{$in_new->{bills}};
+                for my $b1 (@b1) {
+                    if (! grep { $_ eq $b1 } @b2) {
+                        die "FIXMEEEE 1" if exists $by_bill{$b1}{removed_from};
+                        $by_bill{$b1}{removed_from} = $mtg;
+                    }
+                }
+                for my $b2 (@b2) {
+                    if (! grep { $_ eq $b2 } @b1) {
+                        die "FIXMEEEE 2" if exists $by_bill{$b2}{added_to};
+                        $by_bill{$b2}{added_to} = $in_new;
+                    }
+                }
+            }
+        }
+    }
+
+    for my $ymd (sort grep { $_ !~ /^_/ } keys %$json2) {
+        for my $hms (sort keys %{$json2->{$ymd}}) {
+            for my $cname (sort keys %{$json2->{$ymd}{$hms}}) {
+                my $mtg = $json2->{$ymd}{$hms}{$cname};
+
+                printf "%s %s %s\n", $ymd, $hms, $cname         if $debug;
+                my $in_old = find_meeting($json1, $ymd, $hms, $cname);
+            }
+        }
+    }
+
+    for my $bill (sort keys %by_bill) {
+        if (my $r = $by_bill{$bill}{removed_from}) {
+            if (my $a = $by_bill{$bill}{added_to}) {
+                my $moved_to = '';
+                # FIXME: assert that committees match?
+                if ($r->{cname} ne $a->{cname}) {
+                    warn "$ME: FIXMEEE 3! $r->{cname} -> $a->{cname}";
+                    $moved_to = $a->{cname} . ' ';
+                }
+                $moved_to .= "$a->{md} " if $a->{md} ne $r->{md};
+                $moved_to .= "$a->{hm}";
+                warn "$ME: $bill: moved from $r->{cname} $r->{md} $r->{hm} to $moved_to\n";
+            }
+            else {
+                warn "$ME: $bill: removed from $r->{cname} $r->{md} agenda\n";
+            }
+        }
+        elsif (my $a = $by_bill{$bill}{added_to}) {
+            warn "$ME: $bill: added to $a->{cname} $a->{md} $a->{hm} agenda\n";
+        }
+        else {
+            warn "$ME: $bill: WTF is the difference??";
+        }
+    }
+}
+
+sub find_meeting {
+    my ($json, $ymd, $hms, $cname) = @_;
+
+    if (! exists $json->{$ymd}) {
+        warn "$ME: No data for $ymd in $json->{_which}\n";
+    }
+
+    if (exists $json->{$ymd}{$hms}) {
+        if (exists $json->{$ymd}{$hms}{$cname}) {
+            return $json->{$ymd}{$hms}{$cname};
+        }
+    }
+
+    # OK, look for _any_ $cname meetings that day
+    $hms =~ /^(\d+):(\d+):/ or die;
+    my $m1 = $1 * 60 + $2;
+
+    my $found;
+    my $delta_h_min = 9999;
+    for my $hms2 (sort keys %{$json->{$ymd}}) {
+        if (exists $json->{$ymd}{$hms2}{$cname}) {
+            $hms2 =~ /^(\d+):(\d+):/ or die;
+            my $delta_h = abs($1 * 60 + $2 - $m1);
+            if ($delta_h < 4 * 60) {
+                if ($delta_h < $delta_h_min) {
+                    $found = $json->{$ymd}{$hms2}{$cname};
+                    $found->{hms} = $hms2;
+                }
+            }
+        }
+    }
+
+    (my $md = $ymd) =~ s/^\d+-//;
+    (my $hm = $hms) =~ s/:\d+$//;
+    if ($found) {
+        warn "$ME: $cname $md moved from $hm to $found->{hm}\n";
+        return $found;
+    }
+
+    # Sigh.... sometimes we can't figure out a time.
+    # FIXME: look for 00:00:00 in either one
+
+    warn "$ME: $cname $md $hm not in $json->{_which}\n";
+    return;
+}
+
+
+sub slurp_json {
+    my ($file, $rev) = @_;
+
+    my $json;
+
+    -e $file
+        or die "$ME: Does not exist: $file\n";
+    if (! $rev) {
+        $json = decode_json(read_file($file));
+    }
+    else {
+        # Rev
+        open my $hg, '-|', 'hg', 'cat', "-r$rev", $file
+            or die "$ME: Cannot fork: $!\n";
+        my $data = do { local $/ = undef; <$hg>; };
+        close $hg
+            or die "$ME: Error running hg on -r$rev $file\n";
+        $json = decode_json($data);
+    }
+
+    # Fill in fields for convenience
+    for my $ymd (grep { $_ !~ /^_/ } keys %$json) {
+        (my $md = $ymd) =~ s/^\d+-//;
+        for my $hms (keys %{$json->{$ymd}}) {
+            # Diff only committees
+            delete $json->{$ymd}{$hms}{House};
+            delete $json->{$ymd}{$hms}{Senate};
+
+            (my $hm = $hms) =~ s/:\d+$//;
+            for my $cname (keys %{$json->{$ymd}{$hms}}) {
+                my $mtg = $json->{$ymd}{$hms}{$cname};
+
+                $mtg->{ymd}   = $ymd;
+                $mtg->{md}    = $md;
+                $mtg->{hms}   = $hms;
+                $mtg->{hm}    = $hm;
+                $mtg->{cname} = $cname;
+            }
+        }
+    }
+
+    return $json;
+}

@@ -1,0 +1,14 @@
+{
+   "2023-03-15" : {
+      "00:00:00" : {
+         "Senate" : {
+            "bills" : ["HB198","HB118","HB269","HB184","HB145","HB195"],
+            "date" : "2023-03-15",
+            "mtime" : "2023-03-15T17:59:35",
+            "name" : "Senate",
+            "room" : "Senate Floor",
+            "url" : "2023/03/sFloor/sFloor031523_Supplemental1.pdf"
+         }
+      }
+   }
+}

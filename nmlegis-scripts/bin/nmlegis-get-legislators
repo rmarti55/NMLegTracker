@@ -1,0 +1,260 @@
+#!/usr/bin/perl
+#
+# nmlegis-get-legislators - get nmlegis legislator info
+#
+package ESM::NMLegisGetLegislators;
+
+use v5.14;
+use utf8;
+use open qw( :encoding(UTF-8) :std );
+
+(our $ME = $0) =~ s|.*/||;
+(our $VERSION = '$Revision: 1.30 $ ') =~ tr/[0-9].//cd;
+
+use NMLegis                     qw(:all);
+use NMLegis::Legislators;
+use NMLegis::Scrape;
+
+# For debugging, show data structures using DumpTree($var)
+#use Data::TreeDumper; $Data::TreeDumper::Displayaddress = 0;
+
+###############################################################################
+# BEGIN user-customizable section
+
+# Current schema version. Should be updated only on breaking changes.
+# It is defined here, in this script, not in the module, because this
+# script is the one that defines how we save data. (The module reads it,
+# though, so maybe I need to rethink that)
+our $JSON_Schema = '20250123';
+
+# END   user-customizable section
+###############################################################################
+
+use HTML::Entities;
+use HTML::TreeBuilder;
+
+###############################################################################
+# BEGIN boilerplate args checking, usage messages
+
+sub usage {
+    print  <<"END_USAGE";
+Usage: $ME [OPTIONS]
+
+$ME fetches and parses Legislator
+names and contact info from nmlegis.gov .
+
+  * scrapes the top pages: $NMLegis::Legislators::Legislator_List_URL (R, S) ;
+  * fetches all links matching '/Members/Legislator?SponCode=XXXX ,
+    preserving them in a local cache directory;
+  * fetches each such page, saving info
+  * writes $NMLegis::Legislators::Legislators_File
+
+OPTIONS:
+
+  --debug        use local HTML cache (to avoid slamming nmlegis)
+
+  -v, --verbose  show verbose progress indicators
+  -n, --dry-run  make no actual changes
+
+  --help         display this message
+  --version      display program name and version
+END_USAGE
+
+    exit;
+}
+
+# Command-line options.  Note that this operates directly on @ARGV !
+our $debug   = 0;
+our $force   = 0;
+our $verbose = 0;
+our $NOT     = '';              # print "blahing the blah$NOT\n" if $debug
+sub handle_opts {
+    use Getopt::Long;
+    GetOptions(
+        'debug!'     => \$debug,
+        'dry-run|n!' => sub { $NOT = ' [NOT]' },
+        'force'      => \$force,
+        'verbose|v'  => \$verbose,
+
+        help         => \&usage,
+        version      => sub { print "$ME version $VERSION\n"; exit 0 },
+    ) or die "Try `$ME --help' for help\n";
+}
+
+# END   boilerplate args checking, usage messages
+###############################################################################
+
+############################## CODE BEGINS HERE ###############################
+
+# The term is "modulino".
+__PACKAGE__->main()                                     unless caller();
+
+# Main code.
+sub main {
+    # Note that we operate directly on @ARGV, not on function parameters.
+    # This is deliberate: it's because Getopt::Long only operates on @ARGV
+    # and there's no clean way to make it use @_.
+    handle_opts();                      # will set package globals
+
+    # Used by lower levels to avoid fetching from nmlegis
+    $ENV{NMLEGIS_USE_CACHE} //= $debug;
+
+    my %legislators = (_schema => $JSON_Schema);
+    for my $chamber (qw(H S)) {
+        $legislators{$chamber} = get_legislators($chamber);
+    }
+
+    my $output_file = $NMLegis::Legislators::Legislators_File;
+    write_json_outfile(\%legislators, $output_file);
+
+    if (my $web_json = shift(@ARGV)) {
+        system('rsync', '-a', $output_file, $web_json);
+    }
+
+    # Regenerate web page
+    system('nmlegis-show-legislators');
+}
+
+#####################
+#  get_legislators  #  Fetches ALL legislators for H/S, returns AREF by district
+#####################
+sub get_legislators {
+    my $chamber = shift;                # in: 'H'(ouse) or 'S'enate
+    my @legislators;                    # out: sorted by district
+
+    my $scrape = NMLegis::Legislators::fetch_html($chamber);
+    my $url = $scrape->{url};
+
+    # Find <select> with SponCode and name of each legislator
+    my $tb = HTML::TreeBuilder->new_from_content($scrape->{html});
+
+    my $want_id = 'MainContent_ddlLegislators';
+    my $select = $tb->look_down(_tag => 'select', id   => $want_id)
+        or die "$ME: did not find <select id=$want_id> in <$url>";
+
+    for my $option ($select->descendants) {
+        #        use Data::Dump; dd $x->as_HTML;
+        my $val = $option->as_HTML;
+        next if $val =~ /disabled/;
+        $val =~ m!value="([HS][A-Z]{3,5})">(.*?)</opt!i
+            or do {
+                warn "$ME: Did not find 'value=\"XXXXX\"' in '$val'";
+                next;
+            };
+        my ($code, $name) = (uc($1), $2);
+
+        if (my $info = get_legislator($code)) {
+            $info->{id}      = $code;
+            $info->{chamber} = $chamber;
+
+            # Warn Ed if names change. Informational only.
+            encode_entities($info->{name}) eq $name
+                or warn "$ME: $code: name '$info->{name}' != '$name'\n";
+
+            my $d = $info->{district}
+                or die "$ME: Internal error: no district for $code";
+            warn "$ME: Internal error: duplicate for $chamber district $d: $name, $legislators[$d]{name}"
+                if defined $legislators[$d];
+            $legislators[$d] = $info;
+        }
+        else {
+            warn "$ME: No info for $code";
+        }
+    }
+
+    $tb->delete;
+
+    return \@legislators;
+}
+
+
+####################
+#  get_legislator  #  Fetches info for ONE legislator
+####################
+sub get_legislator {
+    my $code = shift;                   # in: SponCode
+    my %info;                           # out: legislator info
+
+    my $scrape = NMLegis::Legislators::fetch_html($code);
+
+    my $tb = HTML::TreeBuilder->new_from_content($scrape->{html});
+    my $list = $tb->look_down(_tag => 'ul', class => 'list-group')
+        or do {
+            warn "$ME: Did not find list-group for <$code> in $scrape->{url}";
+            $tb->delete;
+            return +{ name => 'NOT FOUND' };
+        };
+
+    for my $element ($list->descendants) {
+        if ($element->as_text =~ /^(\w[\w\s]+):\s+(.*)/) {
+            my ($key, $val) = ($1, $2);
+            $val =~ s/^\s+|\s+$//g;     # strip leading/trailing whitespace
+            $val = '' if $val eq ',';   # Grumble. Seems to mean missing addr.
+            $info{lc $key} //= $val;
+        }
+    }
+
+    # Sigh... the only place party appears is in parentheses
+    my $want = 'MainContent_formViewLegislatorName_lblLegislatorName';
+    my $title = $tb->look_down(_tag => 'span', id => $want)
+        or die "$ME: Did not find $want in <$code>";
+    my $title_text = $title->as_text;
+
+    # Strip off title
+    $title_text =~ s/^(rep|sen)\w+\s+//i;
+
+    # Get party.
+    if ($title_text =~ s/\s+-\s+\(([A-Z]+)\)\s*$//) {
+        $info{party} = $1;
+    }
+    else {
+        # 2024-01-13 Jared Hembree, apparently appointed H-59 and
+        # info is incomplete
+        warn "$ME: Did not find party in '$title_text' ($code, district $info{district})";
+        $info{party} = '?';
+    }
+
+    # The rest is name
+    $info{name} = $title_text;
+
+    # Strip off Jr, Junior, etc
+    $info{name} =~ s/,\s*[Jj]\w+\.?\s*$//;
+
+    # Strip off trailing whitespace
+    $info{name} =~ s/\s+$//;
+
+    # Sigh... web UI does not separate first and last names.
+    # But the alt tag in the photo, at least as of 2023-01-25, is
+    # reliably the last name.
+    $want = 'MainContent_formViewLegislator_imgLegislator';
+    if (my $img = $tb->look_down(_tag => 'img', id => $want)) {
+        if (my $alt = $img->attr('alt')) {
+            # 2024-01-05 "McCutcheon<space><space>II"
+            $alt =~ s/\s+/ /g;
+            $info{lastname} = $alt;
+
+            if ($info{name} =~ /^(.*\S)\s+$alt\s*$/) {
+                $info{firstname} = $1;
+            }
+            else {
+                warn "$ME: $code: name=$info{name} lastname=$alt ?";
+            }
+        }
+    }
+    else {
+        warn "$ME: Did not find photo for $code in $scrape->{url}";
+    }
+
+    # 2024-01-15: "lead position" (Speaker, Whip, etc) is shown
+    # in the same <td>, but *outside* of the <span>:
+    #    <span id="...">Javier Martinez - (D)</span> - Speaker of the House
+    # This finds the next element after the title span
+    if (my $lead_position = $title->right) {
+        $lead_position =~ s/^[\s-]+|\s+$//g;
+        $info{lead_position} = $lead_position;
+    }
+
+    $tb->delete;
+
+    return \%info;
+}

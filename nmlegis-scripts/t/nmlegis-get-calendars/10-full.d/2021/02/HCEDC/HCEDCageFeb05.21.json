@@ -1,0 +1,16 @@
+{
+   "2021-02-05" : {
+      "13:30:00" : {
+         "HCEDC" : {
+            "bills" : ["HB8","HB164"],
+            "date" : "2021-02-05",
+            "datetime" : "2021-02-05T13:30:00",
+            "mtime" : "2021-02-04T11:08:38",
+            "name" : "HCEDC",
+            "time" : "1:30 PM",
+            "url" : "2021/02/HCEDC/HCEDCageFeb05.21.pdf",
+            "zoom" : "https://us02web.zoom.us/j/82162614729"
+         }
+      }
+   }
+}

@@ -1,0 +1,16 @@
+{
+   "2022-02-15" : {
+      "00:00:00" : {
+         "SFC" : {
+            "bills" : ["SB212","SB213","HB37","HB7","SB21","HB124","SB164","SB155"],
+            "date" : "2022-02-15",
+            "datetime" : "2022-02-15T00:00:00",
+            "mtime" : "2022-02-15T12:30:03",
+            "name" : "SFC",
+            "room" : "322",
+            "time" : "1/2 hour after Floor Session or Call of Chair",
+            "url" : "2022/02/SFC/SFCageFeb15.22.pdf"
+         }
+      }
+   }
+}

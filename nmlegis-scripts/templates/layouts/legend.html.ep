@@ -1,0 +1,45 @@
+% return if $self->stash('skip_legend');
+<hr/>
+<div class="wrap-collapsible">
+  <input id="collapsible-legend" class="toggle" type="checkbox">
+  <label for="collapsible-legend" class="lbl-toggle">Legend (click to expand)</label>
+  <div class="collapsible-content">
+    <div class="content-inner">
+<table>
+ <tr>
+  <th>Legislators:</th>
+  <td class="party-D">Democratic sponsorship</td>
+  <td class="party-R">Republican sponsorship</td>
+  <td class="party-DTS">Bipartisan sponsorship</td>
+  <td class="mylegislator">This indicates your legislator<br/>
+    (Highlights bills they sponsor, committees they sit in)</td>
+ </tr>
+ <tr>
+  <th>Bill Rows:</th>
+  <td class="active"><b>Active</b> -- hearings scheduled</td>
+  <td class="active"><b><small>(NN)</small></b> - sequence number in agenda</td>
+  <td class="inactive">Inactive -- no hearings scheduled</td>
+ </tr>
+ <tr>
+  <th>Watching:</th>
+  <td class="active">Not watching</td>
+  <td class="active watching"><b>Watching</b> - You (or one of the trackers you follow) are watching this bill</td>
+  <td class="active oppose"><b>Opposed</b>  - You (or one of the trackers you follow) are watching this bill <i>and oppose it</i></td>
+ </tr>
+ <tr>
+  <th>Bill Progress:</th>
+  <td class="passed">Passed</td>
+  <td class="failed">Failed Vote</td>
+  <td class="tabled">Tabled</td>
+ </tr>
+ <tr>
+  <th>Incomplete Data:</th>
+  <td class="heard">Heard(?)<br/>(was scheduled for hearing recently)</td>
+  <td class="heard-long-ago">Heard Long Ago<br/>(was scheduled for hearing many days ago)</td>
+  <td></td>
+  <td>(There is very little I can do about these because nmlegis.gov
+       does not report real-time results)</td>
+ </tr>
+</table>
+</div>
+</div>
