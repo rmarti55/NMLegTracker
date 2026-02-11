@@ -1,0 +1,40 @@
+[
+  {
+    "timestamp": "2026-02-11T23:14:23.513Z",
+    "status": "healthy",
+    "summary": "All checks passed - scraping is working correctly",
+    "stats": {
+      "legislatorCount": 112,
+      "houseLegislators": 70,
+      "senateLegislators": 42,
+      "billCount": 797,
+      "houseBills": 452,
+      "senateBills": 345,
+      "billsWithSponsors": 797,
+      "billsWithActions": 797,
+      "floorVoteCount": 0,
+      "committeeReportCount": 0,
+      "jsonFileSize": 162073,
+      "lastModified": "2026-02-11T23:01:51.915Z"
+    }
+  },
+  {
+    "timestamp": "2026-02-11T23:14:28.796Z",
+    "status": "healthy",
+    "summary": "All checks passed - scraping is working correctly",
+    "stats": {
+      "legislatorCount": 112,
+      "houseLegislators": 70,
+      "senateLegislators": 42,
+      "billCount": 797,
+      "houseBills": 452,
+      "senateBills": 345,
+      "billsWithSponsors": 797,
+      "billsWithActions": 797,
+      "floorVoteCount": 0,
+      "committeeReportCount": 0,
+      "jsonFileSize": 162073,
+      "lastModified": "2026-02-11T23:01:51.915Z"
+    }
+  }
+]

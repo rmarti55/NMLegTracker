@@ -160,9 +160,27 @@ if ! npx tsx scripts/update-sync-time.ts 2>&1; then
     log_error "update-sync-time.ts failed"
 fi
 
+# Step 5: Run scraping health check
+echo "$LOG_PREFIX Running scraping health check..."
+HEALTH_OUTPUT=$(npx tsx scripts/check-scraping-health.ts 2>&1)
+HEALTH_RESULT=$?
+
+echo "$HEALTH_OUTPUT" | grep -E "(Status|Legislators|Bills|checks)" || true
+
+if [ $HEALTH_RESULT -eq 1 ]; then
+    log_error "Scraping health check CRITICAL - parsing may be broken"
+    SCRAPING_HEALTH="critical"
+elif [ $HEALTH_RESULT -eq 2 ]; then
+    echo "$LOG_PREFIX WARNING: Scraping health check degraded"
+    SCRAPING_HEALTH="degraded"
+else
+    SCRAPING_HEALTH="healthy"
+fi
+
 # Record last sync time and status
 echo "$(date -Iseconds)" > "$PROJECT_DIR/.last-sync"
 echo "$SYNC_STATUS" > "$PROJECT_DIR/.last-sync-status"
+echo "$SCRAPING_HEALTH" > "$PROJECT_DIR/.last-scraping-health"
 
 # Summary
 echo ""
@@ -170,14 +188,28 @@ echo "========================================"
 echo "$LOG_PREFIX Sync completed with status: $SYNC_STATUS"
 echo "$LOG_PREFIX   New bills: $NEW_BILLS"
 echo "$LOG_PREFIX   Updated bills: $UPDATED_BILLS"
+echo "$LOG_PREFIX   Scraping health: $SCRAPING_HEALTH"
 if [ "$SYNC_STATUS" = "failed" ]; then
     echo "$LOG_PREFIX   Errors: $SYNC_ERRORS"
 fi
 echo "========================================"
 echo ""
 
+# Send alert if scraping health is critical
+if [ "$SCRAPING_HEALTH" = "critical" ]; then
+    echo "$LOG_PREFIX ⚠️  ALERT: Scraping health is CRITICAL - check nmlegis.gov for HTML changes"
+    npx tsx scripts/send-alert.ts \
+        --type critical \
+        --title "NMLegTracker Scraping CRITICAL" \
+        --message "Scraping health check failed. nmlegis.gov HTML structure may have changed. Check logs at $PROJECT_DIR/logs/sync.log" \
+        2>&1 || true
+fi
+
 # Exit with appropriate code
-if [ "$SYNC_STATUS" = "failed" ]; then
+# Critical scraping health is worse than sync failure
+if [ "$SCRAPING_HEALTH" = "critical" ]; then
+    exit 1
+elif [ "$SYNC_STATUS" = "failed" ]; then
     exit 1
 else
     exit 0

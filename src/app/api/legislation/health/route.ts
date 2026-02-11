@@ -1,11 +1,20 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { 
+  runScrapingHealthCheck, 
+  getHealthHistory,
+  type ScrapingHealthResult 
+} from "@/lib/scraping-health";
 
 export const dynamic = "force-dynamic";
 
 // Cache the nmlegis.gov timestamp for 5 minutes to avoid hammering their server
 let cachedNmlegisUpdate: { timestamp: Date | null; fetchedAt: Date } | null = null;
 const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
+
+// Cache scraping health for 10 minutes (it reads files, so slightly expensive)
+let cachedScrapingHealth: { result: ScrapingHealthResult; fetchedAt: Date } | null = null;
+const SCRAPING_HEALTH_CACHE_TTL_MS = 10 * 60 * 1000; // 10 minutes
 
 /**
  * Fetch the "Last legislative database update" timestamp from nmlegis.gov
@@ -57,6 +66,20 @@ async function fetchNmlegisTimestamp(): Promise<Date | null> {
   }
 }
 
+/**
+ * Get scraping health with caching
+ */
+function getScrapingHealth(): ScrapingHealthResult {
+  if (cachedScrapingHealth && 
+      Date.now() - cachedScrapingHealth.fetchedAt.getTime() < SCRAPING_HEALTH_CACHE_TTL_MS) {
+    return cachedScrapingHealth.result;
+  }
+
+  const result = runScrapingHealthCheck();
+  cachedScrapingHealth = { result, fetchedAt: new Date() };
+  return result;
+}
+
 export async function GET() {
   try {
     // Get our last sync time from the database
@@ -66,13 +89,17 @@ export async function GET() {
     });
 
     // Get bill counts
-    const [totalBills, billsWithText] = await Promise.all([
+    const [totalBills, billsWithText, billsWithSponsors] = await Promise.all([
       prisma.legiBill.count(),
       prisma.legiBill.count({ where: { fullText: { not: null } } }),
+      prisma.legiBill.count({ where: { sponsors: { some: {} } } }),
     ]);
 
     // Fetch nmlegis.gov timestamp
     const nmlegisUpdate = await fetchNmlegisTimestamp();
+
+    // Run scraping health check
+    const scrapingHealth = getScrapingHealth();
 
     const ourLastSync = session?.datasetDate ?? null;
     const now = new Date();
@@ -97,8 +124,17 @@ export async function GET() {
       staleness = hoursSinceSync > 24 ? "very_stale" : "current";
     }
 
+    // Determine overall status based on both staleness and scraping health
+    let overallStatus: "ok" | "warning" | "critical" = "ok";
+    
+    if (scrapingHealth.status === "critical") {
+      overallStatus = "critical";
+    } else if (staleness === "very_stale" || scrapingHealth.status === "degraded") {
+      overallStatus = "warning";
+    }
+
     return NextResponse.json({
-      status: staleness === "very_stale" ? "warning" : "ok",
+      status: overallStatus,
       staleness,
       staleMinutes: staleMinutes > 0 ? staleMinutes : 0,
       
@@ -107,11 +143,29 @@ export async function GET() {
       
       session: session?.sessionName ?? null,
       
+      // Database stats
       stats: {
         totalBills,
         billsWithText,
+        billsWithSponsors,
         textCoverage: totalBills > 0 ? Math.round((billsWithText / totalBills) * 100) : 0,
+        sponsorCoverage: totalBills > 0 ? Math.round((billsWithSponsors / totalBills) * 100) : 0,
       },
+      
+      // Scraping health (from JSON files)
+      scrapingHealth: {
+        status: scrapingHealth.status,
+        summary: scrapingHealth.summary,
+        checks: scrapingHealth.checks,
+        lastChecked: scrapingHealth.timestamp.toISOString(),
+      },
+      
+      // Recent health history
+      healthHistory: getHealthHistory(5).map(h => ({
+        timestamp: h.timestamp,
+        status: h.status,
+        summary: h.summary,
+      })),
       
       checkedAt: now.toISOString(),
     });

@@ -18,6 +18,15 @@ export const AI_ASSISTANT = {
   description: "Your AI assistant for understanding legislation",
 } as const;
 
+// Token limits for AI chat
+export const TOKEN_LIMITS = {
+  // Free tier token limit
+  free: 50000,
+  
+  // Pro tier token limit (if/when implemented)
+  pro: 500000,
+} as const;
+
 // LegiScan API configuration
 export const LEGISCAN_CONFIG = {
   // Base API URL
