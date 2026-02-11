@@ -1,6 +1,29 @@
+/**
+ * Statistics API Route
+ *
+ * GET /api/legislation/stats
+ *
+ * Returns overall statistics about legislation data including
+ * totals, breakdowns by status/chamber, and recent bills.
+ *
+ * @module api/legislation/stats
+ */
+
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
+/**
+ * GET handler for legislation statistics.
+ *
+ * Returns:
+ * - Total counts (bills, legislators, votes)
+ * - Available sessions
+ * - Bills grouped by status
+ * - Bills grouped by chamber (House/Senate)
+ * - 10 most recently updated bills
+ *
+ * @returns JSON response with statistics data
+ */
 export async function GET() {
   try {
     // Get overall stats

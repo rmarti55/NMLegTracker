@@ -1,6 +1,18 @@
+/**
+ * Legislators API Route
+ *
+ * GET /api/legislation/legislators
+ *
+ * List legislators with filtering, pagination, and automatic de-duplication
+ * to handle name variations between data sources.
+ *
+ * @module api/legislation/legislators
+ */
+
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
+/** Legislator data with sponsorship and vote counts */
 interface LegislatorWithCount {
   id: string;
   peopleId: number;
@@ -73,6 +85,19 @@ function deduplicateLegislators(legislators: LegislatorWithCount[]): LegislatorW
   return deduplicated;
 }
 
+/**
+ * GET handler for legislator listing.
+ *
+ * Query Parameters:
+ * - search: Search by name or district
+ * - party: Filter by party ("D" or "R")
+ * - role: Filter by role ("Rep" or "Sen")
+ * - page: Page number (default: 1)
+ * - limit: Results per page (default: 100)
+ *
+ * @param request - The incoming request with search parameters
+ * @returns JSON response with legislators array and pagination info
+ */
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;

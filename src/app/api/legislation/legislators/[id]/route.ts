@@ -1,6 +1,30 @@
+/**
+ * Single Legislator API Route
+ *
+ * GET /api/legislation/legislators/[id]
+ *
+ * Retrieve a single legislator by ID with sponsorships, voting history,
+ * and calculated vote statistics.
+ *
+ * @module api/legislation/legislators/[id]
+ */
+
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
+/**
+ * GET handler for retrieving a single legislator.
+ *
+ * Accepts either a CUID or numeric LegiScan people ID.
+ * Returns legislator data with:
+ * - Sponsored bills
+ * - Recent vote records (last 50)
+ * - Vote statistics (yea/nay/absent/nv counts)
+ *
+ * @param request - The incoming request
+ * @param params - Route parameters containing the legislator ID
+ * @returns JSON response with legislator data or 404 if not found
+ */
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }

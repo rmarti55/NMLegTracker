@@ -1,6 +1,26 @@
+/**
+ * Single Bill API Route
+ *
+ * GET /api/legislation/bills/[id]
+ *
+ * Retrieve a single bill by ID with all related data including
+ * session, sponsors, and vote records.
+ *
+ * @module api/legislation/bills/[id]
+ */
+
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
+/**
+ * GET handler for retrieving a single bill.
+ *
+ * Accepts either a CUID or numeric LegiScan bill ID.
+ *
+ * @param request - The incoming request
+ * @param params - Route parameters containing the bill ID
+ * @returns JSON response with bill data or 404 if not found
+ */
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }

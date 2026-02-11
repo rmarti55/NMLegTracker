@@ -16,6 +16,7 @@
     "@ai-sdk/openai-compatible": "^2.0.4",
     "@ai-sdk/react": "^3.0.14",
     "@auth/prisma-adapter": "^2.11.1",
+    "@prisma/adapter-pg": "^7.4.0",
     "@prisma/client": "^6.19.2",
     "ai": "^6.0.14",
     "cheerio": "^1.2.0",

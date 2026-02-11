@@ -1,0 +1,128 @@
+
+========================================
+[2026-02-11 16:00:01] Starting NM Legislature bill sync...
+========================================
+[2026-02-11 16:00:01] Checking nmlegis.gov for updates...
+/Users/admin/NMLegTracker/scripts/cron-update-bills.sh: line 59: npx: command not found
+[2026-02-11 16:00:01] Running nmlegis Perl scripts...
+[2026-02-11 16:00:01]   Fetching legislators...
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 205.
+Can't exec "hg": No such file or directory at lib/NMLegis/Scrape.pm line 60.
+[2026-02-11 16:00:01]   Fetching bills...
+
+----------------------------------------------------------------------
+[2026-02-11 16:00:01]   Bills JSON size: 162073 bytes
+[2026-02-11 16:00:01]   Mirroring bill documents...

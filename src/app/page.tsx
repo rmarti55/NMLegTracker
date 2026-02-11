@@ -2,9 +2,6 @@ import BillSearchSection from "@/components/BillSearchSection";
 import SyncStatusBadge from "@/components/SyncStatusBadge";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
-import { redirect } from "next/navigation";
 import MainLayout from "@/components/MainLayout";
 
 export const dynamic = "force-dynamic";
@@ -75,12 +72,6 @@ async function getStats() {
 }
 
 export default async function HomePage() {
-  const session = await getServerSession(authOptions);
-  
-  if (!session) {
-    redirect("/api/auth/signin");
-  }
-
   const stats = await getStats();
 
   return (

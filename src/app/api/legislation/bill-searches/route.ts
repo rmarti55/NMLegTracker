@@ -1,8 +1,27 @@
+/**
+ * Bill Search History API Route
+ *
+ * Manages user's bill search history for quick access to recent searches.
+ *
+ * - GET: Retrieve recent searches (returns empty if not authenticated)
+ * - POST: Save a new search (requires authentication)
+ * - DELETE: Clear all search history (requires authentication)
+ *
+ * @module api/legislation/bill-searches
+ */
+
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getAuthSession } from "@/lib/auth-helpers";
 
-// GET: Retrieve recent searches for the logged-in user
+/**
+ * GET handler for retrieving recent searches.
+ *
+ * Returns the 8 most recent searches for the authenticated user.
+ * Returns empty array if not authenticated (no error).
+ *
+ * @returns JSON response with searches array
+ */
 export async function GET() {
   try {
     const session = await getAuthSession();
@@ -28,7 +47,15 @@ export async function GET() {
   }
 }
 
-// POST: Save a new search
+/**
+ * POST handler for saving a search query.
+ *
+ * Saves or updates a search query for the authenticated user.
+ * Queries are normalized to uppercase and deduplicated.
+ *
+ * @param request - Request with JSON body containing { query: string }
+ * @returns JSON response with saved search or error
+ */
 export async function POST(request: NextRequest) {
   try {
     const session = await getAuthSession();
@@ -77,7 +104,13 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// DELETE: Clear all searches for the user
+/**
+ * DELETE handler for clearing search history.
+ *
+ * Deletes all saved searches for the authenticated user.
+ *
+ * @returns JSON response with success status or error
+ */
 export async function DELETE() {
   try {
     const session = await getAuthSession();

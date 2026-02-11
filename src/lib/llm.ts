@@ -1,16 +1,33 @@
+/**
+ * LLM (Large Language Model) Integration
+ *
+ * This module provides AI chat functionality using OpenRouter's API
+ * with Claude 3.5 Haiku for bill analysis and explanation.
+ *
+ * @module lib/llm
+ */
+
 import { createOpenAICompatible } from "@ai-sdk/openai-compatible";
 import { streamText } from "ai";
 import { LLM_CONFIG } from "./config";
 
+/** The model identifier used for AI chat (from config) */
 export const OPENROUTER_MODEL = LLM_CONFIG.model;
 
-// Create OpenRouter provider using OpenAI-compatible interface
+/**
+ * OpenRouter provider instance configured with OpenAI-compatible interface.
+ * Uses the OPENROUTER_API_KEY environment variable for authentication.
+ */
 const openrouter = createOpenAICompatible({
   name: "openrouter",
   baseURL: "https://openrouter.ai/api/v1",
   apiKey: process.env.OPENROUTER_API_KEY,
 });
 
+/**
+ * System prompt for the bill chat assistant.
+ * Defines the AI's persona, capabilities, and response format.
+ */
 const BILL_CHAT_SYSTEM_PROMPT = `You are Bill, an AI assistant who knows legislation inside and out. You explain bills in plain, accessible language.
 
 Your role:
@@ -51,6 +68,28 @@ End EVERY response with exactly this format:
 
 Generate 2-3 contextual follow-ups that help the user understand the bill better.`;
 
+/**
+ * Chat with AI about a specific bill.
+ *
+ * Streams a response from Claude 3.5 Haiku explaining the bill
+ * in plain language based on the provided context.
+ *
+ * @param billContext - Formatted string containing bill metadata, history,
+ *                      sponsors, votes, and optionally full bill text
+ * @param userMessage - The user's question about the bill
+ * @param chatHistory - Previous messages in the conversation for context
+ * @returns A streaming text response from the AI model
+ *
+ * @example
+ * ```typescript
+ * const result = await billChat(
+ *   "Bill: HB9 - Education Funding...",
+ *   "What does this bill do?",
+ *   []
+ * );
+ * // Use result.toUIMessageStreamResponse() for streaming to client
+ * ```
+ */
 export async function billChat(
   billContext: string,
   userMessage: string,

@@ -1,12 +1,49 @@
+/**
+ * Bills API Route
+ *
+ * GET /api/legislation/bills
+ *
+ * Search and list bills with filtering, pagination, and smart bill number matching.
+ *
+ * @module api/legislation/bills
+ */
+
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
-// Check if search term looks like a bill number (e.g., HB9, SB123, HJR5)
+/**
+ * Check if a search term looks like a bill number pattern.
+ *
+ * Matches patterns like: HB, SB, HJR, SJR, HM, SM, HR, SR, HCR, SCR, HJM, SJM
+ * optionally followed by numbers.
+ *
+ * @param search - The search term to check
+ * @returns True if the search looks like a bill number
+ *
+ * @example
+ * isBillNumberPattern("HB9")   // true
+ * isBillNumberPattern("SB123") // true
+ * isBillNumberPattern("tax")   // false
+ */
 function isBillNumberPattern(search: string): boolean {
   // Match patterns like HB, SB, HJR, SJR, HM, SM, HR, SR followed by optional numbers
   return /^(H|S)(B|JR|M|R|CR|JM)?\d*$/i.test(search.trim());
 }
 
+/**
+ * GET handler for bill search and listing.
+ *
+ * Query Parameters:
+ * - search: Bill number (HB9) or keyword search
+ * - status: Filter by status code (1-6)
+ * - body: Filter by chamber ("H" or "S")
+ * - sessionId: Filter by session
+ * - page: Page number (default: 1)
+ * - limit: Results per page (default: 50)
+ *
+ * @param request - The incoming request with search parameters
+ * @returns JSON response with bills array and pagination info
+ */
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
