@@ -95,6 +95,7 @@ model LegiBill {
   sponsors      LegiBillSponsor[]
   votes         LegiRollCall[]
   chatMessages  LegiBillChatMessage[]
+  hearings      LegiHearingBill[]
   history       Json?
   texts         Json?
   supplements   Json?
@@ -112,23 +113,24 @@ model LegiBill {
 }
 
 model LegiPerson {
-  id           String            @id @default(cuid())
-  peopleId     Int               @unique
-  personHash   String?
-  name         String
-  firstName    String
-  lastName     String
-  party        String
-  role         String
-  district     String
-  county       String?
-  email        String?
-  imageUrl     String?
-  bio          Json?
-  sponsorships LegiBillSponsor[]
-  voteRecords  LegiVoteRecord[]
-  createdAt    DateTime          @default(now())
-  updatedAt    DateTime          @updatedAt
+  id                   String                 @id @default(cuid())
+  peopleId             Int                    @unique
+  personHash           String?
+  name                 String
+  firstName            String
+  lastName             String
+  party                String
+  role                 String
+  district             String
+  county               String?
+  email                String?
+  imageUrl             String?
+  bio                  Json?
+  sponsorships         LegiBillSponsor[]
+  voteRecords          LegiVoteRecord[]
+  committeeMemberships LegiCommitteeMember[]
+  createdAt            DateTime               @default(now())
+  updatedAt            DateTime               @updatedAt
 
   @@index([party])
   @@index([role])
@@ -210,4 +212,67 @@ model BillSearchHistory {
 
   @@index([userId])
   @@unique([userId, query])
+}
+
+model LegiCommittee {
+  id          String                @id @default(cuid())
+  code        String                @unique // e.g., "STBTC", "HAFC"
+  name        String                // Full name
+  chamber     String                // "H" or "S"
+  room        String?               // Default meeting room
+  meetingDays String?               // e.g., "Tuesday & Thursday"
+  meetingTime String?               // e.g., "1:30 PM"
+  url         String?               // nmlegis committee page URL
+  members     LegiCommitteeMember[]
+  hearings    LegiHearing[]
+  createdAt   DateTime              @default(now())
+  updatedAt   DateTime              @updatedAt
+
+  @@index([chamber])
+}
+
+model LegiCommitteeMember {
+  id          String        @id @default(cuid())
+  committeeId String
+  committee   LegiCommittee @relation(fields: [committeeId], references: [id], onDelete: Cascade)
+  personId    String
+  person      LegiPerson    @relation(fields: [personId], references: [id], onDelete: Cascade)
+  role        String        // "Chair", "Vice Chair", "Member", "Ranking Member"
+
+  @@unique([committeeId, personId])
+  @@index([committeeId])
+  @@index([personId])
+}
+
+model LegiHearing {
+  id          String            @id @default(cuid())
+  committeeId String
+  committee   LegiCommittee     @relation(fields: [committeeId], references: [id], onDelete: Cascade)
+  date        DateTime
+  time        String?           // Human-readable time string
+  room        String?
+  zoomLink    String?
+  sourceUrl   String?           // PDF or HTML source URL
+  isFloor     Boolean           @default(false) // Floor session vs committee hearing
+  cancelled   Boolean           @default(false) // Meeting was cancelled
+  bills       LegiHearingBill[]
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  @@unique([committeeId, date])
+  @@index([committeeId])
+  @@index([date])
+}
+
+model LegiHearingBill {
+  id        String      @id @default(cuid())
+  hearingId String
+  hearing   LegiHearing @relation(fields: [hearingId], references: [id], onDelete: Cascade)
+  billId    String
+  bill      LegiBill    @relation(fields: [billId], references: [id], onDelete: Cascade)
+  order     Int?        // Position on agenda
+
+  @@unique([hearingId, billId])
+  @@index([hearingId])
+  @@index([billId])
 }

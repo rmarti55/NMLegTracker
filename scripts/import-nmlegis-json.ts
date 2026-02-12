@@ -57,11 +57,19 @@ interface NmlegisLegislator {
   service?: string;
 }
 
+// Detailed history item from nmlegis bill page (with actual calendar dates)
+interface DetailedHistoryItem {
+  legislative_day: number;
+  calendar_day: string;  // YYYY-MM-DD format
+  action: string;
+}
+
 interface NmlegisBill {
   title: string;
   actions: string;
   sponsors: string[];  // Array of sponsor codes like ["HSZCZ", "HHEPA"]
   emergency?: string;  // "*" if emergency
+  detailed_history?: DetailedHistoryItem[];  // New: actual dates from bill page
 }
 
 interface NmlegisBillsJson {
@@ -116,6 +124,60 @@ interface CommitteeReportsJson {
       [committee: string]: (CommitteeVote | null)[];  // Array indexed by report number
     };
   };
+}
+
+// Committee member from committees.json
+interface NmlegisCommitteeMember {
+  code: string;     // Sponsor code like "SHAMB"
+  title: string;    // "Senator"
+  name: string;     // Full name
+  district: string; // "38"
+  party: string;    // "D" or "R"
+  role: string;     // "Chair", "Vice Chair", "Ranking Member", "Member"
+}
+
+// Committee structure from committees.json
+interface NmlegisCommittee {
+  abbr: string;        // "STBTC"
+  chamber: string;     // "H" or "S"
+  name: string;        // Full committee name
+  room?: string;       // Default meeting room
+  time?: string;       // Default meeting time
+  days?: string;       // Meeting days like "Tuesday & Thursday"
+  days_parsed?: string[];
+  url?: string;        // nmlegis committee page URL
+  members: NmlegisCommitteeMember[];
+}
+
+interface NmlegisCommitteesJson {
+  _schema?: string;
+  [code: string]: NmlegisCommittee | string | undefined;
+}
+
+// Schedule/hearing structure from schedule.json
+interface NmlegisHearing {
+  name: string;        // Committee code or "House"/"Senate" for floor
+  date: string;        // YYYY-MM-DD
+  time?: string;       // Human-readable time
+  datetime?: string;   // ISO datetime
+  room?: string;
+  zoom?: string;       // Zoom link
+  url?: string;        // Source PDF URL
+  urls?: string[];     // Multiple source URLs (for supplementals)
+  mtime?: string;      // Modification time
+  bills?: string[];    // Bill codes like ["SB251", "HB123"]
+  billh?: string[];    // Bills from HTML source (alternative)
+  cancelled?: boolean; // If meeting was cancelled
+  isFloor?: boolean;   // If this is a floor session
+}
+
+interface NmlegisScheduleJson {
+  _schema?: string;
+  [date: string]: {
+    [time: string]: {
+      [committee: string]: NmlegisHearing;
+    };
+  } | string | undefined;
 }
 
 /**
@@ -683,6 +745,22 @@ async function upsertLegislator(
 }
 
 /**
+ * Convert detailed_history (with actual calendar dates) to LegiScan-compatible format
+ */
+function convertDetailedHistoryToLegiScanFormat(
+  detailedHistory: DetailedHistoryItem[],
+  chamber: string
+): Array<{ date: string; action: string; chamber: number; importance: number; sequence: number }> {
+  return detailedHistory.map((item, index) => ({
+    date: item.calendar_day, // Already in YYYY-MM-DD format
+    action: item.action,
+    chamber: chamber === "H" ? 1 : 2,
+    importance: 1,
+    sequence: index + 1,
+  }));
+}
+
+/**
  * Parse bill status from actions string
  */
 function parseStatus(actions: string): { status: number; currentCommittee: string | null } {
@@ -772,12 +850,11 @@ async function importBills(
             where: { billNumber, sessionId },
           });
           
-          // Convert actions string to LegiScan-compatible history array
-          const historyArray = convertActionsToHistoryArray(
-            bill.actions,
-            SESSION_START_DATE,
-            chamber
-          );
+          // Convert to LegiScan-compatible history array
+          // Prefer detailed_history (with actual calendar dates) over calculated dates
+          const historyArray = bill.detailed_history && bill.detailed_history.length > 0
+            ? convertDetailedHistoryToLegiScanFormat(bill.detailed_history, chamber)
+            : convertActionsToHistoryArray(bill.actions, SESSION_START_DATE, chamber);
           
           if (existing) {
             // Update if actions changed - check against raw actions stored in first history item
@@ -867,6 +944,269 @@ async function importBills(
   return { newCount, updatedCount, errorCount };
 }
 
+/**
+ * Import committees from committees.json
+ */
+async function importCommittees(
+  committees: NmlegisCommitteesJson,
+  sponsorMap: Map<string, string>,
+  dryRun: boolean,
+  verbose: boolean
+): Promise<{ committees: number; members: number; errorCount: number }> {
+  let committeeCount = 0;
+  let memberCount = 0;
+  let errorCount = 0;
+
+  for (const [code, committee] of Object.entries(committees)) {
+    // Skip schema and non-committee entries
+    if (code.startsWith("_") || typeof committee === "string" || !committee) continue;
+
+    try {
+      if (verbose) {
+        console.log(`  ${code}: ${committee.name}`);
+      }
+
+      if (!dryRun) {
+        // Upsert committee
+        const dbCommittee = await prisma.legiCommittee.upsert({
+          where: { code },
+          create: {
+            code,
+            name: committee.name,
+            chamber: committee.chamber,
+            room: committee.room || null,
+            meetingDays: committee.days || null,
+            meetingTime: committee.time || null,
+            url: committee.url || null,
+          },
+          update: {
+            name: committee.name,
+            chamber: committee.chamber,
+            room: committee.room || null,
+            meetingDays: committee.days || null,
+            meetingTime: committee.time || null,
+            url: committee.url || null,
+          },
+        });
+
+        committeeCount++;
+
+        // Import committee members
+        for (const member of committee.members || []) {
+          const personId = sponsorMap.get(member.code);
+          if (!personId) {
+            if (verbose) {
+              console.log(`    Warning: Unknown sponsor code ${member.code} for ${member.name}`);
+            }
+            continue;
+          }
+
+          try {
+            await prisma.legiCommitteeMember.upsert({
+              where: {
+                committeeId_personId: {
+                  committeeId: dbCommittee.id,
+                  personId,
+                },
+              },
+              create: {
+                committeeId: dbCommittee.id,
+                personId,
+                role: member.role || "Member",
+              },
+              update: {
+                role: member.role || "Member",
+              },
+            });
+            memberCount++;
+          } catch (err) {
+            if (verbose) {
+              console.log(`    Error linking member ${member.code}:`, err);
+            }
+          }
+        }
+      } else {
+        committeeCount++;
+        memberCount += committee.members?.length || 0;
+      }
+    } catch (error) {
+      errorCount++;
+      if (verbose) {
+        console.error(`  Error importing committee ${code}:`, error);
+      }
+    }
+  }
+
+  return { committees: committeeCount, members: memberCount, errorCount };
+}
+
+/**
+ * Import schedule/hearings from schedule.json
+ */
+async function importSchedule(
+  schedule: NmlegisScheduleJson,
+  sessionId: string,
+  dryRun: boolean,
+  verbose: boolean
+): Promise<{ hearings: number; hearingBills: number; errorCount: number }> {
+  let hearingCount = 0;
+  let hearingBillCount = 0;
+  let errorCount = 0;
+
+  // Build a map of committee codes to database IDs
+  const committeeMap = new Map<string, string>();
+  const dbCommittees = await prisma.legiCommittee.findMany({
+    select: { id: true, code: true },
+  });
+  for (const c of dbCommittees) {
+    committeeMap.set(c.code, c.id);
+  }
+
+  // Also handle floor sessions - create pseudo-committees for House and Senate floors
+  if (!dryRun) {
+    for (const floor of ["House", "Senate"]) {
+      const code = floor;
+      if (!committeeMap.has(code)) {
+        const dbFloor = await prisma.legiCommittee.upsert({
+          where: { code },
+          create: {
+            code,
+            name: `${floor} Floor`,
+            chamber: floor === "House" ? "H" : "S",
+            room: `${floor} Floor`,
+          },
+          update: {},
+        });
+        committeeMap.set(code, dbFloor.id);
+      }
+    }
+  }
+
+  // Process each date in the schedule
+  for (const [dateStr, times] of Object.entries(schedule)) {
+    // Skip schema and non-date entries
+    if (dateStr.startsWith("_") || typeof times === "string" || !times) continue;
+
+    // Validate date format
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) continue;
+
+    for (const [timeStr, committees] of Object.entries(times)) {
+      for (const [committeeCode, hearing] of Object.entries(committees)) {
+        try {
+          const committeeId = committeeMap.get(committeeCode);
+          if (!committeeId) {
+            if (verbose) {
+              console.log(`  Warning: Unknown committee ${committeeCode}, skipping hearing on ${dateStr}`);
+            }
+            continue;
+          }
+
+          // Parse datetime
+          let hearingDate: Date;
+          if (hearing.datetime) {
+            hearingDate = new Date(hearing.datetime);
+          } else {
+            // Construct from date and time
+            hearingDate = new Date(`${dateStr}T${timeStr || "00:00:00"}`);
+          }
+
+          // Determine if this is a floor session
+          const isFloor = committeeCode === "House" || committeeCode === "Senate";
+
+          // Get bills - prefer 'bills' over 'billh' (HTML source)
+          const billCodes = hearing.bills || hearing.billh || [];
+
+          if (verbose) {
+            console.log(`  ${committeeCode} ${dateStr} ${hearing.time || timeStr}: ${billCodes.length} bills`);
+          }
+
+          if (!dryRun) {
+            // Upsert hearing - use committeeId + date as unique key
+            const dbHearing = await prisma.legiHearing.upsert({
+              where: {
+                committeeId_date: {
+                  committeeId,
+                  date: hearingDate,
+                },
+              },
+              create: {
+                committeeId,
+                date: hearingDate,
+                time: hearing.time || null,
+                room: hearing.room || null,
+                zoomLink: hearing.zoom || null,
+                sourceUrl: hearing.url || null,
+                isFloor,
+                cancelled: hearing.cancelled || false,
+              },
+              update: {
+                time: hearing.time || null,
+                room: hearing.room || null,
+                zoomLink: hearing.zoom || null,
+                sourceUrl: hearing.url || null,
+                isFloor,
+                cancelled: hearing.cancelled || false,
+              },
+            });
+
+            hearingCount++;
+
+            // Link bills to hearing
+            for (let i = 0; i < billCodes.length; i++) {
+              const billCode = billCodes[i];
+              
+              // Find the bill in the database
+              const bill = await prisma.legiBill.findFirst({
+                where: { billNumber: billCode, sessionId },
+                select: { id: true },
+              });
+
+              if (!bill) {
+                if (verbose) {
+                  console.log(`    Warning: Bill ${billCode} not found in database`);
+                }
+                continue;
+              }
+
+              try {
+                await prisma.legiHearingBill.upsert({
+                  where: {
+                    hearingId_billId: {
+                      hearingId: dbHearing.id,
+                      billId: bill.id,
+                    },
+                  },
+                  create: {
+                    hearingId: dbHearing.id,
+                    billId: bill.id,
+                    order: i + 1,
+                  },
+                  update: {
+                    order: i + 1,
+                  },
+                });
+                hearingBillCount++;
+              } catch {
+                // Ignore duplicate errors
+              }
+            }
+          } else {
+            hearingCount++;
+            hearingBillCount += billCodes.length;
+          }
+        } catch (error) {
+          errorCount++;
+          if (verbose) {
+            console.error(`  Error importing hearing ${committeeCode} ${dateStr}:`, error);
+          }
+        }
+      }
+    }
+  }
+
+  return { hearings: hearingCount, hearingBills: hearingBillCount, errorCount };
+}
+
 async function main() {
   const args = process.argv.slice(2);
   const dryRun = args.includes("--dry-run");
@@ -886,6 +1226,8 @@ async function main() {
   const bills = loadJson<NmlegisBillsJson>(`bills-${CURRENT_YEAR}.json`);
   const floorVotes = loadJson<FloorVotesJson>(`floor-votes-${CURRENT_YEAR}.json`);
   const committeeReports = loadJson<CommitteeReportsJson>(`committee-reports-${CURRENT_YEAR}.json`);
+  const committees = loadJson<NmlegisCommitteesJson>("committees.json");
+  const schedule = loadJson<NmlegisScheduleJson>("schedule.json");
   
   if (!legislators) {
     console.error("❌ legislators.json not found. Run nmlegis-get-legislators first.");
@@ -903,7 +1245,9 @@ async function main() {
   console.log(`   - legislators.json: ✓`);
   console.log(`   - bills-${CURRENT_YEAR}.json: ✓`);
   console.log(`   - floor-votes-${CURRENT_YEAR}.json: ${floorVotes ? "✓" : "not found (optional)"}`);
-  console.log(`   - committee-reports-${CURRENT_YEAR}.json: ${committeeReports ? "✓" : "not found (optional)"}\n`);
+  console.log(`   - committee-reports-${CURRENT_YEAR}.json: ${committeeReports ? "✓" : "not found (optional)"}`);
+  console.log(`   - committees.json: ${committees ? "✓" : "not found (optional)"}`);
+  console.log(`   - schedule.json: ${schedule ? "✓" : "not found (optional)"}\n`);
   
   // Get/create session
   const sessionId = await getOrCreateSession();
@@ -943,6 +1287,22 @@ async function main() {
     committeeVoteResult = await importCommitteeVotes(committeeReports, sessionId, codeMap, dryRun, verbose);
     console.log(`   ${committeeVoteResult.newCount} roll calls, ${committeeVoteResult.voteRecords} vote records\n`);
   }
+
+  // Import committees
+  let committeeResult = { committees: 0, members: 0, errorCount: 0 };
+  if (committees) {
+    console.log("🏛️  Importing committees...");
+    committeeResult = await importCommittees(committees, sponsorMap, dryRun, verbose);
+    console.log(`   ${committeeResult.committees} committees, ${committeeResult.members} members\n`);
+  }
+
+  // Import schedule/hearings
+  let scheduleResult = { hearings: 0, hearingBills: 0, errorCount: 0 };
+  if (schedule) {
+    console.log("📅 Importing schedule/hearings...");
+    scheduleResult = await importSchedule(schedule, sessionId, dryRun, verbose);
+    console.log(`   ${scheduleResult.hearings} hearings, ${scheduleResult.hearingBills} bill assignments\n`);
+  }
   
   // Summary
   console.log("=========================");
@@ -952,7 +1312,9 @@ async function main() {
   console.log(`   🔗 Sponsors linked: ${sponsorLinksAdded}`);
   console.log(`   🗳️  Floor votes: ${floorVoteResult.newCount} (${floorVoteResult.voteRecords} records)`);
   console.log(`   📋 Committee votes: ${committeeVoteResult.newCount} (${committeeVoteResult.voteRecords} records)`);
-  console.log(`   ❌ Errors: ${result.errorCount + floorVoteResult.errorCount + committeeVoteResult.errorCount}`);
+  console.log(`   🏛️  Committees: ${committeeResult.committees} (${committeeResult.members} members)`);
+  console.log(`   📅 Hearings: ${scheduleResult.hearings} (${scheduleResult.hearingBills} bill assignments)`);
+  console.log(`   ❌ Errors: ${result.errorCount + floorVoteResult.errorCount + committeeVoteResult.errorCount + committeeResult.errorCount + scheduleResult.errorCount}`);
   console.log("=========================\n");
   
   await prisma.$disconnect();

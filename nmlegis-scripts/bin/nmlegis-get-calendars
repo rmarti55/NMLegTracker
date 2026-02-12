@@ -268,6 +268,7 @@ sub parse_single_committee {
     return if $url =~ /SXCCageJan21\.25/;
 
     my %keys = (bills => [], name => $name, url => $url, mtime => $mtime);
+    $keys{isFloor} = JSON::XS::false;   # Committee hearing, not floor session
     for my $line (split "\n", $pdf) {
         next if parse_date_time($line, \%keys);
         next if parse_bill_entry($line, \%keys);
@@ -307,6 +308,7 @@ sub parse_long_schedule {
     my $chamber = shift;                # in: H or S
 
     my %keys = (bills => [], url => $url, mtime => $mtime);
+    $keys{isFloor} = JSON::XS::false;   # Committee hearings, not floor session
     my $prior_line = '';
     for my $line (split "\n", $pdf) {
         # DANGER WILL ROBINSON! This looks like a NOP but it's actually
@@ -375,7 +377,7 @@ sub parse_long_schedule {
                 die "$ME: $url : Multiple committee-name matches for '$line': $matches\n";
             }
 
-            %keys = (bills => [], name => $match[0], url => $url, mtime => $mtime);
+            %keys = (bills => [], name => $match[0], url => $url, mtime => $mtime, isFloor => JSON::XS::false);
         }
 
         # Often seen in SFC: two hearings in one day:
@@ -447,6 +449,7 @@ sub parse_floor {
     my %keys = (bills => [], url => $url, mtime => $mtime);
     $keys{name} = $Chamber_Name{$chamber};
     $keys{room} = ($Chamber_Name{$chamber} . ' Floor');
+    $keys{isFloor} = JSON::XS::true;    # Mark as floor session
 
     for my $line (split "\n", $pdf) {
         # Parse date. House and Senate do their calendars differently.
@@ -632,13 +635,14 @@ sub parse_date_time {
     }
 
     # hSched 021121 and lots of others in 2021
+    # Mark meeting as cancelled but preserve the date/time for tracking
     if ($line =~ m!there\s+(will\s+not\s+be|is\s+no)\s.*(committee|hearing)!i) {
-        delete $keys->{$_}      for qw(date time datetime);
+        $keys->{cancelled} = JSON::XS::true;
         $keys->{bills} = [];
         return 1;
     }
     if ($line =~ m!the\s.*committee\s+((will|is)\s+not\s|.*cancel)!i) {
-        delete $keys->{$_}      for qw(date time datetime);
+        $keys->{cancelled} = JSON::XS::true;
         $keys->{bills} = [];
         return 1;
     }
@@ -809,8 +813,9 @@ sub parse_date_time {
         $keys->{time} = $line;
     }
     elsif ($line =~ m!will\s+not\s+(be\s+)?meet!i) {
-        # sSched030723 SIRC
-        delete $keys->{$_}      for qw(date time datetime);
+        # sSched030723 SIRC - mark as cancelled but preserve date for tracking
+        $keys->{cancelled} = JSON::XS::true;
+        $keys->{bills} = [];
         return 1;
     }
     $keys->{datetime} //= "$keys->{date}T00:00:00";

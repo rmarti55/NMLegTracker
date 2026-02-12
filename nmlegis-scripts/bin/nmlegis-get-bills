@@ -28,7 +28,8 @@ use NMLegis::Legislators;
 # It is defined here, in this script, not in the module, because this
 # script is the one that defines how we save data. (The module reads it,
 # though, so maybe I need to rethink that)
-our $JSON_Schema = '20230118';
+# 20260211: Added detailed_history with actual calendar dates from bill pages
+our $JSON_Schema = '20260211';
 
 # END   user-customizable section
 ###############################################################################
@@ -160,6 +161,9 @@ sub get_bills {
                 die "$ME: Internal error: duplicate $c$t$n";
             }
 
+            # Fetch detailed history with actual calendar dates from bill page
+            _get_bill_detailed_history(\%bill, "$c$t$n");
+
             # These are dups, not needed for saving in json
             delete $bill{$_} for qw(session name);
 
@@ -221,6 +225,56 @@ sub _get_bill_sponsors {
     }
 
     $bill->{sponsors} = \@sponsors;
+}
+
+################################
+#  _get_bill_detailed_history  #  Fetch bill page and extract action history with dates
+################################
+sub _get_bill_detailed_history {
+    my $bill = shift;                   # in: hashref with bill info
+    my $bill_name = shift;              # in: e.g., "SB73"
+
+    my @detailed_history;
+
+    # Fetch the individual bill page
+    my $fetched = NMLegis::Bills::fetch_html($bill_name);
+    return unless $fetched && $fetched->{html};
+
+    # Look for the dataListActions table which contains structured history
+    # Format: "Legislative Day: N<br/>Calendar Day: MM/DD/YYYY</br><strong>Action</strong>"
+    my $html = $fetched->{html};
+
+    # Extract all action items from the dataListActions spans
+    while ($html =~ m{<span[^>]*id="MainContent_tabContainerLegislation_tabPanelActions_dataListActions_lblAction_\d+"[^>]*>(.*?)</span>}gsi) {
+        my $content = $1;
+
+        # Parse: "Legislative Day: N<br/>Calendar Day: MM/DD/YYYY</br><strong>Action text</strong>"
+        if ($content =~ m{Legislative\s+Day:\s*(\d+).*?Calendar\s+Day:\s*(\d{1,2}/\d{1,2}/\d{4}).*?<strong>(.*?)</strong>}si) {
+            my ($leg_day, $cal_day, $action) = ($1, $2, $3);
+
+            # Clean up action text
+            $action =~ s/<[^>]+>//g;      # Remove any remaining HTML tags
+            $action =~ s/^\s+|\s+$//g;    # Trim whitespace
+
+            # Convert date from MM/DD/YYYY to YYYY-MM-DD
+            if ($cal_day =~ m{(\d{1,2})/(\d{1,2})/(\d{4})}) {
+                my ($m, $d, $y) = ($1, $2, $3);
+                $cal_day = sprintf("%04d-%02d-%02d", $y, $m, $d);
+            }
+
+            push @detailed_history, {
+                legislative_day => int($leg_day),
+                calendar_day    => $cal_day,
+                action          => $action,
+            };
+        }
+    }
+
+    # Only store if we got valid history
+    if (@detailed_history) {
+        $bill->{detailed_history} = \@detailed_history;
+        print "  $bill_name: got " . scalar(@detailed_history) . " history items\n" if $verbose;
+    }
 }
 
 
